@@ -1,4 +1,4 @@
-# TeaQL
+# TeaQL - The easiest query for various data sources.
 The easiest query for various data sources.
 
 ## Examples
