@@ -33,3 +33,12 @@ Select families has kids boy
 Q.family().hasKids(Q.kid().filterByGendarOfBoy())
 
 ```
+
+Select families and count kid girls.
+
+```java
+
+Q.family().countKid("kidGirlsCount",Q.kid().filterByGendarOfGirl())
+
+```
+
