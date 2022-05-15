@@ -10,7 +10,13 @@ Select All families
 Q.family()
 
 ```
+Select All families and their kids
 
+```java
+
+Q.family().selectKidList()
+
+```
 
 Select families has kids
 
