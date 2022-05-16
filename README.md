@@ -1,4 +1,4 @@
-# TeaQL - The easiest query for various data sources.
+# TeaQL - The Safe, Simple, Unified query for various data sources.
 
 ## Examples
 
