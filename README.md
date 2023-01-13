@@ -41,3 +41,21 @@ Q.family().countKid("kidGirlsCount",Q.kid().filterByGendarOfGirl())
 
 ```
 
+Summarize the age of all kids of the families
+
+```
+    public Object hello(WechatMessagingUserContext userContext) throws Exception {
+        return  Q.family()
+		.selectKidList()
+                .unselectPlatform()
+
+		.averageAgeOfKidList("averageAgeOfTheFamily",Q.kid())
+		.summarizeAgeOfKidList("sumAgeOfTheFamily",Q.kid())
+		.countKid("countKidsOfTheFamily",Q.kid())
+		.executeForList(userContext);
+    }
+
+
+```
+
+
