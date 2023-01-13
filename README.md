@@ -1,4 +1,13 @@
-# TeaQL - The Safe, Simple, Unified query for various data sources.
+# TeaQL - A Safe, Simple, Unified Generative AI based versatile query library for various data sources .
+
+
+## Feature
+
+* One query do all with connected data
+* Graph theory based query
+* Fine grained columns and filters
+* Different data in a single query
+* 
 
 ## Examples
 
