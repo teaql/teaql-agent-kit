@@ -7,7 +7,9 @@
 * Graph theory based query
 * Fine grained columns and filters
 * Different data in a single query
-* 
+
+## This is how ChatGPT explain our query
+
 
 ## Examples
 
@@ -52,15 +54,13 @@ Q.family().countKid("kidGirlsCount",Q.kid().filterByGendarOfGirl())
 
 Summarize the age of all kids of the families
 
-```
+```java
     public Object hello(WechatMessagingUserContext userContext) throws Exception {
         return  Q.family()
 		.selectKidList()
-                .unselectPlatform()
-
-		.averageAgeOfKidList("averageAgeOfTheFamily",Q.kid())
-		.summarizeAgeOfKidList("sumAgeOfTheFamily",Q.kid())
-		.countKid("countKidsOfTheFamily",Q.kid())
+		.averageAgeOfKids("averageAgeOfTheFamily",Q.kid())
+		.summarizeAgeOfKids("sumAgeOfTheFamily",Q.kid())
+		.countKids("countKidsOfTheFamily",Q.kid())
 		.executeForList(userContext);
     }
 
