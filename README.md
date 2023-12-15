@@ -40,7 +40,7 @@ Select families has kids boy
 
 ```java
 
-Q.family().hasKids(Q.kid().filterByGendarOfBoy())
+Q.family().hasKids(Q.kid().whosGenderIsBoy())
 
 ```
 
@@ -48,7 +48,7 @@ Select families and count kid girls.
 
 ```java
 
-Q.family().countKids("kidGirlsCount",Q.kid().whosGendarIsGirl())
+Q.family().countKids("kidGirlsCount",Q.kid().whosGenderIsGirl())
 
 ```
 
