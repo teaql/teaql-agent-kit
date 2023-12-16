@@ -58,9 +58,9 @@ Summarize the age of all kids of the families
     public Object hello(WechatMessagingUserContext userContext) throws Exception {
         return  Q.families()
 		.selectKidList()
-		.averageAgeOfKids(Q.kids())
-		.summarizeAgeOfKids(Q.kids())
-		.countKids(Q.kids())
+		.averageAgeOfKids()
+		.summarizeAgeOfKids()
+		.countKids()
 		.executeForList(userContext);
     }
 
