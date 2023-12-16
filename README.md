@@ -17,14 +17,14 @@ Select All families
 
 ```java
 
-Q.family()
+Q.families()
 
 ```
 Select All families and their kids
 
 ```java
 
-Q.family().selectKidList()
+Q.families().selectKidList()
 
 ```
 
@@ -32,7 +32,7 @@ Select families has kids
 
 ```java
 
-Q.family().hasKids()
+Q.families().hasKids()
 
 ```
 
@@ -40,7 +40,7 @@ Select families has kids boy
 
 ```java
 
-Q.family().hasKids(Q.kid().whosGenderIsBoy())
+Q.families().hasKids(Q.kid().whosGenderIsBoy())
 
 ```
 
@@ -48,7 +48,7 @@ Select families and count kid girls.
 
 ```java
 
-Q.family().countKids("kidGirlsCount",Q.kid().whosGenderIsGirl())
+Q.families().countKids("kidGirlsCount",Q.kid().whosGenderIsGirl())
 
 ```
 
@@ -56,7 +56,7 @@ Summarize the age of all kids of the families
 
 ```java
     public Object hello(WechatMessagingUserContext userContext) throws Exception {
-        return  Q.family()
+        return  Q.families()
 		.selectKidList()
 		.averageAgeOfKids(Q.kid())
 		.summarizeAgeOfKids(Q.kid())
