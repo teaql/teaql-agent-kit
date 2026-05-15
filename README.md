@@ -35,6 +35,7 @@ Then open the folder in Codex, Claude Code, or another coding agent and ask:
 ```text
 I only want to try TeaQL.
 Use this repository as the TeaQL vibe coding kit.
+Follow AGENTS.md.
 Create a runnable demo project outside this repository.
 Use the merchant sample model unless I provide another domain.
 Model the domain from natural language, generate the TeaQL project, run checks,
@@ -58,6 +59,32 @@ The intended split is simple:
 | --- | --- | --- |
 | Quick try | A separate cloned repository | Demo, evaluation, proof of concept |
 | Project mode | Your project keeps lightweight TeaQL config and references a pinned kit version | Real products, team development, long-term iteration |
+
+## Natural-Language Modeling
+
+TeaQL Vibe Kit includes a KSML modeling prompt pack adapted from the
+`openclaw-modeling-factory` modeling workflow. Use it when the first task is
+"turn this business description into a TeaQL model".
+
+The key files are:
+
+| File | Purpose |
+| --- | --- |
+| `AGENTS.md` | Agent entry instructions for Codex, Claude Code, and similar tools. |
+| `playbooks/model-from-natural-language.md` | Step-by-step workflow for natural-language to KSML modeling. |
+| `prompts/modeling/system.md` | Modeling role prompt. |
+| `prompts/modeling/task-template.md` | Reusable task frame for a requested domain. |
+| `prompts/modeling/ksml-rules.md` | Source-of-truth KSML modeling rules. |
+| `prompts/modeling/checklist.md` | Validation checklist before code generation. |
+
+Example agent request:
+
+```text
+Model a warehouse inventory management system.
+Follow AGENTS.md and playbooks/model-from-natural-language.md.
+Use prompts/modeling/ksml-rules.md.
+Create a valid KSML model.xml first, then explain any assumptions.
+```
 
 ## What TeaQL Is
 
@@ -409,7 +436,7 @@ for agent-based TeaQL adoption.
 When using Codex or Claude Code, the workflow should be explicit and repeatable:
 
 1. Read the user's natural-language business description.
-2. Convert it into a TeaQL domain model.
+2. Convert it into a TeaQL KSML domain model using `prompts/modeling/`.
 3. Review entity boundaries, relationships, lifecycle states, permissions, and
    query needs.
 4. Generate Java or Rust TeaQL code.
