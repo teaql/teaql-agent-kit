@@ -147,7 +147,9 @@ illustrative, but the method shapes are aligned with the current Java generator:
 `Q.<entityPlural>()`, `select<Field>()`, `select<Relation>With(...)`,
 `filterBy<Field>(...)`, `filterBy<Relation>With(...)`, relation counts such as
 `countEmployeesAs(...)`, generated `E.<entity>(value)` expressions, and
-`entity.save(userContext)` graph persistence.
+`entity.save(userContext)` graph persistence. Exact method names are generated
+from the model, so your API will vary with entity names, field names,
+relationships, constants, and aggregate fields.
 
 ### Q: Simple Query
 
@@ -194,16 +196,12 @@ logic through application code.
 ### Q: Multi-Level Loading With Filtering
 
 ```java
+// Repeated subqueries can be wrapped in project-level helper methods, for
+// example: platformNamed("Shopify") or employeesNamed("Ada").
 var merchants = Q.merchants()
-    .filterByPlatformWith(Q.platforms()
-        .filterByName("Shopify")
-        .selectSelf())
-    .haveEmployeesWith(Q.employees()
-        .filterByName("Ada")
-        .selectSelf())
-    .selectEmployeeListWith(Q.employees()
-        .filterByName("Ada")
-        .selectSelf())
+    .filterByPlatformWith(platformNamed("Shopify"))
+    .haveEmployeesWith(employeesNamed("Ada"))
+    .selectEmployeeListWith(employeesNamed("Ada"))
     .executeForList(userContext);
 ```
 
@@ -247,12 +245,11 @@ entity chains.
 ### DDD Transaction Scenario: Readable Write
 
 ```java
-var merchant = new Merchant();
-merchant.updateName("TeaQL Store");
-merchant.updatePlatform(platform);
-merchant.addEmployee(employee);
-
-merchant.save(userContext);
+new Merchant()
+    .updateName("TeaQL Store")
+    .updatePlatform(platform)
+    .addEmployee(employee)
+    .save(userContext);
 ```
 
 DDD-style application services should read like business operations, but the
@@ -268,7 +265,9 @@ service crate. The method shapes are aligned with the current Rust generator:
 `Q::<entity_plural>()`, `select_<field>()`, `select_<relation>_with(...)`,
 `filter_by_<field>(...)`, readable filters such as `which_names_contain(...)`,
 relation filters such as `have_employees_with(...)`, generated `E::<entity>()`
-expressions, and `entity.save(&ctx).await` graph persistence.
+expressions, and `entity.save(&ctx).await` graph persistence. Exact method names
+are generated from the model, so your API will vary with entity names, field
+names, relationships, constants, and aggregate fields.
 
 ### Q: Simple Query
 
@@ -307,16 +306,12 @@ let merchants = Q::merchants()
 ### Q: Multi-Level Loading With Filtering
 
 ```rust
+// Repeated subqueries can be wrapped in project-level helper functions, for
+// example: platform_named("Shopify") or employees_named("Ada").
 let merchants = Q::merchants()
-    .filter_by_platform_with(Q::platforms()
-        .which_names_are("Shopify")
-        .select_self())
-    .have_employees_with(Q::employees()
-        .which_names_contain("Ada")
-        .select_self())
-    .select_employee_list_with(Q::employees()
-        .which_names_contain("Ada")
-        .select_self())
+    .filter_by_platform_with(platform_named("Shopify"))
+    .have_employees_with(employees_named("Ada"))
+    .select_employee_list_with(employees_named("Ada"))
     .execute_for_list(&ctx)
     .await?;
 ```
