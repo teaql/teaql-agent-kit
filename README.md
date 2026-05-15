@@ -242,21 +242,32 @@ var platformName = E.merchant(merchant)
 manual nested null checks and unchecked casts when reading through generated
 entity chains.
 
-### DDD Transaction Scenario: Readable Write
+### DDD Transaction Scenario: Typed Behavior
 
 ```java
-new Merchant()
-    .updateName("TeaQL Store")
-    .updatePlatform(platform)
-    .addEmployee(employee)
-    .save(userContext);
+class OperableMerchant extends Merchant {
+    void openStore(UserContext userContext) {
+        updateStatus(MerchantStatus.ACTIVE);
+        save(userContext);
+    }
+}
+
+var merchant = Q.merchants()
+    .returnType(OperableMerchant.class)
+    .filterByName("TeaQL Store")
+    .executeForOne(userContext)
+    .orElseThrow();
+
+merchant.openStore(userContext);
 ```
 
-DDD-style application services should read like business operations, but the
-generated TeaQL layer currently gives them stable entity APIs, relation methods,
-and graph persistence through `entity.save(userContext)`. Business verbs such as
-`openStore`, `approveRequest`, or `recordPayment` should live in application
-code and use the generated model as the persistence boundary.
+This is where TeaQL becomes especially useful for DDD. A project can define a
+domain-specific subclass or behavior type, add readable business methods such as
+`openStore`, `approveRequest`, or `recordPayment`, and ask the `Q` query to
+return that type. After the query, application code calls the business method
+directly instead of mapping raw records into a separate service object. Generated
+entity APIs, relation methods, and graph persistence through
+`entity.save(userContext)` remain available inside that behavior.
 
 ## Rust API Examples
 
@@ -353,23 +364,36 @@ let platform_name = E::merchant(merchant)
 `E` gives the generated Rust code a structured expression surface that agents can
 compose without falling back to nested `unwrap()` chains.
 
-### DDD Transaction Scenario: Readable Write
+### DDD Transaction Scenario: Typed Behavior
 
 ```rust
+struct OperableMerchant {
+    inner: Merchant,
+}
+
+impl OperableMerchant {
+    async fn open_store(&mut self, ctx: &impl TeaqlRuntime) -> Result<()> {
+        self.inner.update_status_id(MerchantStatus::active_id());
+        self.inner.save(ctx).await?;
+        Ok(())
+    }
+}
+
 let mut merchant = Q::merchants()
-    .new_entity(&ctx);
+    .return_type::<OperableMerchant>()
+    .which_names_are("TeaQL Store")
+    .execute_for_one(&ctx)
+    .await?
+    .expect("merchant should exist");
 
-merchant
-    .update_name("TeaQL Store")
-    .update_platform_id(platform.id());
-
-merchant.save(&ctx).await?;
+merchant.open_store(&ctx).await?;
 ```
 
-In Rust, the same DDD goal applies: application code should expose the business
-operation clearly, while generated TeaQL entities, update methods, relation
-helpers, and `save(&ctx).await` keep persistence inside the generated runtime
-surface.
+Rust follows the same DDD shape. A project can define a runtime-compatible
+domain type with extra behavior, set it as the query return type, and call the
+method immediately after loading. Generated TeaQL entities, update methods,
+relation helpers, and `save(&ctx).await` still provide the persistence surface
+used by that behavior.
 
 ## Runtime Context Customization
 
