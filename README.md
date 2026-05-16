@@ -151,6 +151,34 @@ illustrative, but the method shapes are aligned with the current Java generator:
 from the model, so your API will vary with entity names, field names,
 relationships, constants, and aggregate fields.
 
+### Ensure Schema
+
+```java
+import io.teaql.data.TQLContext;
+import io.teaql.data.UserContext;
+import io.teaql.data.meta.EntityMetaFactory;
+import io.teaql.data.sql.SQLRepositorySchemaHelper;
+
+@Controller
+public class EnsureModelController {
+
+    @Autowired
+    private EntityMetaFactory factory;
+
+    @GetMapping("/ensureSchema")
+    @ResponseBody
+    public Object ensureSchema(@TQLContext UserContext context) {
+        new SQLRepositorySchemaHelper().ensureSchema(context, factory);
+        return Map.of("ok", true);
+    }
+}
+```
+
+`ensureSchema(context, factory)` checks the generated TeaQL entity metadata
+against the configured SQL repository and prepares the physical database schema.
+It is typically used during setup, deployment, or controlled admin operations to
+create or adjust tables before normal `Q` queries and graph saves run.
+
 ### Q: Simple Query
 
 ```java
@@ -246,9 +274,9 @@ entity chains.
 
 ```java
 class OperableMerchant extends Merchant {
-    void openStore(UserContext userContext) {
+    OperableMerchant openStore() {
         updateStatus(MerchantStatus.ACTIVE);
-        save(userContext);
+        return this;
     }
 }
 
@@ -258,7 +286,8 @@ var merchant = Q.merchants()
     .executeForOne(userContext)
     .orElseThrow();
 
-merchant.openStore(userContext);
+merchant.openStore()
+    .save(userContext);
 ```
 
 This is where TeaQL becomes especially useful for DDD. A project can define a
@@ -267,7 +296,10 @@ domain-specific subclass or behavior type, add readable business methods such as
 return that type. After the query, application code calls the business method
 directly instead of mapping raw records into a separate service object. Generated
 entity APIs, relation methods, and graph persistence through
-`entity.save(userContext)` remain available inside that behavior.
+`entity.save(userContext)` remain available at the application/service boundary.
+As a best practice, keep domain behavior lightweight and easy to unit test:
+mutate or validate domain state inside the method, and perform persistence
+outside the domain method.
 
 ## Rust API Examples
 
@@ -279,6 +311,28 @@ relation filters such as `have_employees_with(...)`, generated `E::<entity>()`
 expressions, and `entity.save(&ctx).await` graph persistence. Exact method names
 are generated from the model, so your API will vary with entity names, field
 names, relationships, constants, and aggregate fields.
+
+### Ensure Schema
+
+```rust
+use teaql_provider_sqlx_postgres::{PgMutationExecutor, PostgresProviderExt};
+use teaql_runtime::UserContext;
+
+let mut ctx = UserContext::new()
+    .with_module(crm_erp_service::module())
+    .with_repository_registry(crm_erp_service::repository_registry());
+
+ctx.use_postgres_provider(PgMutationExecutor::new(pg_pool));
+
+// ensure_schema checks the generated TeaQL entity metadata against the
+// registered database provider and prepares the physical schema. Provider
+// implementations can create missing tables, add missing columns, and install
+// provider-specific bootstrap objects needed by the runtime.
+ctx.ensure_schema().await?;
+```
+
+After schema bootstrap, the same context can be used for generated `Q` queries,
+graph save, safe expressions, and DDD behavior methods.
 
 ### Q: Simple Query
 
@@ -372,10 +426,9 @@ struct OperableMerchant {
 }
 
 impl OperableMerchant {
-    async fn open_store(&mut self, ctx: &impl TeaqlRuntime) -> Result<()> {
+    fn open_store(&mut self) -> &mut Self {
         self.inner.update_status_id(MerchantStatus::active_id());
-        self.inner.save(ctx).await?;
-        Ok(())
+        self
     }
 }
 
@@ -386,14 +439,17 @@ let mut merchant = Q::merchants()
     .await?
     .expect("merchant should exist");
 
-merchant.open_store(&ctx).await?;
+merchant.open_store();
+merchant.inner.save(&ctx).await?;
 ```
 
 Rust follows the same DDD shape. A project can define a runtime-compatible
 domain type with extra behavior, set it as the query return type, and call the
 method immediately after loading. Generated TeaQL entities, update methods,
 relation helpers, and `save(&ctx).await` still provide the persistence surface
-used by that behavior.
+at the application/service boundary. Keep behavior methods small and testable:
+they should express domain state transitions, while persistence remains outside
+the method.
 
 ## Runtime Context Customization
 
