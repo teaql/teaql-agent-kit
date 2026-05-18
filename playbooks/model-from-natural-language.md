@@ -19,7 +19,12 @@ language and wants a TeaQL/KSML domain model.
    - `name`: kebab-case plus `-service`.
 
 2. Identify the core model.
-   - Platform, merchant, and employee are required baseline objects.
+   - Do not assume multi-tenancy by default.
+   - Classify tenancy as single-tenant, multi-tenant, platform-managed
+     multi-tenant, or undecided.
+   - Add platform, merchant, tenant, employee, organization, company, school,
+     hospital, store, or similar baseline objects only when they are real
+     business concepts or confirmed architecture assumptions.
    - Add concrete business objects for the domain.
    - Add constant objects for status, type, category, gender, priority, and
      finite enumerations.
@@ -38,10 +43,20 @@ language and wants a TeaQL/KSML domain model.
 5. Validate before delivery.
    - Use `prompts/modeling/checklist.md`.
    - Repair any rule violation.
-   - Pay special attention to constant object rules and `merchant(context)`.
+   - Pay special attention to constant object rules and explicit tenancy.
+
+6. Run the model review gate before code generation.
+   - Use `playbooks/model-review-gate.md`.
+   - Summarize entities, fields, relationships, tenancy classification, tenant
+     boundary if any, constants, and assumptions in business language.
+   - Get user confirmation, or record explicit assumptions when the user asked
+     for autonomous quick try execution.
+   - If the user asks for changes, update `model.xml`, validate again, and
+     repeat the review gate.
 
 ## Done
 
-The task is done when the model is valid KSML XML and follows the checklist. If
-the user asked for a runnable TeaQL project, continue with code generation,
-compile checks, and repair loops.
+The task is done when the model is valid KSML XML, follows the checklist, and
+has passed the model review gate. If the user asked for a runnable TeaQL project,
+continue with code generation, compile checks, and repair loops after the model
+is confirmed.
