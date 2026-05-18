@@ -93,24 +93,47 @@ not copy generated source into the same directory as the user's own experiment
 code, and it should not require a Maven/Cargo artifact repository before the
 user has decided to adopt the stack.
 
+Quick try mode may automatically call `ensure_schema()` during runtime setup so
+the first local run can create demo tables, seed sample data, and show a real
+query result. That is a convenience for evaluation only.
+
+In project and production modes, schema creation and migration are explicit
+deployment decisions. Do not hide schema mutation inside normal runtime
+initialization. Run schema bootstrap, migration, validation, or DBA review
+through the project's CI/CD, admin command, migration tool, or deployment
+workflow.
+
 ## Toolchain Workflow
 
 TeaQL Vibe Kit expects code generation to happen after a valid KSML model
-exists. The current local toolchain split is:
+exists. Users should install the TeaQL client tools from package registries,
+such as the Rust CLI from crates.io, and use those clients to request TeaQL
+service code generation. Do not ask users to download or build the client tool
+source code just to generate a service.
 
-| Target | Local toolchain | Main command |
+| Target | User-installed client | Main command |
 | --- | --- | --- |
-| Rust | `~/githome/teaql-cargo-cli` | `cargo run --manifest-path ~/githome/teaql-cargo-cli/Cargo.toml -- gen-code <model.xml>` |
-| Java | `~/githome/teaql-maven-plugin` | `mvn teaql:gen-code -Dteaql.input=<model.xml>` |
+| Rust | TeaQL CLI installed from crates.io | `teaql gen-code <model.xml>` |
+| Java | TeaQL Maven plugin configured from a Maven repository | `mvn teaql:gen-code -Dteaql.input=<model.xml>` |
+
+The TeaQL client is only the request tool. Generated Java or Rust service code
+still comes from the TeaQL service endpoint, for example
+`https://api.teaql.io/latest/generate`.
+
+Local source checkouts such as `~/githome/teaql-cargo-cli` and
+`~/githome/teaql-maven-plugin` are for TeaQL toolchain development and
+debugging, not for normal user installation.
 
 Use `playbooks/generate-with-toolchains.md` when an agent needs to generate
 Java, Rust, or both tracks from the same model. The high-level loop is:
 
 1. Model the domain as KSML XML.
 2. Validate the model with `prompts/modeling/checklist.md`.
-3. Generate Java and/or Rust code with the selected toolchain.
-4. Run target-project compile checks and tests.
-5. Fix model errors in `model.xml`, then regenerate.
+3. Run the model review gate and confirm the model before code generation.
+4. Generate Java and/or Rust code with the selected toolchain.
+5. Run target-project compile checks and tests.
+6. Decide schema bootstrap or migration explicitly for project/production mode.
+7. Fix model errors in `model.xml`, then regenerate.
 
 Example agent request for both tracks:
 
@@ -119,8 +142,9 @@ Use TeaQL Vibe Kit.
 Follow AGENTS.md.
 Model the domain first, validate the KSML model, then generate both Java and
 Rust TeaQL outputs.
-Use the local Rust CLI at ~/githome/teaql-cargo-cli and the local Maven plugin
-at ~/githome/teaql-maven-plugin.
+Before generation, summarize the model for review and wait for confirmation.
+Use the TeaQL client tools installed from package registries, including the Rust
+CLI from crates.io, to request TeaQL service code generation.
 Keep generated artifacts in the target project, run checks, and report the
 commands and output paths.
 ```
@@ -137,6 +161,7 @@ The key files are:
 | --- | --- |
 | `AGENTS.md` | Agent entry instructions for Codex, Claude Code, and similar tools. |
 | `playbooks/model-from-natural-language.md` | Step-by-step workflow for natural-language to KSML modeling. |
+| `playbooks/model-review-gate.md` | Required model confirmation gate before TeaQL code generation. |
 | `prompts/modeling/system.md` | Modeling role prompt. |
 | `prompts/modeling/task-template.md` | Reusable task frame for a requested domain. |
 | `prompts/modeling/ksml-rules.md` | Source-of-truth KSML modeling rules. |

@@ -39,7 +39,6 @@ Correct business object:
              _module_key="compute"
              instance_name="web-server-01"
              status="resource_status()"
-             merchant="merchant(context)"
              create_time="createTime()"
              update_time="updateTime()"/>
 ```
@@ -70,13 +69,52 @@ Business objects use concrete values:
 <employee name="John Smith" phone="13800138000"/>
 ```
 
+### Explicit Tenancy Rule
+
+KSML models must not assume multi-tenancy by default.
+
+Tenancy is an explicit architectural choice. When modeling a domain, determine
+whether the target system is single-tenant, multi-tenant, platform-managed
+multi-tenant, or undecided. Do not add `merchant`, `tenant`, `platform`, or
+`merchant="merchant(context)"` only because an example or historical template
+used them.
+
+Single-tenant models:
+
+- Do not create `merchant`, `tenant`, or `platform` as baseline objects unless
+  they are real business concepts in the user's domain.
+- Do not add `merchant="merchant(context)"` automatically.
+- Model organization, company, store, department, warehouse, school, hospital,
+  or similar objects only when they are part of the business language.
+
+Multi-tenant models:
+
+- Identify the tenant owner object explicitly, such as `merchant`, `company`,
+  `organization`, `school`, `hospital`, or `store_group`.
+- Add tenant ownership only to objects that must be isolated by that boundary.
+- Use `merchant="merchant(context)"` only when the confirmed tenant owner is
+  `merchant`.
+- State the tenant boundary in the model review summary.
+
+Platform-managed multi-tenant models:
+
+- Model platform/operator concepts only if they matter to the business.
+- Model tenant organizations separately from platform/operator data.
+- Make platform-level and tenant-level data boundaries explicit.
+
+Undecided tenancy:
+
+- Ask a short clarification when possible.
+- For autonomous quick try work, record the assumption before generation, such
+  as "Assumption: single-tenant quick try; no tenant boundary was modeled."
+
 ### Attribute Order
 
 Use this order for business object attributes:
 
 1. Identity attributes: `name`, `number`, `code`, `type`.
 2. Relationship references: `status`, `provider`, `region`, parent objects.
-3. `merchant="merchant(context)"`.
+3. Tenant boundary reference, if tenancy was explicitly confirmed.
 4. System fields: `create_time`, `update_time`.
 
 This reads as: who you are, who you belong to, then system records.
@@ -192,18 +230,20 @@ Business objects must include:
 - `_name`.
 - `_module`.
 - `_module_key`.
-- `merchant="merchant(context)"` for tenant-owned business objects.
+- Tenant ownership only when tenancy is explicitly confirmed.
 - Concrete values for real-world fields.
 
-Baseline objects for generated TeaQL services should include:
+Baseline objects for generated TeaQL services are optional and domain-driven.
+Include these only when they are real business concepts or confirmed
+architecture assumptions:
 
 - `platform`.
 - `merchant`.
 - `employee`.
 
-`platform` and `merchant` may be global baseline objects without
-`merchant="merchant(context)"`. Tenant-owned business objects should include
-`merchant="merchant(context)"`.
+When `merchant` is the confirmed tenant owner, tenant-owned business objects may
+include `merchant="merchant(context)"`. `platform` and `merchant` may be global
+baseline objects without `merchant="merchant(context)"`.
 
 ## Constant Objects
 
@@ -352,4 +392,4 @@ Use `object_name()` directly. Do not write `object(object_name)`.
 | `_constant="true"` | Required | Forbidden |
 | `_identifier="code"` | Required | Forbidden |
 | `<_value>` children | Required | Forbidden |
-| `merchant="merchant(context)"` | Forbidden | Required for tenant-owned objects |
+| Tenant boundary, such as `merchant="merchant(context)"` | Forbidden | Optional; only when explicitly confirmed |

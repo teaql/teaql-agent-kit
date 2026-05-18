@@ -28,8 +28,13 @@ Use this checklist before delivering or generating code from a KSML model.
 - Must not have `_identifier`.
 - Must not have `<_value>` children.
 - Use concrete example values, not `string()`, for normal business fields.
-- Include `merchant="merchant(context)"` for tenant-owned business objects.
-- Put attributes in this order: identity, relationships, merchant, system fields.
+- Do not assume multi-tenancy by default.
+- Include tenant ownership only when the user confirmed a tenant boundary or the
+  model records an explicit autonomous quick try assumption.
+- Use `merchant="merchant(context)"` only when `merchant` is the confirmed
+  tenant owner.
+- Put attributes in this order: identity, relationships, tenant boundary if
+  confirmed, system fields.
 
 ## Constant Objects
 
@@ -49,6 +54,18 @@ Use this checklist before delivering or generating code from a KSML model.
 - Do not use `_id` suffixes for references.
 - Status, type, category, gender, priority, and boolean-like states reference
   constant objects.
+
+## Tenancy
+
+- Classify the model as single-tenant, multi-tenant, platform-managed
+  multi-tenant, or undecided.
+- Do not add `platform`, `merchant`, `tenant`, or `merchant(context)` only
+  because an example template included them.
+- For single-tenant models, do not add tenant boundary fields unless they are
+  real business concepts.
+- For multi-tenant models, identify the tenant owner object explicitly and apply
+  tenant ownership only to data that must be isolated by that boundary.
+- Record the tenancy decision or assumption in the model review summary.
 
 ## Modules
 
