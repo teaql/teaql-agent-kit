@@ -23,7 +23,8 @@ AI-assisted development, and find the Java and Rust implementations.
 ## Quick Start
 
 Use this mode when you only want to try TeaQL. It should not modify your
-existing project repository.
+existing project repository, and it does not require creating new git
+repositories.
 
 ```bash
 git clone https://github.com/teaql/teaql-vibe-kit.git
@@ -36,10 +37,11 @@ Then open the folder in Codex, Claude Code, or another coding agent and ask:
 I only want to try TeaQL.
 Use this repository as the TeaQL vibe coding kit.
 Follow AGENTS.md.
-Create a runnable demo project outside this repository.
+Create local trial directories outside this repository.
 Use the merchant sample model unless I provide another domain.
-Model the domain from natural language, generate the TeaQL project, run checks,
-fix any issues, and report the generated project path.
+Model the domain from natural language, generate TeaQL runtime code in one
+directory, create my experiment code in another directory, connect them with a
+local path dependency, run checks, fix any issues, and report the paths.
 ```
 
 For a real project, initialize TeaQL support inside your own repository instead
@@ -53,12 +55,75 @@ version, model the first domain from natural language, generate code, run
 checks, and document the commands used.
 ```
 
-The intended split is simple:
+The intended split is simple for early adoption, and scales into a stricter
+enterprise topology for larger programs:
 
 | Mode | Where TeaQL Vibe Kit lives | Best for |
 | --- | --- | --- |
-| Quick try | A separate cloned repository | Demo, evaluation, proof of concept |
+| Quick try | Local trial directories outside the user's project repository | Demo, evaluation, proof of concept |
 | Project mode | Your project keeps lightweight TeaQL config and references a pinned kit version | Real products, team development, long-term iteration |
+| Enterprise mode | A dedicated model repository plus one or more runtime repositories | Large projects, shared domain models, multiple applications, enterprise CI/CD |
+
+For larger projects, keep model change ownership separate from application
+implementation. A recommended enterprise split is:
+
+| Repository type | Purpose |
+| --- | --- |
+| Model repository | Owns KSML model changes, review history, compatibility policy, generated documentation, and CI validation. |
+| Runtime repository | Generates Java or Rust TeaQL code from a pinned model version and publishes runtime artifacts for one or more core application scenarios. |
+| Application repository | Consumes the appropriate runtime artifact and owns product-specific workflow, UI, API, deployment, and customization code. |
+
+This keeps the semantic model trackable as its own asset. It also lets multiple
+applications choose the runtime that fits their scenario, such as a Java/Spring
+runtime for enterprise business services or a Rust runtime for native service
+workloads.
+
+In quick try mode, keep the setup deliberately lighter. A user may only want a
+few local directories, for example:
+
+```text
+teaql-trial/
+  model/              # model.xml and generation input
+  generated-runtime/  # generated Java or Rust TeaQL code
+  app-playground/     # user's functions, queries, and scenario experiments
+```
+
+The playground should depend on the generated runtime by local path. It should
+not copy generated source into the same directory as the user's own experiment
+code, and it should not require a Maven/Cargo artifact repository before the
+user has decided to adopt the stack.
+
+## Toolchain Workflow
+
+TeaQL Vibe Kit expects code generation to happen after a valid KSML model
+exists. The current local toolchain split is:
+
+| Target | Local toolchain | Main command |
+| --- | --- | --- |
+| Rust | `~/githome/teaql-cargo-cli` | `cargo run --manifest-path ~/githome/teaql-cargo-cli/Cargo.toml -- gen-code <model.xml>` |
+| Java | `~/githome/teaql-maven-plugin` | `mvn teaql:gen-code -Dteaql.input=<model.xml>` |
+
+Use `playbooks/generate-with-toolchains.md` when an agent needs to generate
+Java, Rust, or both tracks from the same model. The high-level loop is:
+
+1. Model the domain as KSML XML.
+2. Validate the model with `prompts/modeling/checklist.md`.
+3. Generate Java and/or Rust code with the selected toolchain.
+4. Run target-project compile checks and tests.
+5. Fix model errors in `model.xml`, then regenerate.
+
+Example agent request for both tracks:
+
+```text
+Use TeaQL Vibe Kit.
+Follow AGENTS.md.
+Model the domain first, validate the KSML model, then generate both Java and
+Rust TeaQL outputs.
+Use the local Rust CLI at ~/githome/teaql-cargo-cli and the local Maven plugin
+at ~/githome/teaql-maven-plugin.
+Keep generated artifacts in the target project, run checks, and report the
+commands and output paths.
+```
 
 ## Natural-Language Modeling
 
@@ -76,6 +141,8 @@ The key files are:
 | `prompts/modeling/task-template.md` | Reusable task frame for a requested domain. |
 | `prompts/modeling/ksml-rules.md` | Source-of-truth KSML modeling rules. |
 | `prompts/modeling/checklist.md` | Validation checklist before code generation. |
+| `playbooks/generate-with-toolchains.md` | Java/Rust generation workflow after the model is valid. |
+| `playbooks/enterprise-repository-topology.md` | Large-project repository split and CI/CD workflow guidance. |
 
 Example agent request:
 
@@ -241,12 +308,23 @@ turning the application layer into a string-query construction site.
 ```java
 var merchants = Q.merchants()
     .selectSelf()
+    // Adds a dynamic property named "employeeCount" to each returned merchant.
     .countEmployeesAs("employeeCount")
+    // Adds a dynamic aggregate/refinement named "employeeStats"; use this for
+    // richer per-merchant child statistics when the child request has
+    // projections, counts, sums, groups, or other aggregate output.
     .statsFromEmployeesAs("employeeStats",
         Q.employees()
             .selectSelf()
             .count())
     .executeForList(userContext);
+
+for (Merchant merchant : merchants) {
+    // Dynamic aggregate values are not generated fields. Read them by the alias
+    // passed to countEmployeesAs/statsFromEmployeesAs.
+    Long employeeCount = merchant.getDynamicProperty("employeeCount", 0L);
+    Object employeeStats = merchant.getDynamicProperty("employeeStats");
+}
 ```
 
 Aggregates are attached to the domain query, keeping reporting logic close to
@@ -384,9 +462,15 @@ let merchants = Q::merchants()
 ### Q: Statistics and Aggregation
 
 ```rust
+use teaql_core::BaseEntity;
+
 let merchants = Q::merchants()
     .select_self()
+    // Adds a dynamic property named "employee_count" to each returned merchant.
     .count_employees_as("employee_count")
+    // Adds a dynamic aggregate/refinement named "employee_stats"; use this for
+    // richer per-merchant child statistics when the child request has
+    // projections, counts, sums, groups, or other aggregate output.
     .stats_from_employees_as(
         "employee_stats",
         Q::employees()
@@ -395,6 +479,13 @@ let merchants = Q::merchants()
     )
     .execute_for_list(&ctx)
     .await?;
+
+for merchant in merchants.iter() {
+    // Dynamic aggregate values are not generated fields. Read them by the alias
+    // passed to count_employees_as/stats_from_employees_as.
+    let employee_count = merchant.dynamic_u64("employee_count").unwrap_or(0);
+    let employee_stats = merchant.dynamic("employee_stats");
+}
 ```
 
 For scalar aggregation, the Rust generator emits helpers such as
@@ -504,6 +595,7 @@ for agent-based TeaQL adoption.
 | `teaql-code-gen` | Code generation service that turns a compact domain model into Java or Rust libraries. | Java / Gradle / Spring Boot / StringTemplate | <https://github.com/teaql/teaql-code-gen> |
 | `teaql-rs` | Rust-native TeaQL runtime, SQL compiler, query APIs, repositories, graph save, and executors. | Rust / Cargo | <https://github.com/teaql/teaql-rs> |
 | `teaql-cli` | Command-line workflow for code generation, documentation, model generation, config, and local aliases. | Rust / Cargo | <https://github.com/teaql/teaql-cli> |
+| `teaql-maven-plugin` | Maven workflow for TeaQL code generation, documentation, frontend model output, and effective config display. | Java / Maven | <https://github.com/teaql/teaql-maven-plugin> |
 | `teaql-spring-boot-starter` | Java / Spring Boot runtime integration for the TeaQL service stack. | Java / Gradle / Spring Boot | <https://github.com/teaql/teaql-spring-boot-starter> |
 
 ## Suggested Agent Workflow

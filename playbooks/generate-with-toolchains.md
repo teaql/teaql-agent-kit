@@ -1,0 +1,294 @@
+# Generate With TeaQL Toolchains
+
+Use this playbook after a valid KSML `model.xml` exists and the user wants Java,
+Rust, or both TeaQL code generation tracks.
+
+## Inputs
+
+- Valid KSML model file or model directory.
+- Target runtime: Java, Rust, or both.
+- Target project directory or quick-try local trial directories.
+- Optional TeaQL service URL, license file, output directory, and timeout.
+
+## General Rules
+
+- Do not generate from vague business text directly. Generate from the model.
+- In quick try mode, do not require git repositories or artifact publishing.
+- Keep generated runtime code separate from the user's experiment code. Use a
+  local path dependency when the playground needs to call generated APIs.
+- In project and enterprise modes, keep generated artifacts in the target
+  runtime project, not in the application code repository.
+- Treat TeaQL service generated Java or Rust code as read-only. Do not edit
+  generated files directly; fix the model, generator configuration, TeaQL
+  generator, or runtime, then regenerate.
+- Prefer local toolchain repositories when they are available:
+  - Rust CLI: `~/githome/teaql-cargo-cli`
+  - Java Maven plugin: `~/githome/teaql-maven-plugin`
+- Use the same model input for Java and Rust when the user requests both tracks.
+
+## Rust Track
+
+Use the Rust CLI when the target runtime is Rust or when the user asks for the
+Cargo toolchain.
+
+1. Build or run the local CLI from `~/githome/teaql-cargo-cli`.
+2. Generate backend/domain code from the model:
+
+   ```bash
+   cargo run --manifest-path ~/githome/teaql-cargo-cli/Cargo.toml -- \
+     gen-code /path/to/model.xml \
+     --output /path/to/target/build \
+     --cwd /path/to/target/project
+   ```
+
+3. Generate documentation or frontend model output when requested:
+
+   ```bash
+   cargo run --manifest-path ~/githome/teaql-cargo-cli/Cargo.toml -- \
+     gen-doc /path/to/model.xml \
+     --output /path/to/target/build \
+     --cwd /path/to/target/project
+
+   cargo run --manifest-path ~/githome/teaql-cargo-cli/Cargo.toml -- \
+     gen-model /path/to/model.xml \
+     --output /path/to/target/build \
+     --cwd /path/to/target/project
+   ```
+
+4. Run target-project Rust checks when a Cargo project is generated:
+
+   ```bash
+   cargo check
+   cargo test
+   ```
+
+For quick try mode, create a separate Cargo playground crate and depend on the
+generated runtime by local path. The generated Rust crate is usually under the
+`lib` directory of the generator output:
+
+```bash
+cargo init --bin --vcs none app-playground
+```
+
+```toml
+[dependencies]
+my_generated_runtime = { path = "../generated-runtime/lib" }
+```
+
+Put customer query functions and business helper functions in `src/lib.rs`.
+Use `tests/` for scenario-oriented experiments. Keep `src/main.rs` as a thin
+smoke demo only.
+
+Recommended quick-try playground shape:
+
+```text
+app-playground/
+  src/
+    lib.rs               # customer functions and query helpers
+    main.rs              # thin smoke demo
+  tests/
+    inventory_queries.rs # scenario-oriented experiments
+  TEAQL_QUICK_TRY_REPORT.md
+```
+
+Example:
+
+```rust
+// src/lib.rs
+use my_generated_runtime::Q;
+
+pub fn stock_on_hand_query() {
+    let _query = Q::stock_items()
+        .select_product_with(Q::products().which_skus_are("USB-C-001"))
+        .select_warehouse_with(Q::warehouses().which_codes_are("SHA-MAIN"))
+        .which_quantities_greater_than(0)
+        .page(1, 20);
+}
+```
+
+```rust
+// tests/inventory_queries.rs
+use app_playground::stock_on_hand_query;
+
+#[test]
+fn builds_stock_on_hand_query() {
+    stock_on_hand_query();
+}
+```
+
+```rust
+// src/main.rs
+fn main() {
+    app_playground::stock_on_hand_query();
+    println!("playground smoke check passed");
+}
+```
+
+Keep regenerated TeaQL code in `generated-runtime`.
+
+## Quick Try Report
+
+For quick try mode, always create a short report in the playground directory:
+
+```text
+app-playground/TEAQL_QUICK_TRY_REPORT.md
+```
+
+The report should help a customer understand what happened, which files matter,
+and what TeaQL contributed beyond ordinary code generation.
+
+Recommended sections:
+
+1. `Goal`
+   - State the natural-language business scenario being tried.
+   - State the target runtime.
+
+2. `Directory Layout`
+   - List the model directory, generated runtime directory, and playground
+     directory.
+   - State explicitly that generated runtime code and customer experiment code
+     are separate.
+
+3. `Model Summary`
+   - List the main business objects, constants, tenant boundary, and important
+     relationships.
+   - Explain that `model.xml` is the semantic source of truth.
+
+4. `Generated Runtime`
+   - List the generated crate path and the key generated APIs, such as `Q`,
+     entity structs, request builders, relation loaders, aggregation helpers,
+     runtime registration, and schema bootstrap helpers when present.
+   - State that generated files should be regenerated from the model, not
+     hand-edited.
+
+5. `Customer Playground`
+   - List the customer-owned files in `src/lib.rs`, `src/main.rs`, and `tests/`.
+   - Explain which queries or scenario functions were written and which
+     generated APIs they use.
+
+6. `Commands Run`
+   - Include the exact generation and verification commands.
+   - Include pass/fail results.
+
+7. `TeaQL Value Demonstrated`
+   - Explain the concrete guardrails demonstrated:
+     - Natural language was converted to a semantic model first.
+     - Generated API names came from the model.
+     - Query code used typed generated methods instead of ad-hoc SQL.
+     - Generated code and customer code stayed separated.
+     - Checks can be rerun after every model change.
+   - Include a short, readable code excerpt from the customer's playground and
+     point out how the generated API reads in business terms.
+   - Explain runtime customization points such as provider choice, runtime
+     context assembly, behavior hooks, checker hooks, tenant/user context, and
+     schema bootstrap.
+   - Explain SQL observability. If SQL was captured during the run, include a
+     short example. If not, state that the generated query can be executed with
+     TeaQL SQL log options enabled as the next verification step.
+
+For Rust quick try, prefer adding one scenario test that initializes a local
+runtime, enables select SQL logging on the runtime context, executes a generated
+query, and asserts that SQL logs were captured. This makes the report concrete:
+the customer sees readable query code and the SQL produced behind it.
+
+The SQL log shown in the report should be customer-readable. Prefer showing:
+
+- result summary, such as `0 x StockItem` or `3 x Product`;
+- end time;
+- elapsed time;
+- formatted SQL with line breaks for `FROM`, `WHERE`, `ORDER BY`, `LIMIT`, and
+  boolean clauses.
+
+8. `Next Steps`
+   - Suggest the smallest next model change or customer scenario to try.
+   - Mention when to move from local path dependencies to a runtime repository
+     or artifact repository.
+
+## Java Track
+
+Use the Maven plugin when the target runtime is Java or when the user asks for
+the Maven toolchain.
+
+1. Install the local plugin when the target project needs the unpublished local
+   version:
+
+   ```bash
+   mvn -f ~/githome/teaql-maven-plugin/pom.xml install
+   ```
+
+2. Generate backend/domain code from the model:
+
+   ```bash
+   mvn teaql:gen-code \
+     -Dteaql.input=/path/to/model.xml \
+     -Dteaql.output=/path/to/target/build
+   ```
+
+3. Generate documentation or frontend model output when requested:
+
+   ```bash
+   mvn teaql:gen-doc \
+     -Dteaql.input=/path/to/model.xml \
+     -Dteaql.output=/path/to/target/build
+
+   mvn teaql:gen-model \
+     -Dteaql.input=/path/to/model.xml \
+     -Dteaql.output=/path/to/target/build
+   ```
+
+4. Run target-project Java checks when a Maven project is generated:
+
+   ```bash
+   mvn test
+   ```
+
+For quick try mode, keep the generated runtime as a separate local Maven module
+or directory and let the playground application depend on it locally. If no
+artifact repository exists yet, install the generated runtime into the local
+Maven cache or use a multi-module local workspace during the trial. Keep user
+controllers, query experiments, and scenario code in the playground module.
+
+## Configuration
+
+Both toolchains use the same configuration model:
+
+1. CLI or Maven parameter.
+2. Environment variable.
+3. `~/.teaql/config.yml`.
+4. Built-in default.
+
+Common keys:
+
+| Purpose | Rust CLI flag | Maven property | Environment variable |
+| --- | --- | --- | --- |
+| Service URL | `--service-url` | `teaql.serviceUrl` | `TEAQL_SERVICE_URL` |
+| License file | `--license-file` | `teaql.licenseFile` | `TEAQL_LICENSE_FILE` |
+| Output directory | `--output` | `teaql.output` | `TEAQL_BUILD_DIR` |
+| Timeout seconds | `--timeout-seconds` | `teaql.timeoutSeconds` | `TEAQL_TIMEOUT_SECONDS` |
+
+Recommended public generation endpoint:
+
+```text
+https://api.teaql.io/latest/generate
+```
+
+## Repair Loop
+
+1. Read generator output and compiler errors.
+2. Classify the failure:
+   - Model error: invalid entity, field, relationship, constant, or lifecycle.
+   - Integration error: missing dependency, project config, database provider, or
+     runtime wiring.
+   - Toolchain error: CLI/plugin config, service URL, license, or network.
+3. Fix model errors in `model.xml` and regenerate.
+4. Fix integration errors in the target project.
+5. Do not patch generated TeaQL service code. If the user explicitly asks for a
+   temporary investigation patch, mark it as temporary and do not present it as a
+   deliverable project change.
+
+## Done
+
+The task is done when generation has run for the requested runtime, target
+checks have passed or the remaining blocker is clearly reported, and the final
+response lists the model path, generated output path, playground path, report
+path, commands run, and any assumptions.
