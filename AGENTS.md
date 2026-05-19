@@ -55,6 +55,26 @@ The only acceptable exception is an explicitly requested temporary investigation
 patch. Such a patch must be reported as temporary and must not be presented as a
 deliverable project change.
 
+## Query API Rule
+
+When a task needs dynamic query construction, such as user-selected fields,
+runtime-selected operators, or other filters that are not known at compile time,
+use the high-level TeaQL JSON query APIs:
+
+- Rust: use `find_with_json_expr`.
+- Java / Spring Boot: use the documented `findByJson` /
+  `findWithJsonExpr` dynamic query surface.
+
+Reference:
+<https://teaql.io/docs/working-with-teaql-and-springboot/find-by-json-dynamic-query>
+
+These dynamic query APIs support field filters, chain-field filters, sorting,
+offset/limit, and page/page-size. Do not build dynamic application queries by
+calling lower-level filter primitives such as Rust `add_filter` or Java
+`addFilter` directly. Keep fixed business and security constraints, such as
+tenant scope and permission boundaries, in typed TeaQL request code around the
+dynamic JSON query.
+
 ## Output Discipline
 
 - For pure modeling tasks, output only valid KSML XML unless the user asks for an

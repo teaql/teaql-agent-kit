@@ -9,7 +9,7 @@ Rust, or both TeaQL code generation tracks.
 - Target runtime: Java, Rust, or both.
 - Target project directory or quick-try local trial directories.
 - TeaQL client tools installed from package registries. For Rust, install the
-  TeaQL CLI from crates.io.
+  `cargo-teaql` CLI from crates.io with `cargo install cargo-teaql`.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
 ## General Rules
@@ -28,8 +28,9 @@ Rust, or both TeaQL code generation tracks.
   generator, or runtime, then regenerate.
 - For user-facing workflows, install TeaQL client tools from package registries
   and use those clients to request TeaQL service generation. For Rust, install
-  the TeaQL CLI from crates.io. Do not ask users to download or build client
-  source repositories for normal generation work.
+  the `cargo-teaql` CLI from crates.io with `cargo install cargo-teaql`. Do not
+  ask users to download or build client source repositories for normal
+  generation work.
 - Local toolchain repositories are only for TeaQL toolchain development or
   debugging:
   - Rust CLI: `~/githome/teaql-cargo-cli`
@@ -39,17 +40,33 @@ Rust, or both TeaQL code generation tracks.
   treat schema creation and migration as explicit deployment decisions, not
   hidden runtime initialization side effects.
 - Use the same model input for Java and Rust when the user requests both tracks.
+- When writing customer query code that must accept dynamic fields, operators,
+  sort clauses, or pagination options at runtime, use the high-level JSON query
+  API instead of low-level filter mutation primitives. In Rust, use
+  `find_with_json_expr`; in Java / Spring Boot, use the documented
+  `findByJson` / `findWithJsonExpr` dynamic query surface. Do not assemble
+  dynamic queries by calling Rust `add_filter` or Java `addFilter` directly.
+  The official guide is
+  <https://teaql.io/docs/working-with-teaql-and-springboot/find-by-json-dynamic-query>.
+  Apply tenant scope, permission boundaries, page-size caps, and default
+  ordering as fixed typed TeaQL request constraints around the dynamic JSON
+  query.
 
 ## Rust Track
 
 Use the Rust CLI when the target runtime is Rust or when the user asks for the
 Cargo toolchain.
 
-1. Install the TeaQL CLI from crates.io.
+1. Install the TeaQL CLI from crates.io:
+
+   ```bash
+   cargo install cargo-teaql
+   ```
+
 2. Generate backend/domain code from the model:
 
    ```bash
-   teaql gen-code /path/to/model.xml \
+   cargo-teaql gen-code /path/to/model.xml \
      --output /path/to/target/build \
      --cwd /path/to/target/project
    ```
@@ -57,11 +74,11 @@ Cargo toolchain.
 3. Generate documentation or frontend model output when requested:
 
    ```bash
-   teaql gen-doc /path/to/model.xml \
+   cargo-teaql gen-doc /path/to/model.xml \
      --output /path/to/target/build \
      --cwd /path/to/target/project
 
-   teaql gen-model /path/to/model.xml \
+   cargo-teaql gen-model /path/to/model.xml \
      --output /path/to/target/build \
      --cwd /path/to/target/project
    ```

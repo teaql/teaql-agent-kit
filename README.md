@@ -107,13 +107,13 @@ workflow.
 
 TeaQL Vibe Kit expects code generation to happen after a valid KSML model
 exists. Users should install the TeaQL client tools from package registries,
-such as the Rust CLI from crates.io, and use those clients to request TeaQL
-service code generation. Do not ask users to download or build the client tool
-source code just to generate a service.
+such as the Rust CLI package `cargo-teaql` from crates.io, and use those clients
+to request TeaQL service code generation. Do not ask users to download or build
+the client tool source code just to generate a service.
 
 | Target | User-installed client | Main command |
 | --- | --- | --- |
-| Rust | TeaQL CLI installed from crates.io | `teaql gen-code <model.xml>` |
+| Rust | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-code <model.xml>` |
 | Java | TeaQL Maven plugin configured from a Maven repository | `mvn teaql:gen-code -Dteaql.input=<model.xml>` |
 
 The TeaQL client is only the request tool. Generated Java or Rust service code
@@ -143,8 +143,8 @@ Follow AGENTS.md.
 Model the domain first, validate the KSML model, then generate both Java and
 Rust TeaQL outputs.
 Before generation, summarize the model for review and wait for confirmation.
-Use the TeaQL client tools installed from package registries, including the Rust
-CLI from crates.io, to request TeaQL service code generation.
+Use the TeaQL client tools installed from package registries, including
+`cargo-teaql` from crates.io, to request TeaQL service code generation.
 Keep generated artifacts in the target project, run checks, and report the
 commands and output paths.
 ```
@@ -300,6 +300,17 @@ Filters are generated from the model, so the agent is guided toward valid fields
 and valid value types. For scalar fields, the Java generator emits
 `filterBy<Field>(...)` and readable helpers such as `whichNamesContain(...)`
 when the model supports them.
+
+### Q: Dynamic JSON Query
+
+When an application needs runtime-defined query criteria, such as fields,
+operators, sorting, or pagination chosen by a user or external request, use the
+Java / Spring Boot `findByJson` / `findWithJsonExpr` dynamic query surface. The
+official guide is
+<https://teaql.io/docs/working-with-teaql-and-springboot/find-by-json-dynamic-query>.
+Do not build that dynamic surface by calling lower-level `addFilter` primitives
+directly. Keep tenant scope, permission boundaries, page-size caps, and default
+ordering in typed TeaQL request code around the dynamic JSON query.
 
 ### Q: Multi-Level Loading
 
@@ -460,6 +471,17 @@ let merchants = Q::merchants()
     .execute_for_list(&ctx)
     .await?;
 ```
+
+### Q: Dynamic JSON Query
+
+When an application needs runtime-defined query criteria, such as fields,
+operators, sorting, or pagination chosen by a user or external request, use the
+Rust `find_with_json_expr` API. It corresponds to the JSON dynamic query
+capability documented in the Java / Spring Boot guide:
+<https://teaql.io/docs/working-with-teaql-and-springboot/find-by-json-dynamic-query>.
+Do not build that dynamic surface by calling lower-level `add_filter` primitives
+directly. Keep tenant scope, permission boundaries, page-size caps, and default
+ordering in typed TeaQL request code around the dynamic JSON query.
 
 ### Q: Multi-Level Loading
 
