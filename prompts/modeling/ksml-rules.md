@@ -105,8 +105,8 @@ Platform-managed multi-tenant models:
 Undecided tenancy:
 
 - Ask a short clarification when possible.
-- For autonomous quick try work, record the assumption before generation, such
-  as "Assumption: single-tenant quick try; no tenant boundary was modeled."
+- For autonomous playground work, record the assumption before generation, such
+  as "Assumption: single-tenant playground; no tenant boundary was modeled."
 
 ### Attribute Order
 

@@ -7,37 +7,51 @@ Rust, or both TeaQL code generation tracks.
 
 - Valid KSML model file or model directory.
 - Target runtime: Java, Rust, or both.
-- Target project directory or quick-try local trial directories.
-- TeaQL client tools installed from package registries. For Rust, install the
-  `cargo-teaql` CLI from crates.io with `cargo install cargo-teaql`.
+- Target project directory or playground local trial directory.
+- TeaQL client tools installed from package registries. For Java, resolve the
+  TeaQL Maven plugin from Maven Central or the configured Maven repository. For
+  Rust, install the `cargo-teaql` CLI from crates.io with
+  `cargo install cargo-teaql`.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
 ## General Rules
 
 - Do not generate from vague business text directly. Generate from the model.
 - Before generation, run `playbooks/model-review-gate.md`. The model must be
-  confirmed by the user, or autonomous quick try assumptions must be explicitly
+  confirmed by the user, or autonomous playground assumptions must be explicitly
   listed and accepted by the user's request.
-- In quick try mode, do not require git repositories or artifact publishing.
-- Keep generated runtime code separate from the user's experiment code. Use a
-  local path dependency when the playground needs to call generated APIs.
-- In project and enterprise modes, keep generated artifacts in the target
-  runtime project, not in the application code repository.
+- Playground mode is the default mode for local trials. Do not require git
+  repositories or artifact publishing.
+- In playground mode, keep model input and generated runtime code inside
+  `app-playground` for easy review: use `app-playground/models` for `model.xml`
+  and related model inputs, and `app-playground/generate-lib` for generated
+  TeaQL runtime code. Keep generated runtime code separate from the user's
+  experiment source and test code. Use a local path dependency when the
+  playground needs to call generated APIs.
 - Treat TeaQL service generated Java or Rust code as read-only. Do not edit
   generated files directly; fix the model, generator configuration, TeaQL
   generator, or runtime, then regenerate.
 - For user-facing workflows, install TeaQL client tools from package registries
-  and use those clients to request TeaQL service generation. For Rust, install
-  the `cargo-teaql` CLI from crates.io with `cargo install cargo-teaql`. Do not
-  ask users to download or build client source repositories for normal
-  generation work.
-- Local toolchain repositories are only for TeaQL toolchain development or
-  debugging:
-  - Rust CLI: `~/githome/teaql-cargo-cli`
-  - Java Maven plugin: `~/githome/teaql-maven-plugin`
-- Quick try mode may run `ensure_schema()` automatically to create local demo
-  tables and make the first run executable. Project and production modes must
-  treat schema creation and migration as explicit deployment decisions, not
+  and use those clients to request TeaQL service generation. For Java, use the
+  TeaQL Maven plugin from Maven Central or the configured Maven repository. For
+  Rust, install the `cargo-teaql` CLI from crates.io with
+  `cargo install cargo-teaql`.
+- Do not clone, search for, or build local or remote TeaQL toolchain source
+  repositories for normal generation work. If the Maven plugin or crates.io
+  crate cannot be installed, resolved, invoked, or executed, stop immediately and
+  report the specific blocker. Do not continue by attempting a source checkout,
+  local source build, hand-written generation, generated-code patch, or alternate
+  generation path.
+- Local toolchain source repositories are only for explicitly requested TeaQL
+  toolchain development or debugging, never as a fallback for generation:
+  - Rust CLI source: `~/githome/teaql-cargo-cli`
+  - Java Maven plugin source: `~/githome/teaql-maven-plugin`
+- Debugging mode is only active when the user explicitly asks to debug TeaQL
+  toolchains, generated output, or integration failures. State the mode switch
+  before using source repositories or temporary investigation patches.
+- Playground mode may run `ensure_schema()` automatically to create local demo
+  tables and make the first run executable. Outside playground mode, schema
+  creation and migration must be treated as explicit deployment decisions, not
   hidden runtime initialization side effects.
 - Use the same model input for Java and Rust when the user requests both tracks.
 - When writing customer query code that must accept dynamic fields, operators,
@@ -57,18 +71,23 @@ Rust, or both TeaQL code generation tracks.
 Use the Rust CLI when the target runtime is Rust or when the user asks for the
 Cargo toolchain.
 
-1. Install the TeaQL CLI from crates.io:
+1. Install the TeaQL CLI from crates.io. If this command fails because the crate
+   cannot be found, downloaded, installed, invoked, or executed, stop immediately
+   and report the failure. Do not look for source code or try to build
+   `cargo-teaql` from a local or remote repository.
 
    ```bash
    cargo install cargo-teaql
    ```
 
-2. Generate backend/domain code from the model:
+2. Generate backend/domain code from the model. In playground mode, create or
+   copy the reviewed model to `/path/to/app-playground/models/model.xml`, and
+   use `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
-   cargo-teaql gen-code /path/to/model.xml \
-     --output /path/to/target/build \
-     --cwd /path/to/target/project
+   cargo-teaql gen-code /path/to/app-playground/models/model.xml \
+     --output /path/to/app-playground/generate-lib \
+     --cwd /path/to/app-playground
    ```
 
 3. Generate documentation or frontend model output when requested:
@@ -90,9 +109,11 @@ Cargo toolchain.
    cargo test
    ```
 
-For quick try mode, create a separate Cargo playground crate and depend on the
-generated runtime by local path. The generated Rust crate is usually under the
-`lib` directory of the generator output:
+For playground mode, create a Cargo playground crate, place the model under
+`app-playground/models`, place generated runtime code under
+`app-playground/generate-lib`, and depend on the generated runtime by local path.
+The generated Rust crate is usually under the `lib` directory of the generator
+output:
 
 ```bash
 cargo init --bin --vcs none app-playground
@@ -100,17 +121,20 @@ cargo init --bin --vcs none app-playground
 
 ```toml
 [dependencies]
-my_generated_runtime = { path = "../generated-runtime/lib" }
+my_generated_runtime = { path = "generate-lib/lib" }
 ```
 
 Put customer query functions and business helper functions in `src/lib.rs`.
 Use `tests/` for scenario-oriented experiments. Keep `src/main.rs` as a thin
 smoke demo only.
 
-Recommended quick-try playground shape:
+Recommended playground shape:
 
 ```text
 app-playground/
+  models/
+    model.xml           # semantic source of truth for generation
+  generate-lib/         # generated Java or Rust TeaQL runtime code
   src/
     lib.rs               # customer functions and query helpers
     main.rs              # thin smoke demo
@@ -152,11 +176,12 @@ fn main() {
 }
 ```
 
-Keep regenerated TeaQL code in `generated-runtime`.
+Keep regenerated TeaQL code in `app-playground/generate-lib`. Do not mix
+generated runtime files into `src/` or `tests/`.
 
-## Quick Try Report
+## Playground Report
 
-For quick try mode, always create a short report in the playground directory:
+For playground mode, always create a short report in the playground directory:
 
 ```text
 app-playground/TEAQL_QUICK_TRY_REPORT.md
@@ -172,8 +197,8 @@ Recommended sections:
    - State the target runtime.
 
 2. `Directory Layout`
-   - List the model directory, generated runtime directory, and playground
-     directory.
+   - List `app-playground/models`, `app-playground/generate-lib`, and the
+     customer-owned playground source/test paths.
    - State explicitly that generated runtime code and customer experiment code
      are separate.
 
@@ -181,7 +206,7 @@ Recommended sections:
    - State the review status: `confirmed`, `confirmed_with_assumptions`, or
      `needs_revision`.
    - State who or what confirmed it: user confirmation, or explicit autonomous
-     assumptions for quick try mode.
+     assumptions for playground mode.
    - List the model path.
    - Summarize reviewed entities, important fields, relationships, constants,
      tenancy classification, tenant boundary if any, assumptions, and open
@@ -198,10 +223,10 @@ Recommended sections:
      runtime registration, and schema bootstrap helpers when present.
    - State that generated files should be regenerated from the model, not
      hand-edited.
-   - If `ensure_schema()` is called automatically in quick try mode, state that
-     this is a local demo convenience. In project and production modes, schema
-     creation and migration must be executed through an explicit deployment,
-     DBA, CI/CD, admin command, or migration workflow.
+   - If `ensure_schema()` is called automatically in playground mode, state that
+     this is a local demo convenience. Outside playground mode, schema creation
+     and migration must be executed through an explicit deployment, DBA, CI/CD,
+     admin command, or migration workflow.
 
 6. `Customer Playground`
    - List the customer-owned files in `src/lib.rs`, `src/main.rs`, and `tests/`.
@@ -231,7 +256,7 @@ Recommended sections:
      short example. If not, state that the generated query can be executed with
      TeaQL SQL log options enabled as the next verification step.
 
-For Rust quick try, prefer adding one scenario test that initializes a local
+For Rust playground mode, prefer adding one scenario test that initializes a local
 runtime, enables select SQL logging on the runtime context, executes a generated
 query, and asserts that SQL logs were captured. This makes the report concrete:
 the customer sees readable query code and the SQL produced behind it.
@@ -254,15 +279,19 @@ The SQL log shown in the report should be customer-readable. Prefer showing:
 Use the Maven plugin when the target runtime is Java or when the user asks for
 the Maven toolchain.
 
-1. Install or configure the TeaQL Maven plugin from the configured Maven
-   repository.
+1. Resolve the TeaQL Maven plugin from Maven Central or the configured Maven
+   repository. If Maven cannot resolve or execute the plugin, stop and report the
+   failure immediately. Do not look for source code or try to build the plugin
+   from a local or remote repository.
 
-2. Generate backend/domain code from the model:
+2. Generate backend/domain code from the model. In playground mode, create or
+   copy the reviewed model to `/path/to/app-playground/models/model.xml`, and
+   use `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
    mvn teaql:gen-code \
-     -Dteaql.input=/path/to/model.xml \
-     -Dteaql.output=/path/to/target/build
+     -Dteaql.input=/path/to/app-playground/models/model.xml \
+     -Dteaql.output=/path/to/app-playground/generate-lib
    ```
 
 3. Generate documentation or frontend model output when requested:
@@ -283,11 +312,13 @@ the Maven toolchain.
    mvn test
    ```
 
-For quick try mode, keep the generated runtime as a separate local Maven module
-or directory and let the playground application depend on it locally. If no
-artifact repository exists yet, install the generated runtime into the local
-Maven cache or use a multi-module local workspace during the trial. Keep user
-controllers, query experiments, and scenario code in the playground module.
+For playground mode, keep the model under `app-playground/models` and the
+generated runtime as a separate local Maven module or directory under
+`app-playground/generate-lib`. Let the playground application depend on it
+locally. If no artifact repository exists yet, install the generated runtime
+into the local Maven cache or use a multi-module local workspace during the
+trial. Keep user controllers, query experiments, and scenario code in the
+playground module.
 
 ## Configuration
 
@@ -323,7 +354,12 @@ https://api.teaql.io/latest/generate
    - Toolchain error: CLI/plugin config, service URL, license, or network.
 3. Fix model errors in `model.xml` and regenerate.
 4. Fix integration errors in the target project.
-5. Do not patch generated TeaQL service code. If the user explicitly asks for a
+5. For generation client installation, resolution, invocation, or execution
+   failures, stop immediately after reporting the blocker. Do not fall back to
+   source checkout, source build, local toolchain repository usage, hand-written
+   generation, generated-code patching, or alternate generation paths unless the
+   user explicitly changes the task to debugging mode.
+6. Do not patch generated TeaQL service code. If the user explicitly asks for a
    temporary investigation patch, mark it as temporary and do not present it as a
    deliverable project change.
 

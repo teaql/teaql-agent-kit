@@ -30,7 +30,7 @@ Use this checklist before delivering or generating code from a KSML model.
 - Use concrete example values, not `string()`, for normal business fields.
 - Do not assume multi-tenancy by default.
 - Include tenant ownership only when the user confirmed a tenant boundary or the
-  model records an explicit autonomous quick try assumption.
+  model records an explicit autonomous playground assumption.
 - Use `merchant="merchant(context)"` only when `merchant` is the confirmed
   tenant owner.
 - Put attributes in this order: identity, relationships, tenant boundary if
