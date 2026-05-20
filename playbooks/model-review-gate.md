@@ -34,12 +34,12 @@ Before generation, obtain one of these outcomes:
 
 - `confirmed`: the user explicitly confirms the model is correct enough to
   generate code.
-- `confirmed_with_assumptions`: the user accepts stated assumptions for quick
-  try or prototype generation.
+- `confirmed_with_assumptions`: the user accepts stated assumptions for
+  playground or prototype generation.
 - `needs_revision`: the user asks for model changes. Update `model.xml`,
   validate again, and repeat this gate.
 
-For autonomous quick try work, the agent may proceed only when assumptions are
+For autonomous playground work, the agent may proceed only when assumptions are
 explicitly listed in the report and the user has asked for autonomous execution.
 
 ## What To Check
@@ -56,7 +56,7 @@ Ask the user to review:
 
 ## Report Requirement
 
-Quick try and project reports must include a `Model Review` section with:
+Playground reports must include a `Model Review` section with:
 
 - Review status.
 - Confirmation source, such as user confirmation or autonomous assumptions.

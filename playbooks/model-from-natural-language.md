@@ -50,7 +50,7 @@ language and wants a TeaQL/KSML domain model.
    - Summarize entities, fields, relationships, tenancy classification, tenant
      boundary if any, constants, and assumptions in business language.
    - Get user confirmation, or record explicit assumptions when the user asked
-     for autonomous quick try execution.
+     for autonomous playground execution.
    - If the user asks for changes, update `model.xml`, validate again, and
      repeat the review gate.
 

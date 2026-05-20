@@ -30,10 +30,15 @@ When the user asks to generate Java or Rust TeaQL code:
 1. Complete the modeling workflow first.
 2. Complete the model review gate in `playbooks/model-review-gate.md`. Do not
    generate TeaQL service code until the model is confirmed or the user has
-   explicitly accepted listed assumptions for autonomous quick try work.
+   explicitly accepted listed assumptions for autonomous playground work.
 3. Read `playbooks/generate-with-toolchains.md`.
 4. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
-   the user's target runtime.
+   the user's target runtime. For Java, use the TeaQL Maven plugin from Maven
+   Central or the configured Maven repository. For Rust, use `cargo-teaql` from
+   crates.io. Do not clone, search for, or build local or remote toolchain source
+   code for normal generation work. If the generation client cannot be
+   installed, resolved, invoked, or executed, stop immediately and report the
+   blocker instead of trying source builds or alternate generation paths.
 5. Keep generated output in the target project or demo project, not in this kit
    repository.
 6. Run generation, compile checks, and tests where the target project provides
@@ -87,23 +92,37 @@ dynamic JSON query.
   code, or encode the safest domain assumption in the model when the user asked
   for autonomous execution.
 
-## Quick Try vs Project Mode
+## Working Modes
 
-- Quick try: use local directories outside the user's project repository. Do not
-  require git repositories or artifact publishing. Keep generated TeaQL runtime
-  code in one directory and user experiment code, query functions, and scenario
-  files in another directory, connected by a local path dependency when needed.
-  Quick try may call `ensure_schema()` automatically so the first local run can
-  create demo tables and show real data.
-- Project mode: keep lightweight TeaQL config and project-specific rules inside
-  the user's repository, and pin the kit version. Treat schema creation and
-  schema migration as explicit project decisions, not hidden runtime
-  initialization side effects.
-- Enterprise mode: keep model changes in a dedicated model repository, keep one
-  or more runtime repositories for core Java/Rust application scenarios, and let
-  downstream applications choose the runtime artifact that fits their scenario.
-  Integrate model validation, code generation, compatibility checks, and runtime
-  publishing into the enterprise CI/CD process.
-  Production runtime initialization must not automatically mutate database
-  schema. Run schema bootstrap, migration, or validation through an explicit
-  CI/CD, DBA, admin command, or deployment workflow.
+- Playground mode: use an `app-playground` directory outside the user's project
+  repository. Do not require git repositories or artifact publishing. Put the
+  generated `model.xml` and related model inputs under `app-playground/models`,
+  and put generated TeaQL runtime code under `app-playground/generate-lib` so
+  users can review both in one playground. Keep user experiment code, query
+  functions, and scenario files in normal playground source/test directories,
+  connected to the generated library by a local path dependency when needed.
+  Playground mode may call `ensure_schema()` automatically so the first local
+  run can create demo tables and show real data.
+- Debugging mode: only enter this mode when the user explicitly asks to debug
+  TeaQL toolchains, generated output, or integration failures. State that the
+  task has switched to debugging mode before using local toolchain source
+  repositories, source checkouts, temporary investigation patches, or other
+  actions forbidden in playground mode.
+- Future modes may be added later. Until a mode is explicitly defined, use
+  playground mode for local trials and debugging mode only for explicit
+  debugging requests.
+
+## Generation Client Stop Rule
+
+For normal generation, the Java and Rust generation clients are the boundary of
+the workflow:
+
+- Java: TeaQL Maven plugin from Maven Central or the configured Maven
+  repository.
+- Rust: `cargo-teaql` from crates.io.
+
+If either generation client cannot be installed, resolved, invoked, or executed,
+stop immediately and report the exact blocker. Do not search for source code,
+clone a repository, build a local toolchain, hand-write generated service code,
+patch generated service code, or try an alternate generation path unless the
+user explicitly switches the task to debugging mode.

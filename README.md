@@ -55,14 +55,13 @@ version, model the first domain from natural language, generate code, run
 checks, and document the commands used.
 ```
 
-The intended split is simple for early adoption, and scales into a stricter
-enterprise topology for larger programs:
+The current workflow has two explicit modes. Additional modes can be added later
+without changing the core modeling-first rule:
 
 | Mode | Where TeaQL Vibe Kit lives | Best for |
 | --- | --- | --- |
-| Quick try | Local trial directories outside the user's project repository | Demo, evaluation, proof of concept |
-| Project mode | Your project keeps lightweight TeaQL config and references a pinned kit version | Real products, team development, long-term iteration |
-| Enterprise mode | A dedicated model repository plus one or more runtime repositories | Large projects, shared domain models, multiple applications, enterprise CI/CD |
+| Playground mode | `app-playground` outside the user's project repository | Demo, evaluation, proof of concept |
+| Debugging mode | Explicitly requested TeaQL toolchain, generated output, or integration debugging workspace | Debugging failures after the normal generation client path stops |
 
 For larger projects, keep model change ownership separate from application
 implementation. A recommended enterprise split is:
@@ -78,30 +77,31 @@ applications choose the runtime that fits their scenario, such as a Java/Spring
 runtime for enterprise business services or a Rust runtime for native service
 workloads.
 
-In quick try mode, keep the setup deliberately lighter. A user may only want a
-few local directories, for example:
+In playground mode, keep the setup deliberately lighter. A user may only want a
+single local playground that keeps reviewable artifacts together, for example:
 
 ```text
-teaql-trial/
-  model/              # model.xml and generation input
-  generated-runtime/  # generated Java or Rust TeaQL code
-  app-playground/     # user's functions, queries, and scenario experiments
+app-playground/
+  models/        # model.xml and generation input
+  generate-lib/  # generated Java or Rust TeaQL code
+  src/           # user's functions and query experiments
+  tests/         # scenario experiments
 ```
 
 The playground should depend on the generated runtime by local path. It should
 not copy generated source into the same directory as the user's own experiment
-code, and it should not require a Maven/Cargo artifact repository before the
-user has decided to adopt the stack.
+code. Keeping `models/` and `generate-lib/` under `app-playground` makes both
+the semantic model and generated library easy for the user to review without
+requiring a Maven/Cargo artifact repository before adoption.
 
-Quick try mode may automatically call `ensure_schema()` during runtime setup so
+Playground mode may automatically call `ensure_schema()` during runtime setup so
 the first local run can create demo tables, seed sample data, and show a real
 query result. That is a convenience for evaluation only.
 
-In project and production modes, schema creation and migration are explicit
-deployment decisions. Do not hide schema mutation inside normal runtime
-initialization. Run schema bootstrap, migration, validation, or DBA review
-through the project's CI/CD, admin command, migration tool, or deployment
-workflow.
+Outside playground mode, schema creation and migration are explicit deployment
+decisions. Do not hide schema mutation inside normal runtime initialization. Run
+schema bootstrap, migration, validation, or DBA review through the project's
+CI/CD, admin command, migration tool, or deployment workflow.
 
 ## Toolchain Workflow
 
@@ -109,7 +109,9 @@ TeaQL Vibe Kit expects code generation to happen after a valid KSML model
 exists. Users should install the TeaQL client tools from package registries,
 such as the Rust CLI package `cargo-teaql` from crates.io, and use those clients
 to request TeaQL service code generation. Do not ask users to download or build
-the client tool source code just to generate a service.
+the client tool source code just to generate a service. If a generation client
+cannot be installed, resolved, invoked, or executed, stop immediately and report
+the blocker instead of trying source builds or alternate generation paths.
 
 | Target | User-installed client | Main command |
 | --- | --- | --- |
