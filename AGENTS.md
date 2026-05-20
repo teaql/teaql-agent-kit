@@ -80,6 +80,21 @@ calling lower-level filter primitives such as Rust `add_filter` or Java
 tenant scope and permission boundaries, in typed TeaQL request code around the
 dynamic JSON query.
 
+## Rust Entity Creation Rule
+
+When Rust customer code, playground code, examples, or tests need to create a
+new TeaQL entity instance, use the generated `Q` collection factory:
+
+```rust
+let entity = Q::<entities>().new_entity(&ctx);
+```
+
+For example, use `Q::products().new_entity(&ctx)` for a `product` entity. Do not
+construct generated entity structs directly with struct literals, `Default`, or
+ad hoc builders in customer code. The `Q` factory is the semantic creation
+surface that keeps context-aware defaults, generated conventions, and future
+runtime hooks in one place.
+
 ## Output Discipline
 
 - For pure modeling tasks, output only valid KSML XML unless the user asks for an

@@ -65,6 +65,11 @@ Rust, or both TeaQL code generation tracks.
   Apply tenant scope, permission boundaries, page-size caps, and default
   ordering as fixed typed TeaQL request constraints around the dynamic JSON
   query.
+- When writing Rust customer code, playground code, examples, or tests that
+  create new entities, use the generated `Q` collection factory:
+  `Q::<entities>().new_entity(&ctx)`, such as
+  `Q::products().new_entity(&ctx)`. Do not instantiate generated entity structs
+  directly with struct literals, `Default`, or ad hoc builders.
 
 ## Rust Track
 
