@@ -31,11 +31,12 @@ Rust, or both TeaQL code generation tracks.
   TeaQL runtime code. Keep generated runtime code separate from the user's
   experiment source and test code. Use a local path dependency when the
   playground needs to call generated APIs.
-- For Java playgrounds that should be runnable as an application, use
-  `teaql:gen-workspace` and write the output to
-  `app-playground/java-workspace` with `teaql.workspaceDir`. This goal requests
-  the TeaQL service scope `java-workspace` and generates a Spring Boot Gradle
-  workspace from the model, including `AGENTS.md`, `build.gradle`,
+- For Java playgrounds that should be runnable as an application, generate the
+  Java library first with `teaql:gen-lib`, then use `teaql:gen-workspace` and
+  write the workspace output to `app-playground/java-workspace` with
+  `teaql.workspaceDir`. The workspace goal requests the TeaQL service scope
+  `java-workspace` and generates a Spring Boot Gradle workspace from the model,
+  including `AGENTS.md`, `build.gradle`,
   `settings.gradle`, `gradle.properties`, `.gitignore`,
   `src/main/resources/application.properties`, the Spring Boot application
   class, `CustomUserContext`, `EnsureModelController`, and
@@ -322,9 +323,9 @@ the Maven toolchain.
    failure immediately. Do not look for source code or try to build the plugin
    from a local or remote repository.
 
-2. Generate backend/domain code from the model when the user needs the Java
-   generated library only. In playground mode, create or copy the reviewed model
-   to `/path/to/app-playground/models/model.xml`, and use
+2. Generate backend/domain library code from the reviewed model. In playground
+   mode, create or copy the reviewed model to
+   `/path/to/app-playground/models/model.xml`, and use
    `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
@@ -333,10 +334,10 @@ the Maven toolchain.
      -Dteaql.output=/path/to/app-playground/generate-lib
    ```
 
-3. Generate a runnable Java playground workspace when the user wants a local
-   Spring Boot application instead of only a generated library. Use
+3. After `teaql:gen-lib` succeeds, generate a runnable Java playground
+   workspace when the user wants a local Spring Boot application. Use
    `teaql:gen-workspace`, which requests the TeaQL service scope
-   `java-workspace`, and write it to
+   `java-workspace`, and write the workspace to
    `/path/to/app-playground/java-workspace`:
 
    ```bash
@@ -375,15 +376,16 @@ the Maven toolchain.
    gradle test
    ```
 
-For Java playground mode, prefer `teaql:gen-workspace` when the expected result
-is a runnable directory. Keep the model under `app-playground/models` and the
-generated workspace under `app-playground/java-workspace`. The workspace is the
+For Java playground mode, always start from the reviewed model, run
+`teaql:gen-lib`, and then run `teaql:gen-workspace` when the expected result is
+a runnable directory. Keep the model under `app-playground/models`, the
+generated library under `app-playground/generate-lib`, and the generated
+workspace under `app-playground/java-workspace`. The workspace is the
 application playground: keep user controllers, query experiments, scenario code,
 and integration configuration there, while continuing to treat generated TeaQL
-library classes as read-only. For library-only Java generation, use
-`teaql:gen-lib`, keep the generated runtime as a separate local Maven module or
-directory under `app-playground/generate-lib`, and wire the playground
-application to it locally.
+library classes as read-only. For library-only Java generation, stop after
+`teaql:gen-lib` and wire any playground application to the generated library
+locally.
 
 ## Configuration
 

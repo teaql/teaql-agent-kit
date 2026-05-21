@@ -95,11 +95,12 @@ code. Keeping `models/` and `generate-lib/` under `app-playground` makes both
 the semantic model and generated library easy for the user to review without
 requiring a Maven/Cargo artifact repository before adoption.
 
-For Java playgrounds that should run as a Spring Boot application, use
-`teaql:gen-workspace`. It requests the generator's `java-workspace` output and
-extracts a runnable Gradle workspace under `app-playground/java-workspace`,
-including project files, application properties, Java entry classes, a CRUD
-guide, and a domain-specific `AGENTS.md` for coding inside that workspace.
+For Java playgrounds that should run as a Spring Boot application, generate the
+Java library first with `teaql:gen-lib`, then use `teaql:gen-workspace`. The
+workspace goal requests the generator's `java-workspace` output and extracts a
+runnable Gradle workspace under `app-playground/java-workspace`, including
+project files, application properties, Java entry classes, a CRUD guide, and a
+domain-specific `AGENTS.md` for coding inside that workspace.
 
 Playground mode may automatically call `ensure_schema()` during runtime setup so
 the first local run can create demo tables, seed sample data, and show a real
