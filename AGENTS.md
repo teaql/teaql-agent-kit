@@ -154,13 +154,13 @@ runtime hooks in one place.
   generated `model.xml` and related model inputs under `app-playground/models`,
   and put generated TeaQL runtime code under `app-playground/generate-lib` so
   users can review both in one playground. When the target runtime is Java and
-  the user wants a runnable workspace, request the TeaQL service scope
-  `java-workspace` and write it under `app-playground/java-workspace`. That
-  generated workspace already contains Spring Boot/Gradle project files and its
-  own `AGENTS.md`; follow that workspace `AGENTS.md` for Java business code
-  inside the generated workspace. Keep user experiment code, query functions,
-  and scenario files in normal playground source/test directories, connected to
-  the generated library or workspace by local project wiring when needed.
+  the user wants a runnable workspace, use `teaql:gen-workspace` and write it
+  under `app-playground/java-workspace`. That generated workspace already
+  contains Spring Boot/Gradle project files and its own `AGENTS.md`; follow that
+  workspace `AGENTS.md` for Java business code inside the generated workspace.
+  Keep user experiment code, query functions, and scenario files in normal
+  playground source/test directories, connected to the generated library or
+  workspace by local project wiring when needed.
   Playground mode may call `ensure_schema()` automatically so the first local
   run can create demo tables and show real data.
 - Debugging mode: only enter this mode when the user explicitly asks to debug
