@@ -84,6 +84,7 @@ single local playground that keeps reviewable artifacts together, for example:
 app-playground/
   models/        # model.xml and generation input
   generate-lib/  # generated Java or Rust TeaQL code
+  java-workspace/# runnable Java Spring Boot workspace when using scope=java-workspace
   src/           # user's functions and query experiments
   tests/         # scenario experiments
 ```
@@ -93,6 +94,12 @@ not copy generated source into the same directory as the user's own experiment
 code. Keeping `models/` and `generate-lib/` under `app-playground` makes both
 the semantic model and generated library easy for the user to review without
 requiring a Maven/Cargo artifact repository before adoption.
+
+For Java playgrounds that should run as a Spring Boot application, use the
+generator's `java-workspace` scope. It produces a runnable Gradle workspace under
+`app-playground/java-workspace`, including project files, application
+properties, Java entry classes, a CRUD guide, and a domain-specific `AGENTS.md`
+for coding inside that workspace.
 
 Playground mode may automatically call `ensure_schema()` during runtime setup so
 the first local run can create demo tables, seed sample data, and show a real
@@ -117,6 +124,12 @@ the blocker instead of trying source builds or alternate generation paths.
 | --- | --- | --- |
 | Rust | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-code <model.xml>` |
 | Java | TeaQL Maven plugin configured from a Maven repository | `mvn teaql:gen-code -Dteaql.input=<model.xml>` |
+| Java runnable workspace | TeaQL Maven plugin configured from a Maven repository | `mvn teaql:gen-code -Dteaql.input=<model.xml> -Dteaql.scope=java-workspace` |
+
+The Java runnable workspace path requires a Maven plugin/client version that can
+pass the explicit TeaQL service scope. If the installed client cannot send
+`scope=java-workspace`, report that as the blocker instead of hand-building the
+workspace.
 
 The TeaQL client is only the request tool. Generated Java or Rust service code
 still comes from the TeaQL service endpoint, for example

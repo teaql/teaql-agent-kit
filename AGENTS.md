@@ -60,7 +60,44 @@ The only acceptable exception is an explicitly requested temporary investigation
 patch. Such a patch must be reported as temporary and must not be presented as a
 deliverable project change.
 
-## Query API Rule
+## Q and Query API Rule
+
+When writing TeaQL customer code, playground code, query functions, examples, or
+tests, start from the generated `Q` collection API for the target entity. Use
+the high-level Q/query surfaces for normal application queries instead of
+manually composing SQL, bypassing generated request types, or mutating generated
+service internals.
+
+For AI Coding tasks that write fixed business queries, use the typed TeaQL Q API
+for filtering, ordering/sorting, pagination, facet/aggregation, and
+selecting/projecting fields when those typed helpers are available. Keep the
+query pipeline explicit and close to the page's visual/request order:
+
+1. Start with the entity Q collection.
+2. Apply hard-coded business and security filters.
+3. Apply dynamic search from JSON when the UI or API accepts runtime criteria.
+4. Apply deterministic ordering/sorting.
+5. Apply pagination with the generated paging helper, such as `offset(0, 3)`.
+6. Apply facet/aggregation declarations when the business view needs them.
+7. Apply field selection/projection when the view only needs selected fields.
+8. Execute the query.
+
+For example, when the business view needs finished tasks, dynamic search,
+latest-first ordering, first-page pagination, product/task-type facets, and a
+small field projection, prefer a Q chain shaped like:
+
+```java
+Q.tasks()
+    .whichAreFinished()
+    .findByJson(json)
+    .orderByCreateTimeDescending()
+    .offset(0, 3)
+    .facetByProductAs("productFacet", Q.products().countTasks())
+    .facetByTaskTypeAs("taskTypeFacet", Q.taskType().countTasks())
+    .selectName()
+    .selectXXX()
+    .executeForList(ctx);
+```
 
 When a task needs dynamic query construction, such as user-selected fields,
 runtime-selected operators, or other filters that are not known at compile time,
@@ -74,11 +111,14 @@ Reference:
 <https://teaql.io/docs/working-with-teaql-and-springboot/find-by-json-dynamic-query>
 
 These dynamic query APIs support field filters, chain-field filters, sorting,
-offset/limit, and page/page-size. Do not build dynamic application queries by
-calling lower-level filter primitives such as Rust `add_filter` or Java
-`addFilter` directly. Keep fixed business and security constraints, such as
-tenant scope and permission boundaries, in typed TeaQL request code around the
-dynamic JSON query.
+offset/limit, page/page-size, dynamic search, and field selection where the
+runtime supports them. Use the documented aggregation query surface for dynamic
+grouping and aggregate calculations; do not emulate aggregation by loading broad
+result sets into application memory unless the data set is intentionally small
+and bounded. Do not build dynamic application queries by calling lower-level
+filter primitives such as Rust `add_filter` or Java `addFilter` directly. Keep
+fixed business and security constraints, such as tenant scope and permission
+boundaries, in typed TeaQL request code around the dynamic JSON query.
 
 ## Rust Entity Creation Rule
 
@@ -113,9 +153,14 @@ runtime hooks in one place.
   repository. Do not require git repositories or artifact publishing. Put the
   generated `model.xml` and related model inputs under `app-playground/models`,
   and put generated TeaQL runtime code under `app-playground/generate-lib` so
-  users can review both in one playground. Keep user experiment code, query
-  functions, and scenario files in normal playground source/test directories,
-  connected to the generated library by a local path dependency when needed.
+  users can review both in one playground. When the target runtime is Java and
+  the user wants a runnable workspace, request the TeaQL service scope
+  `java-workspace` and write it under `app-playground/java-workspace`. That
+  generated workspace already contains Spring Boot/Gradle project files and its
+  own `AGENTS.md`; follow that workspace `AGENTS.md` for Java business code
+  inside the generated workspace. Keep user experiment code, query functions,
+  and scenario files in normal playground source/test directories, connected to
+  the generated library or workspace by local project wiring when needed.
   Playground mode may call `ensure_schema()` automatically so the first local
   run can create demo tables and show real data.
 - Debugging mode: only enter this mode when the user explicitly asks to debug
