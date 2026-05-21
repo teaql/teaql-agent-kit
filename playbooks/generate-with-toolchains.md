@@ -8,6 +8,8 @@ Rust, or both TeaQL code generation tracks.
 - Valid KSML model file or model directory.
 - Target runtime: Java, Rust, or both.
 - Target project directory or playground local trial directory.
+- Optional generation scope when the user asks for a runnable Java workspace:
+  `java-workspace`.
 - TeaQL client tools installed from package registries. For Java, resolve the
   TeaQL Maven plugin from Maven Central or the configured Maven repository. For
   Rust, install the `cargo-teaql` CLI from crates.io with
@@ -28,6 +30,18 @@ Rust, or both TeaQL code generation tracks.
   TeaQL runtime code. Keep generated runtime code separate from the user's
   experiment source and test code. Use a local path dependency when the
   playground needs to call generated APIs.
+- For Java playgrounds that should be runnable as an application, use the
+  TeaQL service scope `java-workspace` and write the output to
+  `app-playground/java-workspace`. This scope generates a Spring Boot Gradle
+  workspace from the model, including `AGENTS.md`, `build.gradle`,
+  `settings.gradle`, `gradle.properties`, `.gitignore`,
+  `src/main/resources/application.properties`, the Spring Boot application
+  class, `CustomUserContext`, `EnsureModelController`, and
+  `docs/teaql-java-crud-guide.md`. Do not recreate these files by hand when the
+  scope is available.
+- When working inside a generated Java workspace, read and follow its generated
+  `AGENTS.md` in addition to this kit-level playbook. The generated workspace
+  guide is domain-specific and should govern Java business code written there.
 - Treat TeaQL service generated Java or Rust code as read-only. Do not edit
   generated files directly; fix the model, generator configuration, TeaQL
   generator, or runtime, then regenerate.
@@ -54,10 +68,23 @@ Rust, or both TeaQL code generation tracks.
   creation and migration must be treated as explicit deployment decisions, not
   hidden runtime initialization side effects.
 - Use the same model input for Java and Rust when the user requests both tracks.
-- When writing customer query code that must accept dynamic fields, operators,
-  sort clauses, or pagination options at runtime, use the high-level JSON query
-  API instead of low-level filter mutation primitives. In Rust, use
-  `find_with_json_expr`; in Java / Spring Boot, use the documented
+- When writing customer query code during AI Coding, start from the generated
+  `Q` collection API for the target entity. For fixed business queries, use
+  typed TeaQL Q/query helpers for filtering, ordering/sorting, pagination,
+  facet/aggregation, and field selection/projection where the generated runtime
+  exposes them. Keep query construction explicit and close to the page's
+  visual/request order: begin with the entity Q collection, apply hard-coded
+  business/security filters, apply dynamic search with `findByJson` /
+  `findWithJsonExpr` or `find_with_json_expr` when runtime criteria exist,
+  apply deterministic ordering, apply pagination such as `offset(0, 3)`, apply
+  facet/aggregation declarations such as `facetByProductAs(...)` when the
+  business view needs them, apply selected fields such as `selectName()`, then
+  execute the query.
+- When customer query code must accept dynamic fields, operators, selected
+  fields, search terms, sort clauses, aggregation requests, or pagination
+  options at runtime, use the high-level JSON query API or documented
+  aggregation query surface instead of low-level filter mutation primitives. In
+  Rust, use `find_with_json_expr`; in Java / Spring Boot, use the documented
   `findByJson` / `findWithJsonExpr` dynamic query surface. Do not assemble
   dynamic queries by calling Rust `add_filter` or Java `addFilter` directly.
   The official guide is
@@ -226,6 +253,10 @@ Recommended sections:
    - List the generated crate path and the key generated APIs, such as `Q`,
      entity structs, request builders, relation loaders, aggregation helpers,
      runtime registration, and schema bootstrap helpers when present.
+   - For Java `java-workspace` output, list the workspace path and call out the
+     generated `AGENTS.md`, Gradle files, Spring Boot application class,
+     `CustomUserContext`, `EnsureModelController`, application properties, and
+     CRUD guide.
    - State that generated files should be regenerated from the model, not
      hand-edited.
    - If `ensure_schema()` is called automatically in playground mode, state that
@@ -289,9 +320,10 @@ the Maven toolchain.
    failure immediately. Do not look for source code or try to build the plugin
    from a local or remote repository.
 
-2. Generate backend/domain code from the model. In playground mode, create or
-   copy the reviewed model to `/path/to/app-playground/models/model.xml`, and
-   use `/path/to/app-playground/generate-lib` as the output path:
+2. Generate backend/domain code from the model when the user needs the Java
+   generated library only. In playground mode, create or copy the reviewed model
+   to `/path/to/app-playground/models/model.xml`, and use
+   `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
    mvn teaql:gen-code \
@@ -299,7 +331,30 @@ the Maven toolchain.
      -Dteaql.output=/path/to/app-playground/generate-lib
    ```
 
-3. Generate documentation or frontend model output when requested:
+3. Generate a runnable Java playground workspace when the user wants a local
+   Spring Boot application instead of only a generated library. Request the
+   TeaQL service scope `java-workspace` and write it to
+   `/path/to/app-playground/java-workspace`:
+
+   ```bash
+   mvn teaql:gen-code \
+     -Dteaql.input=/path/to/app-playground/models/model.xml \
+     -Dteaql.output=/path/to/app-playground/java-workspace \
+     -Dteaql.scope=java-workspace
+   ```
+
+   If the installed Maven plugin does not expose a way to pass
+   `scope=java-workspace`, stop and report that plugin capability as the
+   blocker. Do not hand-build the workspace or fall back to source checkouts in
+   normal generation mode.
+
+   The generated workspace includes its own domain-specific `AGENTS.md`. Read it
+   before adding controllers, services, jobs, query experiments, or integration
+   code inside the workspace. Generated TeaQL library classes remain read-only;
+   workspace-owned Spring Boot code, controllers, tests, and configuration may
+   be edited.
+
+4. Generate documentation or frontend model output when requested:
 
    ```bash
    mvn teaql:gen-doc \
@@ -311,19 +366,22 @@ the Maven toolchain.
      -Dteaql.output=/path/to/target/build
    ```
 
-4. Run target-project Java checks when a Maven project is generated:
+5. Run target-project Java checks when a Maven or Gradle project is generated.
+   For `java-workspace`, run checks from the generated workspace directory:
 
    ```bash
    mvn test
+   gradle test
    ```
 
-For playground mode, keep the model under `app-playground/models` and the
+For Java playground mode, prefer `scope=java-workspace` when the expected result
+is a runnable directory. Keep the model under `app-playground/models` and the
+generated workspace under `app-playground/java-workspace`. The workspace is the
+application playground: keep user controllers, query experiments, scenario code,
+and integration configuration there, while continuing to treat generated TeaQL
+library classes as read-only. For library-only Java generation, keep the
 generated runtime as a separate local Maven module or directory under
-`app-playground/generate-lib`. Let the playground application depend on it
-locally. If no artifact repository exists yet, install the generated runtime
-into the local Maven cache or use a multi-module local workspace during the
-trial. Keep user controllers, query experiments, and scenario code in the
-playground module.
+`app-playground/generate-lib` and wire the playground application to it locally.
 
 ## Configuration
 
