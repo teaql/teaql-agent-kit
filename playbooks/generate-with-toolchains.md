@@ -133,7 +133,7 @@ Cargo toolchain.
    use `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
-   cargo-teaql gen-code /path/to/app-playground/models/model.xml \
+   cargo-teaql gen-lib /path/to/app-playground/models/model.xml \
      --output /path/to/app-playground/generate-lib \
      --cwd /path/to/app-playground
    ```
