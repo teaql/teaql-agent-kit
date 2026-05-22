@@ -10,6 +10,10 @@ Requirements:
 - Include exactly one `<root>` element.
 - The `<root>` element must include a non-empty `name` attribute.
 - Generate dynamic root metadata from the domain.
+- Decide the domain root business object from the user's stated largest system
+  boundary and ownership hierarchy. Do not infer it from the domain title alone.
+  If `platform` manages schools, `platform` is the domain root and `school`
+  references `platform`.
 - Include at least 20 objects for a full business application unless the user
   explicitly asks for a smaller model.
 - Include at least 5 constant objects.
