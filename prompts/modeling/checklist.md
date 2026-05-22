@@ -28,8 +28,10 @@ Use this checklist before delivering or generating code from a KSML model.
 - Must not have `_constant="true"`.
 - Must not have `_identifier`.
 - Must not have `<_value>` children.
-- Exactly one business object is the domain root object, such as `school` for a
-  learning management system.
+- Exactly one business object is the domain root object.
+- The domain root object matches the user's stated largest system boundary,
+  such as `platform` for an education platform that manages schools, or
+  `school` only when one school is the largest scope.
 - The domain root business object does not reference any other object.
 - Every non-root business object references at least one other object and is
   connected to the domain root graph.
