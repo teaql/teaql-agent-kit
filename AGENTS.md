@@ -32,21 +32,26 @@ When the user asks to generate Java or Rust TeaQL code:
    generate TeaQL service code until the model is confirmed or the user has
    explicitly accepted listed assumptions for autonomous playground work.
 3. Read `playbooks/generate-with-toolchains.md`.
-4. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
+4. For Java generation, read `playbooks/java-generation-known-pitfalls.md`
+   before running Maven.
+5. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
    the user's target runtime. For Java, use TeaQL Maven plugin version `0.1.8`
    or newer from the TeaQL Nexus releases repository:
    `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
-   Central freshness. For Rust, use `cargo-teaql` from crates.io. Do not clone,
-   search for, or build local or remote toolchain source code for normal
-   generation work. If the generation client, TeaQL Maven plugin goal, or TeaQL
-   plugin/tool invocation cannot be installed, resolved, invoked, or executed,
-   stop immediately and report the blocker instead of trying source builds or
-   alternate generation paths.
-5. Keep generated output in the target project or demo project, not in this kit
+   Central freshness, and do not invoke the plugin through Maven prefix
+   resolution such as `mvn teaql:gen-lib` or `mvn teaql:gen-workspace`; use the
+   fully qualified plugin coordinates, for example
+   `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib`. For Rust, use
+   `cargo-teaql` from crates.io. Do not clone, search for, or build local or
+   remote toolchain source code for normal generation work. If the generation
+   client, TeaQL Maven plugin goal, or TeaQL plugin/tool invocation cannot be
+   installed, resolved, invoked, or executed, stop immediately and report the
+   blocker instead of trying source builds or alternate generation paths.
+6. Keep generated output in the target project or demo project, not in this kit
    repository.
-6. Run generation, compile checks, and tests where the target project provides
+7. Run generation, compile checks, and tests where the target project provides
    them.
-7. Treat TeaQL service generated code as read-only. If generation or compilation
+8. Treat TeaQL service generated code as read-only. If generation or compilation
    fails because the model is wrong, update `model.xml` and regenerate instead
    of hand-editing generated code.
 
@@ -159,9 +164,11 @@ runtime hooks in one place.
   generated `model.xml` and related model inputs under `app-playground/models`,
   and put generated TeaQL runtime code under `app-playground/generate-lib` so
   users can review both in one playground. When the target runtime is Java and
-  the user wants a runnable workspace, use `teaql:gen-workspace` and write it
-  under `app-playground/java-workspace`. That generated workspace already
-  contains Spring Boot/Gradle project files and its own `AGENTS.md`; follow that
+  the user wants a runnable workspace, first run Java library generation with
+  the fully qualified `gen-lib` Maven plugin coordinate, then run
+  `gen-workspace` with the fully qualified coordinate and write it under
+  `app-playground/java-workspace`. That generated workspace already contains
+  Spring Boot/Maven project files and its own `AGENTS.md`; follow that
   workspace `AGENTS.md` for Java business code inside the generated workspace.
   Keep user experiment code, query functions, and scenario files in normal
   playground source/test directories, connected to the generated library or
@@ -184,7 +191,10 @@ the workflow:
 
 - Java: TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
   releases repository: `https://nexus.teaql.io/repository/maven-releases/`.
-  If it cannot be resolved from that repository, stop and report the blocker.
+  Invoke it with fully qualified coordinates such as
+  `io.teaql:teaql-maven-plugin:0.1.8:gen-lib`; do not use `mvn teaql:*`
+  prefix resolution. If it cannot be resolved from that repository, stop and
+  report the blocker.
 - Rust: `cargo-teaql` from crates.io.
 
 If either generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool

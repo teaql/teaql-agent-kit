@@ -9,13 +9,16 @@ Rust, or both TeaQL code generation tracks.
 - Target runtime: Java, Rust, or both.
 - Target project directory or playground local trial directory.
 - Optional Java workspace output when the user asks for a runnable Java
-  workspace: `teaql:gen-workspace`, which requests the TeaQL service scope
+  workspace: `gen-workspace`, which requests the TeaQL service scope
   `java-workspace`.
 - TeaQL client tools installed from package registries. For Java, resolve TeaQL
   Maven plugin version `0.1.8` or newer from the TeaQL Nexus releases
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
-  on Maven Central freshness. For Rust, install the `cargo-teaql` CLI from
-  crates.io with
+  on Maven Central freshness, and invoke the plugin with fully qualified
+  coordinates such as `io.teaql:teaql-maven-plugin:0.1.8:gen-lib`, not Maven
+  prefix resolution such as `mvn teaql:gen-lib`. Ensure Maven settings or the
+  project POM exposes that URL as both a repository and a plugin repository. For
+  Rust, install the `cargo-teaql` CLI from crates.io with
   `cargo install cargo-teaql`.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
@@ -34,16 +37,15 @@ Rust, or both TeaQL code generation tracks.
   experiment source and test code. Use a local path dependency when the
   playground needs to call generated APIs.
 - For Java playgrounds that should be runnable as an application, generate the
-  Java library first with `teaql:gen-lib`, then use `teaql:gen-workspace` and
-  write the workspace output to `app-playground/java-workspace` with
-  `teaql.workspaceDir`. The workspace goal requests the TeaQL service scope
-  `java-workspace` and generates a Spring Boot Gradle workspace from the model,
-  including `AGENTS.md`, `build.gradle`,
-  `settings.gradle`, `gradle.properties`, `.gitignore`,
-  `src/main/resources/application.properties`, the Spring Boot application
-  class, `CustomUserContext`, `EnsureModelController`, and
-  `docs/teaql-java-crud-guide.md`. Do not recreate these files by hand when the
-  goal is available.
+  Java library first with the fully qualified `gen-lib` Maven plugin coordinate,
+  then use the fully qualified `gen-workspace` coordinate and write the
+  workspace output to `app-playground/java-workspace` with `teaql.workspaceDir`.
+  The workspace goal requests the TeaQL service scope `java-workspace` and
+  generates a Spring Boot/Maven workspace from the model, including `AGENTS.md`,
+  `pom.xml`, `.gitignore`, `src/main/resources/application.properties`, the
+  Spring Boot application class, `CustomUserContext`, `EnsureModelController`,
+  and `docs/teaql-java-crud-guide.md`. Do not recreate these files by hand when
+  the goal is available.
 - When working inside a generated Java workspace, read and follow its generated
   `AGENTS.md` in addition to this kit-level playbook. The generated workspace
   guide is domain-specific and should govern Java business code written there.
@@ -54,8 +56,11 @@ Rust, or both TeaQL code generation tracks.
   and use those clients to request TeaQL service generation. For Java, use TeaQL
   Maven plugin version `0.1.8` or newer from the TeaQL Nexus releases
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
-  on Maven Central freshness. For Rust, install the `cargo-teaql` CLI from
-  crates.io with `cargo install cargo-teaql`.
+  on Maven Central freshness. Invoke Java goals with fully qualified Maven
+  plugin coordinates, for example
+  `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib`; do not use `mvn teaql:*`.
+  For Rust, install the `cargo-teaql` CLI from crates.io with
+  `cargo install cargo-teaql`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
   repositories for normal generation work. If the Maven plugin, Maven plugin
   goal, TeaQL plugin/tool invocation, or crates.io crate cannot be installed,
@@ -260,7 +265,7 @@ Recommended sections:
      entity structs, request builders, relation loaders, aggregation helpers,
      runtime registration, and schema bootstrap helpers when present.
    - For Java `java-workspace` output, list the workspace path and call out the
-     generated `AGENTS.md`, Gradle files, Spring Boot application class,
+     generated `AGENTS.md`, Maven files, Spring Boot application class,
      `CustomUserContext`, `EnsureModelController`, application properties, and
      CRUD guide.
    - State that generated files should be regenerated from the model, not
@@ -321,10 +326,18 @@ The SQL log shown in the report should be customer-readable. Prefer showing:
 Use the Maven plugin when the target runtime is Java or when the user asks for
 the Maven toolchain.
 
+Before running Maven for a Java project, read
+`playbooks/java-generation-known-pitfalls.md`.
+
 1. Resolve TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
    releases repository:
    `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
-   Central freshness. If Maven cannot resolve the plugin from the TeaQL Nexus
+   Central freshness. Invoke goals with fully qualified Maven plugin coordinates
+   such as `io.teaql:teaql-maven-plugin:0.1.8:gen-lib`; do not use Maven prefix
+   resolution such as `mvn teaql:gen-lib`, because Maven may resolve the prefix
+   against Central or the wrong plugin group. Ensure Maven settings or the
+   project POM exposes the TeaQL Nexus releases URL as both a repository and a
+   plugin repository. If Maven cannot resolve the plugin from the TeaQL Nexus
    repository, if the plugin version is older than `0.1.8`, or if any TeaQL
    Maven plugin goal or TeaQL plugin/tool invocation fails, stop and report the
    failure immediately. Do not look for source code, try to build the plugin from
@@ -337,27 +350,27 @@ the Maven toolchain.
    `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
-   mvn teaql:gen-lib \
+   mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib \
      -Dteaql.input=/path/to/app-playground/models/model.xml \
      -Dteaql.output=/path/to/app-playground/generate-lib
    ```
 
-3. After `teaql:gen-lib` succeeds, generate a runnable Java playground
+3. After `gen-lib` succeeds, generate a runnable Java playground
    workspace when the user wants a local Spring Boot application. Use
-   `teaql:gen-workspace`, which requests the TeaQL service scope
-   `java-workspace`, and write the workspace to
+   `gen-workspace`, which requests the TeaQL service scope `java-workspace`, and
+   write the workspace to
    `/path/to/app-playground/java-workspace`:
 
    ```bash
-   mvn teaql:gen-workspace \
+   mvn io.teaql:teaql-maven-plugin:0.1.8:gen-workspace \
      -Dteaql.input=/path/to/app-playground/models/model.xml \
      -Dteaql.workspaceDir=/path/to/app-playground/java-workspace
    ```
 
-   If the installed Maven plugin does not expose `teaql:gen-workspace`, or if
-   the `teaql:gen-workspace` invocation fails, stop and report that plugin
-   capability or invocation failure as the blocker. Do not hand-build the
-   workspace or fall back to source checkouts in normal generation mode.
+   If the installed Maven plugin does not expose `gen-workspace`, or if the
+   `gen-workspace` invocation fails, stop and report that plugin capability or
+   invocation failure as the blocker. Do not hand-build the workspace or fall
+   back to source checkouts in normal generation mode.
 
    The generated workspace includes its own domain-specific `AGENTS.md`. Read it
    before adding controllers, services, jobs, query experiments, or integration
@@ -368,33 +381,33 @@ the Maven toolchain.
 4. Generate documentation or frontend model output when requested:
 
    ```bash
-   mvn teaql:gen-doc \
+   mvn io.teaql:teaql-maven-plugin:0.1.8:gen-doc \
      -Dteaql.input=/path/to/model.xml \
      -Dteaql.output=/path/to/target/build
 
-   mvn teaql:gen-model \
+   mvn io.teaql:teaql-maven-plugin:0.1.8:gen-model \
      -Dteaql.input=/path/to/model.xml \
      -Dteaql.output=/path/to/target/build
    ```
 
-5. Run target-project Java checks when a Maven or Gradle project is generated.
+5. Run target-project Java checks when a Maven project is generated.
    For `java-workspace`, run checks from the generated workspace directory:
 
    ```bash
+   mvn clean compile
    mvn test
-   gradle test
    ```
 
 For Java playground mode, always start from the reviewed model, run
-`teaql:gen-lib`, and then run `teaql:gen-workspace` when the expected result is
-a runnable directory. Keep the model under `app-playground/models`, the
-generated library under `app-playground/generate-lib`, and the generated
-workspace under `app-playground/java-workspace`. The workspace is the
-application playground: keep user controllers, query experiments, scenario code,
-and integration configuration there, while continuing to treat generated TeaQL
-library classes as read-only. For library-only Java generation, stop after
-`teaql:gen-lib` and wire any playground application to the generated library
-locally.
+fully qualified `gen-lib`, and then run fully qualified `gen-workspace` when
+the expected result is a runnable directory. Keep the model under
+`app-playground/models`, the generated library under `app-playground/generate-lib`,
+and the generated workspace under `app-playground/java-workspace`. The workspace
+is the application playground: keep user controllers, query experiments,
+scenario code, and integration configuration there, while continuing to treat
+generated TeaQL library classes as read-only. For library-only Java generation,
+stop after fully qualified `gen-lib` and wire any playground application to the
+generated library locally.
 
 ## Configuration
 
