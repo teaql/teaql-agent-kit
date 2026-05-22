@@ -147,7 +147,7 @@ builds or alternate generation paths.
 
 | Target | User-installed client | Main command |
 | --- | --- | --- |
-| Rust | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-code <model.xml>` |
+| Rust | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-lib <model.xml>` |
 | Java | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
 | Java runnable workspace | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
