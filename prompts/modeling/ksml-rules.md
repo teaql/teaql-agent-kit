@@ -174,15 +174,24 @@ Example shape:
 ### Domain Root Business Object
 
 Every system must have exactly one domain root business object. This object
-represents the largest business scope covered by the system, such as `school`
-for a learning management system, `hospital` for a hospital management system,
-or `company` for an internal enterprise system.
+represents the largest business scope covered by the system. Choose it from the
+user's stated system boundary, not from examples. For example, use `platform`
+when the system manages multiple schools from an education platform, use
+`school` only when one school is the largest scope, use `hospital` when one
+hospital is the largest scope, and use `company` when one company is the
+largest scope.
 
 The domain root business object:
 
 - Is a business object, not the XML `<root>` metadata element.
 - Must not reference any other business object or constant object.
 - Should be named from the user's domain language, not from a generic template.
+- Must be the object that other top-level business objects belong to. If the
+  user says the root is `platform`, `group`, `organization`, `company`,
+  `school`, or another named object, use that object as the domain root.
+- Must not be replaced by a lower-level example object. In an education
+  platform that contains schools, `platform` is the root and `school` references
+  `platform`; in a single-school management system, `school` can be the root.
 
 All other objects must be connected to the model through relationships:
 
@@ -194,13 +203,27 @@ All other objects must be connected to the model through relationships:
 - Do not leave standalone business objects that are not associated with the
   domain root graph.
 
+Wrong when the user's system boundary is an education platform:
+
+```xml
+<school _name="School" .../>
+<platform _name="Platform" school="school()" .../>
+```
+
+Correct:
+
+```xml
+<platform _name="Platform" .../>
+<school _name="School" platform="platform()" .../>
+```
+
 Finite-set objects are special:
 
 - Status, type, category, priority, gender, and similar finite-set objects are
   constant objects.
 - Every constant object must reference the domain root business object directly,
-  such as `student_status school="school()"` or
-  `course_category school="school()"`.
+  such as `school_type platform="platform()"` when `platform` is the root, or
+  `course_category school="school()"` when `school` is the root.
 - Do not model finite-set objects as global standalone constants unless the user
   explicitly states they are cross-system global platform data.
 
