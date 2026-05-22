@@ -1,6 +1,6 @@
-# TeaQL Vibe Kit
+# TeaQL Agent Kit
 
-TeaQL Vibe Kit is the agent-native entry point for the TeaQL ecosystem. It is
+TeaQL Agent Kit is the agent-native entry point for the TeaQL ecosystem. It is
 designed for Codex, Claude Code, and similar coding agents that can read a
 repository, follow instructions, generate or modify files, run commands, inspect
 errors, and iterate until the project works.
@@ -27,8 +27,8 @@ existing project repository, and it does not require creating new git
 repositories.
 
 ```bash
-git clone https://github.com/teaql/teaql-vibe-kit.git
-cd teaql-vibe-kit
+git clone https://github.com/teaql/teaql-agent-kit.git
+cd teaql-agent-kit
 ```
 
 Then open the folder in Codex, Claude Code, or another coding agent and ask:
@@ -49,16 +49,65 @@ of treating this kit as a disposable demo:
 
 ```text
 This is a real project.
-Use TeaQL Vibe Kit as the external workflow reference.
+Use TeaQL Agent Kit as the external workflow reference.
 Initialize minimal TeaQL project configuration in this repository, pin the kit
 version, model the first domain from natural language, generate code, run
 checks, and document the commands used.
 ```
 
+## Quick Try
+
+Copy one of these prompts into your coding agent after opening this repository.
+
+### Java Spring Boot
+
+```text
+Follow the instructions from https://github.com/teaql/teaql-agent-kit.
+
+Use Java to build a school management system with these domain concepts:
+
+- Platform
+- School
+- School Type, with values Primary and Secondary
+
+Create the semantic TeaQL model first, review it, then generate the Java TeaQL
+code. Generate both the Java library with gen-lib and the runnable Spring Boot
+workspace with gen-workspace.
+
+Build only:
+- a query API for schools
+- a registration API for schools
+
+Use the generated Q/query APIs and generated update methods where applicable.
+Do not hand-edit generated TeaQL service code.
+```
+
+### Rust Playground
+
+```text
+Follow the instructions from https://github.com/teaql/teaql-agent-kit.
+
+Use Rust to build a school management system with these domain concepts:
+
+- Platform
+- School
+- School Type, with values Primary and Secondary
+
+Create the semantic TeaQL model first, review it, then generate the Rust TeaQL
+code.
+
+Build only:
+- a query function/API for schools
+- a registration function/API for schools
+
+Use the generated Q/query APIs and generated update methods where applicable.
+Do not hand-edit generated TeaQL service code.
+```
+
 The current workflow has two explicit modes. Additional modes can be added later
 without changing the core modeling-first rule:
 
-| Mode | Where TeaQL Vibe Kit lives | Best for |
+| Mode | Where TeaQL Agent Kit lives | Best for |
 | --- | --- | --- |
 | Playground mode | `app-playground` outside the user's project repository | Demo, evaluation, proof of concept |
 | Debugging mode | Explicitly requested TeaQL toolchain, generated output, or integration debugging workspace | Debugging failures after the normal generation client path stops |
@@ -115,7 +164,7 @@ CI/CD, admin command, migration tool, or deployment workflow.
 
 ## Toolchain Workflow
 
-TeaQL Vibe Kit expects code generation to happen after a valid KSML model
+TeaQL Agent Kit expects code generation to happen after a valid KSML model
 exists. Users should install the TeaQL client tools from package registries. For
 Java, resolve TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
 releases repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not
@@ -167,7 +216,7 @@ high-level loop is:
 Example agent request for both tracks:
 
 ```text
-Use TeaQL Vibe Kit.
+Use TeaQL Agent Kit.
 Follow AGENTS.md.
 Model the domain first, validate the KSML model, then generate both Java and
 Rust TeaQL outputs.
@@ -180,7 +229,7 @@ commands and output paths.
 
 ## Natural-Language Modeling
 
-TeaQL Vibe Kit includes a KSML modeling prompt pack adapted from the
+TeaQL Agent Kit includes a KSML modeling prompt pack adapted from the
 `openclaw-modeling-factory` modeling workflow. Use it when the first task is
 "turn this business description into a TeaQL model".
 
@@ -690,7 +739,7 @@ for agent-based TeaQL adoption.
 
 | Repository | Purpose | Main technology | Link |
 | --- | --- | --- | --- |
-| `teaql-vibe-kit` | Agent-native quick start, workflow guidance, examples, and ecosystem entry point. | Markdown / agent workflows | <https://github.com/teaql/teaql-vibe-kit> |
+| `teaql-agent-kit` | Agent-native quick start, workflow guidance, examples, and ecosystem entry point. | Markdown / agent workflows | <https://github.com/teaql/teaql-agent-kit> |
 | `teaql-code-gen` | Code generation service that turns a compact domain model into Java or Rust libraries. | Java / Gradle / Spring Boot / StringTemplate | <https://github.com/teaql/teaql-code-gen> |
 | `teaql-rs` | Rust-native TeaQL runtime, SQL compiler, query APIs, repositories, graph save, and executors. | Rust / Cargo | <https://github.com/teaql/teaql-rs> |
 | `teaql-cli` | Command-line workflow for code generation, documentation, model generation, config, and local aliases. | Rust / Cargo | <https://github.com/teaql/teaql-cli> |
@@ -717,7 +766,7 @@ model, then let TeaQL generate and constrain the implementation surface.
 
 ## Status
 
-TeaQL Vibe Kit is the lightweight entry repository for the broader TeaQL
-ecosystem. The Java and Rust tracks are both usable, and the vibe-coding
+TeaQL Agent Kit is the lightweight entry repository for the broader TeaQL
+ecosystem. The Java and Rust tracks are both usable, and the agent-coding
 workflow will continue to evolve around real examples, agent playbooks, and
 repeatable project initialization.
