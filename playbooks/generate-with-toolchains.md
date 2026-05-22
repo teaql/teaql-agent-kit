@@ -103,6 +103,11 @@ Rust, or both TeaQL code generation tracks.
   Apply tenant scope, permission boundaries, page-size caps, and default
   ordering as fixed typed TeaQL request constraints around the dynamic JSON
   query.
+- When customer code changes entity state, use the generated chainable
+  `update<Field>(...)` methods where the runtime exposes them. Chain related
+  field updates on the entity and persist with the normal TeaQL save surface.
+  Do not update generated state by direct field mutation, raw SQL, generated
+  service internals, or lower-level persistence bypasses.
 - When writing Rust customer code, playground code, examples, or tests that
   create new entities, use the generated `Q` collection factory:
   `Q::<entities>().new_entity(&ctx)`, such as

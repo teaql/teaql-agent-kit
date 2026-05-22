@@ -128,6 +128,26 @@ filter primitives such as Rust `add_filter` or Java `addFilter` directly. Keep
 fixed business and security constraints, such as tenant scope and permission
 boundaries, in typed TeaQL request code around the dynamic JSON query.
 
+## Chainable Update Rule
+
+TeaQL updates can also be expressed through generated chainable update methods.
+When customer code, playground code, examples, or tests need to change entity
+state, prefer generated `update<Field>(...)` methods over direct field mutation,
+manual SQL, or generated service internals. Chain multiple updates on the entity
+when the business transition changes more than one field, then persist through
+the normal TeaQL save surface:
+
+```java
+merchant
+    .updateStatus(MerchantStatus.ACTIVE)
+    .updateDisplayName("TeaQL Store")
+    .save(userContext);
+```
+
+Keep the chain focused on the domain state transition. If the update exposes a
+modeling error, fix the model and regenerate instead of patching generated
+service code.
+
 ## Rust Entity Creation Rule
 
 When Rust customer code, playground code, examples, or tests need to create a

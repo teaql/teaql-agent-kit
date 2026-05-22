@@ -444,6 +444,24 @@ As a best practice, keep domain behavior lightweight and easy to unit test:
 mutate or validate domain state inside the method, and perform persistence
 outside the domain method.
 
+### Chainable Updates
+
+Generated update methods are also part of the typed TeaQL surface. When a
+business action changes entity state, prefer chainable `update<Field>(...)`
+methods and persist through the normal save path instead of assigning fields
+directly or writing update SQL:
+
+```java
+merchant
+    .updateStatus(MerchantStatus.ACTIVE)
+    .updateDisplayName("TeaQL Store")
+    .save(userContext);
+```
+
+Use the chain to express one domain transition clearly. If the generated update
+surface is missing or awkward, fix the semantic model and regenerate rather than
+patching generated service code.
+
 ## Rust API Examples
 
 The Rust examples use the same merchant sample style, generated as a Rust
@@ -617,6 +635,11 @@ relation helpers, and `save(&ctx).await` still provide the persistence surface
 at the application/service boundary. Keep behavior methods small and testable:
 they should express domain state transitions, while persistence remains outside
 the method.
+
+Generated Rust update methods should be used the same way for state changes:
+chain the generated update calls when the runtime exposes chainable setters,
+then persist through `save(&ctx).await`. Avoid direct generated-field mutation
+and raw SQL for ordinary business updates.
 
 ## Runtime Context Customization
 
