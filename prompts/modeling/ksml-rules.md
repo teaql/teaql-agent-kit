@@ -175,11 +175,11 @@ Example shape:
 
 Every system must have exactly one domain root business object. This object
 represents the largest business scope covered by the system. Choose it from the
-user's stated system boundary, not from examples. For example, use `platform`
-when the system manages multiple schools from an education platform, use
-`school` only when one school is the largest scope, use `hospital` when one
-hospital is the largest scope, and use `company` when one company is the
-largest scope.
+user's stated system boundary and ownership hierarchy, not from examples or
+from the system title. Do not infer that `school` is the root merely because the
+domain name contains "school management". If the model includes both `platform`
+and `school`, and the platform manages, hosts, registers, or contains schools,
+then `platform` is the root and `school` must reference `platform`.
 
 The domain root business object:
 
@@ -189,9 +189,18 @@ The domain root business object:
 - Must be the object that other top-level business objects belong to. If the
   user says the root is `platform`, `group`, `organization`, `company`,
   `school`, or another named object, use that object as the domain root.
-- Must not be replaced by a lower-level example object. In an education
-  platform that contains schools, `platform` is the root and `school` references
-  `platform`; in a single-school management system, `school` can be the root.
+- Must not be replaced by a lower-level example object or by an object guessed
+  from the system name.
+
+Use these precedence rules when several root candidates appear:
+
+1. If the user explicitly identifies the root or largest layer, use that object.
+2. If a platform/operator/group/organization/company contains or manages
+   schools, stores, hospitals, departments, or other operating units, the
+   platform/operator/group/organization/company is the root.
+3. Use `school` as the root only when the described system scope is one school
+   and no higher-level platform, operator, group, organization, company, or
+   owner object manages that school.
 
 All other objects must be connected to the model through relationships:
 
@@ -208,6 +217,7 @@ Wrong when the user's system boundary is an education platform:
 ```xml
 <school _name="School" .../>
 <platform _name="Platform" school="school()" .../>
+<school_type _name="School Type" school="school()" .../>
 ```
 
 Correct:
@@ -215,6 +225,7 @@ Correct:
 ```xml
 <platform _name="Platform" .../>
 <school _name="School" platform="platform()" .../>
+<school_type _name="School Type" platform="platform()" .../>
 ```
 
 Finite-set objects are special:

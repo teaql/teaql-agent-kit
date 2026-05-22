@@ -30,8 +30,13 @@ Use this checklist before delivering or generating code from a KSML model.
 - Must not have `<_value>` children.
 - Exactly one business object is the domain root object.
 - The domain root object matches the user's stated largest system boundary,
-  such as `platform` for an education platform that manages schools, or
-  `school` only when one school is the largest scope.
+  not merely the system title.
+- If the model includes both `platform` and `school`, and the platform manages,
+  hosts, registers, or contains schools, `platform` is the domain root and
+  `school` references `platform`.
+- `school` is the domain root only when one school is the largest scope and no
+  higher-level platform, operator, group, organization, company, or owner object
+  manages that school.
 - The domain root business object does not reference any other object.
 - Every non-root business object references at least one other object and is
   connected to the domain root graph.
