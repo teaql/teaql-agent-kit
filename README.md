@@ -20,44 +20,10 @@ This repository is meant to become the GitHub-star entry point for TeaQL: start
 here when you want to try TeaQL with vibe coding, understand what TeaQL gives to
 AI-assisted development, and find the Java and Rust implementations.
 
-## Quick Start
-
-Use this mode when you only want to try TeaQL. It should not modify your
-existing project repository, and it does not require creating new git
-repositories.
-
-```bash
-git clone https://github.com/teaql/teaql-agent-kit.git
-cd teaql-agent-kit
-```
-
-Then open the folder in Codex, Claude Code, or another coding agent and ask:
-
-```text
-I only want to try TeaQL.
-Use this repository as the TeaQL vibe coding kit.
-Follow AGENTS.md.
-Create local trial directories outside this repository.
-Use the merchant sample model unless I provide another domain.
-Model the domain from natural language, generate TeaQL runtime code in one
-directory, create my experiment code in another directory, connect them with a
-local path dependency, run checks, fix any issues, and report the paths.
-```
-
-For a real project, initialize TeaQL support inside your own repository instead
-of treating this kit as a disposable demo:
-
-```text
-This is a real project.
-Use TeaQL Agent Kit as the external workflow reference.
-Initialize minimal TeaQL project configuration in this repository, pin the kit
-version, model the first domain from natural language, generate code, run
-checks, and document the commands used.
-```
-
 ## Quick Try
 
-Copy one of these prompts into your coding agent after opening this repository.
+Copy one of these prompts into your coding agent. The agent should read
+<https://github.com/teaql/teaql-agent-kit> directly and follow its instructions.
 
 ### Java Spring Boot
 
