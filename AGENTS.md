@@ -34,12 +34,14 @@ When the user asks to generate Java or Rust TeaQL code:
 3. Read `playbooks/generate-with-toolchains.md`.
 4. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
    the user's target runtime. For Java, use TeaQL Maven plugin version `0.1.8`
-   or newer from Maven Central or the configured Maven repository. For Rust, use
-   `cargo-teaql` from crates.io. Do not clone, search for, or build local or
-   remote toolchain source code for normal generation work. If the generation
-   client, TeaQL Maven plugin goal, or TeaQL plugin/tool invocation cannot be
-   installed, resolved, invoked, or executed, stop immediately and report the
-   blocker instead of trying source builds or alternate generation paths.
+   or newer from the TeaQL Nexus releases repository:
+   `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
+   Central freshness. For Rust, use `cargo-teaql` from crates.io. Do not clone,
+   search for, or build local or remote toolchain source code for normal
+   generation work. If the generation client, TeaQL Maven plugin goal, or TeaQL
+   plugin/tool invocation cannot be installed, resolved, invoked, or executed,
+   stop immediately and report the blocker instead of trying source builds or
+   alternate generation paths.
 5. Keep generated output in the target project or demo project, not in this kit
    repository.
 6. Run generation, compile checks, and tests where the target project provides
@@ -180,8 +182,9 @@ runtime hooks in one place.
 For normal generation, the Java and Rust generation clients are the boundary of
 the workflow:
 
-- Java: TeaQL Maven plugin version `0.1.8` or newer from Maven Central or the
-  configured Maven repository.
+- Java: TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
+  releases repository: `https://nexus.teaql.io/repository/maven-releases/`.
+  If it cannot be resolved from that repository, stop and report the blocker.
 - Rust: `cargo-teaql` from crates.io.
 
 If either generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool

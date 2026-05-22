@@ -114,11 +114,12 @@ CI/CD, admin command, migration tool, or deployment workflow.
 ## Toolchain Workflow
 
 TeaQL Vibe Kit expects code generation to happen after a valid KSML model
-exists. Users should install the TeaQL client tools from package registries,
-such as TeaQL Maven plugin version `0.1.8` or newer for Java and the Rust CLI
-package `cargo-teaql` from crates.io, and use those clients to request TeaQL
-service code generation. Do not ask users to download or build the client tool
-source code just to generate a service. If a generation client, TeaQL Maven
+exists. Users should install the TeaQL client tools from package registries. For
+Java, resolve TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
+releases repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not
+rely on Maven Central freshness. For Rust, install the CLI package
+`cargo-teaql` from crates.io. Do not ask users to download or build the client
+tool source code just to generate a service. If a generation client, TeaQL Maven
 plugin goal, or TeaQL plugin/tool invocation cannot be installed, resolved,
 invoked, or executed, stop immediately and report the blocker instead of trying
 source builds or alternate generation paths.
@@ -126,13 +127,15 @@ source builds or alternate generation paths.
 | Target | User-installed client | Main command |
 | --- | --- | --- |
 | Rust | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-code <model.xml>` |
-| Java | TeaQL Maven plugin `>= 0.1.8` configured from a Maven repository | `mvn teaql:gen-lib -Dteaql.input=<model.xml>` |
-| Java runnable workspace | TeaQL Maven plugin `>= 0.1.8` configured from a Maven repository | `mvn teaql:gen-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
+| Java | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn teaql:gen-lib -Dteaql.input=<model.xml>` |
+| Java runnable workspace | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn teaql:gen-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
 The Java runnable workspace path requires a Maven plugin/client version that can
-run `teaql:gen-workspace`; use version `0.1.8` or newer. If the installed client
-does not provide that goal, or if any TeaQL plugin/tool call fails, report that
-as the blocker and stop instead of hand-building the workspace.
+run `teaql:gen-workspace`; use version `0.1.8` or newer from the TeaQL Nexus
+releases repository. If the plugin cannot be resolved from that repository, if
+the installed client does not provide that goal, or if any TeaQL plugin/tool
+call fails, report that as the blocker and stop instead of hand-building the
+workspace.
 
 The TeaQL client is only the request tool. Generated Java or Rust service code
 still comes from the TeaQL service endpoint, for example

@@ -12,8 +12,10 @@ Rust, or both TeaQL code generation tracks.
   workspace: `teaql:gen-workspace`, which requests the TeaQL service scope
   `java-workspace`.
 - TeaQL client tools installed from package registries. For Java, resolve TeaQL
-  Maven plugin version `0.1.8` or newer from Maven Central or the configured
-  Maven repository. For Rust, install the `cargo-teaql` CLI from crates.io with
+  Maven plugin version `0.1.8` or newer from the TeaQL Nexus releases
+  repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
+  on Maven Central freshness. For Rust, install the `cargo-teaql` CLI from
+  crates.io with
   `cargo install cargo-teaql`.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
@@ -50,9 +52,10 @@ Rust, or both TeaQL code generation tracks.
   generator, or runtime, then regenerate.
 - For user-facing workflows, install TeaQL client tools from package registries
   and use those clients to request TeaQL service generation. For Java, use TeaQL
-  Maven plugin version `0.1.8` or newer from Maven Central or the configured
-  Maven repository. For Rust, install the `cargo-teaql` CLI from crates.io with
-  `cargo install cargo-teaql`.
+  Maven plugin version `0.1.8` or newer from the TeaQL Nexus releases
+  repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
+  on Maven Central freshness. For Rust, install the `cargo-teaql` CLI from
+  crates.io with `cargo install cargo-teaql`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
   repositories for normal generation work. If the Maven plugin, Maven plugin
   goal, TeaQL plugin/tool invocation, or crates.io crate cannot be installed,
@@ -318,13 +321,15 @@ The SQL log shown in the report should be customer-readable. Prefer showing:
 Use the Maven plugin when the target runtime is Java or when the user asks for
 the Maven toolchain.
 
-1. Resolve TeaQL Maven plugin version `0.1.8` or newer from Maven Central or the
-   configured Maven repository. If Maven cannot resolve the plugin, if the
-   plugin version is older than `0.1.8`, or if any TeaQL Maven plugin goal or
-   TeaQL plugin/tool invocation fails, stop and report the failure immediately.
-   Do not look for source code, try to build the plugin from a local or remote
-   repository, hand-build generated output, or try an alternate generation path
-   in normal generation mode.
+1. Resolve TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
+   releases repository:
+   `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
+   Central freshness. If Maven cannot resolve the plugin from the TeaQL Nexus
+   repository, if the plugin version is older than `0.1.8`, or if any TeaQL
+   Maven plugin goal or TeaQL plugin/tool invocation fails, stop and report the
+   failure immediately. Do not look for source code, try to build the plugin from
+   a local or remote repository, hand-build generated output, or try an alternate
+   generation path in normal generation mode.
 
 2. Generate backend/domain library code from the reviewed model. In playground
    mode, create or copy the reviewed model to
