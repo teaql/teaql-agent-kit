@@ -28,6 +28,11 @@ Use this checklist before delivering or generating code from a KSML model.
 - Must not have `_constant="true"`.
 - Must not have `_identifier`.
 - Must not have `<_value>` children.
+- Exactly one business object is the domain root object, such as `school` for a
+  learning management system.
+- The domain root business object does not reference any other object.
+- Every non-root business object references at least one other object and is
+  connected to the domain root graph.
 - Use concrete example values, not `string()`, for normal business fields.
 - Do not assume multi-tenancy by default.
 - Include tenant ownership only when the user confirmed a tenant boundary or the
@@ -46,6 +51,8 @@ Use this checklist before delivering or generating code from a KSML model.
 - Must have `_identifier="code"`.
 - Must have `<_value>` children.
 - Must not have `merchant="merchant(context)"`.
+- Must reference the domain root business object directly unless explicitly
+  modeled as cross-system global platform data.
 - `<_value>` ids start from `1001` and increment sequentially.
 - `<_value>` code values are `UPPERCASE_WITH_UNDERSCORES`.
 

@@ -171,6 +171,39 @@ Example shape:
   `appointment_status()` or `gender()`.
 - Do not use `_id` suffixes for object references.
 
+### Domain Root Business Object
+
+Every system must have exactly one domain root business object. This object
+represents the largest business scope covered by the system, such as `school`
+for a learning management system, `hospital` for a hospital management system,
+or `company` for an internal enterprise system.
+
+The domain root business object:
+
+- Is a business object, not the XML `<root>` metadata element.
+- Must not reference any other business object or constant object.
+- Should be named from the user's domain language, not from a generic template.
+
+All other objects must be connected to the model through relationships:
+
+- Every non-root business object must reference at least one other business
+  object or constant object.
+- Prefer connecting operational data to its natural parent, such as
+  `student school="school()"`, `course school="school()"`, or
+  `enrollment student="student()" course="course()"`.
+- Do not leave standalone business objects that are not associated with the
+  domain root graph.
+
+Finite-set objects are special:
+
+- Status, type, category, priority, gender, and similar finite-set objects are
+  constant objects.
+- Every constant object must reference the domain root business object directly,
+  such as `student_status school="school()"` or
+  `course_category school="school()"`.
+- Do not model finite-set objects as global standalone constants unless the user
+  explicitly states they are cross-system global platform data.
+
 Every object must include:
 
 - `_name`.
