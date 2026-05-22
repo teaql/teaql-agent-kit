@@ -11,9 +11,9 @@ Rust, or both TeaQL code generation tracks.
 - Optional Java workspace output when the user asks for a runnable Java
   workspace: `teaql:gen-workspace`, which requests the TeaQL service scope
   `java-workspace`.
-- TeaQL client tools installed from package registries. For Java, resolve the
-  TeaQL Maven plugin from Maven Central or the configured Maven repository. For
-  Rust, install the `cargo-teaql` CLI from crates.io with
+- TeaQL client tools installed from package registries. For Java, resolve TeaQL
+  Maven plugin version `0.1.8` or newer from Maven Central or the configured
+  Maven repository. For Rust, install the `cargo-teaql` CLI from crates.io with
   `cargo install cargo-teaql`.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
@@ -49,16 +49,16 @@ Rust, or both TeaQL code generation tracks.
   generated files directly; fix the model, generator configuration, TeaQL
   generator, or runtime, then regenerate.
 - For user-facing workflows, install TeaQL client tools from package registries
-  and use those clients to request TeaQL service generation. For Java, use the
-  TeaQL Maven plugin from Maven Central or the configured Maven repository. For
-  Rust, install the `cargo-teaql` CLI from crates.io with
+  and use those clients to request TeaQL service generation. For Java, use TeaQL
+  Maven plugin version `0.1.8` or newer from Maven Central or the configured
+  Maven repository. For Rust, install the `cargo-teaql` CLI from crates.io with
   `cargo install cargo-teaql`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
-  repositories for normal generation work. If the Maven plugin or crates.io
-  crate cannot be installed, resolved, invoked, or executed, stop immediately and
-  report the specific blocker. Do not continue by attempting a source checkout,
-  local source build, hand-written generation, generated-code patch, or alternate
-  generation path.
+  repositories for normal generation work. If the Maven plugin, Maven plugin
+  goal, TeaQL plugin/tool invocation, or crates.io crate cannot be installed,
+  resolved, invoked, or executed, stop immediately and report the specific
+  blocker. Do not continue by attempting a source checkout, local source build,
+  hand-written generation, generated-code patch, or alternate generation path.
 - Local toolchain source repositories are only for explicitly requested TeaQL
   toolchain development or debugging, never as a fallback for generation:
   - Rust CLI source: `~/githome/teaql-cargo-cli`
@@ -318,10 +318,13 @@ The SQL log shown in the report should be customer-readable. Prefer showing:
 Use the Maven plugin when the target runtime is Java or when the user asks for
 the Maven toolchain.
 
-1. Resolve the TeaQL Maven plugin from Maven Central or the configured Maven
-   repository. If Maven cannot resolve or execute the plugin, stop and report the
-   failure immediately. Do not look for source code or try to build the plugin
-   from a local or remote repository.
+1. Resolve TeaQL Maven plugin version `0.1.8` or newer from Maven Central or the
+   configured Maven repository. If Maven cannot resolve the plugin, if the
+   plugin version is older than `0.1.8`, or if any TeaQL Maven plugin goal or
+   TeaQL plugin/tool invocation fails, stop and report the failure immediately.
+   Do not look for source code, try to build the plugin from a local or remote
+   repository, hand-build generated output, or try an alternate generation path
+   in normal generation mode.
 
 2. Generate backend/domain library code from the reviewed model. In playground
    mode, create or copy the reviewed model to
@@ -346,9 +349,10 @@ the Maven toolchain.
      -Dteaql.workspaceDir=/path/to/app-playground/java-workspace
    ```
 
-   If the installed Maven plugin does not expose `teaql:gen-workspace`, stop and
-   report that plugin capability as the blocker. Do not hand-build the workspace
-   or fall back to source checkouts in normal generation mode.
+   If the installed Maven plugin does not expose `teaql:gen-workspace`, or if
+   the `teaql:gen-workspace` invocation fails, stop and report that plugin
+   capability or invocation failure as the blocker. Do not hand-build the
+   workspace or fall back to source checkouts in normal generation mode.
 
    The generated workspace includes its own domain-specific `AGENTS.md`. Read it
    before adding controllers, services, jobs, query experiments, or integration
@@ -422,10 +426,11 @@ https://api.teaql.io/latest/generate
 3. Fix model errors in `model.xml` and regenerate.
 4. Fix integration errors in the target project.
 5. For generation client installation, resolution, invocation, or execution
-   failures, stop immediately after reporting the blocker. Do not fall back to
-   source checkout, source build, local toolchain repository usage, hand-written
-   generation, generated-code patching, or alternate generation paths unless the
-   user explicitly changes the task to debugging mode.
+   failures, including TeaQL Maven plugin goal failures and TeaQL plugin/tool
+   invocation failures, stop immediately after reporting the blocker. Do not
+   fall back to source checkout, source build, local toolchain repository usage,
+   hand-written generation, generated-code patching, or alternate generation
+   paths unless the user explicitly changes the task to debugging mode.
 6. Do not patch generated TeaQL service code. If the user explicitly asks for a
    temporary investigation patch, mark it as temporary and do not present it as a
    deliverable project change.
