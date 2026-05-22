@@ -139,6 +139,8 @@ runtime hooks in one place.
 
 - For pure modeling tasks, output only valid KSML XML unless the user asks for an
   explanation.
+- Generated KSML must have exactly one `<root>` element with a non-empty `name`
+  attribute; TeaQL generation uses root `name` as the domain name.
 - For implementation tasks, keep generated artifacts in the target project, not
   in this kit repository.
 - Do not edit generated Java or Rust TeaQL service files directly. Update the

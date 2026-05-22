@@ -8,6 +8,7 @@ Requirements:
 
 - Generate valid XML.
 - Include exactly one `<root>` element.
+- The `<root>` element must include a non-empty `name` attribute.
 - Generate dynamic root metadata from the domain.
 - Include at least 20 objects for a full business application unless the user
   explicitly asks for a smaller model.

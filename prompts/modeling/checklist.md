@@ -5,6 +5,7 @@ Use this checklist before delivering or generating code from a KSML model.
 ## Root
 
 - Exactly one `<root>` element.
+- Root `name` is present and non-empty.
 - `alias_model_name` is snake_case.
 - `english_name` is Title Case.
 - `chinese_name` is domain-specific.

@@ -121,7 +121,8 @@ This reads as: who you are, who you belong to, then system records.
 
 ## Root Definition
 
-The model must contain exactly one `<root>` element.
+The model must contain exactly one `<root>` element. The root must include a
+non-empty `name` attribute; TeaQL generation uses it as the domain name.
 
 Generate root metadata dynamically from the user's domain. Do not copy example
 values.
