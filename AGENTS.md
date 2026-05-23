@@ -68,6 +68,24 @@ The only acceptable exception is an explicitly requested temporary investigation
 patch. Such a patch must be reported as temporary and must not be presented as a
 deliverable project change.
 
+## Generated Workspace AGENTS.md Rule
+
+Generated TeaQL workspaces may contain their own `AGENTS.md`. That file is
+generated dynamically by the server for the specific domain, runtime, and
+workspace shape, and may contain rules that are newer or more specific than this
+kit-level file.
+
+Before any AI coding agent reads, edits, tests, runs, or explains code inside a
+generated workspace, it must first locate and read that workspace's `AGENTS.md`.
+If the workspace is regenerated, read the generated `AGENTS.md` again before
+continuing, because its contents may have changed. Treat the generated workspace
+`AGENTS.md` as the local authority for work inside that workspace; combine it
+with this kit-level file, and let the more specific workspace rule win when the
+two differ.
+
+If no `AGENTS.md` exists in a directory that is expected to be a generated
+workspace, stop and report that blocker instead of guessing the workspace rules.
+
 ## Q and Query API Rule
 
 When writing TeaQL customer code, playground code, query functions, examples, or
@@ -188,8 +206,9 @@ runtime hooks in one place.
   the fully qualified `gen-lib` Maven plugin coordinate, then run
   `gen-workspace` with the fully qualified coordinate and write it under
   `app-playground/java-workspace`. That generated workspace already contains
-  Spring Boot/Maven project files and its own `AGENTS.md`; follow that
-  workspace `AGENTS.md` for Java business code inside the generated workspace.
+  Spring Boot/Maven project files and its own dynamic `AGENTS.md`; read that
+  workspace `AGENTS.md` before any work inside the generated workspace and read
+  it again after regeneration before continuing.
   Keep user experiment code, query functions, and scenario files in normal
   playground source/test directories, connected to the generated library or
   workspace by local project wiring when needed.
