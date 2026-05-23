@@ -47,8 +47,14 @@ Rust, or both TeaQL code generation tracks.
   and `docs/teaql-java-crud-guide.md`. Do not recreate these files by hand when
   the goal is available.
 - When working inside a generated Java workspace, read and follow its generated
-  `AGENTS.md` in addition to this kit-level playbook. The generated workspace
-  guide is domain-specific and should govern Java business code written there.
+  `AGENTS.md` in addition to this kit-level playbook before reading, editing,
+  testing, running, or explaining workspace code. The generated workspace guide
+  is created dynamically by the server for that domain and runtime, so read it
+  again after every workspace regeneration. It is the local authority for Java
+  business code written there; when it is more specific than this kit-level
+  playbook, follow the workspace guide. If the workspace is expected to be
+  generated but has no `AGENTS.md`, stop and report that missing guide as the
+  blocker.
 - Treat TeaQL service generated Java or Rust code as read-only. Do not edit
   generated files directly; fix the model, generator configuration, TeaQL
   generator, or runtime, then regenerate.
@@ -377,11 +383,15 @@ Before running Maven for a Java project, read
    invocation failure as the blocker. Do not hand-build the workspace or fall
    back to source checkouts in normal generation mode.
 
-   The generated workspace includes its own domain-specific `AGENTS.md`. Read it
-   before adding controllers, services, jobs, query experiments, or integration
-   code inside the workspace. Generated TeaQL library classes remain read-only;
-   workspace-owned Spring Boot code, controllers, tests, and configuration may
-   be edited.
+   The generated workspace includes its own domain-specific `AGENTS.md`,
+   generated dynamically by the server. Read that file before inspecting,
+   adding, editing, testing, running, or explaining controllers, services, jobs,
+   query experiments, or integration code inside the workspace. If the workspace
+   is regenerated, read the regenerated `AGENTS.md` again before continuing,
+   because its rules may have changed. If the expected generated `AGENTS.md` is
+   missing, stop and report that blocker. Generated TeaQL library classes remain
+   read-only; workspace-owned Spring Boot code, controllers, tests, and
+   configuration may be edited.
 
 4. Generate documentation or frontend model output when requested:
 

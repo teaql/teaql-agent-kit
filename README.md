@@ -117,7 +117,12 @@ requests the generator's `java-workspace` output and extracts a runnable
 Spring Boot/Maven workspace under `app-playground/java-workspace`, including
 project files,
 application properties, Java entry classes, a CRUD guide, and a domain-specific
-`AGENTS.md` for coding inside that workspace.
+`AGENTS.md` for coding inside that workspace. That workspace `AGENTS.md` is
+generated dynamically by the server and may change whenever the workspace is
+regenerated. AI coding agents must read it before reading, editing, testing,
+running, or explaining code inside the generated workspace, and must read it
+again after regeneration. If the expected generated `AGENTS.md` is missing, stop
+and report the missing workspace guide instead of guessing the rules.
 
 Playground mode may automatically call `ensure_schema()` during runtime setup so
 the first local run can create demo tables, seed sample data, and show a real
