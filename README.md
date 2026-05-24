@@ -100,8 +100,9 @@ app-playground/
   models/        # model.xml and generation input
   generate-lib/  # generated Java or Rust TeaQL code
   java-workspace/# runnable Java Spring Boot workspace from gen-workspace
-  src/           # user's functions and query experiments
-  tests/         # scenario experiments
+  rust-workspace/# editable Rust Tokio workspace from gen-workspace
+  src/           # optional ad hoc user functions and query experiments
+  tests/         # optional ad hoc scenario experiments
 ```
 
 The playground should depend on the generated runtime by local path. It should
@@ -123,6 +124,14 @@ regenerated. AI coding agents must read it before reading, editing, testing,
 running, or explaining code inside the generated workspace, and must read it
 again after regeneration. If the expected generated `AGENTS.md` is missing, stop
 and report the missing workspace guide instead of guessing the rules.
+
+For Rust playgrounds that should run locally, generate the Rust library first
+with `cargo-teaql gen-lib`, then run `cargo-teaql gen-workspace` and extract the
+editable workspace under `app-playground/rust-workspace`. That workspace depends
+on the generated crate at `../generate-lib/lib`, contains a thin Tokio async
+entrypoint, and has its own generated `AGENTS.md`. Read that workspace guide
+before coding inside the Rust workspace and again after regeneration. Do not add
+a web framework unless the user explicitly asks for one.
 
 Playground mode may automatically call `ensure_schema()` during runtime setup so
 the first local run can create demo tables, seed sample data, and show a real
@@ -153,6 +162,7 @@ builds or alternate generation paths.
 | Target | User-installed client | Main command |
 | --- | --- | --- |
 | Rust | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-lib <model.xml>` |
+| Rust runnable workspace | `cargo install cargo-teaql` from crates.io | `cargo-teaql gen-workspace <model.xml> --workspace-dir <workspace-dir>` |
 | Java | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
 | Java runnable workspace | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
@@ -162,6 +172,15 @@ releases repository. If the plugin cannot be resolved from that repository, if
 the installed client does not provide that goal, or if any TeaQL plugin/tool
 call fails, report that as the blocker and stop instead of hand-building the
 workspace.
+
+The Rust runnable workspace path follows the same model-first sequence:
+generate the Rust library with `cargo-teaql gen-lib`, then generate the editable
+workspace with `cargo-teaql gen-workspace`. In playground mode, write the model
+to `app-playground/models`, generated runtime code to
+`app-playground/generate-lib`, and the editable Rust workspace to
+`app-playground/rust-workspace`. The workspace depends on the generated crate at
+`../generate-lib/lib` by local path and starts as a Tokio async application
+skeleton without a web framework.
 
 The TeaQL client is only the request tool. Generated Java or Rust service code
 still comes from the TeaQL service endpoint, for example

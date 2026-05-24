@@ -42,11 +42,19 @@ When the user asks to generate Java or Rust TeaQL code:
    resolution such as `mvn teaql:gen-lib` or `mvn teaql:gen-workspace`; use the
    fully qualified plugin coordinates, for example
    `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib`. For Rust, use
-   `cargo-teaql` from crates.io. Do not clone, search for, or build local or
+   `cargo-teaql` from crates.io. For a runnable Rust playground, generate the
+   library first with `cargo-teaql gen-lib`, then generate the editable
+   workspace with `cargo-teaql gen-workspace`; the workspace depends on the
+   generated crate by local path. Do not clone, search for, or build local or
    remote toolchain source code for normal generation work. If the generation
    client, TeaQL Maven plugin goal, or TeaQL plugin/tool invocation cannot be
    installed, resolved, invoked, or executed, stop immediately and report the
    blocker instead of trying source builds or alternate generation paths.
+   When invoking TeaQL tools from the command line, pass concrete absolute or
+   project-relative paths. Do not pass Maven/POM expressions such as
+   `${project.basedir}` or `${project.baseDir}` as `-D` values; CLI properties
+   are not POM interpolation sites, and `${project.baseDir}` is not a valid
+   Maven project property name.
 6. Keep generated output in the target project or demo project, not in this kit
    repository.
 7. Run generation, compile checks, and tests where the target project provides
@@ -209,6 +217,15 @@ runtime hooks in one place.
   Spring Boot/Maven project files and its own dynamic `AGENTS.md`; read that
   workspace `AGENTS.md` before any work inside the generated workspace and read
   it again after regeneration before continuing.
+  When the target runtime is Rust and the user wants a runnable workspace, first
+  run Rust library generation with `cargo-teaql gen-lib`, then run
+  `cargo-teaql gen-workspace` and write it under
+  `app-playground/rust-workspace`. That workspace depends on the generated
+  crate at `../generate-lib/lib` by local path. Keep generated Rust code
+  read-only and put customer-owned queries, services, tests, runtime wiring,
+  and integration code inside `rust-workspace`. The default Rust workspace is a
+  Tokio async application skeleton only; do not add a web framework unless the
+  user explicitly asks for one.
   Keep user experiment code, query functions, and scenario files in normal
   playground source/test directories, connected to the generated library or
   workspace by local project wiring when needed.

@@ -11,6 +11,9 @@ Rust, or both TeaQL code generation tracks.
 - Optional Java workspace output when the user asks for a runnable Java
   workspace: `gen-workspace`, which requests the TeaQL service scope
   `java-workspace`.
+- Optional Rust workspace output when the user asks for a runnable Rust
+  workspace: `gen-workspace`, which requests the TeaQL service scope
+  `rust-workspace` and depends on the generated Rust crate by local path.
 - TeaQL client tools installed from package registries. For Java, resolve TeaQL
   Maven plugin version `0.1.8` or newer from the TeaQL Nexus releases
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
@@ -36,6 +39,12 @@ Rust, or both TeaQL code generation tracks.
   TeaQL runtime code. Keep generated runtime code separate from the user's
   experiment source and test code. Use a local path dependency when the
   playground needs to call generated APIs.
+- Use concrete paths in command-line examples and invocations. Do not pass
+  Maven/POM expressions such as `${project.basedir}` or `${project.baseDir}` to
+  `-Dteaql.input`, `-Dteaql.output`, `-Dteaql.workspaceDir`, `--output`, or
+  `--workspace-dir`. Maven only interpolates project expressions in POM/plugin
+  configuration contexts, not arbitrary CLI property values; use an actual path
+  such as `/path/to/app-playground/generate-lib` or `app-playground/generate-lib`.
 - For Java playgrounds that should be runnable as an application, generate the
   Java library first with the fully qualified `gen-lib` Maven plugin coordinate,
   then use the fully qualified `gen-workspace` coordinate and write the
@@ -163,24 +172,25 @@ Cargo toolchain.
    cargo test
    ```
 
-For playground mode, create a Cargo playground crate, place the model under
-`app-playground/models`, place generated runtime code under
-`app-playground/generate-lib`, and depend on the generated runtime by local path.
-The generated Rust crate is usually under the `lib` directory of the generator
-output:
+For playground mode, generate the editable Rust workspace after `gen-lib`.
+Place the model under `app-playground/models`, place generated runtime code
+under `app-playground/generate-lib`, and write the workspace to
+`app-playground/rust-workspace`:
 
 ```bash
-cargo init --bin --vcs none app-playground
+cargo-teaql gen-workspace /path/to/app-playground/models/model.xml \
+  --workspace-dir /path/to/app-playground/rust-workspace \
+  --cwd /path/to/app-playground
 ```
 
-```toml
-[dependencies]
-my_generated_runtime = { path = "generate-lib/lib" }
-```
+The generated workspace depends on the generated runtime crate by local path.
+The default dependency path is `../generate-lib/lib` from
+`app-playground/rust-workspace`.
 
-Put customer query functions and business helper functions in `src/lib.rs`.
-Use `tests/` for scenario-oriented experiments. Keep `src/main.rs` as a thin
-smoke demo only.
+Put customer query functions, business helper functions, tests, runtime wiring,
+and integration code inside `rust-workspace`. Keep `src/main.rs` as a thin
+Tokio async smoke entrypoint. Do not add a web framework unless the user
+explicitly asks for one.
 
 Recommended playground shape:
 
@@ -189,19 +199,22 @@ app-playground/
   models/
     model.xml           # semantic source of truth for generation
   generate-lib/         # generated Java or Rust TeaQL runtime code
-  src/
-    lib.rs               # customer functions and query helpers
-    main.rs              # thin smoke demo
-  tests/
-    inventory_queries.rs # scenario-oriented experiments
+  rust-workspace/       # editable Rust app from gen-workspace
+    AGENTS.md
+    Cargo.toml
+    src/
+      lib.rs             # customer functions and query helpers
+      main.rs            # thin Tokio async smoke demo
+    tests/
+      inventory_queries.rs # scenario-oriented experiments
   TEAQL_QUICK_TRY_REPORT.md
 ```
 
 Example:
 
 ```rust
-// src/lib.rs
-use my_generated_runtime::Q;
+// rust-workspace/src/lib.rs
+use generated_domain_crate::Q;
 
 pub fn stock_on_hand_query() {
     let _query = Q::stock_items()
@@ -213,8 +226,8 @@ pub fn stock_on_hand_query() {
 ```
 
 ```rust
-// tests/inventory_queries.rs
-use app_playground::stock_on_hand_query;
+// rust-workspace/tests/inventory_queries.rs
+use generated_workspace_crate::stock_on_hand_query;
 
 #[test]
 fn builds_stock_on_hand_query() {
@@ -223,15 +236,19 @@ fn builds_stock_on_hand_query() {
 ```
 
 ```rust
-// src/main.rs
-fn main() {
-    app_playground::stock_on_hand_query();
+// rust-workspace/src/main.rs
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    generated_workspace_crate::stock_on_hand_query();
     println!("playground smoke check passed");
+    Ok(())
 }
 ```
 
 Keep regenerated TeaQL code in `app-playground/generate-lib`. Do not mix
-generated runtime files into `src/` or `tests/`.
+generated runtime files into `rust-workspace/src/` or `rust-workspace/tests/`.
+When working inside `rust-workspace`, read its generated `AGENTS.md` first and
+read it again after regeneration.
 
 ## Playground Report
 
@@ -279,6 +296,10 @@ Recommended sections:
      generated `AGENTS.md`, Maven files, Spring Boot application class,
      `CustomUserContext`, `EnsureModelController`, application properties, and
      CRUD guide.
+   - For Rust `rust-workspace` output, list the workspace path and call out the
+     generated `AGENTS.md`, `Cargo.toml`, Tokio async entrypoint, local-path
+     dependency on `../generate-lib/lib`, and customer-owned source/test
+     directories.
    - State that generated files should be regenerated from the model, not
      hand-edited.
    - If `ensure_schema()` is called automatically in playground mode, state that
