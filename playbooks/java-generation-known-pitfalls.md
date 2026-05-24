@@ -82,6 +82,13 @@ checker classes. `gen-workspace` generates the runnable Spring Boot project
 skeleton, including project files, application properties, application entry
 classes, `EnsureModelController`, and the generated workspace `AGENTS.md`.
 
+When invoking Maven goals from the command line, use concrete paths for
+`-Dteaql.input`, `-Dteaql.output`, and `-Dteaql.workspaceDir`. Do not pass
+`${project.basedir}` or `${project.baseDir}` as a `-D` value. Those are POM
+configuration expressions, not shell path variables; Maven will not reliably
+interpolate them in user-supplied CLI properties, and `${project.baseDir}` is
+not the valid Maven property spelling.
+
 If the user asks for a Java project, runnable workspace, Spring Boot application,
 or local Java playground, default to the full two-step pipeline. Only stop after
 `gen-lib` when the user explicitly asks for library-only generation.
