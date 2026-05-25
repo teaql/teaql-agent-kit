@@ -124,7 +124,7 @@ This reads as: who you are, who you belong to, then system records.
 
 To keep model names stable and consistent across generated code, SQL, JSON,
 frontend clients, and agent-written application code, model names and attribute
-names must not use programming-language or database reserved keywords.
+names must not exactly match programming-language or database reserved keywords.
 
 The prohibited keyword sets are:
 
@@ -138,12 +138,13 @@ The prohibited keyword sets are:
 
 Do not use bare names such as `type`, `class`, `enum`, `interface`, `package`,
 `module`, `match`, `async`, `await`, `yield`, `select`, `from`, `where`, `order`,
-`group`, `user`, or `table` as object names or attribute names.
+`group`, `user`, or `table` as the full object name or full attribute name.
+Compound domain names such as `school_type`, `request_type`, `item_kind`, and
+`sort_order` are valid because the full name is not a reserved keyword.
 
 Use domain-specific alternatives instead:
 
-- `request_category` instead of `type`.
-- `school_category` instead of `school_type`.
+- `request_type` instead of `type`.
 - `item_kind` instead of `type`.
 - `user_account` instead of `user`.
 - `sort_order` instead of `order`.
@@ -188,8 +189,8 @@ Example shape:
 - No object nesting except `<_value>` entries inside constant objects.
 - Each element type must be unique.
 - Object names use lowercase snake_case.
-- Object names and attribute names must not be reserved keywords in Java,
-  SQL2016, JavaScript, Dart, Rust, Go, or Python.
+- Object names and attribute names must not exactly match reserved keywords in
+  Java, SQL2016, JavaScript, Dart, Rust, Go, or Python.
 - Dates use ISO format such as `2024-01-15`.
 
 ## Object Rules
@@ -248,7 +249,7 @@ Wrong when the user's system boundary is an education platform:
 ```xml
 <school _name="School" .../>
 <platform _name="Platform" school="school()" .../>
-<school_category _name="School Category" school="school()" .../>
+<school_type _name="School Type" school="school()" .../>
 ```
 
 Correct:
@@ -256,7 +257,7 @@ Correct:
 ```xml
 <platform _name="Platform" .../>
 <school _name="School" platform="platform()" .../>
-<school_category _name="School Category" platform="platform()" .../>
+<school_type _name="School Type" platform="platform()" .../>
 ```
 
 Finite-set objects are special:
@@ -264,7 +265,7 @@ Finite-set objects are special:
 - Status, category, kind, priority, gender, and similar finite-set objects are
   constant objects.
 - Every constant object must reference the domain root business object directly,
-  such as `school_category platform="platform()"` when `platform` is the root, or
+  such as `school_type platform="platform()"` when `platform` is the root, or
   `course_category school="school()"` when `school` is the root.
 - Do not model finite-set objects as global standalone constants unless the user
   explicitly states they are cross-system global platform data.

@@ -20,8 +20,8 @@ Use this checklist before delivering or generating code from a KSML model.
 - No nested objects except `<_value>` children inside constant objects.
 - Object names are lowercase snake_case.
 - Each element type is unique.
-- Object names and attribute names do not use reserved keywords from Java,
-  SQL2016, JavaScript, Dart, Rust, Go, and Python.
+- Object names and attribute names do not exactly match reserved keywords from
+  Java, SQL2016, JavaScript, Dart, Rust, Go, and Python.
 
 ## Business Objects
 
