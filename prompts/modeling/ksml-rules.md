@@ -154,6 +154,10 @@ Use domain-specific alternatives instead:
 The model must contain exactly one `<root>` element. The root must include a
 non-empty `name` attribute; TeaQL generation uses it as the domain name.
 
+The outermost XML tag must be `<root>`. Never wrap KSML in `<model>`, `<ksml>`,
+`<domain>`, or any other top-level element. If the document starts with anything
+other than `<root ...>`, it is invalid KSML.
+
 Generate root metadata dynamically from the user's domain. Do not copy example
 values.
 

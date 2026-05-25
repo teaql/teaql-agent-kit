@@ -9,6 +9,8 @@ Requirements:
 - Generate valid XML.
 - Include exactly one `<root>` element.
 - The `<root>` element must include a non-empty `name` attribute.
+- The outermost XML tag must be `<root>`. Never use `<model>`, `<ksml>`,
+  `<domain>`, or any other wrapper tag.
 - Generate dynamic root metadata from the domain.
 - Decide the domain root business object from the user's stated largest system
   boundary and ownership hierarchy. Do not infer it from the domain title alone.

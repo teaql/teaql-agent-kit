@@ -5,6 +5,8 @@ Use this checklist before delivering or generating code from a KSML model.
 ## Root
 
 - Exactly one `<root>` element.
+- The document element is `<root>`, not `<model>`, `<ksml>`, `<domain>`, or any
+  other wrapper tag.
 - Root `name` is present and non-empty.
 - `alias_model_name` is snake_case.
 - `english_name` is Title Case.
