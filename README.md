@@ -738,6 +738,9 @@ for agent-based TeaQL adoption.
 
 ## Suggested Agent Workflow
 
+Initial tests suggest that capable AI coding agents generally perform better
+when paired with stronger language models.
+
 When using Codex or Claude Code, the workflow should be explicit and repeatable:
 
 1. Read the user's natural-language business description.
