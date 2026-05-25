@@ -28,8 +28,8 @@ language and wants a TeaQL/KSML domain model.
    - Add concrete business objects for the domain.
    - Add constant objects for status, category, kind, classification, gender,
      priority, and finite enumerations.
-   - Do not use object or attribute names that are reserved keywords in Java,
-     SQL2016, JavaScript, Dart, Rust, Go, or Python.
+   - Do not use object or attribute names that exactly match reserved keywords in
+     Java, SQL2016, JavaScript, Dart, Rust, Go, or Python.
 
 3. Organize modules.
    - Use `_module` as the first-level menu display name.

@@ -28,8 +28,8 @@ Requirements:
 - Use concrete realistic sample values for business fields.
 - Use constant objects for status, category, kind, classification, gender,
   priority, and other finite enumerations.
-- Do not use object or attribute names that are reserved keywords in Java,
-  SQL2016, JavaScript, Dart, Rust, Go, or Python.
+- Do not use object or attribute names that exactly match reserved keywords in
+  Java, SQL2016, JavaScript, Dart, Rust, Go, or Python.
 - Output only XML unless the user asks for analysis.
 
 Source integrated from `openclaw-modeling-factory/prompts/task_template.md`.
