@@ -20,6 +20,8 @@ Use this checklist before delivering or generating code from a KSML model.
 - No nested objects except `<_value>` children inside constant objects.
 - Object names are lowercase snake_case.
 - Each element type is unique.
+- Object names and attribute names do not use reserved keywords from Java,
+  SQL2016, JavaScript, Dart, Rust, Go, and Python.
 
 ## Business Objects
 
@@ -67,8 +69,8 @@ Use this checklist before delivering or generating code from a KSML model.
 
 - Use `object_name()` directly.
 - Do not use `_id` suffixes for references.
-- Status, type, category, gender, priority, and boolean-like states reference
-  constant objects.
+- Status, category, kind, classification, gender, priority, and boolean-like
+  states reference constant objects.
 
 ## Tenancy
 
