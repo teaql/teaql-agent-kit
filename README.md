@@ -34,7 +34,7 @@ Use Java to build a school management system with these domain concepts:
 
 - Platform
 - School
-- School Type, with values Primary and Secondary
+- School Category, with values Primary and Secondary
 
 Create the semantic TeaQL model first, review it, then generate the Java TeaQL
 code. Generate both the Java library with gen-lib and the runnable Spring Boot
@@ -57,7 +57,7 @@ Use Rust to build a school management system with these domain concepts:
 
 - Platform
 - School
-- School Type, with values Primary and Secondary
+- School Category, with values Primary and Secondary
 
 Create the semantic TeaQL model first, review it, then generate the Rust TeaQL
 code.

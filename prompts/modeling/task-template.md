@@ -26,8 +26,10 @@ Requirements:
 - Use `merchant="merchant(context)"` only when `merchant` is the confirmed
   tenant owner.
 - Use concrete realistic sample values for business fields.
-- Use constant objects for status, type, category, gender, priority, and other
-  finite enumerations.
+- Use constant objects for status, category, kind, classification, gender,
+  priority, and other finite enumerations.
+- Do not use object or attribute names that are reserved keywords in Java,
+  SQL2016, JavaScript, Dart, Rust, Go, or Python.
 - Output only XML unless the user asks for analysis.
 
 Source integrated from `openclaw-modeling-factory/prompts/task_template.md`.

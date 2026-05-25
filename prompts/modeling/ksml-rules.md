@@ -112,12 +112,41 @@ Undecided tenancy:
 
 Use this order for business object attributes:
 
-1. Identity attributes: `name`, `number`, `code`, `type`.
+1. Identity attributes: `name`, `number`, `code`, domain-specific classification
+   names such as `category`, `kind`, or `classification`.
 2. Relationship references: `status`, `provider`, `region`, parent objects.
 3. Tenant boundary reference, if tenancy was explicitly confirmed.
 4. System fields: `create_time`, `update_time`.
 
 This reads as: who you are, who you belong to, then system records.
+
+### Reserved Keyword Naming
+
+To keep model names stable and consistent across generated code, SQL, JSON,
+frontend clients, and agent-written application code, model names and attribute
+names must not use programming-language or database reserved keywords.
+
+The prohibited keyword sets are:
+
+- Java.
+- SQL2016.
+- JavaScript.
+- Dart.
+- Rust.
+- Go.
+- Python.
+
+Do not use bare names such as `type`, `class`, `enum`, `interface`, `package`,
+`module`, `match`, `async`, `await`, `yield`, `select`, `from`, `where`, `order`,
+`group`, `user`, or `table` as object names or attribute names.
+
+Use domain-specific alternatives instead:
+
+- `request_category` instead of `type`.
+- `school_category` instead of `school_type`.
+- `item_kind` instead of `type`.
+- `user_account` instead of `user`.
+- `sort_order` instead of `order`.
 
 ## Root Definition
 
@@ -159,6 +188,8 @@ Example shape:
 - No object nesting except `<_value>` entries inside constant objects.
 - Each element type must be unique.
 - Object names use lowercase snake_case.
+- Object names and attribute names must not be reserved keywords in Java,
+  SQL2016, JavaScript, Dart, Rust, Go, or Python.
 - Dates use ISO format such as `2024-01-15`.
 
 ## Object Rules
@@ -217,7 +248,7 @@ Wrong when the user's system boundary is an education platform:
 ```xml
 <school _name="School" .../>
 <platform _name="Platform" school="school()" .../>
-<school_type _name="School Type" school="school()" .../>
+<school_category _name="School Category" school="school()" .../>
 ```
 
 Correct:
@@ -225,15 +256,15 @@ Correct:
 ```xml
 <platform _name="Platform" .../>
 <school _name="School" platform="platform()" .../>
-<school_type _name="School Type" platform="platform()" .../>
+<school_category _name="School Category" platform="platform()" .../>
 ```
 
 Finite-set objects are special:
 
-- Status, type, category, priority, gender, and similar finite-set objects are
+- Status, category, kind, priority, gender, and similar finite-set objects are
   constant objects.
 - Every constant object must reference the domain root business object directly,
-  such as `school_type platform="platform()"` when `platform` is the root, or
+  such as `school_category platform="platform()"` when `platform` is the root, or
   `course_category school="school()"` when `school` is the root.
 - Do not model finite-set objects as global standalone constants unless the user
   explicitly states they are cross-system global platform data.
@@ -377,15 +408,16 @@ Correct:
           hire_date="2024-01-15"/>
 ```
 
-## Status and Type Fields
+## Status and Classification Fields
 
 Fields that represent a finite set must reference constant objects.
 
 Use constant objects for:
 
 - status.
-- type.
 - category.
+- kind.
+- classification.
 - gender.
 - priority.
 - urgency level.
@@ -426,7 +458,7 @@ Use `object_name()` directly. Do not write `object(object_name)`.
 | Phone | Concrete typical phone number |
 | Email | Concrete typical email |
 | Address | Concrete typical address |
-| Status, type, category | `constant_object()` |
+| Status, category, kind, classification | `constant_object()` |
 | Gender | `gender()` or a domain-specific constant |
 | Date fields | Concrete date such as `2024-01-15` |
 | `create_time`, `update_time` | `createTime()`, `updateTime()` |

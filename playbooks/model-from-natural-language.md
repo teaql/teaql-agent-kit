@@ -26,8 +26,10 @@ language and wants a TeaQL/KSML domain model.
      hospital, store, or similar baseline objects only when they are real
      business concepts or confirmed architecture assumptions.
    - Add concrete business objects for the domain.
-   - Add constant objects for status, type, category, gender, priority, and
-     finite enumerations.
+   - Add constant objects for status, category, kind, classification, gender,
+     priority, and finite enumerations.
+   - Do not use object or attribute names that are reserved keywords in Java,
+     SQL2016, JavaScript, Dart, Rust, Go, or Python.
 
 3. Organize modules.
    - Use `_module` as the first-level menu display name.
