@@ -21,8 +21,8 @@ Rust, or both TeaQL code generation tracks.
   coordinates such as `io.teaql:teaql-maven-plugin:0.1.8:gen-lib`, not Maven
   prefix resolution such as `mvn teaql:gen-lib`. Ensure Maven settings or the
   project POM exposes that URL as both a repository and a plugin repository. For
-  Rust, install the `cargo-teaql` CLI from crates.io with
-  `cargo install cargo-teaql`.
+  Rust, install `cargo-teaql` version `0.1.7` or newer from crates.io with
+  `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
 ## General Rules
@@ -74,8 +74,8 @@ Rust, or both TeaQL code generation tracks.
   on Maven Central freshness. Invoke Java goals with fully qualified Maven
   plugin coordinates, for example
   `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib`; do not use `mvn teaql:*`.
-  For Rust, install the `cargo-teaql` CLI from crates.io with
-  `cargo install cargo-teaql`.
+  For Rust, install `cargo-teaql` version `0.1.7` or newer from crates.io with
+  `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
   repositories for normal generation work. If the Maven plugin, Maven plugin
   goal, TeaQL plugin/tool invocation, or crates.io crate cannot be installed,
@@ -134,16 +134,23 @@ Rust, or both TeaQL code generation tracks.
 Use the Rust CLI when the target runtime is Rust or when the user asks for the
 Cargo toolchain.
 
-1. Install the TeaQL CLI from crates.io. If this command fails because the crate
-   cannot be found, downloaded, installed, invoked, or executed, stop immediately
-   and report the failure. Do not look for source code or try to build
-   `cargo-teaql` from a local or remote repository.
+1. Install `cargo-teaql` version `0.1.7` or newer from crates.io. If this
+   command fails because the crate cannot be found, downloaded, installed,
+   invoked, or executed, stop immediately and report the failure. Do not look
+   for source code or try to build `cargo-teaql` from a local or remote
+   repository.
 
    ```bash
    cargo install cargo-teaql
    ```
 
-2. Generate backend/domain code from the model. In playground mode, create or
+2. Install the local command links exposed by the CLI:
+
+   ```bash
+   cargo-teaql install-links
+   ```
+
+3. Generate backend/domain code from the model. In playground mode, create or
    copy the reviewed model to `/path/to/app-playground/models/model.xml`, and
    use `/path/to/app-playground/generate-lib` as the output path:
 
@@ -153,7 +160,7 @@ Cargo toolchain.
      --cwd /path/to/app-playground
    ```
 
-3. Generate documentation or frontend model output when requested:
+4. Generate documentation or frontend model output when requested:
 
    ```bash
    cargo-teaql gen-doc /path/to/model.xml \
@@ -165,7 +172,7 @@ Cargo toolchain.
      --cwd /path/to/target/project
    ```
 
-4. Run target-project Rust checks when a Cargo project is generated:
+5. Run target-project Rust checks when a Cargo project is generated:
 
    ```bash
    cargo check

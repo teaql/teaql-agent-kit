@@ -42,14 +42,16 @@ When the user asks to generate Java or Rust TeaQL code:
    resolution such as `mvn teaql:gen-lib` or `mvn teaql:gen-workspace`; use the
    fully qualified plugin coordinates, for example
    `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib`. For Rust, use
-   `cargo-teaql` from crates.io. For a runnable Rust playground, generate the
-   library first with `cargo-teaql gen-lib`, then generate the editable
-   workspace with `cargo-teaql gen-workspace`; the workspace depends on the
-   generated crate by local path. Do not clone, search for, or build local or
-   remote toolchain source code for normal generation work. If the generation
-   client, TeaQL Maven plugin goal, or TeaQL plugin/tool invocation cannot be
-   installed, resolved, invoked, or executed, stop immediately and report the
-   blocker instead of trying source builds or alternate generation paths.
+   `cargo-teaql` version `0.1.7` or newer from crates.io, and run
+   `cargo-teaql install-links` after installation. For a runnable Rust
+   playground, generate the library first with `cargo-teaql gen-lib`, then
+   generate the editable workspace with `cargo-teaql gen-workspace`; the
+   workspace depends on the generated crate by local path. Do not clone, search
+   for, or build local or remote toolchain source code for normal generation
+   work. If the generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool
+   invocation cannot be installed, resolved, invoked, or executed, stop
+   immediately and report the blocker instead of trying source builds or
+   alternate generation paths.
    When invoking TeaQL tools from the command line, pass concrete absolute or
    project-relative paths. Do not pass Maven/POM expressions such as
    `${project.basedir}` or `${project.baseDir}` as `-D` values; CLI properties
@@ -251,7 +253,8 @@ the workflow:
   `io.teaql:teaql-maven-plugin:0.1.8:gen-lib`; do not use `mvn teaql:*`
   prefix resolution. If it cannot be resolved from that repository, stop and
   report the blocker.
-- Rust: `cargo-teaql` from crates.io.
+- Rust: `cargo-teaql` version `0.1.7` or newer from crates.io. Run
+  `cargo-teaql install-links` after installation.
 
 If either generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool
 invocation cannot be installed, resolved, invoked, or executed, stop immediately
