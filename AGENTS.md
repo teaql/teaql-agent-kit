@@ -80,21 +80,30 @@ deliverable project change.
 
 ## Generated Workspace AGENTS.md Rule
 
-Generated TeaQL workspaces may contain their own `AGENTS.md`. That file is
-generated dynamically by the server for the specific domain, runtime, and
-workspace shape, and may contain rules that are newer or more specific than this
-kit-level file.
+Generated TeaQL libraries and workspaces may contain their own `AGENTS.md`.
+Those files are generated dynamically by the server for the specific domain,
+runtime, and generated surface, and may contain rules that are newer or more
+specific than this kit-level file.
 
 Before any AI coding agent reads, edits, tests, runs, or explains code inside a
-generated workspace, it must first locate and read that workspace's `AGENTS.md`.
-If the workspace is regenerated, read the generated `AGENTS.md` again before
-continuing, because its contents may have changed. Treat the generated workspace
-`AGENTS.md` as the local authority for work inside that workspace; combine it
-with this kit-level file, and let the more specific workspace rule win when the
-two differ.
+generated library or generated workspace, it must first locate and read the
+nearest generated `AGENTS.md`. For playground layouts, read
+`app-playground/generate-lib/AGENTS.md` before using the generated TeaQL library
+APIs, then read the generated workspace `AGENTS.md` before working inside
+`java-workspace` or `rust-workspace`. If a generated library is consumed from a
+package repository instead of a local generated directory, locate the unpacked
+dependency source first. For Cargo dependencies, use `cargo metadata` to find
+the package source or `cargo vendor` to materialize it locally, then read the
+crate root `AGENTS.md` before using that crate's APIs. If the library or
+workspace is regenerated or the dependency version changes, read the generated
+`AGENTS.md` again before continuing, because its contents may have changed.
+Treat the generated library/workspace `AGENTS.md` as the local authority for
+work inside that generated surface; combine it with this kit-level file, and let
+the more specific generated rule win when the two differ.
 
 If no `AGENTS.md` exists in a directory that is expected to be a generated
-workspace, stop and report that blocker instead of guessing the workspace rules.
+library or generated workspace, stop and report that blocker instead of
+guessing the generated-surface rules.
 
 ## Q and Query API Rule
 
@@ -211,7 +220,9 @@ runtime hooks in one place.
   repository. Do not require git repositories or artifact publishing. Put the
   generated `model.xml` and related model inputs under `app-playground/models`,
   and put generated TeaQL runtime code under `app-playground/generate-lib` so
-  users can review both in one playground. When the target runtime is Java and
+  users can review both in one playground. After library generation, read
+  `app-playground/generate-lib/AGENTS.md` before using or explaining the
+  generated library APIs. When the target runtime is Java and
   the user wants a runnable workspace, first run Java library generation with
   the fully qualified `gen-lib` Maven plugin coordinate, then run
   `gen-workspace` with the fully qualified coordinate and write it under
