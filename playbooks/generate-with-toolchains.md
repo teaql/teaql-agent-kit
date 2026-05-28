@@ -23,11 +23,18 @@ Rust, or both TeaQL code generation tracks.
   project POM exposes that URL as both a repository and a plugin repository. For
   Rust, install `cargo-teaql` version `0.1.7` or newer from crates.io with
   `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
+- Optional server-side KSML evaluation target exposed by the installed client:
+  `cargo-teaql eval` for the Rust/client path, or the fully qualified Maven
+  plugin `eval` goal for the Java/Maven path.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
 ## General Rules
 
 - Do not generate from vague business text directly. Generate from the model.
+- Run server-side KSML evaluation before generation when the installed client
+  exposes an `eval` target. Evaluation `errors` must be fixed before generation.
+  Evaluation `warnings` and `suggestions` should be reported to the user but do
+  not block generation by default.
 - Before generation, run `playbooks/model-review-gate.md`. The model must be
   confirmed by the user, or autonomous playground assumptions must be explicitly
   listed and accepted by the user's request.
@@ -158,7 +165,15 @@ Cargo toolchain.
    cargo-teaql install-links
    ```
 
-3. Generate backend/domain code from the model. In playground mode, create or
+3. Evaluate the reviewed model when the installed client exposes `eval`.
+   Evaluation errors block generation; warnings and suggestions should be
+   reported:
+
+   ```bash
+   cargo-teaql eval /path/to/app-playground/models/model.xml
+   ```
+
+4. Generate backend/domain code from the model. In playground mode, create or
    copy the reviewed model to `/path/to/app-playground/models/model.xml`, and
    use `/path/to/app-playground/generate-lib` as the output path:
 
@@ -168,7 +183,7 @@ Cargo toolchain.
      --cwd /path/to/app-playground
    ```
 
-4. Generate documentation or frontend model output when requested:
+5. Generate documentation or frontend model output when requested:
 
    ```bash
    cargo-teaql gen-doc /path/to/model.xml \
@@ -180,7 +195,7 @@ Cargo toolchain.
      --cwd /path/to/target/project
    ```
 
-5. Run target-project Rust checks when a Cargo project is generated:
+6. Run target-project Rust checks when a Cargo project is generated:
 
    ```bash
    cargo check
@@ -395,7 +410,16 @@ Before running Maven for a Java project, read
    a local or remote repository, hand-build generated output, or try an alternate
    generation path in normal generation mode.
 
-2. Generate backend/domain library code from the reviewed model. In playground
+2. Evaluate the reviewed model when the installed Maven plugin exposes `eval`.
+   Use the fully qualified Maven plugin coordinate. Evaluation errors block
+   generation; warnings and suggestions should be reported:
+
+   ```bash
+   mvn io.teaql:teaql-maven-plugin:<version>:eval \
+     -Dteaql.input=/path/to/app-playground/models/model.xml
+   ```
+
+3. Generate backend/domain library code from the reviewed model. In playground
    mode, create or copy the reviewed model to
    `/path/to/app-playground/models/model.xml`, and use
    `/path/to/app-playground/generate-lib` as the output path:
@@ -406,7 +430,7 @@ Before running Maven for a Java project, read
      -Dteaql.output=/path/to/app-playground/generate-lib
    ```
 
-3. After `gen-lib` succeeds, generate a runnable Java playground
+4. After `gen-lib` succeeds, generate a runnable Java playground
    workspace when the user wants a local Spring Boot application. Use
    `gen-workspace`, which requests the TeaQL service scope `java-workspace`, and
    write the workspace to
@@ -433,7 +457,7 @@ Before running Maven for a Java project, read
    read-only; workspace-owned Spring Boot code, controllers, tests, and
    configuration may be edited.
 
-4. Generate documentation or frontend model output when requested:
+5. Generate documentation or frontend model output when requested:
 
    ```bash
    mvn io.teaql:teaql-maven-plugin:0.1.8:gen-doc \
@@ -445,7 +469,7 @@ Before running Maven for a Java project, read
      -Dteaql.output=/path/to/target/build
    ```
 
-5. Run target-project Java checks when a Maven project is generated.
+6. Run target-project Java checks when a Maven project is generated.
    For `java-workspace`, run checks from the generated workspace directory:
 
    ```bash
@@ -495,8 +519,10 @@ https://api.teaql.io/latest/generate
    - Model error: invalid entity, field, relationship, constant, or lifecycle.
    - Integration error: missing dependency, project config, database provider, or
      runtime wiring.
-   - Toolchain error: CLI/plugin config, service URL, license, or network.
-3. Fix model errors in `model.xml` and regenerate.
+   - Toolchain error: CLI/plugin config, service URL, license, evaluation, or
+     network.
+3. Fix model errors in `model.xml`, rerun `eval` when available, then
+   regenerate.
 4. Fix integration errors in the target project.
 5. For generation client installation, resolution, invocation, or execution
    failures, including TeaQL Maven plugin goal failures and TeaQL plugin/tool
@@ -512,5 +538,5 @@ https://api.teaql.io/latest/generate
 
 The task is done when generation has run for the requested runtime, target
 checks have passed or the remaining blocker is clearly reported, and the final
-response lists the model path, generated output path, playground path, report
-path, commands run, and any assumptions.
+response lists the model path, evaluation result when available, generated
+output path, playground path, report path, commands run, and any assumptions.

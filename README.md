@@ -161,6 +161,8 @@ the blocker instead of trying source builds or alternate generation paths.
 
 | Target | User-installed client | Main command |
 | --- | --- | --- |
+| KSML evaluation, Rust/client path | `cargo install cargo-teaql` from crates.io, then `cargo-teaql install-links` | `cargo-teaql eval <model-file-or-directory>` |
+| KSML evaluation, Java/Maven path | TeaQL Maven plugin with `eval` goal from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:<version>:eval -Dteaql.input=<model-file-or-directory>` |
 | Rust | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 0.1.7`, then `cargo-teaql install-links` | `cargo-teaql gen-lib <model.xml>` |
 | Rust runnable workspace | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 0.1.7`, then `cargo-teaql install-links` | `cargo-teaql gen-workspace <model.xml> --workspace-dir <workspace-dir>` |
 | Java | TeaQL Maven plugin `>= 0.1.8` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
@@ -197,11 +199,14 @@ high-level loop is:
 
 1. Model the domain as KSML XML.
 2. Validate the model with `prompts/modeling/checklist.md`.
-3. Run the model review gate and confirm the model before code generation.
-4. Generate Java and/or Rust code with the selected toolchain.
-5. Run target-project compile checks and tests.
-6. Decide schema bootstrap or migration explicitly for project/production mode.
-7. Fix model errors in `model.xml`, then regenerate.
+3. Run server-side KSML evaluation with the client toolchain when the `eval`
+   target is available. Fix evaluation `errors`; carry `warnings` and
+   `suggestions` into review.
+4. Run the model review gate and confirm the model before code generation.
+5. Generate Java and/or Rust code with the selected toolchain.
+6. Run target-project compile checks and tests.
+7. Decide schema bootstrap or migration explicitly for project/production mode.
+8. Fix model errors in `model.xml`, then regenerate.
 
 Example agent request for both tracks:
 
@@ -213,7 +218,8 @@ Rust TeaQL outputs.
 Before generation, summarize the model for review and wait for confirmation.
 Use the TeaQL client tools installed from package registries, including
 `cargo-teaql` version `0.1.7` or newer from crates.io followed by
-`cargo-teaql install-links`, to request TeaQL service code generation.
+`cargo-teaql install-links`, to evaluate the KSML model and request TeaQL
+service code generation.
 Keep generated artifacts in the target project, run checks, and report the
 commands and output paths.
 ```

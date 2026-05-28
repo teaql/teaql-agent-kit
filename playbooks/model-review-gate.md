@@ -15,6 +15,11 @@ assumptions match the business domain.
 Provide a short model review summary in business language. Include:
 
 - Model name and target runtime.
+- Server-side KSML evaluation result, when `eval` was available:
+  - error count
+  - warning count
+  - suggestion count
+  - any remaining warnings or suggestions that need user judgment
 - Main entities.
 - Important fields per entity.
 - Relationships and ownership boundaries.
@@ -41,6 +46,11 @@ Before generation, obtain one of these outcomes:
 
 For autonomous playground work, the agent may proceed only when assumptions are
 explicitly listed in the report and the user has asked for autonomous execution.
+
+If server-side KSML evaluation reports `errors`, do not generate code. Fix the
+model and run evaluation again. `warnings` and `suggestions` do not block
+generation by default, but they must be disclosed in the review summary when
+present.
 
 ## What To Check
 

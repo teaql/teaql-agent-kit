@@ -18,9 +18,17 @@ When the user asks to model a business domain:
 4. Use `prompts/modeling/task-template.md` to frame the user's domain.
 5. Produce a `model.xml` candidate.
 6. Validate the model against `prompts/modeling/checklist.md`.
-7. If generating Java or Rust TeaQL code, run the model review gate in
+7. If the TeaQL client toolchain exposes model evaluation, run server-side KSML
+   evaluation before generation:
+   - Rust/client path: `cargo-teaql eval <model-file-or-directory>`.
+   - Java/Maven path:
+     `mvn io.teaql:teaql-maven-plugin:<version>:eval -Dteaql.input=<model-file-or-directory>`.
+   Fix all evaluation `errors` before generation. Bring `warnings` and
+   `suggestions` into the model review instead of treating them as automatic
+   blockers.
+8. If generating Java or Rust TeaQL code, run the model review gate in
    `playbooks/model-review-gate.md` and get confirmation before generation.
-8. If generating a TeaQL project, run the appropriate code generation and checks
+9. If generating a TeaQL project, run the appropriate code generation and checks
    after the model is created.
 
 ## Code Generation Workflow
@@ -34,7 +42,12 @@ When the user asks to generate Java or Rust TeaQL code:
 3. Read `playbooks/generate-with-toolchains.md`.
 4. For Java generation, read `playbooks/java-generation-known-pitfalls.md`
    before running Maven.
-5. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
+5. Run the toolchain's model evaluation target before generation when available.
+   For Rust, use `cargo-teaql eval <model-file-or-directory>`. For Java, use the
+   fully qualified Maven plugin `eval` goal. Fix evaluation `errors` before
+   generation; report `warnings` and `suggestions` in the model review or final
+   delivery notes.
+6. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
    the user's target runtime. For Java, use TeaQL Maven plugin version `0.1.8`
    or newer from the TeaQL Nexus releases repository:
    `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
@@ -57,11 +70,11 @@ When the user asks to generate Java or Rust TeaQL code:
    `${project.basedir}` or `${project.baseDir}` as `-D` values; CLI properties
    are not POM interpolation sites, and `${project.baseDir}` is not a valid
    Maven project property name.
-6. Keep generated output in the target project or demo project, not in this kit
+7. Keep generated output in the target project or demo project, not in this kit
    repository.
-7. Run generation, compile checks, and tests where the target project provides
+8. Run generation, compile checks, and tests where the target project provides
    them.
-8. Treat TeaQL service generated code as read-only. If generation or compilation
+9. Treat TeaQL service generated code as read-only. If generation or compilation
    fails because the model is wrong, update `model.xml` and regenerate instead
    of hand-editing generated code.
 
