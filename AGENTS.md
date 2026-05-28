@@ -22,7 +22,7 @@ When the user asks to model a business domain:
    evaluation before generation:
    - Rust/client path: `cargo-teaql eval <model-file-or-directory>`.
    - Java/Maven path:
-     `mvn io.teaql:teaql-maven-plugin:<version>:eval -Dteaql.input=<model-file-or-directory>`.
+     `mvn io.teaql:teaql-maven-plugin:0.1.9:eval -Dteaql.input=<model-file-or-directory>`.
    Fix all evaluation `errors` before generation. Bring `warnings` and
    `suggestions` into the model review instead of treating them as automatic
    blockers.
@@ -48,14 +48,14 @@ When the user asks to generate Java or Rust TeaQL code:
    generation; report `warnings` and `suggestions` in the model review or final
    delivery notes.
 6. Choose the Java Maven plugin path, the Rust Cargo CLI path, or both based on
-   the user's target runtime. For Java, use TeaQL Maven plugin version `0.1.8`
+   the user's target runtime. For Java, use TeaQL Maven plugin version `0.1.9`
    or newer from the TeaQL Nexus releases repository:
    `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
    Central freshness, and do not invoke the plugin through Maven prefix
    resolution such as `mvn teaql:gen-lib` or `mvn teaql:gen-workspace`; use the
    fully qualified plugin coordinates, for example
-   `mvn io.teaql:teaql-maven-plugin:0.1.8:gen-lib`. For Rust, use
-   `cargo-teaql` version `0.1.7` or newer from crates.io, and run
+   `mvn io.teaql:teaql-maven-plugin:0.1.9:gen-lib`. For Rust, use
+   `cargo-teaql` version `0.1.9` or newer from crates.io, and run
    `cargo-teaql install-links` after installation. For a runnable Rust
    playground, generate the library first with `cargo-teaql gen-lib`, then
    generate the editable workspace with `cargo-teaql gen-workspace`; the
@@ -271,13 +271,13 @@ runtime hooks in one place.
 For normal generation, the Java and Rust generation clients are the boundary of
 the workflow:
 
-- Java: TeaQL Maven plugin version `0.1.8` or newer from the TeaQL Nexus
+- Java: TeaQL Maven plugin version `0.1.9` or newer from the TeaQL Nexus
   releases repository: `https://nexus.teaql.io/repository/maven-releases/`.
   Invoke it with fully qualified coordinates such as
-  `io.teaql:teaql-maven-plugin:0.1.8:gen-lib`; do not use `mvn teaql:*`
+  `io.teaql:teaql-maven-plugin:0.1.9:gen-lib`; do not use `mvn teaql:*`
   prefix resolution. If it cannot be resolved from that repository, stop and
   report the blocker.
-- Rust: `cargo-teaql` version `0.1.7` or newer from crates.io. Run
+- Rust: `cargo-teaql` version `0.1.9` or newer from crates.io. Run
   `cargo-teaql install-links` after installation.
 
 If either generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool
