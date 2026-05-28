@@ -29,7 +29,8 @@ language and wants a TeaQL/KSML domain model.
    - Add constant objects for status, category, kind, classification, gender,
      priority, and finite enumerations.
    - Do not use object or attribute names that exactly match reserved keywords in
-     Java, SQL2016, JavaScript, Dart, Rust, Go, or Python.
+     Java, JavaScript, Dart, Rust, Go, or Python.
+   - Do not use attribute names that exactly match SQL2016 reserved keywords.
 
 3. Organize modules.
    - Use `_module` as the first-level menu display name.

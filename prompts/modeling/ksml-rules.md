@@ -122,23 +122,33 @@ This reads as: who you are, who you belong to, then system records.
 
 ### Reserved Keyword Naming
 
-To keep model names stable and consistent across generated code, SQL, JSON,
-frontend clients, and agent-written application code, model names and attribute
-names must not exactly match programming-language or database reserved keywords.
+To keep model names stable and consistent across generated code, JSON, frontend
+clients, and agent-written application code, object names and attribute names
+must not exactly match programming-language reserved keywords.
 
-The prohibited keyword sets are:
+Because attributes become persisted fields, attribute names must also not
+exactly match SQL2016 reserved keywords. SQL2016 keyword checks apply to
+attribute names, not object names.
+
+The prohibited programming-language keyword sets for object names and attribute
+names are:
 
 - Java.
-- SQL2016.
 - JavaScript.
 - Dart.
 - Rust.
 - Go.
 - Python.
 
-Do not use bare names such as `type`, `class`, `enum`, `interface`, `package`,
-`module`, `match`, `async`, `await`, `yield`, `select`, `from`, `where`, `order`,
-`group`, `user`, or `table` as the full object name or full attribute name.
+Do not use programming-language keyword names such as `type`, `class`, `enum`,
+`interface`, `package`, `module`, `match`, `async`, `await`, or `yield` as the
+full object name or full attribute name.
+
+Do not use SQL2016 keyword names such as `select`, `from`, `where`, `order`,
+`group`, `user`, or `table` as the full attribute name. These SQL names are not
+prohibited as object names by this rule, but prefer clearer domain-specific
+object names when the business term is ambiguous.
+
 Compound domain names such as `school_type`, `request_type`, `item_kind`, and
 `sort_order` are valid because the full name is not a reserved keyword.
 
@@ -194,7 +204,8 @@ Example shape:
 - Each element type must be unique.
 - Object names use lowercase snake_case.
 - Object names and attribute names must not exactly match reserved keywords in
-  Java, SQL2016, JavaScript, Dart, Rust, Go, or Python.
+  Java, JavaScript, Dart, Rust, Go, or Python.
+- Attribute names must not exactly match SQL2016 reserved keywords.
 - Dates use ISO format such as `2024-01-15`.
 
 ## Object Rules

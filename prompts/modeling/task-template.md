@@ -31,7 +31,8 @@ Requirements:
 - Use constant objects for status, category, kind, classification, gender,
   priority, and other finite enumerations.
 - Do not use object or attribute names that exactly match reserved keywords in
-  Java, SQL2016, JavaScript, Dart, Rust, Go, or Python.
+  Java, JavaScript, Dart, Rust, Go, or Python.
+- Do not use attribute names that exactly match SQL2016 reserved keywords.
 - Output only XML unless the user asks for analysis.
 
 Source integrated from `openclaw-modeling-factory/prompts/task_template.md`.
