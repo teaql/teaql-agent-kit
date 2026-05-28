@@ -326,6 +326,10 @@ Correct:
 - Business objects go in the functional module where they belong.
 - Constant objects usually go in `Basic Data`, unless a process-specific module
   is clearer.
+- If a constant object is referenced by exactly one business object, place that
+  constant object in the same module as the business object by using the same
+  `_module` and `_module_key`. The finite set is local to that business area,
+  not shared basic data.
 - Prefer functional or process groupings.
 - Avoid menu clutter.
 - Avoid single-object modules.

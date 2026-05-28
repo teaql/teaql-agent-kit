@@ -92,4 +92,6 @@ Use this checklist before delivering or generating code from a KSML model.
 - `_module` is a display name, usually Title Case with spaces.
 - `_module_key` is lowercase kebab-case.
 - Group objects by functional domain or business process.
+- If a constant object is referenced by exactly one business object, it uses the
+  same `_module` and `_module_key` as that business object.
 - Avoid single-object modules.
