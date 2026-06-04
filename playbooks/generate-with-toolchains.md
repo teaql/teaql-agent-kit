@@ -140,8 +140,8 @@ Rust, or both TeaQL code generation tracks.
   service internals, or lower-level persistence bypasses.
 - When writing Rust customer code, playground code, examples, or tests that
   create new entities, use the generated `Q` collection factory:
-  `Q::<entities>().new_entity(&ctx)`, such as
-  `Q::products().new_entity(&ctx)`. Do not instantiate generated entity structs
+  `Q::<entities>().comment(...).new_entity(&ctx)`, such as
+  `Q::products().comment("Initialize new product").new_entity(&ctx)`. Do not instantiate generated entity structs
   directly with struct literals, `Default`, or ad hoc builders.
 
 ## Rust Track
@@ -248,8 +248,10 @@ use generated_domain_crate::Q;
 
 pub fn stock_on_hand_query() {
     let _query = Q::stock_items()
-        .select_product_with(Q::products().which_skus_are("USB-C-001"))
-        .select_warehouse_with(Q::warehouses().which_codes_are("SHA-MAIN"))
+        .comment("Load stock on hand")
+        .purpose("Check available inventory")
+        .select_product_with(Q::products().comment("Filter by SKU").purpose("Filtering").which_skus_are("USB-C-001"))
+        .select_warehouse_with(Q::warehouses().comment("Filter by warehouse code").purpose("Filtering").which_codes_are("SHA-MAIN"))
         .which_quantities_greater_than(0)
         .page(1, 20);
 }

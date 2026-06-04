@@ -314,7 +314,7 @@ illustrative, but the method shapes are aligned with the current Java generator:
 `Q.<entityPlural>()`, `select<Field>()`, `select<Relation>With(...)`,
 `filterBy<Field>(...)`, `filterBy<Relation>With(...)`, relation counts such as
 `countEmployeesAs(...)`, generated `E.<entity>(value)` expressions, and
-`entity.save(userContext)` graph persistence. Exact method names are generated
+`entity.auditAs(...).save(userContext)` graph persistence. Exact method names are generated
 from the model, so your API will vary with entity names, field names,
 relationships, constants, and aggregate fields.
 
@@ -352,6 +352,8 @@ create or adjust tables before normal `Q` queries and graph saves run.
 import com.doublechaintech.crmerpservice.Q;
 
 var merchants = Q.merchants()
+    .comment("Load merchants for homepage")
+    .purpose("List active merchants")
     .selectSelf()
     .page(1, 20)
     .executeForList(userContext);
@@ -364,7 +366,11 @@ instead of manually assembling SQL or repository calls.
 
 ```java
 var merchants = Q.merchants()
+    .comment("Search merchants by name and platform")
+    .purpose("Filter merchants")
     .filterByPlatformWith(Q.platforms()
+        .comment("Load platform")
+        .purpose("Filtering")
         .filterByName("Shopify")
         .selectSelf())
     .filterByName("TeaQL")
@@ -391,8 +397,16 @@ ordering in typed TeaQL request code around the dynamic JSON query.
 
 ```java
 var merchants = Q.merchants()
-    .selectPlatformWith(Q.platforms().selectSelf())
-    .selectEmployeeListWith(Q.employees().selectSelf())
+    .comment("Load merchants with relations")
+    .purpose("Export merchant data")
+    .selectPlatformWith(Q.platforms()
+        .comment("Load platform details")
+        .purpose("Relations")
+        .selectSelf())
+    .selectEmployeeListWith(Q.employees()
+        .comment("Load employee details")
+        .purpose("Relations")
+        .selectSelf())
     .executeForList(userContext);
 ```
 
@@ -405,6 +419,8 @@ logic through application code.
 // Repeated subqueries can be wrapped in project-level helper methods, for
 // example: platformNamed("Shopify") or employeesNamed("Ada").
 var merchants = Q.merchants()
+    .comment("Load Shopify merchants with specific employees")
+    .purpose("Filter merchants by related entities")
     .filterByPlatformWith(platformNamed("Shopify"))
     .haveEmployeesWith(employeesNamed("Ada"))
     .selectEmployeeListWith(employeesNamed("Ada"))
@@ -418,6 +434,8 @@ turning the application layer into a string-query construction site.
 
 ```java
 var merchants = Q.merchants()
+    .comment("Load merchants with stats")
+    .purpose("Reporting")
     .selectSelf()
     // Adds a dynamic property named "employeeCount" to each returned merchant.
     .countEmployeesAs("employeeCount")
@@ -426,6 +444,8 @@ var merchants = Q.merchants()
     // projections, counts, sums, groups, or other aggregate output.
     .statsFromEmployeesAs("employeeStats",
         Q.employees()
+            .comment("Load employee profiles")
+            .purpose("Build contact list")
             .selectSelf()
             .count())
     .executeForList(userContext);
@@ -470,13 +490,15 @@ class OperableMerchant extends Merchant {
 }
 
 var merchant = Q.merchants()
+    .comment("Load merchant to open store")
+    .purpose("Open store")
     .returnType(OperableMerchant.class)
     .filterByName("TeaQL Store")
     .executeForOne(userContext)
     .orElseThrow();
 
 merchant.openStore()
-    .save(userContext);
+    .auditAs("Open store for the first time").save(userContext);
 ```
 
 This is where TeaQL becomes especially useful for DDD. A project can define a
@@ -485,7 +507,7 @@ domain-specific subclass or behavior type, add readable business methods such as
 return that type. After the query, application code calls the business method
 directly instead of mapping raw records into a separate service object. Generated
 entity APIs, relation methods, and graph persistence through
-`entity.save(userContext)` remain available at the application/service boundary.
+`entity.auditAs(...).save(userContext)` remain available at the application/service boundary.
 As a best practice, keep domain behavior lightweight and easy to unit test:
 mutate or validate domain state inside the method, and perform persistence
 outside the domain method.
@@ -501,7 +523,7 @@ directly or writing update SQL:
 merchant
     .updateStatus(MerchantStatus.ACTIVE)
     .updateDisplayName("TeaQL Store")
-    .save(userContext);
+    .auditAs("Update store display name").save(userContext);
 ```
 
 Use the chain to express one domain transition clearly. If the generated update
@@ -515,7 +537,7 @@ service crate. The method shapes are aligned with the current Rust generator:
 `Q::<entity_plural>()`, `select_<field>()`, `select_<relation>_with(...)`,
 `filter_by_<field>(...)`, readable filters such as `which_names_contain(...)`,
 relation filters such as `have_employees_with(...)`, generated `E::<entity>()`
-expressions, and `entity.save(&ctx).await` graph persistence. Exact method names
+expressions, and `entity.audit_as(...).save(&ctx).await` graph persistence. Exact method names
 are generated from the model, so your API will vary with entity names, field
 names, relationships, constants, and aggregate fields.
 
@@ -547,6 +569,8 @@ graph save, safe expressions, and DDD behavior methods.
 use crm_erp_service::Q;
 
 let merchants = Q::merchants()
+    .comment("Load merchants for homepage")
+    .purpose("List active merchants")
     .select_self()
     .page(1, 20)
     .execute_for_list(&ctx)
@@ -557,8 +581,12 @@ let merchants = Q::merchants()
 
 ```rust
 let merchants = Q::merchants()
+    .comment("Search merchants by name and platform")
+    .purpose("Filter merchants")
     .which_names_contain("TeaQL")
     .filter_by_platform_with(Q::platforms()
+        .comment("Load platform")
+        .purpose("Filtering")
         .which_names_are("Shopify")
         .select_self())
     .execute_for_list(&ctx)
@@ -580,8 +608,16 @@ ordering in typed TeaQL request code around the dynamic JSON query.
 
 ```rust
 let merchants = Q::merchants()
-    .select_platform_with(Q::platforms().select_self())
-    .select_employee_list_with(Q::employees().select_self())
+    .comment("Load merchants with relations")
+    .purpose("Export merchant data")
+    .select_platform_with(Q::platforms()
+        .comment("Load platform details")
+        .purpose("Relations")
+        .select_self())
+    .select_employee_list_with(Q::employees()
+        .comment("Load employee details")
+        .purpose("Relations")
+        .select_self())
     .execute_for_list(&ctx)
     .await?;
 ```
@@ -592,6 +628,8 @@ let merchants = Q::merchants()
 // Repeated subqueries can be wrapped in project-level helper functions, for
 // example: platform_named("Shopify") or employees_named("Ada").
 let merchants = Q::merchants()
+    .comment("Load Shopify merchants with specific employees")
+    .purpose("Filter merchants by related entities")
     .filter_by_platform_with(platform_named("Shopify"))
     .have_employees_with(employees_named("Ada"))
     .select_employee_list_with(employees_named("Ada"))
@@ -605,6 +643,8 @@ let merchants = Q::merchants()
 use teaql_core::BaseEntity;
 
 let merchants = Q::merchants()
+    .comment("Load merchants with stats")
+    .purpose("Reporting")
     .select_self()
     // Adds a dynamic property named "employee_count" to each returned merchant.
     .count_employees_as("employee_count")
@@ -614,6 +654,9 @@ let merchants = Q::merchants()
     .stats_from_employees_as(
         "employee_stats",
         Q::employees()
+            .comment("Load employee profiles")
+            .purpose("Build contact list")
+            .which_roles_are("admin")
             .select_self()
             .aggregate_count("count"),
     )
@@ -664,6 +707,8 @@ impl OperableMerchant {
 }
 
 let mut merchant = Q::merchants()
+    .comment("Load merchant to open store")
+    .purpose("Open store")
     .return_type::<OperableMerchant>()
     .which_names_are("TeaQL Store")
     .execute_for_one(&ctx)
@@ -671,20 +716,20 @@ let mut merchant = Q::merchants()
     .expect("merchant should exist");
 
 merchant.open_store();
-merchant.inner.save(&ctx).await?;
+merchant.inner.audit_as("Open store for the first time").save(&ctx).await?;
 ```
 
 Rust follows the same DDD shape. A project can define a runtime-compatible
 domain type with extra behavior, set it as the query return type, and call the
 method immediately after loading. Generated TeaQL entities, update methods,
-relation helpers, and `save(&ctx).await` still provide the persistence surface
+relation helpers, and `audit_as(...).save(&ctx).await` still provide the persistence surface
 at the application/service boundary. Keep behavior methods small and testable:
 they should express domain state transitions, while persistence remains outside
 the method.
 
 Generated Rust update methods should be used the same way for state changes:
 chain the generated update calls when the runtime exposes chainable setters,
-then persist through `save(&ctx).await`. Avoid direct generated-field mutation
+then persist through `audit_as(...).save(&ctx).await`. Avoid direct generated-field mutation
 and raw SQL for ordinary business updates.
 
 ## Runtime Context Customization
