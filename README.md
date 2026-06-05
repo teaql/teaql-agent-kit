@@ -352,10 +352,10 @@ create or adjust tables before normal `Q` queries and graph saves run.
 import com.doublechaintech.crmerpservice.Q;
 
 var merchants = Q.merchants()
-    .comment("Load merchants for homepage")
-    .purpose("List active merchants")
     .selectSelf()
     .page(1, 20)
+    .comment("Load merchants for homepage")
+    .purpose("List active merchants")
     .executeForList(userContext);
 ```
 
@@ -366,14 +366,14 @@ instead of manually assembling SQL or repository calls.
 
 ```java
 var merchants = Q.merchants()
-    .comment("Search merchants by name and platform")
-    .purpose("Filter merchants")
     .filterByPlatformWith(Q.platforms()
         .comment("Load platform")
         .purpose("Filtering")
         .filterByName("Shopify")
         .selectSelf())
     .filterByName("TeaQL")
+    .comment("Search merchants by name and platform")
+    .purpose("Filter merchants")
     .executeForList(userContext);
 ```
 
@@ -397,8 +397,6 @@ ordering in typed TeaQL request code around the dynamic JSON query.
 
 ```java
 var merchants = Q.merchants()
-    .comment("Load merchants with relations")
-    .purpose("Export merchant data")
     .selectPlatformWith(Q.platforms()
         .comment("Load platform details")
         .purpose("Relations")
@@ -407,6 +405,8 @@ var merchants = Q.merchants()
         .comment("Load employee details")
         .purpose("Relations")
         .selectSelf())
+    .comment("Load merchants with relations")
+    .purpose("Export merchant data")
     .executeForList(userContext);
 ```
 
@@ -419,11 +419,11 @@ logic through application code.
 // Repeated subqueries can be wrapped in project-level helper methods, for
 // example: platformNamed("Shopify") or employeesNamed("Ada").
 var merchants = Q.merchants()
-    .comment("Load Shopify merchants with specific employees")
-    .purpose("Filter merchants by related entities")
     .filterByPlatformWith(platformNamed("Shopify"))
     .haveEmployeesWith(employeesNamed("Ada"))
     .selectEmployeeListWith(employeesNamed("Ada"))
+    .comment("Load Shopify merchants with specific employees")
+    .purpose("Filter merchants by related entities")
     .executeForList(userContext);
 ```
 
@@ -434,8 +434,6 @@ turning the application layer into a string-query construction site.
 
 ```java
 var merchants = Q.merchants()
-    .comment("Load merchants with stats")
-    .purpose("Reporting")
     .selectSelf()
     // Adds a dynamic property named "employeeCount" to each returned merchant.
     .countEmployeesAs("employeeCount")
@@ -448,6 +446,8 @@ var merchants = Q.merchants()
             .purpose("Build contact list")
             .selectSelf()
             .count())
+    .comment("Load merchants with stats")
+    .purpose("Reporting")
     .executeForList(userContext);
 
 for (Merchant merchant : merchants) {
@@ -490,10 +490,10 @@ class OperableMerchant extends Merchant {
 }
 
 var merchant = Q.merchants()
-    .comment("Load merchant to open store")
-    .purpose("Open store")
     .returnType(OperableMerchant.class)
     .filterByName("TeaQL Store")
+    .comment("Load merchant to open store")
+    .purpose("Open store")
     .executeForOne(userContext)
     .orElseThrow();
 
@@ -569,10 +569,10 @@ graph save, safe expressions, and DDD behavior methods.
 use crm_erp_service::Q;
 
 let merchants = Q::merchants()
-    .comment("Load merchants for homepage")
-    .purpose("List active merchants")
     .select_self()
     .page(1, 20)
+    .comment("Load merchants for homepage")
+    .purpose("List active merchants")
     .execute_for_list(&ctx)
     .await?;
 ```
@@ -581,14 +581,14 @@ let merchants = Q::merchants()
 
 ```rust
 let merchants = Q::merchants()
-    .comment("Search merchants by name and platform")
-    .purpose("Filter merchants")
     .which_names_contain("TeaQL")
     .filter_by_platform_with(Q::platforms()
         .comment("Load platform")
         .purpose("Filtering")
         .which_names_are("Shopify")
         .select_self())
+    .comment("Search merchants by name and platform")
+    .purpose("Filter merchants")
     .execute_for_list(&ctx)
     .await?;
 ```
@@ -608,8 +608,6 @@ ordering in typed TeaQL request code around the dynamic JSON query.
 
 ```rust
 let merchants = Q::merchants()
-    .comment("Load merchants with relations")
-    .purpose("Export merchant data")
     .select_platform_with(Q::platforms()
         .comment("Load platform details")
         .purpose("Relations")
@@ -618,6 +616,8 @@ let merchants = Q::merchants()
         .comment("Load employee details")
         .purpose("Relations")
         .select_self())
+    .comment("Load merchants with relations")
+    .purpose("Export merchant data")
     .execute_for_list(&ctx)
     .await?;
 ```
@@ -628,11 +628,11 @@ let merchants = Q::merchants()
 // Repeated subqueries can be wrapped in project-level helper functions, for
 // example: platform_named("Shopify") or employees_named("Ada").
 let merchants = Q::merchants()
-    .comment("Load Shopify merchants with specific employees")
-    .purpose("Filter merchants by related entities")
     .filter_by_platform_with(platform_named("Shopify"))
     .have_employees_with(employees_named("Ada"))
     .select_employee_list_with(employees_named("Ada"))
+    .comment("Load Shopify merchants with specific employees")
+    .purpose("Filter merchants by related entities")
     .execute_for_list(&ctx)
     .await?;
 ```
@@ -643,8 +643,6 @@ let merchants = Q::merchants()
 use teaql_core::BaseEntity;
 
 let merchants = Q::merchants()
-    .comment("Load merchants with stats")
-    .purpose("Reporting")
     .select_self()
     // Adds a dynamic property named "employee_count" to each returned merchant.
     .count_employees_as("employee_count")
@@ -660,6 +658,8 @@ let merchants = Q::merchants()
             .select_self()
             .aggregate_count("count"),
     )
+    .comment("Load merchants with stats")
+    .purpose("Reporting")
     .execute_for_list(&ctx)
     .await?;
 
@@ -707,10 +707,10 @@ impl OperableMerchant {
 }
 
 let mut merchant = Q::merchants()
-    .comment("Load merchant to open store")
-    .purpose("Open store")
     .return_type::<OperableMerchant>()
     .which_names_are("TeaQL Store")
+    .comment("Load merchant to open store")
+    .purpose("Open store")
     .execute_for_one(&ctx)
     .await?
     .expect("merchant should exist");
