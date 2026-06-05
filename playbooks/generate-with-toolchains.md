@@ -48,8 +48,7 @@ Rust, or both TeaQL code generation tracks.
   playground needs to call generated APIs.
 - Use concrete paths in command-line examples and invocations. Do not pass
   Maven/POM expressions such as `${project.basedir}` or `${project.baseDir}` to
-  `-Dteaql.input`, `-Dteaql.output`, `-Dteaql.workspaceDir`, `--output`, or
-  `--workspace-dir`. Maven only interpolates project expressions in POM/plugin
+  `-Dteaql.input`, `-Dteaql.output`, `-Dteaql.workspaceDir`, or `--output`. Maven only interpolates project expressions in POM/plugin
   configuration contexts, not arbitrary CLI property values; use an actual path
   such as `/path/to/app-playground/generate-lib` or `app-playground/generate-lib`.
 - For Java playgrounds that should be runnable as an application, generate the
@@ -209,7 +208,7 @@ under `app-playground/generate-lib`, and write the workspace to
 
 ```bash
 cargo-teaql gen-workspace /path/to/app-playground/models/model.xml \
-  --workspace-dir /path/to/app-playground/rust-workspace \
+  --output /path/to/app-playground/rust-workspace \
   --cwd /path/to/app-playground
 ```
 
