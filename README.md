@@ -20,6 +20,18 @@ This repository is meant to become the GitHub-star entry point for TeaQL: start
 here when you want to try TeaQL with vibe coding, understand what TeaQL gives to
 AI-assisted development, and find the Java and Rust implementations.
 
+## The Philosophy Behind TeaQL: Uncompromising Design Meets AI
+
+TeaQL is **not** a solo endeavor or a weekend workshop project. It is the culmination of collective expertise—a comprehensive ecosystem systematically architected by a dedicated group of top-tier engineers with extensive enterprise experience.
+
+Our core motto is simple: **"Never compromise on design."**
+
+Long before a single line of implementation was written, our team spent countless hours meticulously crafting, debating, and finalizing extensive architectural blueprints and design documents online. Because of our strict adherence to this uncompromising standard, our initial progress was deliberately slow. We refused to accumulate technical debt or settle for "good enough" just to launch faster.
+
+Then came the era of Agentic AI.
+
+With our robust, battle-tested designs already in place, AI became the ultimate catalyst. The AI didn't design the system; rather, it helped us rapidly execute and realize the vast library of design documents we had already perfected. What used to be a bottleneck of manual implementation has now skyrocketed in velocity. AI coding tools gave our top-tier engineering collective the execution speed necessary to match our rigorous design vision—without ever having to compromise.
+
 ## Quick Try
 
 Copy one of these prompts into your coding agent. The agent should read
