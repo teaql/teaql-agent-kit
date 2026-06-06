@@ -248,9 +248,8 @@ use generated_domain_crate::Q;
 pub fn stock_on_hand_query() {
     let _query = Q::stock_items()
         .comment("Load stock on hand")
-        .purpose("Check available inventory")
-        .select_product_with(Q::products().comment("Filter by SKU").purpose("Filtering").which_skus_are("USB-C-001"))
-        .select_warehouse_with(Q::warehouses().comment("Filter by warehouse code").purpose("Filtering").which_codes_are("SHA-MAIN"))
+        .select_product_with(Q::products().comment("Filter by SKU").which_skus_are("USB-C-001"))
+        .select_warehouse_with(Q::warehouses().comment("Filter by warehouse code").which_codes_are("SHA-MAIN"))
         .which_quantities_greater_than(0)
         .page(1, 20);
 }
