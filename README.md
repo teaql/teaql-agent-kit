@@ -79,12 +79,20 @@ For long-lived business software, these dimensions matter as much as whether the
 
 ---
 
+## Reports
+
+Evaluation reports will be published in this repository.
+
+Reports may include controlled and autonomous runs across different coding agents, language models, and TEAQL stacks.
+
+---
+
 ## Evaluation Across Stacks
 
 TEAQL Agent Kit may evaluate equivalent business software tasks across different TEAQL implementations, including:
 
-* TEAQL Java stack
-* TEAQL Rust stack
+- TEAQL Java stack
+- TEAQL Rust stack
 
 The purpose is not to rank programming languages.
 
@@ -99,8 +107,4 @@ Today, TEAQL Agent Kit evaluates coding agents.
 Long term, the same evidence may help define which AI coding tasks can be safely automated, which require human gates, and which should never bypass review.
 
 The goal is measured automation, not blind automation.
-
-## Reports
-
-Preparing the #1 report.
 
