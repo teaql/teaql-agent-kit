@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TEAQL Agent Kit Autonomous Evaluation Metrics",
+  "type": "object",
+  "required": [
+    "taskId",
+    "agent",
+    "model",
+    "stack",
+    "date",
+    "branch",
+    "commit",
+    "result",
+    "metrics"
+  ],
+  "properties": {
+    "taskId": {
+      "type": "string"
+    },
+    "taskTitle": {
+      "type": "string"
+    },
+    "agent": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "stack": {
+      "type": "string",
+      "enum": ["java", "rust", "mixed", "other"]
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "commit": {
+      "type": "string"
+    },
+    "result": {
+      "type": "object",
+      "required": [
+        "finalStatus",
+        "oneShotSuccess",
+        "compileSuccess",
+        "testPassRate"
+      ],
+      "properties": {
+        "finalStatus": {
+          "type": "string",
+          "enum": ["passed", "partially-passed", "failed"]
+        },
+        "oneShotSuccess": {
+          "type": "boolean"
+        },
+        "compileSuccess": {
+          "type": "boolean"
+        },
+        "testPassRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "functionalCompletion",
+        "apiAdherence",
+        "hallucinatedApiCount",
+        "auditCoverage",
+        "frameworkDiscipline",
+        "errorRecoverability",
+        "repairTurnsRequired",
+        "humanInterventionCount",
+        "unsafeShortcutCount"
+      ],
+      "properties": {
+        "functionalCompletion": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "apiAdherence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "hallucinatedApiCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "auditCoverage": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "frameworkDiscipline": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "errorRecoverability": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "repairTurnsRequired": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "humanInterventionCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unsafeShortcutCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tokenUsage": {
+          "type": "object",
+          "properties": {
+            "inputTokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "outputTokens": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "totalTokens": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "promptFile": {
+          "type": "string"
+        },
+        "logsFile": {
+          "type": "string"
+        },
+        "changedFilesFile": {
+          "type": "string"
+        },
+        "observationsFile": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
