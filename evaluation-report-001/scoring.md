@@ -4,7 +4,7 @@
 
 ## Overall Score
 
-**Composite: 7.9 / 10**
+**Composite: 8.0 / 10**
 
 ---
 
@@ -16,7 +16,7 @@
 | Type Safety | 8.5 | 15% | 291 methods/entity; Audited<T> enforces audit at compile time |
 | Code Generation | 8.0 | 15% | select_*_with exists; 1 doc-code inconsistency (execute_for_exists) |
 | API Design | 8.5 | 15% | Q/E facade + constant shortcuts + comment chain |
-| Runtime | 7.0 | 10% | Full-featured (auto-migration, graph save, checkers); heavy deps with sqlx |
+| Runtime | 7.5 | 10% | Full-featured (auto-migration, graph save, audit trail, version locking); heavy deps with sqlx |
 | Documentation | 7.5 | 10% | API_GUIDE.md mostly accurate; 1 execute_for_exists claim wrong |
 | Ecosystem | 7.0 | 10% | ~20 Rust crates + 3 Java + open source forge; low community stars |
 | Extensibility | 7.0 | 10% | Behavior/Checker hooks; 5 database providers |
@@ -76,12 +76,18 @@
 **Weaknesses:**
 - execute_for_exists location inconsistency
 
-### 5. Runtime — 7.0
+### 5. Runtime — 7.5
 
 **Strengths:**
 - One-line startup: `service_runtime_from_env()` connects and runs schema migration
 - Auto schema migration: `ensure_schema()` creates tables and adds columns, never drops
 - Graph save with full audit pipeline: audit_as → checkers → diff → SQL → audit log → events
+- **Purpose-comment trace chain**: every SQL tagged with `.purpose() -> .comment()` business intent
+- **Audit entries**: mutations generate `[AUDIT]` logs with entity type, ID, operation, and all field snapshots
+- **Optimistic locking**: UPDATE uses `WHERE id = ? AND version = ?` to prevent concurrent conflicts
+- **Soft delete via version**: queries filter `WHERE (version > 0)`, deletes set version to 0
+- **Execution timing**: every SQL logged with microsecond precision
+- **Relation loading transparency**: eager-loaded relations appear as separate logged SQL statements
 - Environment variable control: TEAQL_AUDIT, TEAQL_SCHEMA, TEAQL_SQL_LOG
 - Multiple database providers: SQLite (sqlx/rusqlite), PostgreSQL, MySQL, Meilisearch, Redis
 
