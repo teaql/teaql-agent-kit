@@ -558,6 +558,10 @@ UPDATE school_data
     <tr><td><strong>Extensibility</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>Behavior/Checker hooks; 5 database providers</td></tr>
   </table>
 
+  <div class="callout">
+    <p><strong>Score adjustment: 7.9 &rarr; 8.0.</strong> The initial composite score was 7.9 with Runtime at 7.0. After capturing and analyzing the full SQL trace log (109 lines, 36 statements), the Runtime dimension was upgraded to 7.5. TeaQL's audit trail capabilities &mdash; purpose-comment chain, mutation audit entries with field snapshots, optimistic locking via version guards, microsecond execution timing, and relation loading transparency &mdash; are stronger than initially assessed from documentation alone. The trace log provides concrete evidence that TeaQL's "transparent tracking and audit" positioning is not aspirational but implemented and functional. This added 0.05 to the weighted composite, rounding to 8.0.</p>
+  </div>
+
   <h2>Ecosystem</h2>
   <p><strong>10 public repositories</strong> in the <a href="https://github.com/teaql">teaql GitHub organization</a>.</p>
 
