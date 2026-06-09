@@ -5,140 +5,177 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TeaQL Evaluation Report #001</title>
 <style>
-  @page { size: A4; margin: 0; }
-  @media print {
-    body { background: none; padding: 0; }
-    .page { box-shadow: none; margin: 0; page-break-after: always; }
-    .page:last-child { page-break-after: auto; }
-  }
+  /* ===== RESET ===== */
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ===== PAGE SETUP ===== */
+  @page {
+    size: A4;
+    margin: 18mm 20mm 22mm 20mm;
+  }
+
+  /* ===== SCREEN LAYOUT ===== */
   body {
     background: #e8e8e8;
     display: flex; flex-direction: column; align-items: center;
     padding: 40px 0; gap: 40px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #1a1a1a; font-size: 14px; line-height: 1.65;
+    color: #222; font-size: 13.5px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
   .page {
     background: #fff; width: 700px; min-height: 990px;
-    padding: 60px 80px; position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 56px 72px; position: relative;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
     display: flex; flex-direction: column;
   }
 
-  /* typography */
+  /* ===== PRINT ===== */
+  @media print {
+    html, body { background: #fff !important; padding: 0 !important; gap: 0 !important; font-size: 12.5px; }
+    .page {
+      box-shadow: none !important; margin: 0 !important;
+      width: 100% !important; min-height: auto !important;
+      padding: 0 !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
+    .page:last-child { page-break-after: auto; }
+    .pn { position: relative !important; bottom: auto !important; right: auto !important; text-align: right; margin-top: 24px; font-size: 10px; color: #999; }
+    .sig-block { page-break-inside: avoid; }
+    pre { page-break-inside: avoid; }
+    table { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    a { color: #222 !important; text-decoration: underline; }
+    a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9px; color: #888; word-break: break-all; }
+    .callout { background: #f5f5f5 !important; border-left-color: #999 !important; }
+    .tag { border: 1px solid #999 !important; color: #222 !important; background: #f5f5f5 !important; }
+    pre { background: #f5f5f5 !important; border-color: #ddd !important; }
+    pre code, pre .cm, pre .kw, pre .st, pre .fn { color: #222 !important; }
+    .cm { color: #666 !important; }
+  }
+
+  /* ===== TYPOGRAPHY ===== */
   h1 { font-family: Georgia, "Times New Roman", serif; font-weight: normal; }
   h2 {
-    font-family: Georgia, serif; font-size: 20px; font-weight: normal;
-    color: #111; margin: 28px 0 12px; padding-bottom: 6px;
-    border-bottom: 1px solid #eee;
+    font-family: Georgia, serif; font-size: 18px; font-weight: normal;
+    color: #111; margin: 24px 0 10px; padding-bottom: 5px;
+    border-bottom: 1px solid #e5e5e5;
+    letter-spacing: -0.01em;
   }
   h2:first-child { margin-top: 0; }
-  h3 { font-size: 14px; font-weight: 600; color: #222; margin: 18px 0 6px; }
-  p { margin: 0 0 12px; color: #333; }
-  ul { margin: 4px 0 12px 18px; }
-  li { margin-bottom: 4px; color: #333; }
+  h3 { font-size: 13px; font-weight: 600; color: #222; margin: 16px 0 5px; letter-spacing: 0.01em; }
+  p { margin: 0 0 10px; color: #333; }
+  ul { margin: 4px 0 10px 16px; }
+  li { margin-bottom: 3px; color: #333; }
   li strong { color: #111; }
   a { color: #3578e5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-  /* tables */
-  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 13px; }
+  /* ===== TABLES ===== */
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 12.5px; }
   th {
-    text-align: left; font-weight: 600; color: #444;
-    padding: 8px 10px; background: #f7f7f7;
-    border-bottom: 2px solid #e0e0e0; font-size: 12px;
+    text-align: left; font-weight: 600; color: #555;
+    padding: 6px 8px; background: #f7f7f7;
+    border-bottom: 1.5px solid #ddd; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.04em;
   }
-  td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: #333; }
+  td { padding: 6px 8px; border-bottom: 1px solid #f0f0f0; color: #333; }
   tr:last-child td { border-bottom: none; }
 
-  /* code */
+  /* ===== CODE (print-friendly: light bg, dark text) ===== */
   code {
-    font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
-    font-size: 12px; background: #f5f5f5; padding: 1px 5px; border-radius: 3px;
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+    font-size: 11px; background: #f5f5f5; padding: 1px 4px; border-radius: 3px;
+    color: #333;
   }
   pre {
-    background: #1a1a2e; color: #d4d4d8; padding: 14px 18px;
-    border-radius: 6px; overflow-x: auto; margin: 8px 0 16px;
-    font-size: 12px; line-height: 1.6;
-    font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+    background: #f7f7f7; color: #222;
+    border: 1px solid #e0e0e0; border-left: 3px solid #ddd;
+    padding: 12px 14px; margin: 8px 0 14px;
+    font-size: 11px; line-height: 1.45;
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+    overflow-x: auto; border-radius: 3px;
+    white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word;
   }
-  pre code { background: none; padding: 0; color: inherit; }
-  .cm { color: #6b7280; }
-  .kw { color: #7dd3fc; }
-  .st { color: #fbbf24; }
-  .fn { color: #a5b4fc; }
+  pre code { background: none; padding: 0; color: inherit; border: none; font-size: inherit; }
+  .cm { color: #888; }
+  .kw { color: #555; font-weight: 600; }
+  .st { color: #555; }
+  .fn { color: #333; font-weight: 500; }
 
-  /* tags */
+  /* ===== TAGS ===== */
   .tag {
-    display: inline-block; font-size: 10px; padding: 1px 6px;
-    border-radius: 3px; font-weight: 500; vertical-align: middle;
+    display: inline-block; font-size: 9.5px; padding: 1px 5px;
+    border-radius: 2px; font-weight: 600; vertical-align: middle;
+    letter-spacing: 0.03em;
   }
-  .t-ok { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-  .t-w { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+  .t-ok { background: #f0f0f0; color: #333; border: 1px solid #ccc; }
+  .t-w { background: #f5f5f0; color: #555; border: 1px solid #bbb; }
 
-  /* callout */
+  /* ===== CALLOUT ===== */
   .callout {
-    border-left: 2px solid #6b8e6b; padding: 10px 14px;
-    margin: 10px 0; background: #fafafa; border-radius: 0 4px 4px 0;
-    font-size: 13px;
+    border-left: 2px solid #999; padding: 8px 12px;
+    margin: 8px 0; background: #fafafa; border-radius: 0 3px 3px 0;
+    font-size: 12px;
   }
   .callout p { margin: 0; }
 
-  /* cover */
+  /* ===== COVER PAGE ===== */
   .cover-header {
-    font-size: 13px; letter-spacing: 1.5px; color: #333;
-    padding-bottom: 20px; border-bottom: 1px solid #b3b3b3; margin-bottom: 70px;
+    font-size: 12px; letter-spacing: 1.5px; color: #555;
+    padding-bottom: 18px; border-bottom: 1px solid #ccc; margin-bottom: 60px;
+    text-transform: uppercase;
   }
   .cover-title {
-    font-family: Georgia, serif; font-size: 72px; font-weight: normal;
-    line-height: 1.1; margin: 0 0 60px; color: #111;
+    font-family: Georgia, serif; font-size: 64px; font-weight: normal;
+    line-height: 1.08; margin: 0 0 50px; color: #111;
+    letter-spacing: -0.02em;
   }
   .icon-box {
-    width: 55px; height: 55px; border: 1.5px solid #6b8e6b;
+    width: 50px; height: 50px; border: 1.5px solid #888;
     display: flex; justify-content: center; align-items: center;
-    font-size: 34px; font-family: Georgia, serif; margin-bottom: 60px; color: #111;
+    font-size: 30px; font-family: Georgia, serif; margin-bottom: 50px; color: #111;
   }
   .report-number {
-    font-family: Georgia, serif; font-size: 46px;
-    margin: 0 0 20px; font-weight: normal; color: #111;
+    font-family: Georgia, serif; font-size: 42px;
+    margin: 0 0 18px; font-weight: normal; color: #111;
   }
-  .short-line { width: 50px; height: 1.5px; background: #6b8e6b; margin-bottom: 40px; }
-  .subtitle-1 { font-size: 22px; line-height: 1.4; margin: 0 0 15px; color: #222; }
-  .subtitle-2 { font-size: 15px; color: #555; margin: 0; }
+  .short-line { width: 40px; height: 1.5px; background: #888; margin-bottom: 36px; }
+  .subtitle-1 { font-size: 20px; line-height: 1.4; margin: 0 0 12px; color: #222; }
+  .subtitle-2 { font-size: 14px; color: #666; margin: 0; }
   .spacer { flex-grow: 1; }
   .page-footer {
-    border-top: 1px solid #b3b3b3; padding-top: 25px;
+    border-top: 1px solid #ccc; padding-top: 20px;
     display: flex; justify-content: space-between; align-items: flex-end;
   }
   .page-footer-text {
-    font-size: 11px; letter-spacing: 1.2px; color: #333; text-transform: uppercase;
+    font-size: 10px; letter-spacing: 1.2px; color: #555; text-transform: uppercase;
   }
 
-  /* inner header */
+  /* ===== INNER HEADER ===== */
   .inner-header {
     display: flex; justify-content: space-between;
-    font-size: 12px; color: #666;
-    border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 30px;
+    font-size: 11px; color: #888;
+    border-bottom: 1px solid #e5e5e5; padding-bottom: 10px; margin-bottom: 24px;
   }
 
-  /* big score */
-  .big-score {
-    text-align: center; margin: 16px 0 24px;
-  }
-  .big-score .num { font-size: 48px; font-weight: 600; color: #111; }
-  .big-score .den { font-size: 20px; color: #999; }
-  .big-score .cap { font-size: 12px; color: #888; margin-top: 4px; }
+  /* ===== BIG SCORE ===== */
+  .big-score { text-align: center; margin: 12px 0 20px; }
+  .big-score .num { font-size: 44px; font-weight: 600; color: #111; }
+  .big-score .den { font-size: 18px; color: #aaa; }
+  .big-score .cap { font-size: 11px; color: #999; margin-top: 3px; }
 
-  /* page number */
+  /* ===== PAGE NUMBER ===== */
   .pn {
-    position: absolute; bottom: 40px; right: 80px;
-    font-size: 12px; color: #888;
+    position: absolute; bottom: 36px; right: 72px;
+    font-size: 11px; color: #aaa;
   }
 
-  /* footer sig */
+  /* ===== FOOTER SIG ===== */
   .sig-block {
-    margin-top: auto; padding-top: 20px; border-top: 1px solid #eee;
-    font-size: 11px; color: #999;
+    margin-top: auto; padding-top: 16px; border-top: 1px solid #eee;
+    font-size: 10.5px; color: #aaa;
   }
 </style>
 </head>
@@ -158,12 +195,12 @@
   <div class="spacer"></div>
   <div class="page-footer">
     <div class="page-footer-text">Evidence &nbsp;&middot;&nbsp; Audit Trails &nbsp;&middot;&nbsp; Deterministic by Design</div>
-    <svg width="80" height="30" viewBox="0 0 100 30" style="opacity:0.7">
-      <path d="M5,25 Q25,20 45,25 T85,25" fill="none" stroke="#333" stroke-width="1.5"/>
-      <circle cx="20" cy="15" r="2.5" fill="#333"/>
-      <circle cx="70" cy="15" r="2.5" fill="#333"/>
-      <path d="M20,18 L20,25 M70,18 L70,25" stroke="#333" stroke-width="1.5"/>
-      <path d="M20,15 L35,15" stroke="#333" stroke-width="1" stroke-dasharray="2 2"/>
+    <svg width="80" height="30" viewBox="0 0 100 30" style="opacity:0.5">
+      <path d="M5,25 Q25,20 45,25 T85,25" fill="none" stroke="#555" stroke-width="1.5"/>
+      <circle cx="20" cy="15" r="2.5" fill="#555"/>
+      <circle cx="70" cy="15" r="2.5" fill="#555"/>
+      <path d="M20,18 L20,25 M70,18 L70,25" stroke="#555" stroke-width="1.5"/>
+      <path d="M20,15 L35,15" stroke="#555" stroke-width="1" stroke-dasharray="2 2"/>
     </svg>
   </div>
 </div>
@@ -185,7 +222,7 @@
 
   <h3>Evaluated Target</h3>
   <table>
-    <tr><th style="width:170px">Item</th><th>Value</th></tr>
+    <tr><th style="width:160px">Item</th><th>Value</th></tr>
     <tr><td><strong>Project</strong></td><td>TeaQL School Management System</td></tr>
     <tr><td><strong>Domain</strong></td><td>Education (Platform, School, SchoolType)</td></tr>
     <tr><td><strong>Language</strong></td><td>Rust</td></tr>
@@ -202,7 +239,7 @@
 
   <h3>Hardware</h3>
   <table>
-    <tr><th style="width:170px">Item</th><th>Value</th></tr>
+    <tr><th style="width:160px">Item</th><th>Value</th></tr>
     <tr><td><strong>Device</strong></td><td>MacBook Pro (Retina, Mid 2015)</td></tr>
     <tr><td><strong>CPU</strong></td><td>Intel Core i7-4770HQ @ 2.20GHz (x86_64)</td></tr>
     <tr><td><strong>Memory</strong></td><td>16 GB RAM</td></tr>
@@ -212,7 +249,7 @@
 
   <h3>Software</h3>
   <table>
-    <tr><th style="width:170px">Component</th><th>Version</th></tr>
+    <tr><th style="width:160px">Component</th><th>Version</th></tr>
     <tr><td><strong>OS</strong></td><td>macOS (Darwin)</td></tr>
     <tr><td><strong>Shell</strong></td><td>zsh</td></tr>
     <tr><td><strong>Rust</strong></td><td>rustc 1.94.1</td></tr>
@@ -241,7 +278,7 @@
 
   <h3>Execution Steps</h3>
   <table>
-    <tr><th style="width:30px">#</th><th>Step</th><th>Tool / Command</th></tr>
+    <tr><th style="width:28px">#</th><th>Step</th><th>Tool / Command</th></tr>
     <tr><td>1</td><td>Fetch TeaQL agent kit</td><td>Git clone autonomous branch</td></tr>
     <tr><td>2</td><td>Create KSML semantic model</td><td>28 lines of XML</td></tr>
     <tr><td>3</td><td>Validate model</td><td><code>cargo-teaql eval</code></td></tr>
@@ -289,25 +326,26 @@
   <h2>Semantic Model (KSML)</h2>
   <p>The complete domain is defined in 28 lines of XML:</p>
 
-  <pre><code><span class="kw">&lt;root</span> alias_model_name=<span class="st">"school_management"</span>
-      data_service=<span class="st">"sqlite"</span>
-      name=<span class="st">"school-management-service"</span><span class="kw">&gt;</span>
+  <pre><code>&lt;root alias_model_name="school_management"
+      data_service="sqlite"
+      name="school-management-service"&gt;
 
-  <span class="kw">&lt;school_type</span> _constant=<span class="st">"true"</span> _identifier=<span class="st">"code"</span>
-              id=<span class="st">"id()"</span> name=<span class="st">"string()"</span> code=<span class="st">"string()"</span>
-              platform=<span class="st">"platform()"</span><span class="kw">&gt;</span>
-    <span class="kw">&lt;_value</span> id=<span class="st">"1001"</span> name=<span class="st">"Primary"</span> code=<span class="st">"PRIMARY"</span><span class="kw">/&gt;</span>
-    <span class="kw">&lt;_value</span> id=<span class="st">"1002"</span> name=<span class="st">"Secondary"</span> code=<span class="st">"SECONDARY"</span><span class="kw">/&gt;</span>
-  <span class="kw">&lt;/school_type&gt;</span>
+  &lt;school_type _constant="true" _identifier="code"
+              id="id()" name="string()" code="string()"
+              platform="platform()"&gt;
+    &lt;_value id="1001" name="Primary" code="PRIMARY"/&gt;
+    &lt;_value id="1002" name="Secondary" code="SECONDARY"/&gt;
+  &lt;/school_type&gt;
 
-  <span class="kw">&lt;platform</span> name=<span class="st">"Sunrise Education Group"</span>
-            create_time=<span class="st">"createTime()"</span> update_time=<span class="st">"updateTime()"</span><span class="kw">/&gt;</span>
+  &lt;platform name="Sunrise Education Group"
+            create_time="createTime()"
+            update_time="updateTime()"/&gt;
 
-  <span class="kw">&lt;school</span> name=<span class="st">"Green Valley Primary School"</span>
-          school_type=<span class="st">"school_type()"</span> platform=<span class="st">"platform()"</span>
-          create_time=<span class="st">"createTime()"</span> update_time=<span class="st">"updateTime()"</span><span class="kw">/&gt;</span>
+  &lt;school name="Green Valley Primary School"
+          school_type="school_type()" platform="platform()"
+          create_time="createTime()" update_time="updateTime()"/&gt;
 
-<span class="kw">&lt;/root&gt;</span></code></pre>
+&lt;/root&gt;</code></pre>
 
   <p><code>cargo-teaql eval</code> returned <strong>0 errors, 0 warnings</strong>. 12 solid checks passed including constant properties, reference targets, module keys, and domain root detection.</p>
 
@@ -315,7 +353,7 @@
   <p><strong>28 lines XML &rarr; 8,165 lines Rust (26 files, 290:1 expansion)</strong></p>
 
   <table>
-    <tr><th>File</th><th style="width:60px; text-align:right">Lines</th><th>Purpose</th></tr>
+    <tr><th>File</th><th style="width:55px; text-align:right">Lines</th><th>Purpose</th></tr>
     <tr><td><code>school/request.rs</code></td><td style="text-align:right">2,114</td><td>291 public methods: filters, ordering, pagination, relations, aggregation</td></tr>
     <tr><td><code>school/entity.rs</code></td><td style="text-align:right">312</td><td><code>get_*</code> / <code>update_*</code> / <code>changed_*</code> / <code>eval_*</code> per field</td></tr>
     <tr><td><code>school/expression.rs</code></td><td style="text-align:right">149</td><td>E expression chain with NotLoaded panic guidance</td></tr>
@@ -342,23 +380,23 @@
   <h2>API Design Analysis</h2>
 
   <h3>Q API &mdash; Query Building</h3>
-  <pre><code><span class="kw">use</span> school_management_service::{Q, E};
+  <pre><code>use school_management_service::{Q, E};
 
-<span class="kw">let</span> schools = Q::<span class="fn">schools</span>()
-    .<span class="fn">with_school_type_is_primary</span>()     <span class="cm">// constant shortcut</span>
-    .<span class="fn">with_name_containing</span>(<span class="st">"Valley"</span>)    <span class="cm">// string filter</span>
-    .<span class="fn">order_by_name_asc</span>()               <span class="cm">// ordering</span>
-    .<span class="fn">page</span>(1, 10)                       <span class="cm">// pagination</span>
-    .<span class="fn">select_school_type</span>()              <span class="cm">// eager-load relation</span>
-    .<span class="fn">comment</span>(<span class="st">"Filter primary schools"</span>) <span class="cm">// trace annotation</span>
-    .<span class="fn">purpose</span>(<span class="st">"School dashboard"</span>)       <span class="cm">// unlocks execute</span>
-    .<span class="fn">execute_for_list</span>(&ctx).<span class="kw">await</span>?;    <span class="cm">// SmartList&lt;School&gt;</span></code></pre>
+let schools = Q::schools()
+    .with_school_type_is_primary()     // constant shortcut
+    .with_name_containing("Valley")    // string filter
+    .order_by_name_asc()               // ordering
+    .page(1, 10)                       // pagination
+    .select_school_type()              // eager-load relation
+    .comment("Filter primary schools") // trace annotation
+    .purpose("School dashboard")       // unlocks execute
+    .execute_for_list(&amp;ctx).await?;   // SmartList&lt;School&gt;</code></pre>
 
   <h3>E API &mdash; Safe Expression Access</h3>
-  <pre><code><span class="kw">let</span> type_name = E::<span class="fn">school</span>(&school)
-    .<span class="fn">get_school_type</span>()  <span class="cm">// SchoolTypeExpression</span>
-    .<span class="fn">get_name</span>()         <span class="cm">// ValueExpression&lt;String&gt;</span>
-    .<span class="fn">eval</span>();            <span class="cm">// Option&lt;String&gt;</span></code></pre>
+  <pre><code>let type_name = E::school(&amp;school)
+    .get_school_type()  // SchoolTypeExpression
+    .get_name()         // ValueExpression&lt;String&gt;
+    .eval();            // Option&lt;String&gt;</code></pre>
 
   <h3>Verified API Surface</h3>
   <table>
@@ -374,11 +412,11 @@
   <h3>Execution Methods</h3>
   <table>
     <tr><th>Method</th><th>Returns</th><th>Location</th></tr>
-    <tr><td><code>.execute_for_list(&amp;ctx)</code></td><td><code>SmartList&lt;Entity&gt;</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
-    <tr><td><code>.execute_for_one(&amp;ctx)</code></td><td><code>Option&lt;Entity&gt;</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
-    <tr><td><code>.execute_for_count(&amp;ctx)</code></td><td><code>u64</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
-    <tr><td><code>.execute_for_records(&amp;ctx)</code></td><td><code>SmartList&lt;Record&gt;</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
-    <tr><td><code>.execute_for_exists(&amp;ctx)</code></td><td><code>bool</code></td><td>SchoolRequest only <span class="tag t-w">line 185</span></td></tr>
+    <tr><td><code>.execute_for_list(&amp;ctx)</code></td><td><code>SmartList&lt;Entity&gt;</code></td><td>PurposedQuery <span class="tag t-ok">VERIFIED</span></td></tr>
+    <tr><td><code>.execute_for_one(&amp;ctx)</code></td><td><code>Option&lt;Entity&gt;</code></td><td>PurposedQuery <span class="tag t-ok">VERIFIED</span></td></tr>
+    <tr><td><code>.execute_for_count(&amp;ctx)</code></td><td><code>u64</code></td><td>PurposedQuery <span class="tag t-ok">VERIFIED</span></td></tr>
+    <tr><td><code>.execute_for_records(&amp;ctx)</code></td><td><code>SmartList&lt;Record&gt;</code></td><td>PurposedQuery <span class="tag t-ok">VERIFIED</span></td></tr>
+    <tr><td><code>.execute_for_exists(&amp;ctx)</code></td><td><code>bool</code></td><td>SchoolRequest only <span class="tag t-w">LINE 185</span></td></tr>
   </table>
 
   <div class="callout">
@@ -401,7 +439,7 @@
   <p><strong>18 / 18 tests passed</strong> (100% pass rate) against a live SQLite database.</p>
 
   <table>
-    <tr><th style="width:30px">#</th><th>Test</th><th>API</th><th style="width:50px">Result</th></tr>
+    <tr><th style="width:28px">#</th><th>Test</th><th>API</th><th style="width:55px">Result</th></tr>
     <tr><td>1</td><td>List all platforms</td><td><code>Q::platforms().execute_for_list()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
     <tr><td>2</td><td>List all school types</td><td><code>Q::school_types().execute_for_list()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
     <tr><td>3</td><td>Create platform</td><td><code>new_entity().audit_as().save()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
@@ -461,15 +499,15 @@
   <h3>1. Purpose-Comment Chain</h3>
   <p>Every query carries a <code>.purpose()</code> and <code>.comment()</code> annotation that propagates into the SQL trace log:</p>
 
-  <pre><code><span class="cm">// Code</span>
-Q::<span class="fn">schools</span>()
-    .<span class="fn">with_name_containing</span>(<span class="st">"Primary"</span>)
-    .<span class="fn">comment</span>(<span class="st">"Filter schools containing 'Primary'"</span>)
-    .<span class="fn">purpose</span>(<span class="st">"Search schools by name"</span>)
+  <pre><code>// Code
+Q::schools()
+    .with_name_containing("Primary")
+    .comment("Filter schools containing 'Primary'")
+    .purpose("Search schools by name")
 
-<span class="cm">// Trace log output</span>
-[Search schools by name <span class="kw">-&gt;</span> Filter schools containing 'Primary']
-SELECT ... FROM school_data
+// Trace log output
+[Search schools by name -&gt; Filter schools containing 'Primary']
+  SELECT ... FROM school_data
   WHERE ((version &gt; 0) AND (name LIKE '%Primary%'))</code></pre>
 
   <p>The <code>purpose</code> identifies the business operation. The <code>comment</code> describes the specific step. Together they create a readable audit trail that connects business intent to raw SQL.</p>
@@ -490,13 +528,13 @@ SELECT ... FROM school_data
   <h3>3. Optimistic Locking</h3>
   <p>UPDATE statements include a <code>version</code> check to prevent concurrent modification conflicts:</p>
 
-  <pre><code><span class="cm">-- Load with current version</span>
-SELECT ... FROM school_data WHERE (id = 1)  <span class="cm">-- version = 2</span>
+  <pre><code>-- Load with current version
+SELECT ... FROM school_data WHERE (id = 1)  -- version = 2
 
-<span class="cm">-- Update with version guard</span>
+-- Update with version guard
 UPDATE school_data
   SET name = 'Updated Green Valley Primary School', version = 3
-  WHERE id = 1 AND version = 2  <span class="cm">-- fails if version changed</span></code></pre>
+  WHERE id = 1 AND version = 2  -- fails if version changed</code></pre>
 
   <h3>4. Soft Delete via Version</h3>
   <p>All queries filter with <code>WHERE (version &gt; 0)</code>. Deleting an entity sets version to 0 (or negative), preserving the record for audit while hiding it from normal queries.</p>
@@ -504,7 +542,7 @@ UPDATE school_data
   <h3>5. Execution Timing</h3>
   <p>Every SQL statement is logged with precise execution time in microseconds:</p>
 
-  <pre><code>[2026-06-09 04:10:02.573]-[1105µs]-[DEBUG]
+  <pre><code>[2026-06-09 04:10:02.573]-[1105us]-[DEBUG]
   [Create Maple Leaf Primary School] - [1 rows affected]
   INSERT INTO school_data (...) VALUES (...)</code></pre>
 
@@ -512,16 +550,16 @@ UPDATE school_data
   <p>When a query loads relations (e.g., <code>.select_school_type()</code>), the framework issues separate SQL statements for the main entity and each relation, each independently logged with timing:</p>
 
   <pre><code>[List schools with type details -&gt; Load schools with school type relation]
-  SELECT ... FROM school_data WHERE (version &gt; 0)     <span class="cm">[670µs]</span>
-  SELECT ... FROM school_type_data WHERE (id IN (1001, 1002))  <span class="cm">[643µs]</span></code></pre>
+  SELECT ... FROM school_data WHERE (version &gt; 0)     [670us]
+  SELECT ... FROM school_type_data WHERE (id IN (1001, 1002))  [643us]</code></pre>
 
   <h3>7. Trace Statistics from Test Run</h3>
   <table>
     <tr><th>Metric</th><th style="text-align:right">Value</th></tr>
     <tr><td><strong>Total SQL statements</strong></td><td style="text-align:right">36</td></tr>
     <tr><td><strong>Audit entries generated</strong></td><td style="text-align:right">6 (4 Created, 2 Updated)</td></tr>
-    <tr><td><strong>Avg query time</strong></td><td style="text-align:right">~720µs</td></tr>
-    <tr><td><strong>Slowest query</strong></td><td style="text-align:right">2,348µs (school load with relations)</td></tr>
+    <tr><td><strong>Avg query time</strong></td><td style="text-align:right">~720us</td></tr>
+    <tr><td><strong>Slowest query</strong></td><td style="text-align:right">2,348us (school load with relations)</td></tr>
     <tr><td><strong>Purpose-comment pairs</strong></td><td style="text-align:right">17 unique chains</td></tr>
     <tr><td><strong>Version-guarded updates</strong></td><td style="text-align:right">1 (version 2 &rarr; 3)</td></tr>
   </table>
@@ -547,7 +585,7 @@ UPDATE school_data
   </div>
 
   <table>
-    <tr><th>Dimension</th><th style="width:50px; text-align:right">Score</th><th style="width:50px; text-align:right">Weight</th><th>Key Evidence</th></tr>
+    <tr><th>Dimension</th><th style="width:48px; text-align:right">Score</th><th style="width:48px; text-align:right">Weight</th><th>Key Evidence</th></tr>
     <tr><td><strong>Semantic Modeling</strong></td><td style="text-align:right">9.0</td><td style="text-align:right">15%</td><td>28 lines define full domain; eval diagnostics accurate</td></tr>
     <tr><td><strong>Type Safety</strong></td><td style="text-align:right">8.5</td><td style="text-align:right">15%</td><td>291 methods/entity; Audited&lt;T&gt; enforces audit at compile time</td></tr>
     <tr><td><strong>Code Generation</strong></td><td style="text-align:right">8.0</td><td style="text-align:right">15%</td><td>select_*_with exists; 1 doc-code inconsistency found</td></tr>
@@ -580,7 +618,7 @@ UPDATE school_data
 
   <h3>Dependency Breakdown (261 total with sqlx-sqlite)</h3>
   <table>
-    <tr><th>Category</th><th style="width:50px; text-align:right">Count</th><th>Source</th></tr>
+    <tr><th>Category</th><th style="width:48px; text-align:right">Count</th><th>Source</th></tr>
     <tr><td>TeaQL crates</td><td style="text-align:right">7</td><td>core, runtime, sql, macros, data-service, provider, tool-core</td></tr>
     <tr><td>SQLx + TLS</td><td style="text-align:right">16</td><td>sqlx, sqlx-core/macros, rustls, ring, webpki</td></tr>
     <tr><td>Windows compat</td><td style="text-align:right">27</td><td>windows-sys/targets (unused on macOS/Linux)</td></tr>
@@ -614,7 +652,7 @@ UPDATE school_data
   <h2>Evidence Chain</h2>
 
   <table>
-    <tr><th style="width:170px">Item</th><th>Reference</th></tr>
+    <tr><th style="width:160px">Item</th><th>Reference</th></tr>
     <tr><td><strong>Website</strong></td><td><a href="https://teaql.io">teaql.io</a></td></tr>
     <tr><td><strong>Open-Source Project</strong></td><td><a href="https://github.com/teaql/teaql-agent-kit">github.com/teaql/teaql-agent-kit</a></td></tr>
     <tr><td><strong>Code Gen Server</strong></td><td><a href="https://github.com/teaql/teaql-forge-rs">github.com/teaql/teaql-forge-rs</a> (Apache-2.0)</td></tr>
@@ -630,7 +668,7 @@ UPDATE school_data
 
   <div class="sig-block" style="text-align: center;">
     Evaluation date: 2026-06-09 &nbsp;&middot;&nbsp; TeaQL 3.2.2 &nbsp;&middot;&nbsp; cargo-teaql 0.2.0 &nbsp;&middot;&nbsp; All claims verified against source code and GitHub API<br>
-    <span style="color: #b3b3b3; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; display: inline-block;">
+    <span style="color: #bbb; font-size: 9.5px; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; display: inline-block;">
       Framed token, text, test, trial, today, tomorrow &mdash; deterministic by design.
     </span>
   </div>
