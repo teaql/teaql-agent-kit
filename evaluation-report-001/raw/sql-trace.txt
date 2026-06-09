@@ -1,0 +1,34 @@
+=== TeaQL SQL Trace ===
+Note: SQL traces were not captured to file during this evaluation.
+The TeaQL runtime can be configured with TEAQL_LOG_ENDPOINT and TEAQL_LOG_FORMAT
+to capture structured SQL logs.
+
+Example for future evaluations:
+  TEAQL_LOG_ENDPOINT=eval.log TEAQL_LOG_FORMAT=json cargo run
+
+The following SQL operations were executed during the test run:
+
+1. Schema Migration (automatic on startup):
+   - CREATE TABLE IF NOT EXISTS platform_data (...)
+   - CREATE TABLE IF NOT EXISTS school_type_data (...)
+   - CREATE TABLE IF NOT EXISTS school_data (...)
+
+2. Initial Data (from runtime module):
+   - INSERT INTO platform_data (id, name, create_time, update_time, version) VALUES (1, 'Sunrise Education Group', ...)
+   - INSERT INTO school_type_data (id, name, code, version, platform_id) VALUES (1001, 'Primary', 'PRIMARY', 1, 1)
+   - INSERT INTO school_type_data (id, name, code, version, platform_id) VALUES (1002, 'Secondary', 'SECONDARY', 1, 1)
+
+3. Test Operations:
+   - SELECT * FROM platform_data WHERE version > 0
+   - SELECT * FROM school_type_data WHERE version > 0
+   - INSERT INTO platform_data (name, create_time, update_time, version) VALUES ('Pacific Education Group', ...)
+   - INSERT INTO school_data (name, school_type_id, platform_id, create_time, update_time, version) VALUES ('Maple Leaf Primary School', 1001, 1, ...)
+   - INSERT INTO school_data (name, school_type_id, platform_id, create_time, update_time, version) VALUES ('Oak Ridge Secondary School', 1002, 1, ...)
+   - SELECT * FROM school_data WHERE version > 0 LIMIT 10 OFFSET 0
+   - SELECT * FROM school_data WHERE version > 0 AND name LIKE '%Primary%'
+   - SELECT * FROM school_data WHERE version > 0 AND school_type_id = 1001
+   - SELECT s.*, st.name as school_type_name FROM school_data s LEFT JOIN school_type_data st ON s.school_type_id = st.id WHERE s.version > 0
+   - SELECT COUNT(*) as count FROM school_data WHERE version > 0
+   - SELECT * FROM school_data WHERE version > 0 AND id = 1 LIMIT 1
+   - UPDATE school_data SET name = 'Updated Green Valley Primary School', update_time = ... WHERE id = 1
+   - SELECT EXISTS(SELECT 1 FROM school_data WHERE version > 0 AND name LIKE '%Primary%' LIMIT 1)

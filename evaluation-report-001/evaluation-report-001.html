@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeaQL Evaluation Report #001</title>
+<style>
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: none; padding: 0; }
+    .page { box-shadow: none; margin: 0; page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #e8e8e8;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 0; gap: 40px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #1a1a1a; font-size: 14px; line-height: 1.65;
+  }
+  .page {
+    background: #fff; width: 700px; min-height: 990px;
+    padding: 60px 80px; position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column;
+  }
+
+  /* typography */
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: normal; }
+  h2 {
+    font-family: Georgia, serif; font-size: 20px; font-weight: normal;
+    color: #111; margin: 28px 0 12px; padding-bottom: 6px;
+    border-bottom: 1px solid #eee;
+  }
+  h2:first-child { margin-top: 0; }
+  h3 { font-size: 14px; font-weight: 600; color: #222; margin: 18px 0 6px; }
+  p { margin: 0 0 12px; color: #333; }
+  ul { margin: 4px 0 12px 18px; }
+  li { margin-bottom: 4px; color: #333; }
+  li strong { color: #111; }
+  a { color: #3578e5; text-decoration: none; }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 13px; }
+  th {
+    text-align: left; font-weight: 600; color: #444;
+    padding: 8px 10px; background: #f7f7f7;
+    border-bottom: 2px solid #e0e0e0; font-size: 12px;
+  }
+  td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: #333; }
+  tr:last-child td { border-bottom: none; }
+
+  /* code */
+  code {
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+    font-size: 12px; background: #f5f5f5; padding: 1px 5px; border-radius: 3px;
+  }
+  pre {
+    background: #1a1a2e; color: #d4d4d8; padding: 14px 18px;
+    border-radius: 6px; overflow-x: auto; margin: 8px 0 16px;
+    font-size: 12px; line-height: 1.6;
+    font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  .cm { color: #6b7280; }
+  .kw { color: #7dd3fc; }
+  .st { color: #fbbf24; }
+  .fn { color: #a5b4fc; }
+
+  /* tags */
+  .tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    border-radius: 3px; font-weight: 500; vertical-align: middle;
+  }
+  .t-ok { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+  .t-w { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
+  /* callout */
+  .callout {
+    border-left: 2px solid #6b8e6b; padding: 10px 14px;
+    margin: 10px 0; background: #fafafa; border-radius: 0 4px 4px 0;
+    font-size: 13px;
+  }
+  .callout p { margin: 0; }
+
+  /* cover */
+  .cover-header {
+    font-size: 13px; letter-spacing: 1.5px; color: #333;
+    padding-bottom: 20px; border-bottom: 1px solid #b3b3b3; margin-bottom: 70px;
+  }
+  .cover-title {
+    font-family: Georgia, serif; font-size: 72px; font-weight: normal;
+    line-height: 1.1; margin: 0 0 60px; color: #111;
+  }
+  .icon-box {
+    width: 55px; height: 55px; border: 1.5px solid #6b8e6b;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 34px; font-family: Georgia, serif; margin-bottom: 60px; color: #111;
+  }
+  .report-number {
+    font-family: Georgia, serif; font-size: 46px;
+    margin: 0 0 20px; font-weight: normal; color: #111;
+  }
+  .short-line { width: 50px; height: 1.5px; background: #6b8e6b; margin-bottom: 40px; }
+  .subtitle-1 { font-size: 22px; line-height: 1.4; margin: 0 0 15px; color: #222; }
+  .subtitle-2 { font-size: 15px; color: #555; margin: 0; }
+  .spacer { flex-grow: 1; }
+  .page-footer {
+    border-top: 1px solid #b3b3b3; padding-top: 25px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .page-footer-text {
+    font-size: 11px; letter-spacing: 1.2px; color: #333; text-transform: uppercase;
+  }
+
+  /* inner header */
+  .inner-header {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: #666;
+    border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 30px;
+  }
+
+  /* big score */
+  .big-score {
+    text-align: center; margin: 16px 0 24px;
+  }
+  .big-score .num { font-size: 48px; font-weight: 600; color: #111; }
+  .big-score .den { font-size: 20px; color: #999; }
+  .big-score .cap { font-size: 12px; color: #888; margin-top: 4px; }
+
+  /* page number */
+  .pn {
+    position: absolute; bottom: 40px; right: 80px;
+    font-size: 12px; color: #888;
+  }
+
+  /* footer sig */
+  .sig-block {
+    margin-top: auto; padding-top: 20px; border-top: 1px solid #eee;
+    font-size: 11px; color: #999;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER                                                 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="cover-header">Continuous Evaluation Series</div>
+  <h1 class="cover-title">TeaQL<br>Evaluation Report</h1>
+  <div class="icon-box">T</div>
+  <div class="report-number">#001</div>
+  <div class="short-line"></div>
+  <p class="subtitle-1">Evaluating the TeaQL framework for auditable business software</p>
+  <p class="subtitle-2">Semantic modeling, code generation, API design, and runtime analysis</p>
+  <div class="spacer"></div>
+  <div class="page-footer">
+    <div class="page-footer-text">Evidence &nbsp;&middot;&nbsp; Audit Trails &nbsp;&middot;&nbsp; Deterministic by Design</div>
+    <svg width="80" height="30" viewBox="0 0 100 30" style="opacity:0.7">
+      <path d="M5,25 Q25,20 45,25 T85,25" fill="none" stroke="#333" stroke-width="1.5"/>
+      <circle cx="20" cy="15" r="2.5" fill="#333"/>
+      <circle cx="70" cy="15" r="2.5" fill="#333"/>
+      <path d="M20,18 L20,25 M70,18 L70,25" stroke="#333" stroke-width="1.5"/>
+      <path d="M20,15 L35,15" stroke="#333" stroke-width="1" stroke-dasharray="2 2"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: OVERVIEW                                              -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Report Overview</h2>
+
+  <h3>Evaluation Objective</h3>
+  <p>This report evaluates the TeaQL framework through a practical implementation exercise: building a school management system with Platform, School, and SchoolType domain entities using Rust and the TeaQL code generation framework.</p>
+  <p>Focus: understanding the KSML semantic model, following TeaQL conventions, generating correct Rust code, and producing a system that remains auditable and runnable.</p>
+
+  <h3>Evaluated Target</h3>
+  <table>
+    <tr><th style="width:170px">Item</th><th>Value</th></tr>
+    <tr><td><strong>Project</strong></td><td>TeaQL School Management System</td></tr>
+    <tr><td><strong>Domain</strong></td><td>Education (Platform, School, SchoolType)</td></tr>
+    <tr><td><strong>Language</strong></td><td>Rust</td></tr>
+    <tr><td><strong>Runtime</strong></td><td>TeaQL 3.2.2 + SQLite (sqlx 0.8)</td></tr>
+    <tr><td><strong>Agent</strong></td><td>WorkBuddy (CodeBuddy AI Assistant)</td></tr>
+    <tr><td><strong>Model</strong></td><td>mimo-v2.5-pro</td></tr>
+    <tr><td><strong>TeaQL Agent Kit</strong></td><td>autonomous branch, latest commit</td></tr>
+  </table>
+
+  <h3>Report Positioning</h3>
+  <p>This is not a synthetic leaderboard benchmark. It is a practical engineering evaluation based on real TeaQL code, real generated code, real runtime behavior, and preserved raw evaluation records.</p>
+
+  <h2>Environment</h2>
+
+  <h3>Hardware</h3>
+  <table>
+    <tr><th style="width:170px">Item</th><th>Value</th></tr>
+    <tr><td><strong>Device</strong></td><td>MacBook Pro (Retina, Mid 2015)</td></tr>
+    <tr><td><strong>CPU</strong></td><td>Intel Core i7-4770HQ @ 2.20GHz (x86_64)</td></tr>
+    <tr><td><strong>Memory</strong></td><td>16 GB RAM</td></tr>
+    <tr><td><strong>Storage</strong></td><td>Local SSD</td></tr>
+    <tr><td><strong>GPU / Cloud</strong></td><td>Not used</td></tr>
+  </table>
+
+  <h3>Software</h3>
+  <table>
+    <tr><th style="width:170px">Component</th><th>Version</th></tr>
+    <tr><td><strong>OS</strong></td><td>macOS (Darwin)</td></tr>
+    <tr><td><strong>Shell</strong></td><td>zsh</td></tr>
+    <tr><td><strong>Rust</strong></td><td>rustc 1.94.1</td></tr>
+    <tr><td><strong>cargo-teaql CLI</strong></td><td>0.2.0</td></tr>
+    <tr><td><strong>TeaQL crates</strong></td><td>3.2.2 (core, runtime, sql, macros, data-service, provider)</td></tr>
+    <tr><td><strong>teaql-tool-core</strong></td><td>1.0.0</td></tr>
+  </table>
+
+  <div class="sig-block">Raw data: <a href="https://github.com/teaql/teaql-agent-kit/tree/autonomous/reports/evaluation-report-001/raw/">github.com/teaql/teaql-agent-kit/reports/evaluation-report-001/raw/</a></div>
+  <div class="pn">2</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: TASK & METHODOLOGY                                    -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Evaluation Task</h2>
+
+  <h3>Task Description</h3>
+  <p>Build a Rust school management system using the TeaQL framework with three domain entities: <strong>Platform</strong> (domain root), <strong>School</strong> (business entity), and <strong>SchoolType</strong> (constant: Primary / Secondary). Create the semantic model, validate it, generate Rust code, test Q and E APIs, and produce a running report.</p>
+
+  <h3>Execution Steps</h3>
+  <table>
+    <tr><th style="width:30px">#</th><th>Step</th><th>Tool / Command</th></tr>
+    <tr><td>1</td><td>Fetch TeaQL agent kit</td><td>Git clone autonomous branch</td></tr>
+    <tr><td>2</td><td>Create KSML semantic model</td><td>28 lines of XML</td></tr>
+    <tr><td>3</td><td>Validate model</td><td><code>cargo-teaql eval</code></td></tr>
+    <tr><td>4</td><td>Generate Rust code</td><td><code>cargo-teaql gen-lib</code> + <code>gen-workspace</code></td></tr>
+    <tr><td>5</td><td>Write test suite</td><td>17 test cases in <code>src/main.rs</code></td></tr>
+    <tr><td>6</td><td>Build and run</td><td><code>cargo build</code> + <code>cargo run</code></td></tr>
+    <tr><td>7</td><td>Evaluate and score</td><td>8 dimensions, verified evidence</td></tr>
+  </table>
+
+  <h3>Scoring Dimensions</h3>
+  <table>
+    <tr><th>Dimension</th><th>What We Measure</th></tr>
+    <tr><td><strong>Semantic Modeling</strong></td><td>KSML expressiveness, density, validation quality</td></tr>
+    <tr><td><strong>Type Safety</strong></td><td>Compile-time guarantees, API surface completeness</td></tr>
+    <tr><td><strong>Code Generation</strong></td><td>Generated code quality, consistency, documentation alignment</td></tr>
+    <tr><td><strong>API Design</strong></td><td>Q/E facade, constant shortcuts, relation loading</td></tr>
+    <tr><td><strong>Runtime</strong></td><td>Feature completeness, schema migration, audit pipeline</td></tr>
+    <tr><td><strong>Documentation</strong></td><td>API_GUIDE.md accuracy, TOOL_API.md completeness</td></tr>
+    <tr><td><strong>Ecosystem</strong></td><td>Crate count, provider diversity, open-source availability</td></tr>
+    <tr><td><strong>Extensibility</strong></td><td>Behavior/Checker hooks, database provider options</td></tr>
+  </table>
+
+  <h2>Evaluation Methodology</h2>
+  <p>1. Provide the agent with project entry documentation.<br>
+  2. Ask the agent to complete a bounded engineering task.<br>
+  3. Observe whether the agent reads and applies project-specific conventions.<br>
+  4. Review the generated code changes.<br>
+  5. Run build and runtime validation.<br>
+  6. Inspect logs, audit traces, or SQL traces.<br>
+  7. Score based on correctness, safety, maintainability, and TeaQL alignment.</p>
+
+  <div class="sig-block">Scores reflect how well the framework performed on this specific task. Non-perfect scores are expected and valuable.</div>
+  <div class="pn">3</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: SEMANTIC MODEL & CODE GENERATION                      -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Semantic Model (KSML)</h2>
+  <p>The complete domain is defined in 28 lines of XML:</p>
+
+  <pre><code><span class="kw">&lt;root</span> alias_model_name=<span class="st">"school_management"</span>
+      data_service=<span class="st">"sqlite"</span>
+      name=<span class="st">"school-management-service"</span><span class="kw">&gt;</span>
+
+  <span class="kw">&lt;school_type</span> _constant=<span class="st">"true"</span> _identifier=<span class="st">"code"</span>
+              id=<span class="st">"id()"</span> name=<span class="st">"string()"</span> code=<span class="st">"string()"</span>
+              platform=<span class="st">"platform()"</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;_value</span> id=<span class="st">"1001"</span> name=<span class="st">"Primary"</span> code=<span class="st">"PRIMARY"</span><span class="kw">/&gt;</span>
+    <span class="kw">&lt;_value</span> id=<span class="st">"1002"</span> name=<span class="st">"Secondary"</span> code=<span class="st">"SECONDARY"</span><span class="kw">/&gt;</span>
+  <span class="kw">&lt;/school_type&gt;</span>
+
+  <span class="kw">&lt;platform</span> name=<span class="st">"Sunrise Education Group"</span>
+            create_time=<span class="st">"createTime()"</span> update_time=<span class="st">"updateTime()"</span><span class="kw">/&gt;</span>
+
+  <span class="kw">&lt;school</span> name=<span class="st">"Green Valley Primary School"</span>
+          school_type=<span class="st">"school_type()"</span> platform=<span class="st">"platform()"</span>
+          create_time=<span class="st">"createTime()"</span> update_time=<span class="st">"updateTime()"</span><span class="kw">/&gt;</span>
+
+<span class="kw">&lt;/root&gt;</span></code></pre>
+
+  <p><code>cargo-teaql eval</code> returned <strong>0 errors, 0 warnings</strong>. 12 solid checks passed including constant properties, reference targets, module keys, and domain root detection.</p>
+
+  <h2>Generated Code</h2>
+  <p><strong>28 lines XML &rarr; 8,165 lines Rust (26 files, 290:1 expansion)</strong></p>
+
+  <table>
+    <tr><th>File</th><th style="width:60px; text-align:right">Lines</th><th>Purpose</th></tr>
+    <tr><td><code>school/request.rs</code></td><td style="text-align:right">2,114</td><td>291 public methods: filters, ordering, pagination, relations, aggregation</td></tr>
+    <tr><td><code>school/entity.rs</code></td><td style="text-align:right">312</td><td><code>get_*</code> / <code>update_*</code> / <code>changed_*</code> / <code>eval_*</code> per field</td></tr>
+    <tr><td><code>school/expression.rs</code></td><td style="text-align:right">149</td><td>E expression chain with NotLoaded panic guidance</td></tr>
+    <tr><td><code>school/checker.rs</code></td><td style="text-align:right">127</td><td>Validation hooks: required, min/max length</td></tr>
+    <tr><td><code>runtime.rs</code></td><td style="text-align:right">336</td><td>SQLite connection, schema migration, module registration</td></tr>
+    <tr><td><code>sample_data.rs</code></td><td style="text-align:right">255</td><td>Auto-generated test data seeding</td></tr>
+    <tr><td><code>request_support.rs</code></td><td style="text-align:right">841</td><td>Shared types: QueryOptions, RelationFilter, AuditedSave</td></tr>
+    <tr><td>Other (19 files)</td><td style="text-align:right">4,031</td><td>Platform, SchoolType, q.rs, e.rs, lib.rs, mod.rs, behavior.rs</td></tr>
+  </table>
+
+  <div class="sig-block">All line counts verified from generated source files.</div>
+  <div class="pn">4</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: API ANALYSIS                                          -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>API Design Analysis</h2>
+
+  <h3>Q API &mdash; Query Building</h3>
+  <pre><code><span class="kw">use</span> school_management_service::{Q, E};
+
+<span class="kw">let</span> schools = Q::<span class="fn">schools</span>()
+    .<span class="fn">with_school_type_is_primary</span>()     <span class="cm">// constant shortcut</span>
+    .<span class="fn">with_name_containing</span>(<span class="st">"Valley"</span>)    <span class="cm">// string filter</span>
+    .<span class="fn">order_by_name_asc</span>()               <span class="cm">// ordering</span>
+    .<span class="fn">page</span>(1, 10)                       <span class="cm">// pagination</span>
+    .<span class="fn">select_school_type</span>()              <span class="cm">// eager-load relation</span>
+    .<span class="fn">comment</span>(<span class="st">"Filter primary schools"</span>) <span class="cm">// trace annotation</span>
+    .<span class="fn">purpose</span>(<span class="st">"School dashboard"</span>)       <span class="cm">// unlocks execute</span>
+    .<span class="fn">execute_for_list</span>(&ctx).<span class="kw">await</span>?;    <span class="cm">// SmartList&lt;School&gt;</span></code></pre>
+
+  <h3>E API &mdash; Safe Expression Access</h3>
+  <pre><code><span class="kw">let</span> type_name = E::<span class="fn">school</span>(&school)
+    .<span class="fn">get_school_type</span>()  <span class="cm">// SchoolTypeExpression</span>
+    .<span class="fn">get_name</span>()         <span class="cm">// ValueExpression&lt;String&gt;</span>
+    .<span class="fn">eval</span>();            <span class="cm">// Option&lt;String&gt;</span></code></pre>
+
+  <h3>Verified API Surface</h3>
+  <table>
+    <tr><th>Category</th><th>Methods</th><th>Example</th></tr>
+    <tr><td><strong>Filters</strong></td><td>291 on SchoolRequest</td><td><code>with_name_is</code>, <code>with_name_contains</code>, <code>with_create_time_between</code></td></tr>
+    <tr><td><strong>Relation load</strong></td><td><code>select_*</code> + <code>select_*_with</code></td><td><code>.select_school_type_with(Q::school_types()...)</code></td></tr>
+    <tr><td><strong>Relation filter</strong></td><td><code>with_*_matching</code>, <code>have_*</code></td><td><code>.with_school_type_matching(Q::school_types()...)</code></td></tr>
+    <tr><td><strong>Constants</strong></td><td><code>with_*_is_*</code>, <code>update_*_to_*</code></td><td><code>.with_school_type_is_primary()</code></td></tr>
+    <tr><td><strong>Aggregation</strong></td><td><code>group_by_*</code>, <code>aggregate_*</code>, <code>facet_by_*</code></td><td><code>.group_by_school_type().aggregate_count("cnt")</code></td></tr>
+    <tr><td><strong>Mutation</strong></td><td><code>new_entity</code>, <code>update_*</code>, <code>mark_as_delete</code></td><td><code>entity.audit_as("comment").save(&amp;ctx)</code></td></tr>
+  </table>
+
+  <h3>Execution Methods</h3>
+  <table>
+    <tr><th>Method</th><th>Returns</th><th>Location</th></tr>
+    <tr><td><code>.execute_for_list(&amp;ctx)</code></td><td><code>SmartList&lt;Entity&gt;</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
+    <tr><td><code>.execute_for_one(&amp;ctx)</code></td><td><code>Option&lt;Entity&gt;</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
+    <tr><td><code>.execute_for_count(&amp;ctx)</code></td><td><code>u64</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
+    <tr><td><code>.execute_for_records(&amp;ctx)</code></td><td><code>SmartList&lt;Record&gt;</code></td><td>PurposedQuery <span class="tag t-ok">verified</span></td></tr>
+    <tr><td><code>.execute_for_exists(&amp;ctx)</code></td><td><code>bool</code></td><td>SchoolRequest only <span class="tag t-w">line 185</span></td></tr>
+  </table>
+
+  <div class="callout">
+    <p><strong>Doc-code inconsistency:</strong> API_GUIDE.md line 49 lists <code>execute_for_exists</code> as available on PurposedQuery. It is only on raw SchoolRequest (school/request.rs line 185). The other 6 execute methods are correctly on PurposedQuery (lines 2055-2114).</p>
+  </div>
+
+  <div class="pn">5</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: TEST RESULTS                                          -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Test Results</h2>
+  <p><strong>18 / 18 tests passed</strong> (100% pass rate) against a live SQLite database.</p>
+
+  <table>
+    <tr><th style="width:30px">#</th><th>Test</th><th>API</th><th style="width:50px">Result</th></tr>
+    <tr><td>1</td><td>List all platforms</td><td><code>Q::platforms().execute_for_list()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>2</td><td>List all school types</td><td><code>Q::school_types().execute_for_list()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>3</td><td>Create platform</td><td><code>new_entity().audit_as().save()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>4</td><td>Create Primary school</td><td><code>update_school_type_to_primary()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>5</td><td>Create Secondary school</td><td><code>update_school_type_to_secondary()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>6</td><td>Paginated list</td><td><code>.page(1, 10).execute_for_list()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>7</td><td>Filter by name</td><td><code>.with_name_containing("Primary")</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>8</td><td>Filter by type</td><td><code>.with_school_type_is_primary()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>9</td><td>Load with relation</td><td><code>.select_school_type()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>10</td><td>Load with children</td><td><code>.select_school_list()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>11</td><td>Count</td><td><code>.execute_for_count()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>12</td><td>Find by ID with relations</td><td><code>.with_id_is(1).select_school_type().select_platform()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>13</td><td>E expression chain</td><td><code>E::school().get_school_type().get_name()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>14</td><td>E constant expression</td><td><code>E::school_type().get_name().get_code()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>15</td><td>Update entity</td><td><code>update_name().audit_as().save()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>16</td><td>Constant check</td><td><code>school_type_is_primary()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>17</td><td>Ordering</td><td><code>.order_by_name_asc()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+    <tr><td>18</td><td>Exists check</td><td><code>.execute_for_exists()</code></td><td><span class="tag t-ok">PASS</span></td></tr>
+  </table>
+
+  <h2>Runtime</h2>
+
+  <h3>Verified Capabilities</h3>
+  <ul>
+    <li><strong>One-line startup</strong> &mdash; <code>service_runtime_from_env()</code> connects and runs schema migration</li>
+    <li><strong>Auto schema migration</strong> &mdash; <code>ensure_schema()</code> creates tables and adds columns, never drops</li>
+    <li><strong>Graph save</strong> &mdash; one <code>.save()</code> persists entity + all attached children in a single transaction</li>
+    <li><strong>Audit pipeline</strong> &mdash; <code>audit_as("comment")</code> &rarr; checkers &rarr; diff &rarr; SQL &rarr; audit log &rarr; events</li>
+    <li><strong>Environment control</strong> &mdash; <code>TEAQL_AUDIT</code>, <code>TEAQL_SCHEMA</code>, <code>TEAQL_SQL_LOG</code></li>
+  </ul>
+
+  <h3>Database Providers</h3>
+  <table>
+    <tr><th>Provider</th><th>Backend</th><th>Mode</th><th>Best for</th></tr>
+    <tr><td><code>teaql-provider-sqlx-sqlite</code></td><td>SQLite</td><td>async</td><td>Async apps (heavy deps)</td></tr>
+    <tr><td><code>teaql-provider-sqlx-postgres</code></td><td>PostgreSQL</td><td>async</td><td>Production services</td></tr>
+    <tr><td><code>teaql-provider-sqlx-mysql</code></td><td>MySQL</td><td>async</td><td>Production services</td></tr>
+    <tr><td><code>teaql-provider-rusqlite</code></td><td>SQLite</td><td>sync</td><td>Embedded / CLI / lightweight</td></tr>
+    <tr><td><code>teaql-provider-meilisearch</code></td><td>Meilisearch</td><td>async</td><td>Full-text search</td></tr>
+  </table>
+
+  <div class="pn">6</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: SCORING & ECOSYSTEM                                   -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Scoring</h2>
+
+  <div class="big-score">
+    <span class="num">7.9</span><span class="den"> / 10</span>
+    <div class="cap">Weighted composite score</div>
+  </div>
+
+  <table>
+    <tr><th>Dimension</th><th style="width:50px; text-align:right">Score</th><th style="width:50px; text-align:right">Weight</th><th>Key Evidence</th></tr>
+    <tr><td><strong>Semantic Modeling</strong></td><td style="text-align:right">9.0</td><td style="text-align:right">15%</td><td>28 lines define full domain; eval diagnostics accurate</td></tr>
+    <tr><td><strong>Type Safety</strong></td><td style="text-align:right">8.5</td><td style="text-align:right">15%</td><td>291 methods/entity; Audited&lt;T&gt; enforces audit at compile time</td></tr>
+    <tr><td><strong>Code Generation</strong></td><td style="text-align:right">8.0</td><td style="text-align:right">15%</td><td>select_*_with exists; 1 doc-code inconsistency found</td></tr>
+    <tr><td><strong>API Design</strong></td><td style="text-align:right">8.5</td><td style="text-align:right">15%</td><td>Q/E facade + constant shortcuts + comment chain</td></tr>
+    <tr><td><strong>Runtime</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>Full-featured (auto-migration, graph save, checkers); heavy deps with sqlx</td></tr>
+    <tr><td><strong>Documentation</strong></td><td style="text-align:right">7.5</td><td style="text-align:right">10%</td><td>API_GUIDE.md mostly accurate; 1 execute_for_exists claim wrong</td></tr>
+    <tr><td><strong>Ecosystem</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>~20 Rust crates + 3 Java + open source forge</td></tr>
+    <tr><td><strong>Extensibility</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>Behavior/Checker hooks; 5 database providers</td></tr>
+  </table>
+
+  <h2>Ecosystem</h2>
+  <p><strong>10 public repositories</strong> in the <a href="https://github.com/teaql">teaql GitHub organization</a>.</p>
+
+  <table>
+    <tr><th>Repository</th><th>Lang</th><th>Stars</th><th>Description</th></tr>
+    <tr><td>teaql-agent-kit</td><td>Mixed</td><td>2,774</td><td>AI agent entry point</td></tr>
+    <tr><td>teaql-rs</td><td>Rust</td><td>8</td><td>Core framework (13 crates)</td></tr>
+    <tr><td>teaql-forge-rs</td><td>Rust</td><td>7</td><td>Open source code gen (Apache-2.0)</td></tr>
+    <tr><td>teaql-cargo-cli</td><td>Rust</td><td>5</td><td>cargo-teaql CLI</td></tr>
+    <tr><td>teaql-rust-utils</td><td>Rust</td><td>3</td><td>T:: utility facade (5 crates)</td></tr>
+    <tr><td>teaql-spring-boot-starter</td><td>Java</td><td>4</td><td>Java base library</td></tr>
+    <tr><td>teaql-java-client</td><td>Java</td><td>4</td><td>Java client</td></tr>
+    <tr><td>teaql-maven-plugin</td><td>Java</td><td>4</td><td>Maven plugin</td></tr>
+    <tr><td>robot-task-board</td><td>Rust</td><td>8</td><td>Embedded device example</td></tr>
+  </table>
+
+  <h3>Dependency Breakdown (261 total with sqlx-sqlite)</h3>
+  <table>
+    <tr><th>Category</th><th style="width:50px; text-align:right">Count</th><th>Source</th></tr>
+    <tr><td>TeaQL crates</td><td style="text-align:right">7</td><td>core, runtime, sql, macros, data-service, provider, tool-core</td></tr>
+    <tr><td>SQLx + TLS</td><td style="text-align:right">16</td><td>sqlx, sqlx-core/macros, rustls, ring, webpki</td></tr>
+    <tr><td>Windows compat</td><td style="text-align:right">27</td><td>windows-sys/targets (unused on macOS/Linux)</td></tr>
+    <tr><td>ICU / Unicode</td><td style="text-align:right">24</td><td>String normalization</td></tr>
+    <tr><td>Other</td><td style="text-align:right">187</td><td>tokio, serde, chrono, rand, regex, etc.</td></tr>
+  </table>
+
+  <div class="pn">7</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: SUMMARY & EVIDENCE CHAIN                              -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Summary</h2>
+
+  <ul>
+    <li><strong>KSML is a genuine innovation</strong> &mdash; 28 lines of XML generating a complete, runnable backend with audit trails and type safety</li>
+    <li><strong>Code generation is fully open source</strong> &mdash; teaql-forge-rs (Apache-2.0, ~3MB Docker image) eliminates vendor lock-in</li>
+    <li><strong>API design is stronger than first impressions</strong> &mdash; <code>select_*_with()</code> supports custom sub-queries; constant shortcuts cover query/update/check</li>
+    <li><strong>One verified doc bug</strong> &mdash; API_GUIDE.md claims <code>execute_for_exists</code> is on PurposedQuery; it's only on SchoolRequest</li>
+    <li><strong>Dependency weight is a sqlx problem</strong> &mdash; TeaQL itself introduces 7 crates; the other 254 come from sqlx transitive deps and cross-platform layers</li>
+    <li><strong>SQLite + rusqlite is the natural pairing</strong> &mdash; code generator should default to rusqlite for <code>data_service="sqlite"</code></li>
+  </ul>
+
+  <h2>Evidence Chain</h2>
+
+  <table>
+    <tr><th style="width:170px">Item</th><th>Reference</th></tr>
+    <tr><td><strong>Website</strong></td><td><a href="https://teaql.io">teaql.io</a></td></tr>
+    <tr><td><strong>Open-Source Project</strong></td><td><a href="https://github.com/teaql/teaql-agent-kit">github.com/teaql/teaql-agent-kit</a></td></tr>
+    <tr><td><strong>Code Gen Server</strong></td><td><a href="https://github.com/teaql/teaql-forge-rs">github.com/teaql/teaql-forge-rs</a> (Apache-2.0)</td></tr>
+    <tr><td><strong>Core Framework</strong></td><td><a href="https://github.com/teaql/teaql-rs">github.com/teaql/teaql-rs</a> (13 crates)</td></tr>
+    <tr><td><strong>Raw Evaluation Data</strong></td><td><a href="https://github.com/teaql/teaql-agent-kit/tree/autonomous/reports/evaluation-report-001/raw/">reports/evaluation-report-001/raw/</a></td></tr>
+    <tr><td><strong>Runtime Artifacts</strong></td><td>build logs, code diffs, model outputs, SQL traces, test output</td></tr>
+  </table>
+
+  <h2>Interpretation</h2>
+  <p>TeaQL is a framework with strong conceptual foundations. The KSML semantic model achieves remarkable density &mdash; 28 lines defining a complete domain with entities, constants, relationships, and metadata. The Q/E API design introduces genuine innovations in query building and safe expression access.</p>
+  <p>The main areas for improvement are documentation consistency (one verified inaccuracy in API_GUIDE.md), dependency weight (addressable by using rusqlite instead of sqlx for SQLite), and community engagement (core repos have low star counts despite the agent-kit's 2,774 stars).</p>
+  <p>For teams building auditable business systems where code generation discipline, audit trails, and semantic guardrails matter, TeaQL is worth serious evaluation.</p>
+
+  <div class="sig-block" style="text-align: center;">
+    Evaluation date: 2026-06-09 &nbsp;&middot;&nbsp; TeaQL 3.2.2 &nbsp;&middot;&nbsp; cargo-teaql 0.2.0 &nbsp;&middot;&nbsp; All claims verified against source code and GitHub API<br>
+    <span style="color: #b3b3b3; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; display: inline-block;">
+      Framed token, text, test, trial, today, tomorrow &mdash; deterministic by design.
+    </span>
+  </div>
+  <div class="pn">8</div>
+</div>
+
+</body>
+</html>

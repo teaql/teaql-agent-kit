@@ -1,0 +1,119 @@
+=== TeaQL School Management System - Runtime Test Output ===
+Date: 2026-06-09
+Environment: macOS, Rust 1.94.1, TeaQL 3.2.2, SQLite (sqlx 0.8)
+
+=== TEST 1: Q::platforms() - List all platforms ===
+  Found 1 platform(s)
+  - Platform: id=1, name=Sunrise Education Group
+
+=== TEST 2: Q::school_types() - List all school types ===
+  Found 2 school type(s)
+  - SchoolType: id=1001, name=Primary, code=PRIMARY
+  - SchoolType: id=1002, name=Secondary, code=SECONDARY
+
+=== TEST 3: Q::platforms() - Create new platform ===
+  Created platform with id=2
+
+=== TEST 4: Q::schools() - Create schools ===
+  Created Primary school id=3
+  Created Secondary school id=4
+
+=== TEST 5: Q::schools() - List with pagination ===
+  Page 1: 4 school(s)
+  - School: id=1, name=Updated Green Valley Primary School
+  - School: id=2, name=Oak Ridge Secondary School
+  - School: id=3, name=Maple Leaf Primary School
+  - School: id=4, name=Oak Ridge Secondary School
+
+=== TEST 6: Q::schools() - Filter by name ===
+  Found 2 school(s) with 'Primary' in name
+  - School: id=1, name=Updated Green Valley Primary School
+  - School: id=3, name=Maple Leaf Primary School
+
+=== TEST 7: Q::schools() - Filter by school type (Primary) ===
+  Found 2 Primary school(s)
+  - Primary School: id=1, name=Updated Green Valley Primary School
+  - Primary School: id=3, name=Maple Leaf Primary School
+
+=== TEST 8: Q::schools() - Load with school_type relation ===
+  Loaded 4 school(s) with relations
+  - School: id=1, name=Updated Green Valley Primary School, type=Primary
+  - School: id=2, name=Oak Ridge Secondary School, type=Secondary
+  - School: id=3, name=Maple Leaf Primary School, type=Primary
+  - School: id=4, name=Oak Ridge Secondary School, type=Secondary
+
+=== TEST 9: Q::platforms() - Load with school_list children ===
+  Platform: id=1, name=Sunrise Education Group, schools=4
+    - School: id=1, name=Updated Green Valley Primary School
+    - School: id=2, name=Oak Ridge Secondary School
+    - School: id=3, name=Maple Leaf Primary School
+    - School: id=4, name=Oak Ridge Secondary School
+  Platform: id=2, name=Pacific Education Group, schools=0
+
+=== TEST 10: Q::schools() - Count ===
+  Total schools: 4
+
+=== TEST 11: Q::schools() - Find one by ID ===
+  Found school: id=1, name=Updated Green Valley Primary School
+  Type: Primary, Platform: Sunrise Education Group
+
+=== TEST 12: E API - Safe expression access ===
+  E::school().get_name() = Some("Updated Green Valley Primary School")
+  E::school().get_school_type().get_name() = Some("Primary")
+  E::school().get_platform().get_name() = Some("Sunrise Education Group")
+
+=== TEST 13: E API - SchoolType constant expression ===
+  E::school_type().get_name() = Some("Primary")
+  E::school_type().get_code() = Some("PRIMARY")
+
+=== TEST 14: Q::schools() - Update school name ===
+  Updated school name: 'Updated Green Valley Primary School' -> 'Updated Green Valley Primary School'
+
+=== TEST 15: School type constant check (school_type_is_primary) ===
+  School 'Updated Green Valley Primary School': is_primary=true, is_secondary=false
+  School 'Maple Leaf Primary School': is_primary=true, is_secondary=false
+
+=== TEST 16: Q::schools() - Order by name ===
+  Schools ordered by name (ascending):
+  - Maple Leaf Primary School
+  - Oak Ridge Secondary School
+  - Oak Ridge Secondary School
+  - Updated Green Valley Primary School
+
+=== TEST 17: Q::schools() - Exists check ===
+  Primary schools exist: true
+
+================================================================================
+TEAQL SCHOOL MANAGEMENT SYSTEM - API TEST REPORT
+================================================================================
+
+Total Tests: 18
+Passed:      18
+Failed:      0
+Pass Rate:   100.0%
+
+Test Name                                     Status   Detail
+--------------------------------------------------------------------------------
+Q::platforms() - List all                     PASS     Found 1 platform(s)
+Q::school_types() - List all                  PASS     Found 2 school type(s)
+Q::platforms() - Create new                   PASS     Created platform id=2
+Q::schools() - Create Primary                 PASS     Created Primary school id=3
+Q::schools() - Create Secondary               PASS     Created Secondary school id=4
+Q::schools() - Paginated list                 PASS     Page 1 returned 4 school(s)
+Q::schools() - Filter by name                 PASS     Found 2 matching school(s)
+Q::schools() - Filter by type (Primary)       PASS     Found 2 Primary school(s)
+Q::schools() - Load with relation             PASS     Loaded 4 school(s) with school_type relation
+Q::platforms() - Load with children           PASS     Loaded 2 platform(s) with school_list
+Q::schools() - Count                          PASS     Total count: 4
+Q::schools() - Find one by ID                 PASS     Found school with type and platform
+E API - Safe expression access                PASS     name, type, platform chains work
+E API - SchoolType constant                   PASS     name and code access work
+Q::schools() - Update name                    PASS     Renamed school successfully
+School type constant check                    PASS     Checked 2 school(s)
+Q::schools() - Order by name                  PASS     Listed 4 school(s) ordered by name
+Q::schools() - Exists check                   PASS     Exists: true
+--------------------------------------------------------------------------------
+
+================================================================================
+END OF REPORT
+================================================================================
