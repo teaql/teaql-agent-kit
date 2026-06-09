@@ -447,7 +447,91 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 7: SCORING & ECOSYSTEM                                   -->
+<!-- PAGE 7: TRANSPARENCY & AUDIT TRAIL                            -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="inner-header">
+    <span>TeaQL Evaluation Report #001</span>
+    <span>2026-06-09</span>
+  </div>
+
+  <h2>Transparency &amp; Audit Trail</h2>
+  <p>TeaQL's core differentiator is transparent tracking and auditability. Every SQL operation is tagged with a two-level business intent chain, and every mutation generates an audit entry with full field snapshots.</p>
+
+  <h3>1. Purpose-Comment Chain</h3>
+  <p>Every query carries a <code>.purpose()</code> and <code>.comment()</code> annotation that propagates into the SQL trace log:</p>
+
+  <pre><code><span class="cm">// Code</span>
+Q::<span class="fn">schools</span>()
+    .<span class="fn">with_name_containing</span>(<span class="st">"Primary"</span>)
+    .<span class="fn">comment</span>(<span class="st">"Filter schools containing 'Primary'"</span>)
+    .<span class="fn">purpose</span>(<span class="st">"Search schools by name"</span>)
+
+<span class="cm">// Trace log output</span>
+[Search schools by name <span class="kw">-&gt;</span> Filter schools containing 'Primary']
+SELECT ... FROM school_data
+  WHERE ((version &gt; 0) AND (name LIKE '%Primary%'))</code></pre>
+
+  <p>The <code>purpose</code> identifies the business operation. The <code>comment</code> describes the specific step. Together they create a readable audit trail that connects business intent to raw SQL.</p>
+
+  <h3>2. Mutation Audit Entries</h3>
+  <p>Every INSERT and UPDATE generates an <code>[AUDIT]</code> entry with the entity type, ID, operation, trace comment, and all field values:</p>
+
+  <pre><code>[AUDIT] Entity [School:U64(3)] Created
+  (Trace: Create Maple Leaf Primary School)
+  {create_time: Timestamp(2026-06-09T04:10:07.305Z),
+   id: U64(3),
+   name: Text("Maple Leaf Primary School"),
+   platform_id: U64(1),
+   school_type_id: U64(1001),
+   update_time: Timestamp(2026-06-09T04:10:07.305Z),
+   version: I64(1)}</code></pre>
+
+  <h3>3. Optimistic Locking</h3>
+  <p>UPDATE statements include a <code>version</code> check to prevent concurrent modification conflicts:</p>
+
+  <pre><code><span class="cm">-- Load with current version</span>
+SELECT ... FROM school_data WHERE (id = 1)  <span class="cm">-- version = 2</span>
+
+<span class="cm">-- Update with version guard</span>
+UPDATE school_data
+  SET name = 'Updated Green Valley Primary School', version = 3
+  WHERE id = 1 AND version = 2  <span class="cm">-- fails if version changed</span></code></pre>
+
+  <h3>4. Soft Delete via Version</h3>
+  <p>All queries filter with <code>WHERE (version &gt; 0)</code>. Deleting an entity sets version to 0 (or negative), preserving the record for audit while hiding it from normal queries.</p>
+
+  <h3>5. Execution Timing</h3>
+  <p>Every SQL statement is logged with precise execution time in microseconds:</p>
+
+  <pre><code>[2026-06-09 04:10:02.573]-[1105µs]-[DEBUG]
+  [Create Maple Leaf Primary School] - [1 rows affected]
+  INSERT INTO school_data (...) VALUES (...)</code></pre>
+
+  <h3>6. Relation Loading Transparency</h3>
+  <p>When a query loads relations (e.g., <code>.select_school_type()</code>), the framework issues separate SQL statements for the main entity and each relation, each independently logged with timing:</p>
+
+  <pre><code>[List schools with type details -&gt; Load schools with school type relation]
+  SELECT ... FROM school_data WHERE (version &gt; 0)     <span class="cm">[670µs]</span>
+  SELECT ... FROM school_type_data WHERE (id IN (1001, 1002))  <span class="cm">[643µs]</span></code></pre>
+
+  <h3>7. Trace Statistics from Test Run</h3>
+  <table>
+    <tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+    <tr><td><strong>Total SQL statements</strong></td><td style="text-align:right">36</td></tr>
+    <tr><td><strong>Audit entries generated</strong></td><td style="text-align:right">6 (4 Created, 2 Updated)</td></tr>
+    <tr><td><strong>Avg query time</strong></td><td style="text-align:right">~720µs</td></tr>
+    <tr><td><strong>Slowest query</strong></td><td style="text-align:right">2,348µs (school load with relations)</td></tr>
+    <tr><td><strong>Purpose-comment pairs</strong></td><td style="text-align:right">17 unique chains</td></tr>
+    <tr><td><strong>Version-guarded updates</strong></td><td style="text-align:right">1 (version 2 &rarr; 3)</td></tr>
+  </table>
+
+  <div class="sig-block">Full trace log: <a href="https://github.com/teaql/teaql-agent-kit/tree/autonomous/reports/evaluation-report-001/raw/sql-trace.txt">raw/sql-trace.txt</a></div>
+  <div class="pn">7</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: SCORING & ECOSYSTEM                                   -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="inner-header">
@@ -458,7 +542,7 @@
   <h2>Scoring</h2>
 
   <div class="big-score">
-    <span class="num">7.9</span><span class="den"> / 10</span>
+    <span class="num">8.0</span><span class="den"> / 10</span>
     <div class="cap">Weighted composite score</div>
   </div>
 
@@ -468,7 +552,7 @@
     <tr><td><strong>Type Safety</strong></td><td style="text-align:right">8.5</td><td style="text-align:right">15%</td><td>291 methods/entity; Audited&lt;T&gt; enforces audit at compile time</td></tr>
     <tr><td><strong>Code Generation</strong></td><td style="text-align:right">8.0</td><td style="text-align:right">15%</td><td>select_*_with exists; 1 doc-code inconsistency found</td></tr>
     <tr><td><strong>API Design</strong></td><td style="text-align:right">8.5</td><td style="text-align:right">15%</td><td>Q/E facade + constant shortcuts + comment chain</td></tr>
-    <tr><td><strong>Runtime</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>Full-featured (auto-migration, graph save, checkers); heavy deps with sqlx</td></tr>
+    <tr><td><strong>Runtime</strong></td><td style="text-align:right">7.5</td><td style="text-align:right">10%</td><td>Full-featured (auto-migration, graph save, audit trail, version locking); heavy deps with sqlx</td></tr>
     <tr><td><strong>Documentation</strong></td><td style="text-align:right">7.5</td><td style="text-align:right">10%</td><td>API_GUIDE.md mostly accurate; 1 execute_for_exists claim wrong</td></tr>
     <tr><td><strong>Ecosystem</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>~20 Rust crates + 3 Java + open source forge</td></tr>
     <tr><td><strong>Extensibility</strong></td><td style="text-align:right">7.0</td><td style="text-align:right">10%</td><td>Behavior/Checker hooks; 5 database providers</td></tr>
@@ -500,11 +584,11 @@
     <tr><td>Other</td><td style="text-align:right">187</td><td>tokio, serde, chrono, rand, regex, etc.</td></tr>
   </table>
 
-  <div class="pn">7</div>
+  <div class="pn">8</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 8: SUMMARY & EVIDENCE CHAIN                              -->
+<!-- PAGE 9: SUMMARY & EVIDENCE CHAIN                              -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="inner-header">
@@ -546,7 +630,7 @@
       Framed token, text, test, trial, today, tomorrow &mdash; deterministic by design.
     </span>
   </div>
-  <div class="pn">8</div>
+  <div class="pn">9</div>
 </div>
 
 </body>
