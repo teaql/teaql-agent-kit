@@ -7,6 +7,7 @@
 3. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
 4. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 5. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
+6. **No parsing scripts**: Do NOT write Python or bash scripts to parse JSON outputs from `cargo-teaql eval`. Read the terminal output directly and match it against `agents/ERROR-FIX.md`.
 
 ## IF YOU GET AN ERROR
 
