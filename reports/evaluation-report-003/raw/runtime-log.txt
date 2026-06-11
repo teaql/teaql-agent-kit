@@ -1,0 +1,30 @@
+
+running 15 tests
+test tests::q_campaigns_list ... ok
+test tests::q_customers_with_type ... ok
+test tests::q_consolidated_move_order_report ... ok
+test tests::q_employees_with_department ... ok
+test tests::q_invoices_with_line_items ... ok
+test tests::q_financial_summaries ... ok
+test tests::q_leads_with_source ... ok
+test tests::q_merchants_filter_by_name ... ok
+test tests::q_merchants_simple_query ... ok
+test tests::q_move_orders_with_customer ... ok
+test tests::q_services_with_category ... ok
+test tests::q_payments_with_order ... ok
+test tests::q_user_accounts_with_roles ... ok
+test tests::q_vehicles_with_type ... ok
+test tests::q_expenses_with_category ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
