@@ -23,7 +23,7 @@
 For comprehensive guides, templates, and patterns, please refer to the specific files:
 
 - **Rules**: `agents/RULES.md` (Strict rules for KSML formatting)
-- **Quick Start**: `playbooks/QUICK-START.md` (5-minute guide for generation)
+- **Quick Start**: `agents/QUICK-START.md` (5-minute guide for generation)
 - **Templates**: `agents/TEMPLATES.md` (Copy-paste XML patterns)
 - **Decision Trees**: `agents/DECISION-TREES.md` (How to choose roots/tenancy)
 - **Errors**: `agents/ERROR-FIX.md` (Full error lookup table)
