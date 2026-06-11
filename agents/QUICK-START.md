@@ -26,7 +26,7 @@ Run the validation tool:
 ```bash
 cargo-teaql eval model.xml
 ```
-*Tip: If the output is a large JSON, you can write a short Python script to convert it into a Markdown file for easier reading.*
+*Tip: When errors occur, the CLI natively outputs a beautifully formatted Markdown report for easy reading and analysis.*
 - **If errors occur**: Read the output or Markdown report, then go straight to `agents/ERROR-FIX.md` and use the copy-paste fixes provided there.
 - **If 0 errors**: Proceed to generation.
 
