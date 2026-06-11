@@ -22,7 +22,7 @@ Plugin org.apache.maven.plugins:teaql-maven-plugin not found in Maven Central
 ```
 
 Use fully qualified Maven plugin coordinates and resolve TeaQL Maven plugin
-version `0.1.12` or newer from:
+version `1.0.0` or newer from:
 
 ```text
 https://nexus.teaql.io/repository/maven-releases/
@@ -52,17 +52,17 @@ for example:
 Required command shape:
 
 ```bash
-mvn io.teaql:teaql-maven-plugin:0.1.12:gen-lib \
+mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib \
   -Dteaql.input=app-playground/models/model.xml \
   -Dteaql.output=app-playground/generate-lib
 
-mvn io.teaql:teaql-maven-plugin:0.1.12:gen-workspace \
+mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace \
   -Dteaql.input=app-playground/models/model.xml \
   -Dteaql.workspaceDir=app-playground/java-workspace
 ```
 
 If Maven cannot resolve the plugin from the TeaQL Nexus releases repository, if
-the plugin version is older than `0.1.12`, or if any TeaQL Maven plugin goal or
+the plugin version is older than `1.0.0`, or if any TeaQL Maven plugin goal or
 TeaQL plugin/tool invocation fails, stop immediately and report the exact
 blocker. Do not try Maven Central freshness, local source builds, hand-built
 workspace files, copied generated code, or alternate generation paths.
@@ -228,8 +228,8 @@ TeaQL service code remains read-only.
 
 | Category | Command |
 | --- | --- |
-| Generate Java library | `mvn io.teaql:teaql-maven-plugin:0.1.12:gen-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
-| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:0.1.12:gen-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
+| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
+| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
 | Install generated library | `cd core && mvn install -DskipTests` |
 | Compile workspace | `cd java-workspace && mvn clean compile` |
 | Run app | `mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=19987"` |
