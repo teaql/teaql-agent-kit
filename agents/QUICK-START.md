@@ -26,8 +26,8 @@ Run the validation tool:
 ```bash
 cargo-teaql eval model.xml
 ```
-**CRITICAL AI RULE**: Do NOT write Python or bash scripts to parse the JSON output of this command. Read the error messages directly from the terminal output.
-- **If errors occur**: Do not guess! Go straight to `agents/ERROR-FIX.md` and use the copy-paste fixes provided there.
+*Tip: If the output is a large JSON, you can write a short Python script to convert it into a Markdown file for easier reading.*
+- **If errors occur**: Read the output or Markdown report, then go straight to `agents/ERROR-FIX.md` and use the copy-paste fixes provided there.
 - **If 0 errors**: Proceed to generation.
 
 ## Step 4: Generate the Workspace
