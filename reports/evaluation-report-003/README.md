@@ -93,7 +93,7 @@ Raw evaluation logs, prompts, code changes, build and runtime logs, and SQL/audi
 ## Page 4 — Evaluation Result
 
 ### Overall Score
-**Overall:** 8.8 / 10
+**Overall:** 8.9 / 10
 
 | Dimension | Score | Notes |
 |-----------|------:|------|
