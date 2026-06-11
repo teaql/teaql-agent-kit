@@ -1,0 +1,23 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running `target/debug/moving-company-service-workspace`
+=== Moving Company Service - TeaQL Playground ===
+Domain crate: moving-company-service
+
+Building query examples...
+Q::merchants() query built successfully
+Q::move_orders() with customer relation built successfully
+Q::employees() with department relation built successfully
+Q::vehicles() with relations built successfully
+Q::payments() with relations built successfully
+Q::invoices() with line items built successfully
+Q::leads() with source and status built successfully
+Q::services() with category built successfully
+E API expressions available (require entity instances at runtime)
+Q::financial_summarys() built successfully
+Q::user_accounts() with roles built successfully
+
+=== All query and expression examples built successfully ===
+Note: To execute queries against a database, initialize the runtime context with:
+  let runtime = moving_company_service::service_runtime_from_env().await?;
+  let ctx = runtime.user_context();
+  let results = query.execute_for_list(&ctx).await?;
