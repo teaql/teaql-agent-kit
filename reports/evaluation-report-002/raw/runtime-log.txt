@@ -1,0 +1,44 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running `target/debug/school-management-service-workspace`
+=== School Management System - TeaQL Playground ===
+
+[OK] Runtime context initialized with SQLite backend
+
+--- Test 1: Query all schools ---
+[OK] Found 11 school(s)
+  - Beijing No.1 Primary School (Updated) (GZ-003): 1500 students
+  - Guangzhou Tech High School (GZ-003): 1500 students
+  - Updated Name (UPD-001): 100 students
+  - E Expression Test School (EEX-001): 200 students
+  - Shanghai International School (SH-002): 800 students
+  - Guangzhou Tech High School (GZ-003): 1500 students
+  - Updated Name (UPD-001): 100 students
+  - E Expression Test School (EEX-001): 200 students
+  - Guangzhou Tech High School (GZ-003): 1500 students
+  - Updated Name (UPD-001): 100 students
+  - E Expression Test School (EEX-001): 200 students
+
+--- Test 2: Query schools by type (PRIMARY) ---
+[OK] Found 6 primary school(s)
+
+--- Test 3: Query schools by platform ---
+[OK] Found 11 school(s) on platform 1
+
+--- Test 4: Register a new school ---
+[OK] Registered school with ID=5
+
+--- Test 5: Query school with relations ---
+[OK] School: Guangzhou Tech High School
+  Type: Secondary (SECONDARY)
+  Platform: EduManage Platform
+
+--- Test 6: Update school name ---
+[OK] School name updated
+
+--- Test 7: Query school count by type ---
+[FAIL] School: invalid relation field school_type: Some(I64(1001))
+
+--- Test 8: E expression access ---
+[OK] E expression: name=Some("Beijing No.1 Primary School (Updated)"), code=Some("GZ-003")
+
+=== All tests completed ===

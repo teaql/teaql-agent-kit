@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeaQL 评估报告 #002</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        .cover {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px;
+            page-break-after: always;
+        }
+        .framed-t {
+            width: 80px;
+            height: 80px;
+            border: 1.5px solid #2d5a3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .framed-t span {
+            font-size: 36px;
+            font-weight: 600;
+            color: #2d5a3d;
+            letter-spacing: 0;
+        }
+        .report-title {
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .report-number {
+            font-size: 72px;
+            font-weight: 200;
+            color: #666666;
+            margin-bottom: 40px;
+        }
+        .report-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            color: #666666;
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 60px;
+        }
+        .report-meta {
+            font-size: 12px;
+            color: #999999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .microcopy {
+            font-size: 10px;
+            color: #cccccc;
+            letter-spacing: 3px;
+            margin-top: 40px;
+            text-transform: lowercase;
+        }
+        .content-page {
+            padding: 80px 60px;
+            page-break-after: always;
+            min-height: 100vh;
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: #000000;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin: 40px 0 20px 0;
+            color: #1a1a1a;
+        }
+        h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 30px 0 15px 0;
+            color: #333333;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #444444;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+        }
+        th {
+            background: #f8f8f8;
+            font-weight: 500;
+            color: #333333;
+        }
+        td {
+            color: #444444;
+        }
+        .score {
+            font-size: 48px;
+            font-weight: 200;
+            color: #2d5a3d;
+            text-align: center;
+            margin: 40px 0;
+        }
+        .score-label {
+            font-size: 12px;
+            color: #999999;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 12px;
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #d63384;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: #333333;
+        }
+        .highlight {
+            border-left: 3px solid #2d5a3d;
+            padding-left: 20px;
+            margin: 20px 0;
+        }
+        @media print {
+            .cover {
+                height: 100vh;
+            }
+            .content-page {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="framed-t">
+            <span>T</span>
+        </div>
+        <div class="report-title">TeaQL 评估报告</div>
+        <div class="report-number">#002</div>
+        <div class="report-subtitle">
+            评估编码代理在可审计业务软件上的表现<br>
+            数据、案例、代码、追踪和证据
+        </div>
+        <div class="report-meta">
+            代理输出 · 约束 · 审计追踪
+        </div>
+        <div class="microcopy">
+            framed token, text, test, trial, today, tomorrow — deterministic by design
+        </div>
+    </div>
+</body>
+</html>
