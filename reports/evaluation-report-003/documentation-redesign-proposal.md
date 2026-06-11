@@ -474,6 +474,115 @@ The CLI reads the model.xml, looks up the entity definition, and generates the e
 
 ---
 
+## Proposed Tool: WebSocket Real-Time Model Service
+
+### Problem
+
+CLI tools require:
+1. Starting a new process per query
+2. Reading model.xml from disk each time
+3. No awareness of model changes during session
+
+AI agents work in long sessions where the model evolves. They need real-time access to model information without CLI overhead.
+
+### Solution: Persistent WebSocket Connection
+
+```
+AI Agent ←→ WebSocket ←→ TeaQL Service
+```
+
+### Protocol
+
+```json
+// Request
+{"cmd": "fields", "entity": "employee"}
+
+// Response
+{
+  "status": "ok",
+  "entity": "employee",
+  "fields": [
+    {"name": "name", "type": "String", "example": "Wang Fang"},
+    {"name": "employee_number", "type": "String", "example": "EMP-2024-001"},
+    ...
+  ],
+  "references": [
+    {"name": "gender", "target": "gender", "kind": "constant"},
+    {"name": "department", "target": "department", "kind": "business"}
+  ]
+}
+```
+
+### Commands
+
+| Command | Description | Response |
+|---------|-------------|----------|
+| `fields` | List all fields with types | Field list with examples |
+| `relations` | List all relations | Parent/child relations |
+| `constants` | List constant values | All `_value` entries |
+| `validate` | Validate current model | Errors, warnings, suggestions |
+| `fix` | Get fix for specific error | Copy-paste fix code |
+| `generate` | Generate code for operation | Ready-to-use Rust code |
+| `subscribe` | Subscribe to model changes | Real-time notifications |
+| `diff` | Show model changes | Before/after comparison |
+
+### Session Flow
+
+```
+1. Agent connects: ws://localhost:9527
+2. Agent sends: {"cmd": "fields", "entity": "employee"}
+3. Service returns field list
+4. Agent creates model
+5. Agent sends: {"cmd": "validate", "model": "current"}
+6. Service returns errors with fixes
+7. Agent fixes model
+8. Agent sends: {"cmd": "subscribe", "events": ["model_changed"]}
+9. Agent receives notification when model changes
+10. Agent auto-regenerates affected code
+```
+
+### Benefits Over CLI
+
+| Aspect | CLI | WebSocket |
+|--------|-----|-----------|
+| Startup overhead | Process per query | Persistent connection |
+| Model awareness | Reads from disk each time | In-memory, instant |
+| Change notifications | None | Real-time subscribe |
+| Parallel queries | Sequential | Concurrent |
+| IDE integration | Limited | Full |
+| AI agent session | Disconnect/reconnect | Persistent |
+
+### Integration with AI Agents
+
+```rust
+// AI agent code
+let teaql = TeaqlClient::connect("ws://localhost:9527").await?;
+
+// Get fields instantly
+let fields = teaql.fields("employee").await?;
+
+// Validate model
+let result = teaql.validate(&model_xml).await?;
+
+// Subscribe to changes
+teaql.subscribe("model_changed", |event| {
+    // Auto-regenerate affected code
+    regenerate_code(&event.changed_entities);
+}).await?;
+```
+
+### Expected Impact
+
+| Metric | With CLI | With WebSocket |
+|--------|----------|----------------|
+| Query latency | ~100ms | ~1ms |
+| Model change detection | Manual | Automatic |
+| AI session continuity | Broken | Persistent |
+| Multi-entity queries | Sequential | Parallel |
+| IDE plugin support | Basic | Full |
+
+---
+
 ## Implementation Plan
 
 ### Phase 1: Restructure existing content (1 week)
