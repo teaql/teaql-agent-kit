@@ -98,38 +98,99 @@ purpose: string
 
 ### 2.3 Where Syntax
 
-| Syntax | Operator | SQL Equivalent |
-|--------|----------|----------------|
-| `"field": value` | equals | `field = value` |
-| `"field~": value` | contains | `field LIKE '%value%'` |
-| `"field>": value` | greater than | `field > value` |
-| `"field<": value` | less than | `field < value` |
-| `"field>=": value` | greater or equal | `field >= value` |
-| `"field<=": value` | less or equal | `field <= value` |
-| `"field!": value` | not equal | `field != value` |
-| `"field_in": [values]` | in list | `field IN (...)` |
-| `"field_start": value` | starts with | `field LIKE 'value%'` |
-| `"field_end": value` | ends with | `field LIKE '%value'` |
-| `"field_null": true` | is null | `field IS NULL` |
-| `"field.NotNull": true` | is not null | `field IS NOT NULL` |
+The `where` clause uses a structured condition tree for complex filtering.
 
-**Multiple conditions are AND by default:**
+**Condition Object:**
 
 ```json
-"where": {
-  "title~": "Rust",
-  "status": "AVAILABLE",
-  "total_copies>": 5
+{
+  "field": "title",
+  "op": "~",
+  "value": ["Rust"]
 }
 ```
 
-**OR conditions:**
+| Field | Type | Description |
+|-------|------|-------------|
+| `field` | string | Field name to filter |
+| `op` | string | Operator (see below) |
+| `value` | array | Filter values (always array) |
+
+**Operators:**
+
+| Op | Meaning | SQL Equivalent |
+|----|---------|----------------|
+| `=` | equals | `field = value[0]` |
+| `!=` | not equals | `field != value[0]` |
+| `>` | greater than | `field > value[0]` |
+| `<` | less than | `field < value[0]` |
+| `>=` | greater or equal | `field >= value[0]` |
+| `<=` | less or equal | `field <= value[0]` |
+| `~` | contains | `field LIKE '%value[0]%'` |
+| `^` | starts with | `field LIKE 'value[0]%'` |
+| `$` | ends with | `field LIKE '%value[0]'` |
+| `in` | in list | `field IN (value)` |
+| `not_in` | not in list | `field NOT IN (value)` |
+| `null` | is null | `field IS NULL` |
+| `not_null` | is not null | `field IS NOT NULL` |
+| `between` | between | `field BETWEEN value[0] AND value[1]` |
+
+**Logic Combinators:**
 
 ```json
+{
+  "and": [condition, condition, ...],
+  "or": [condition, condition, ...],
+  "not": condition
+}
+```
+
+**Examples:**
+
+Simple AND:
+```json
 "where": {
-  "OR": [
-    {"title~": "Rust"},
-    {"title~": "Go"}
+  "and": [
+    {"field": "title", "op": "~", "value": ["Rust"]},
+    {"field": "status", "op": "=", "value": ["AVAILABLE"]},
+    {"field": "total_copies", "op": ">=", "value": [5]}
+  ]
+}
+```
+
+Complex OR + AND:
+```json
+"where": {
+  "or": [
+    {"and": [
+      {"field": "title", "op": "~", "value": ["Rust"]},
+      {"field": "status", "op": "=", "value": ["AVAILABLE"]}
+    ]},
+    {"and": [
+      {"field": "title", "op": "~", "value": ["Go"]},
+      {"field": "available_copies", "op": ">", "value": [0]}
+    ]}
+  ]
+}
+```
+
+NOT + IN:
+```json
+"where": {
+  "and": [
+    {"field": "status", "op": "in", "value": ["ACTIVE", "RESERVED"]},
+    {"field": "status", "op": "not_in", "value": ["RETIRED"]},
+    {"field": "return_date", "op": "null", "value": []}
+  ]
+}
+```
+
+BETWEEN:
+```json
+"where": {
+  "and": [
+    {"field": "total_copies", "op": "between", "value": [5, 20]},
+    {"field": "loan_date", "op": "between", "value": ["2024-01-01", "2024-12-31"]}
   ]
 }
 ```
