@@ -441,6 +441,98 @@
             <li><span class="badge badge-warning">注意</span> API 命名存在不一致（contains vs containing）</li>
         </ul>
         
+        <h2>TeaQL Token 节约机制</h2>
+        <p>TeaQL 框架通过以下机制显著降低 AI Agent 的 token 消耗：</p>
+        
+        <h3>1. 领域特定语言（KSML）</h3>
+        <p>使用简洁的 XML 语法定义模型，相比手写 Rust 代码减少 90% 以上的 token：</p>
+        <pre><code>&lt;school name="Springfield" address="123 Main St" /&gt;
+// 对应生成 ~500 行 Rust 代码</code></pre>
+        
+        <h3>2. 代码生成替代手写</h3>
+        <table>
+            <tr>
+                <th>项目</th>
+                <th>手写代码</th>
+                <th>TeaQL 生成</th>
+                <th>节约比例</th>
+            </tr>
+            <tr>
+                <td>实体定义</td>
+                <td>~200 行/实体</td>
+                <td>~20 行 KSML</td>
+                <td class="success">90%</td>
+            </tr>
+            <tr>
+                <td>查询构建器</td>
+                <td>~500 行/实体</td>
+                <td>自动生成</td>
+                <td class="success">100%</td>
+            </tr>
+            <tr>
+                <td>校验器</td>
+                <td>~100 行/实体</td>
+                <td>自动生成</td>
+                <td class="success">100%</td>
+            </tr>
+            <tr>
+                <td>总计（14 实体）</td>
+                <td>~11,200 行</td>
+                <td>~280 行 KSML</td>
+                <td class="success">97.5%</td>
+            </tr>
+        </table>
+        
+        <h3>3. 类型状态模式</h3>
+        <p>编译时强制检查查询状态，减少运行时错误和调试 token：</p>
+        <pre><code>// 编译错误：未调用 .purpose()
+let schools = Q::schools().execute_for_list(&ctx).await?;
+// 正确：类型状态转换
+let schools = Q::schools().purpose("List").execute_for_list(&ctx).await?;</code></pre>
+        
+        <h3>4. 审计模式强制</h3>
+        <p>强制审计注释减少沟通成本，每个操作自带上下文：</p>
+        <pre><code>.audit_as("Create Oakwood Academy school").save(&ctx).await?</code></pre>
+        
+        <h2>改进措施建议</h2>
+        <table>
+            <tr>
+                <th>优先级</th>
+                <th>改进项</th>
+                <th>预期效果</th>
+            </tr>
+            <tr>
+                <td>P0</td>
+                <td>统一 API 命名（消除 contains/containing 漂移）</td>
+                <td>减少 30% 编译错误迭代</td>
+            </tr>
+            <tr>
+                <td>P0</td>
+                <td>IDE 插件（代码提示、自动补全）</td>
+                <td>减少 50% 文档查询 token</td>
+            </tr>
+            <tr>
+                <td>P1</td>
+                <td>编译缓存优化（增量编译）</td>
+                <td>减少 70% 编译等待时间</td>
+            </tr>
+            <tr>
+                <td>P1</td>
+                <td>错误信息增强（链式调用定位）</td>
+                <td>减少 40% 调试 token</td>
+            </tr>
+            <tr>
+                <td>P2</td>
+                <td>交互式模型编辑器（可视化 KSML）</td>
+                <td>减少 60% 建模 token</td>
+            </tr>
+            <tr>
+                <td>P2</td>
+                <td>模板库（常见领域模型）</td>
+                <td>减少 80% 初始建模 token</td>
+            </tr>
+        </table>
+        
         <h2>评估维度</h2>
         <table>
             <tr>
