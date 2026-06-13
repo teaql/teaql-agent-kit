@@ -22,11 +22,15 @@ For every common pattern, copy and paste the relevant template below, and replac
                _module="{Module Name}"
                _module_key="{module-key}"
                {field}="{concrete_value}"
-               merchant="merchant(context)"
                create_time="createTime()"
                update_time="updateTime()"/>
 ```
-*(Remove `merchant="merchant(context)"` if not a multi-tenant system where merchant is the root).*
+
+Add a tenant boundary reference only when multi-tenancy is explicitly confirmed:
+
+```xml
+{tenant_owner}="{tenant_owner}(context)"
+```
 
 <!-- TEMPLATE: Constant Object -->
 ```xml
@@ -34,11 +38,18 @@ For every common pattern, copy and paste the relevant template below, and replac
                  _module="{Module Name}"
                  _module_key="{module-key}"
                  id="id()" name="string()" code="string()"
-                 platform="platform()"
                  _constant="true" _identifier="code">
   <_value id="1001" name="{Value Name 1}" code="{VALUE_CODE_1}"/>
   <_value id="1002" name="{Value Name 2}" code="{VALUE_CODE_2}"/>
 </{constant_name}>
+```
+
+If the evaluator requires constants to reference the domain root, add the real
+root object reference. Do not default to `platform` unless `platform` is the
+actual root object:
+
+```xml
+{root_object}="{root_object}()"
 ```
 
 <!-- TEMPLATE: Reference Field -->

@@ -5,10 +5,10 @@
 | Error | Meaning | Fix |
 |-------|---------|-----|
 | Empty attribute | Attribute has no value | Delete it or fill with a concrete value. |
-| Missing root ref | Constant not linked to root | Add reference to root entity (e.g. `platform="platform()"`). |
+| Missing root ref | Constant not linked to root | Add reference to the actual domain root object (e.g. `bookstore="bookstore()"` when `bookstore` is the root). |
 | Depth exceeded | Too many nested references | Remove one reference or use string field. |
 | Sensitive field | Token/key/password detected | Add `_audit_mask_fields="field_name"`. |
-| Disconnected graph | Entity not connected to root | Connect to its natural parent or the root (e.g., add `merchant="merchant(context)"`). |
+| Disconnected graph | Entity not connected to root | Connect it to its natural parent or actual root object. Use a tenant context reference only when multi-tenancy is explicitly confirmed. |
 | Reserved keyword | Using a language keyword | Rename attribute (e.g., `type` -> `item_kind`, `user` -> `user_account`). |
 
 ## Code Generation / Compilation Errors
@@ -26,28 +26,59 @@
 ### Fix: Missing root ref
 ```xml
 <!-- Before: Error -->
-<entity name="order" />
+<order_status _name="Order Status"
+              _module="Basic Data"
+              _module_key="basic-data"
+              id="id()" name="string()" code="string()"
+              _constant="true" _identifier="code">
+  <_value id="1001" name="Created" code="CREATED"/>
+</order_status>
 
-<!-- After: Fix (Add root reference) -->
-<entity name="order" platform="platform()" />
+<!-- After: Fix (Add the actual root object reference) -->
+<order_status _name="Order Status"
+              _module="Basic Data"
+              _module_key="basic-data"
+              bookstore="bookstore()"
+              id="id()" name="string()" code="string()"
+              _constant="true" _identifier="code">
+  <_value id="1001" name="Created" code="CREATED"/>
+</order_status>
 ```
 
 ### Fix: Sensitive field
 ```xml
 <!-- Before: Error (password detected as plain text) -->
-<entity name="user" password="" />
+<user_account _name="User Account"
+              _module="Identity"
+              _module_key="identity"
+              login_name="alice"
+              password_hash="hash-example"
+              bookstore="bookstore()"/>
 
 <!-- After: Fix (Mask field) -->
-<entity name="user" password="" _audit_mask_fields="password" />
+<user_account _name="User Account"
+              _module="Identity"
+              _module_key="identity"
+              login_name="alice"
+              password_hash="hash-example"
+              bookstore="bookstore()"
+              _audit_mask_fields="password_hash"/>
 ```
 
 ### Fix: Disconnected graph
 ```xml
 <!-- Before: Error -->
-<entity name="order_item" />
+<order_item _name="Order Item"
+            _module="Sales"
+            _module_key="sales"
+            item_name="Domain Modeling with TeaQL"/>
 
-<!-- After: Fix (Connect to parent) -->
-<entity name="order_item" order="order(context)" />
+<!-- After: Fix (Connect to natural parent) -->
+<order_item _name="Order Item"
+            _module="Sales"
+            _module_key="sales"
+            item_name="Domain Modeling with TeaQL"
+            order="order()"/>
 ```
 
 ### Fix: Missing .audit_as() / .purpose() (Java)

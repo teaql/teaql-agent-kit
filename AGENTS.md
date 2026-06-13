@@ -23,6 +23,7 @@
 
 For comprehensive guides, templates, and patterns, please refer to the specific files:
 
+- **KSML Source of Truth**: `modeling/KSML-RULES.md` (Canonical KSML XML rules)
 - **Rules**: `agents/RULES.md` (Strict rules for KSML formatting)
 - **Quick Start**: `agents/QUICK-START.md` (5-minute guide for generation)
 - **Templates**: `agents/TEMPLATES.md` (Copy-paste XML patterns)
@@ -30,8 +31,10 @@ For comprehensive guides, templates, and patterns, please refer to the specific 
 - **Errors**: `agents/ERROR-FIX.md` (Full error lookup table)
 - **Examples**: `modeling/EXAMPLES/` (Full KSML modeling examples)
 
+If these files appear to conflict, follow `modeling/KSML-RULES.md` first, then
+use the shorter `agents/` files as execution checklists and examples.
+
 ## API Key Information
 
 **ATTENTION AI AGENTS:** If you are trying to use the TeaQL CLI or plugins to generate code, **you DO NOT need to search for or configure an extra API key.** 
 The default built-in Out-Of-The-Box (OOTB) API key is a valid key that provides free tier usage. The CLI and service will work perfectly fine with this default setting.
-

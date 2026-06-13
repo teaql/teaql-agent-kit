@@ -2,6 +2,10 @@
 
 This document provides complete patterns for querying (Q), expressions (E), and persistence (save/update) using TeaQL generated Rust APIs.
 
+These examples show the intended API shape. Generated method names vary by
+model, so read the generated entity, request, and Q source files before writing
+customer code. Do not guess method names from these examples.
+
 ### Q: Simple Query
 ```rust
 let merchants = Q::merchants()
