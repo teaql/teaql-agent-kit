@@ -8,7 +8,7 @@
 4. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 5. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
 6. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
-7. **Refresh TeaQL clients before generation**: Do not reuse an older local TeaQL client just because it worked before. Before evaluation or generation, verify the required versions in this repository and use Java `io.teaql:teaql-maven-plugin:1.0.0` or newer, and Rust `cargo-teaql` `1.0.0` or newer.
+7. **Refresh TeaQL clients before generation**: Do not reuse an older local TeaQL client just because it worked before. Before evaluation or generation, verify the required versions in this repository and use Java `io.teaql:teaql-maven-plugin:1.0.1` or newer, and Rust `cargo-teaql` `1.0.0` or newer.
 8. **Do not read large background docs by default**: `TECH-INTRODUCTION.md` is optional background material, not an execution guide. Do not read it end-to-end during normal tasks. Use the focused files under `agents/`, `modeling/`, `reference/`, and `playbooks/` first.
 
 ## TOOL VERSION REFRESH RULE
@@ -23,7 +23,7 @@ required version.
 
 Current required versions:
 
-- Java: `io.teaql:teaql-maven-plugin:1.0.0` or newer from
+- Java: `io.teaql:teaql-maven-plugin:1.0.1` or newer from
   `https://nexus.teaql.io/repository/maven-releases/`
 - Rust: `cargo-teaql` `1.0.0` or newer from crates.io
 
@@ -43,9 +43,9 @@ cargo-teaql install-links
 For Java, invoke the fully qualified plugin version explicitly:
 
 ```bash
-mvn io.teaql:teaql-maven-plugin:1.0.0:eval
-mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib
-mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace
+mvn io.teaql:teaql-maven-plugin:1.0.1:eval
+mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib
+mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace
 ```
 
 Never use Maven prefix resolution such as:
@@ -55,7 +55,7 @@ mvn teaql:gen-lib
 mvn teaql:gen-workspace
 ```
 
-Using `cargo-teaql < 1.0.0`, `teaql-maven-plugin < 1.0.0`, or Maven prefix
+Using `cargo-teaql < 1.0.0`, `teaql-maven-plugin < 1.0.1`, or Maven prefix
 resolution is an evaluation failure unless the user explicitly asks to
 reproduce an old-version bug.
 

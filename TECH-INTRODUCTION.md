@@ -182,11 +182,11 @@ the blocker instead of trying source builds or alternate generation paths.
 | Target | User-installed client | Main command |
 | --- | --- | --- |
 | KSML evaluation, Rust/client path | `cargo install cargo-teaql` from crates.io, then `cargo-teaql install-links` | `cargo-teaql eval <model-file-or-directory>` |
-| KSML evaluation, Java/Maven path | TeaQL Maven plugin with `eval` goal from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.0.0:eval -Dteaql.input=<model-file-or-directory>` |
+| KSML evaluation, Java/Maven path | TeaQL Maven plugin with `eval` goal from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.0.1:eval -Dteaql.input=<model-file-or-directory>` |
 | Rust | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 1.0.0`, then `cargo-teaql install-links` | `cargo-teaql gen-lib <model.xml>` |
 | Rust runnable workspace | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 1.0.0`, then `cargo-teaql install-links` | `cargo-teaql gen-workspace <model.xml> --output <workspace-dir>` |
-| Java | TeaQL Maven plugin `>= 1.0.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
-| Java runnable workspace | TeaQL Maven plugin `>= 1.0.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
+| Java | TeaQL Maven plugin `>= 1.0.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
+| Java runnable workspace | TeaQL Maven plugin `>= 1.0.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
 The Java runnable workspace path requires a Maven plugin/client version that can
 run `gen-workspace`; use version `1.0.0` or newer from the TeaQL Nexus

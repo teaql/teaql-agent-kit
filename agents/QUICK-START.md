@@ -54,7 +54,7 @@ older local client from a previous run.
 
 Required versions:
 
-- Java: `io.teaql:teaql-maven-plugin:1.0.0` or newer
+- Java: `io.teaql:teaql-maven-plugin:1.0.1` or newer
 - Rust: `cargo-teaql` `1.0.0` or newer
 
 For Rust:
@@ -68,7 +68,7 @@ cargo-teaql install-links
 For Java, always invoke the fully qualified plugin version, for example:
 
 ```bash
-mvn io.teaql:teaql-maven-plugin:1.0.0:eval -Dteaql.input=model.xml
+mvn io.teaql:teaql-maven-plugin:1.0.1:eval -Dteaql.input=model.xml
 ```
 
 Run the validation tool:

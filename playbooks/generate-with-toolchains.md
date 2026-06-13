@@ -18,7 +18,7 @@ Rust, or both TeaQL code generation tracks.
   Maven plugin version `1.0.0` or newer from the TeaQL Nexus releases
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
   on Maven Central freshness, and invoke the plugin with fully qualified
-  coordinates such as `io.teaql:teaql-maven-plugin:1.0.0:gen-lib`, not Maven
+  coordinates such as `io.teaql:teaql-maven-plugin:1.0.1:gen-lib`, not Maven
   prefix resolution such as `mvn teaql:gen-lib`. Ensure Maven settings or the
   project POM exposes that URL as both a repository and a plugin repository. For
   Rust, install `cargo-teaql` version `1.0.0` or newer from crates.io with
@@ -35,7 +35,7 @@ Rust, or both TeaQL code generation tracks.
   TeaQL client version. Previous successful use of an older local client is not
   evidence that it is valid for this repository. The repository-required
   versions are authoritative for every new run: Java
-  `io.teaql:teaql-maven-plugin:1.0.0` or newer from the TeaQL Nexus releases
+  `io.teaql:teaql-maven-plugin:1.0.1` or newer from the TeaQL Nexus releases
   repository, and Rust `cargo-teaql` `1.0.0` or newer from crates.io.
 - For Rust, when network access is available, run
   `cargo install cargo-teaql --force`, then `cargo-teaql --version`, then
@@ -44,10 +44,10 @@ Rust, or both TeaQL code generation tracks.
 - For Java, never rely on a previously resolved plugin or Maven prefix
   resolution. Invoke the fully qualified plugin coordinate with version
   `1.0.0` or newer, such as
-  `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib`. If Maven resolves an older
+  `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib`. If Maven resolves an older
   plugin, or the required version cannot be resolved from the TeaQL Nexus
   releases repository, stop and report the blocker.
-- Using `cargo-teaql < 1.0.0`, `teaql-maven-plugin < 1.0.0`, or `mvn teaql:*`
+- Using `cargo-teaql < 1.0.0`, `teaql-maven-plugin < 1.0.1`, or `mvn teaql:*`
   is an evaluation failure unless the user explicitly asks to reproduce an
   old-version bug.
 - Run server-side KSML evaluation before generation when the installed client
@@ -106,7 +106,7 @@ Rust, or both TeaQL code generation tracks.
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
   on Maven Central freshness. Invoke Java goals with fully qualified Maven
   plugin coordinates, for example
-  `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib`; do not use `mvn teaql:*`.
+  `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib`; do not use `mvn teaql:*`.
   For Rust, install `cargo-teaql` version `1.0.0` or newer from crates.io with
   `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
@@ -418,7 +418,7 @@ Before running Maven for a Java project, read
    releases repository:
    `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
    Central freshness. Invoke goals with fully qualified Maven plugin coordinates
-   such as `io.teaql:teaql-maven-plugin:1.0.0:gen-lib`; do not use Maven prefix
+   such as `io.teaql:teaql-maven-plugin:1.0.1:gen-lib`; do not use Maven prefix
    resolution such as `mvn teaql:gen-lib`, because Maven may resolve the prefix
    against Central or the wrong plugin group. Ensure Maven settings or the
    project POM exposes the TeaQL Nexus releases URL as both a repository and a
@@ -434,7 +434,7 @@ Before running Maven for a Java project, read
    generation; warnings and suggestions should be reported:
 
    ```bash
-   mvn io.teaql:teaql-maven-plugin:1.0.0:eval \
+   mvn io.teaql:teaql-maven-plugin:1.0.1:eval \
      -Dteaql.input=/path/to/app-playground/models/model.xml
    ```
 
@@ -444,7 +444,7 @@ Before running Maven for a Java project, read
    `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
-   mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib \
+   mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib \
      -Dteaql.input=/path/to/app-playground/models/model.xml \
      -Dteaql.output=/path/to/app-playground/generate-lib
    ```
@@ -456,7 +456,7 @@ Before running Maven for a Java project, read
    `/path/to/app-playground/java-workspace`:
 
    ```bash
-   mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace \
+   mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace \
      -Dteaql.input=/path/to/app-playground/models/model.xml \
      -Dteaql.workspaceDir=/path/to/app-playground/java-workspace
    ```
@@ -479,11 +479,11 @@ Before running Maven for a Java project, read
 5. Generate documentation or frontend model output when requested:
 
    ```bash
-   mvn io.teaql:teaql-maven-plugin:1.0.0:gen-doc \
+   mvn io.teaql:teaql-maven-plugin:1.0.1:gen-doc \
      -Dteaql.input=/path/to/model.xml \
      -Dteaql.output=/path/to/target/build
 
-   mvn io.teaql:teaql-maven-plugin:1.0.0:gen-model \
+   mvn io.teaql:teaql-maven-plugin:1.0.1:gen-model \
      -Dteaql.input=/path/to/model.xml \
      -Dteaql.output=/path/to/target/build
    ```
