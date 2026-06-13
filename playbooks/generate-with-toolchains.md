@@ -31,6 +31,25 @@ Rust, or both TeaQL code generation tracks.
 ## General Rules
 
 - Do not generate from vague business text directly. Generate from the model.
+- Before any TeaQL evaluation or generation command, refresh or verify the
+  TeaQL client version. Previous successful use of an older local client is not
+  evidence that it is valid for this repository. The repository-required
+  versions are authoritative for every new run: Java
+  `io.teaql:teaql-maven-plugin:1.0.0` or newer from the TeaQL Nexus releases
+  repository, and Rust `cargo-teaql` `1.0.0` or newer from crates.io.
+- For Rust, when network access is available, run
+  `cargo install cargo-teaql --force`, then `cargo-teaql --version`, then
+  `cargo-teaql install-links` before generation. If the available version is
+  older than `1.0.0`, stop and report the blocker.
+- For Java, never rely on a previously resolved plugin or Maven prefix
+  resolution. Invoke the fully qualified plugin coordinate with version
+  `1.0.0` or newer, such as
+  `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib`. If Maven resolves an older
+  plugin, or the required version cannot be resolved from the TeaQL Nexus
+  releases repository, stop and report the blocker.
+- Using `cargo-teaql < 1.0.0`, `teaql-maven-plugin < 1.0.0`, or `mvn teaql:*`
+  is an evaluation failure unless the user explicitly asks to reproduce an
+  old-version bug.
 - Run server-side KSML evaluation before generation when the installed client
   exposes an `eval` target. Evaluation `errors` must be fixed before generation.
   Evaluation `warnings` and `suggestions` should be reported to the user but do

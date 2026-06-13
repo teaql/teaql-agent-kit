@@ -49,6 +49,28 @@ Follow `agents/DECISION-TREES.md` to pick the right root and tenancy strategy.
 ```
 
 ## Step 3: Validate and Fix Errors
+Before validation, refresh and verify the TeaQL client version. Do not reuse an
+older local client from a previous run.
+
+Required versions:
+
+- Java: `io.teaql:teaql-maven-plugin:1.0.0` or newer
+- Rust: `cargo-teaql` `1.0.0` or newer
+
+For Rust:
+
+```bash
+cargo install cargo-teaql --force
+cargo-teaql --version
+cargo-teaql install-links
+```
+
+For Java, always invoke the fully qualified plugin version, for example:
+
+```bash
+mvn io.teaql:teaql-maven-plugin:1.0.0:eval -Dteaql.input=model.xml
+```
+
 Run the validation tool:
 ```bash
 cargo-teaql eval model.xml

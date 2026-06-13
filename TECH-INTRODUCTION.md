@@ -1,5 +1,13 @@
 # TeaQL Agent Kit
 
+> AI agent reading rule: this is a long background document, not the default
+> execution guide. Do not read it end-to-end for normal modeling, generation,
+> debugging, or API usage tasks. Start with `AGENTS.md`, `agents/QUICK-START.md`,
+> `agents/RULES.md`, `modeling/KSML-RULES.md`, `agents/TEMPLATES.md`,
+> `agents/ERROR-FIX.md`, and `reference/API-PATTERN-*.md`. Search this file and
+> read only the relevant section when architecture or philosophy context is
+> explicitly needed.
+
 TeaQL Agent Kit is the agent-native entry point for the TeaQL ecosystem. It is
 designed for Codex, Claude Code, and similar coding agents that can read a
 repository, follow instructions, generate or modify files, run commands, inspect
