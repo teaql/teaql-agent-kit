@@ -1,0 +1,56 @@
+=== Runtime Log ===
+Date: 2026-06-13 16:26 CST (final run)
+Command: SCHOOL_SERVICE_DATABASE_URL=sqlite:///tmp/school.db cargo run
+
+=== Setting up School Types ===
+  PRIMARY school type created: id=1
+  SECONDARY school type created: id=2
+
+=== Creating Platform ===
+  Platform created: id=1
+
+=== Creating Schools ===
+  School created: id=Some(1), name=北京第一小学
+  School created: id=Some(2), name=上海实验小学
+  School created: id=Some(3), name=北京四中
+  School created: id=Some(4), name=上海中学
+
+=== Query All School Types ===
+  SchoolType: id=1, name=小学, code=1001
+  SchoolType: id=2, name=中学, code=1002
+
+=== Query All Schools (with relations) ===
+  School: id=1, name=北京第一小学, platform=Demo Platform, type=小学
+  School: id=2, name=上海实验小学, platform=Demo Platform, type=小学
+  School: id=3, name=北京四中, platform=Demo Platform, type=中学
+  School: id=4, name=上海中学, platform=Demo Platform, type=中学
+
+=== Filter: PRIMARY Schools ===
+  Primary School: id=1, name=北京第一小学
+  Primary School: id=2, name=上海实验小学
+
+=== E Expression Facade ===
+  E facade -> name: Some("北京第一小学")
+
+=== Stats ===
+  Total schools: 4
+
+=== Search (containing '北京') ===
+  Found: id=1, name=北京第一小学
+  Found: id=3, name=北京四中
+
+✅ All operations completed.
+
+--- Audit Log (TEAQL_AUDIT=_full) ---
+Second run (idempotent check):
+=== Setting up School Types ===
+  PRIMARY already exists: id=1
+  SECONDARY already exists: id=2
+
+=== Creating Platform ===
+  Platform already exists: id=1
+
+=== Creating Schools ===
+  Schools already exist (count=4), skipping seed.
+
+✅ All operations completed.
