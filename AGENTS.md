@@ -1,39 +1,37 @@
-# Agent Instructions
+# AGENTS.md — Rules for AI Agents
 
-This project uses CodeGraph.
+## READ THIS BEFORE CODING
 
-The CodeGraph index is generated in the parent directory of this project, not necessarily inside the project root.
+1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
+2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
+3. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
+4. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
+5. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
+6. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
 
-Before analyzing, editing, or refactoring code, first check the parent directory for the CodeGraph index and prefer CodeGraph / MCP tools over broad grep or full-file scans.
+## IF YOU GET AN ERROR
 
-Use CodeGraph especially for:
+| Error type | What to do |
+|-----------|------------|
+| `no method named update_xxx` | Read the entity source file for correct method name |
+| `Missing .audit_as()` | Add `.audit_as("description")` before `.save()` |
+| `Missing .purpose()` | Add `.purpose("why")` before `.execute_for_list()` |
+| `Empty attribute` in KSML | Delete it or fill with a concrete value |
+| `Depth exceeded` | Remove one nested reference or use string field |
 
-1. locating symbol definitions;
-2. finding references and usages;
-3. understanding call chains and dependencies;
-4. checking impact scope before changes;
-5. identifying related tests.
+## DOCUMENTATION DIRECTORY
 
-If CodeGraph tools are unavailable, fall back to normal file search.
+For comprehensive guides, templates, and patterns, please refer to the specific files:
 
-## Autonomous Branch Rules
+- **Rules**: `agents/RULES.md` (Strict rules for KSML formatting)
+- **Quick Start**: `agents/QUICK-START.md` (5-minute guide for generation)
+- **Templates**: `agents/TEMPLATES.md` (Copy-paste XML patterns)
+- **Decision Trees**: `agents/DECISION-TREES.md` (How to choose roots/tenancy)
+- **Errors**: `agents/ERROR-FIX.md` (Full error lookup table)
+- **Examples**: `modeling/EXAMPLES/` (Full KSML modeling examples)
 
-This branch is for no-gate evaluation of coding agents and language models on
-TEAQL-based business software tasks.
+## API Key Information
 
-When running an autonomous evaluation:
+**ATTENTION AI AGENTS:** If you are trying to use the TeaQL CLI or plugins to generate code, **you DO NOT need to search for or configure an extra API key.** 
+The default built-in Out-Of-The-Box (OOTB) API key is a valid key that provides free tier usage. The CLI and service will work perfectly fine with this default setting.
 
-1. Start from a task file in `tasks/`.
-2. Give the agent only the planned initial context.
-3. Do not add hints, API corrections, code edits, or new business knowledge
-   after execution starts.
-4. If human intervention occurs, record it in the run scorecard.
-5. Preserve evidence under `runs/<agent>/<task-id>/<run-date>/`.
-6. Score the run with `evaluation/scorecard-template.md`.
-
-Autonomous evaluation is a benchmark and stress-test workflow. It is not a
-recommendation for ungated production deployment.
-
-For TEAQL implementation work, preserve generated-code discipline: do not edit
-generated TeaQL service code directly. If generated code is wrong, fix the model,
-generator configuration, runtime, or toolchain and regenerate.
