@@ -3,13 +3,14 @@
 This document provides patterns for defining relationships in KSML.
 
 ## 1. Parent-Child Relationship (One-to-Many)
+*(Example assumes `company` is the actual domain root object.)*
 
 ```xml
 <department _name="Department"
             _module="HR Management"
             _module_key="hr-management"
             name="Engineering"
-            platform="platform()"
+            company="company()"
             create_time="createTime()"
             update_time="updateTime()"/>
 
@@ -18,7 +19,7 @@ This document provides patterns for defining relationships in KSML.
           _module_key="hr-management"
           name="John Doe"
           department="department()"
-          platform="platform()"
+          company="company()"
           create_time="createTime()"
           update_time="updateTime()"/>
 ```
@@ -55,25 +56,27 @@ This document provides patterns for defining relationships in KSML.
 ```
 
 ## 3. Self-Referencing Relationship (Hierarchy)
+*(Example assumes `company` is the actual domain root object.)*
 
 ```xml
 <employee_category _name="Employee Category"
                    _module="HR Management"
                    _module_key="hr-management"
                    id="id()" name="string()" code="string()"
-                   platform="platform()"
+                   company="company()"
                    _constant="true" _identifier="code">
   <_value id="1001" name="Manager" code="MANAGER"/>
   <_value id="1002" name="Staff" code="STAFF"/>
 </employee_category>
 
+<!-- manager is a self-reference for hierarchy. -->
 <employee _name="Employee"
           _module="HR Management"
           _module_key="hr-management"
           name="John Doe"
           category="employee_category()"
-          manager="employee()"  <!-- Self-reference for hierarchical structure -->
-          platform="platform()"
+          manager="employee()"
+          company="company()"
           create_time="createTime()"
           update_time="updateTime()"/>
 ```

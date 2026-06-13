@@ -13,7 +13,7 @@ Does the system have a platform/operator managing multiple organizations?
 Is this a single-tenant system?
   YES → Do not add `merchant="merchant(context)"` or any tenant boundary fields.
   NO → Is there a clear tenant owner (e.g. merchant, company, school)?
-    YES → Add `{tenant_owner}="merchant(context)"` to tenant-owned objects.
+    YES → Add `{tenant_owner}="{tenant_owner}(context)"` to tenant-owned objects.
     NO → Ask the user to clarify before assuming tenancy.
 
 ## MODULE ASSIGNMENT

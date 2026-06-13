@@ -35,7 +35,8 @@ This document provides complete, copy-paste examples of business objects in KSML
 ```
 
 ## 3. Platform-Level Business Object
-*(No tenant boundaries, owned by the platform operator)*
+*(Use this only when `platform` is the actual root object and the data is owned
+by the platform operator.)*
 
 ```xml
 <platform_configuration _name="Platform Configuration"
