@@ -1,0 +1,69 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running `target/debug/school-management-service-workspace`
+✓ Runtime initialized, schema synchronized
+✓ Sample data generated:
+   • Attendance: 400 records
+   • Class Group: 200 records
+   • Course: 300 records
+   • Department: 100 records
+   • Grade Record: 400 records
+   • Grading Rule: 100 records
+   • School: 300 records
+   • Student: 300 records
+   • Teacher: 300 records
+
+═══ Q API: Query Tests ═══
+
+✓ execute_by_id: Platform(id=1, name='EduTech Platform')
+✓ execute_for_list: 300 schools found
+✓ Text filter (name containing Springfield): 300 matches
+✓ Constant filter (ACTIVE): 75 schools
+✓ Order by name ASC: ["Springfield Elementary School 1", "Springfield Elementary School 10", "Springfield Elementary School 100", "Springfield Elementary School 101", "Springfield Elementary School 102", "Springfield Elementary School 103", "Springfield Elementary School 104", "Springfield Elementary School 105", "Springfield Elementary School 106", "Springfield Elementary School 107", "Springfield Elementary School 108", "Springfield Elementary School 109", "Springfield Elementary School 11", "Springfield Elementary School 110", "Springfield Elementary School 111", "Springfield Elementary School 112", "Springfield Elementary School 113", "Springfield Elementary School 114", "Springfield Elementary School 115", "Springfield Elementary School 116", "Springfield Elementary School 117", "Springfield Elementary School 118", "Springfield Elementary School 119", "Springfield Elementary School 12", "Springfield Elementary School 120", "Springfield Elementary School 121", "Springfield Elementary School 122", "Springfield Elementary School 123", "Springfield Elementary School 124", "Springfield Elementary School 125", "Springfield Elementary School 126", "Springfield Elementary School 127", "Springfield Elementary School 128", "Springfield Elementary School 129", "Springfield Elementary School 13", "Springfield Elementary School 130", "Springfield Elementary School 131", "Springfield Elementary School 132", "Springfield Elementary School 133", "Springfield Elementary School 134", "Springfield Elementary School 135", "Springfield Elementary School 136", "Springfield Elementary School 137", "Springfield Elementary School 138", "Springfield Elementary School 139", "Springfield Elementary School 14", "Springfield Elementary School 140", "Springfield Elementary School 141", "Springfield Elementary School 142", "Springfield Elementary School 143", "Springfield Elementary School 144", "Springfield Elementary School 145", "Springfield Elementary School 146", "Springfield Elementary School 147", "Springfield Elementary School 148", "Springfield Elementary School 149", "Springfield Elementary School 15", "Springfield Elementary School 150", "Springfield Elementary School 151", "Springfield Elementary School 152", "Springfield Elementary School 153", "Springfield Elementary School 154", "Springfield Elementary School 155", "Springfield Elementary School 156", "Springfield Elementary School 157", "Springfield Elementary School 158", "Springfield Elementary School 159", "Springfield Elementary School 16", "Springfield Elementary School 160", "Springfield Elementary School 161", "Springfield Elementary School 162", "Springfield Elementary School 163", "Springfield Elementary School 164", "Springfield Elementary School 165", "Springfield Elementary School 166", "Springfield Elementary School 167", "Springfield Elementary School 168", "Springfield Elementary School 169", "Springfield Elementary School 17", "Springfield Elementary School 170", "Springfield Elementary School 171", "Springfield Elementary School 172", "Springfield Elementary School 173", "Springfield Elementary School 174", "Springfield Elementary School 175", "Springfield Elementary School 176", "Springfield Elementary School 177", "Springfield Elementary School 178", "Springfield Elementary School 179", "Springfield Elementary School 18", "Springfield Elementary School 180", "Springfield Elementary School 181", "Springfield Elementary School 182", "Springfield Elementary School 183", "Springfield Elementary School 184", "Springfield Elementary School 185", "Springfield Elementary School 186", "Springfield Elementary School 187", "Springfield Elementary School 188", "Springfield Elementary School 189", "Springfield Elementary School 19", "Springfield Elementary School 190", "Springfield Elementary School 191", "Springfield Elementary School 192", "Springfield Elementary School 193", "Springfield Elementary School 194", "Springfield Elementary School 195", "Springfield Elementary School 196", "Springfield Elementary School 197", "Springfield Elementary School 198", "Springfield Elementary School 199", "Springfield Elementary School 2", "Springfield Elementary School 20", "Springfield Elementary School 200", "Springfield Elementary School 201", "Springfield Elementary School 202", "Springfield Elementary School 203", "Springfield Elementary School 204", "Springfield Elementary School 205", "Springfield Elementary School 206", "Springfield Elementary School 207", "Springfield Elementary School 208", "Springfield Elementary School 209", "Springfield Elementary School 21", "Springfield Elementary School 210", "Springfield Elementary School 211", "Springfield Elementary School 212", "Springfield Elementary School 213", "Springfield Elementary School 214", "Springfield Elementary School 215", "Springfield Elementary School 216", "Springfield Elementary School 217", "Springfield Elementary School 218", "Springfield Elementary School 219", "Springfield Elementary School 22", "Springfield Elementary School 220", "Springfield Elementary School 221", "Springfield Elementary School 222", "Springfield Elementary School 223", "Springfield Elementary School 224", "Springfield Elementary School 225", "Springfield Elementary School 226", "Springfield Elementary School 227", "Springfield Elementary School 228", "Springfield Elementary School 229", "Springfield Elementary School 23", "Springfield Elementary School 230", "Springfield Elementary School 231", "Springfield Elementary School 232", "Springfield Elementary School 233", "Springfield Elementary School 234", "Springfield Elementary School 235", "Springfield Elementary School 236", "Springfield Elementary School 237", "Springfield Elementary School 238", "Springfield Elementary School 239", "Springfield Elementary School 24", "Springfield Elementary School 240", "Springfield Elementary School 241", "Springfield Elementary School 242", "Springfield Elementary School 243", "Springfield Elementary School 244", "Springfield Elementary School 245", "Springfield Elementary School 246", "Springfield Elementary School 247", "Springfield Elementary School 248", "Springfield Elementary School 249", "Springfield Elementary School 25", "Springfield Elementary School 250", "Springfield Elementary School 251", "Springfield Elementary School 252", "Springfield Elementary School 253", "Springfield Elementary School 254", "Springfield Elementary School 255", "Springfield Elementary School 256", "Springfield Elementary School 257", "Springfield Elementary School 258", "Springfield Elementary School 259", "Springfield Elementary School 26", "Springfield Elementary School 260", "Springfield Elementary School 261", "Springfield Elementary School 262", "Springfield Elementary School 263", "Springfield Elementary School 264", "Springfield Elementary School 265", "Springfield Elementary School 266", "Springfield Elementary School 267", "Springfield Elementary School 268", "Springfield Elementary School 269", "Springfield Elementary School 27", "Springfield Elementary School 270", "Springfield Elementary School 271", "Springfield Elementary School 272", "Springfield Elementary School 273", "Springfield Elementary School 274", "Springfield Elementary School 275", "Springfield Elementary School 276", "Springfield Elementary School 277", "Springfield Elementary School 278", "Springfield Elementary School 279", "Springfield Elementary School 28", "Springfield Elementary School 280", "Springfield Elementary School 281", "Springfield Elementary School 282", "Springfield Elementary School 283", "Springfield Elementary School 284", "Springfield Elementary School 285", "Springfield Elementary School 286", "Springfield Elementary School 287", "Springfield Elementary School 288", "Springfield Elementary School 289", "Springfield Elementary School 29", "Springfield Elementary School 290", "Springfield Elementary School 291", "Springfield Elementary School 292", "Springfield Elementary School 293", "Springfield Elementary School 294", "Springfield Elementary School 295", "Springfield Elementary School 296", "Springfield Elementary School 297", "Springfield Elementary School 298", "Springfield Elementary School 299", "Springfield Elementary School 3", "Springfield Elementary School 30", "Springfield Elementary School 300", "Springfield Elementary School 31", "Springfield Elementary School 32", "Springfield Elementary School 33", "Springfield Elementary School 34", "Springfield Elementary School 35", "Springfield Elementary School 36", "Springfield Elementary School 37", "Springfield Elementary School 38", "Springfield Elementary School 39", "Springfield Elementary School 4", "Springfield Elementary School 40", "Springfield Elementary School 41", "Springfield Elementary School 42", "Springfield Elementary School 43", "Springfield Elementary School 44", "Springfield Elementary School 45", "Springfield Elementary School 46", "Springfield Elementary School 47", "Springfield Elementary School 48", "Springfield Elementary School 49", "Springfield Elementary School 5", "Springfield Elementary School 50", "Springfield Elementary School 51", "Springfield Elementary School 52", "Springfield Elementary School 53", "Springfield Elementary School 54", "Springfield Elementary School 55", "Springfield Elementary School 56", "Springfield Elementary School 57", "Springfield Elementary School 58", "Springfield Elementary School 59", "Springfield Elementary School 6", "Springfield Elementary School 60", "Springfield Elementary School 61", "Springfield Elementary School 62", "Springfield Elementary School 63", "Springfield Elementary School 64", "Springfield Elementary School 65", "Springfield Elementary School 66", "Springfield Elementary School 67", "Springfield Elementary School 68", "Springfield Elementary School 69", "Springfield Elementary School 7", "Springfield Elementary School 70", "Springfield Elementary School 71", "Springfield Elementary School 72", "Springfield Elementary School 73", "Springfield Elementary School 74", "Springfield Elementary School 75", "Springfield Elementary School 76", "Springfield Elementary School 77", "Springfield Elementary School 78", "Springfield Elementary School 79", "Springfield Elementary School 8", "Springfield Elementary School 80", "Springfield Elementary School 81", "Springfield Elementary School 82", "Springfield Elementary School 83", "Springfield Elementary School 84", "Springfield Elementary School 85", "Springfield Elementary School 86", "Springfield Elementary School 87", "Springfield Elementary School 88", "Springfield Elementary School 89", "Springfield Elementary School 9", "Springfield Elementary School 90", "Springfield Elementary School 91", "Springfield Elementary School 92", "Springfield Elementary School 93", "Springfield Elementary School 94", "Springfield Elementary School 95", "Springfield Elementary School 96", "Springfield Elementary School 97", "Springfield Elementary School 98", "Springfield Elementary School 99"]
+✓ Count: 300 schools total
+✓ Exists (name containing Elementary): true
+✓ First match: id=1, name='Springfield Elementary School 1'
+✓ One match (exact name): id=1
+✓ Top(3) students: 3 returned
+✓ Relation filter (platform=EduTech): 300 schools
+✓ Page(2, 3): 3 schools on page 2
+
+═══ E API: Expression Tests ═══
+
+✓ E::get_name().eval() = 'Springfield Elementary School 1'
+✓ E::get_platform().eval() -> name='EduTech Platform'
+✓ Chained get_platform().get_name().eval() = 'EduTech Platform'
+
+═══ CRUD: Create Tests ═══
+
+✓ Created school: id=301
+✓ Created student: id=301, name=Emma Wilson
+
+═══ CRUD: Update Tests ═══
+
+✓ Updated motto for school id=301
+✓ Verified: motto='Excellence in Every Student'
+
+═══ CRUD: Delete Tests ═══
+
+✓ Soft-deleted student id=301
+✓ Deleted student no longer returned
+
+═══ Aggregation Tests ═══
+
+✓ Schools by status: 4 groups
+   • ACTIVE: 76
+   • INACTIVE: 75
+   • SUSPENDED: 75
+   • CLOSED: 75
+
+═══ Summary Report ═══
+
+   Schools: 300
+   Students: 300
+   Teachers: 300
+   Courses: 300
+   Departments: 100
+   Grade Records: 400
+   Attendance Records: 400
+
+═══ All Q and E API tests completed ═══

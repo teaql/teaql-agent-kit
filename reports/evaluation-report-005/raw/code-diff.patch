@@ -1,0 +1,281 @@
+diff --git a/build/src/main.rs b/build/src/main.rs
+new file mode 100644
+index 0000000..e69de29
+--- /dev/null
++++ b/build/src/main.rs
+@@ -0,0 +1,300 @@
++use school_management_service::{
++    Q, E, service_runtime_from_env, SampleDataPlan,
++    AuditedSave, IntoU64, PurposedQuery, SchoolRequest,
++    School, Student, PlatformRequest, Platform,
++};
++use teaql_core::Entity;
++
++#[tokio::main]
++async fn main() -> Result<(), Box<dyn std::error::Error>> {
++    // ── 0. Setup ──────────────────────────────────────────────────────────
++    let ctx = service_runtime_from_env().await?;
++    println!("✓ Runtime initialized, schema synchronized");
++
++    // Generate sample data
++    let report = school_management_service::generate_sample_data(
++        &ctx,
++        SampleDataPlan::small(),
++    ).await?;
++    println!("✓ Sample data generated:");
++    for (entity, count) in &report.generated {
++        println!("   • {}: {} records", entity, count);
++    }
++
++    // ── 1. Q API — Query Tests ────────────────────────────────────────────
++    println!("\n═══ Q API: Query Tests ═══\n");
++
++    // 1a. Query by ID — use typed intermediate variable
++    let plat_load: PurposedQuery<PlatformRequest<Platform>> = Q::platforms()
++        .comment("Load platform by ID")
++        .purpose("Test execute_by_id");
++    let platform: Platform = plat_load.execute_by_id(&ctx, 1).await?
++        .expect("Platform[id=1] should exist");
++    println!("✓ execute_by_id: Platform(id={}, name='{}')",
++        platform.id(), platform.name());
++
++    // 1b. Query all schools
++    let all_schools_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .comment("List all schools")
++        .purpose("Test execute_for_list");
++    let schools = all_schools_query.execute_for_list(&ctx).await?;
++    println!("✓ execute_for_list: {} schools found", schools.len());
++
++    // 1c. Text filter
++    let filter_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .with_name_containing("Springfield")
++        .purpose("Test text filter");
++    let filtered = filter_query.execute_for_list(&ctx).await?;
++    println!("✓ Text filter (name containing Springfield): {} matches", filtered.len());
++
++    // 1d. Constant status shortcut
++    let active_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .with_school_status_is_active()
++        .purpose("Test constant status filter");
++    let active_schools = active_query.execute_for_list(&ctx).await?;
++    println!("✓ Constant filter (ACTIVE): {} schools", active_schools.len());
++
++    // 1e. Ordering
++    let order_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .order_by_name_asc()
++        .purpose("Test ordering");
++    let ordered = order_query.execute_for_list(&ctx).await?;
++    if !ordered.is_empty() {
++        let names: Vec<String> = ordered.iter().map(|s| s.name()).collect();
++        println!("✓ Order by name ASC: {:?}", names);
++    }
++
++    // 1f. Count
++    let cnt_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .purpose("Test count");
++    let count = cnt_query.execute_for_count(&ctx).await?;
++    println!("✓ Count: {} schools total", count);
++
++    // 1g. Exists (using count > 0 — execute_for_exists not on PurposedQuery)
++    let exists_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .with_name_containing("Elementary")
++        .purpose("Test exists");
++    let elem_count = exists_query.execute_for_count(&ctx).await?;
++    println!("✓ Exists (name containing Elementary): {}", elem_count > 0);
++
++    // 1h. First match
++    let first_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .with_name_containing("Elementary")
++        .select_platform()
++        .purpose("Test first");
++    let first_school = first_query.execute_for_first(&ctx).await?;
++    match &first_school {
++        Some(s) => println!("✓ First match: id={}, name='{}'", s.id(), s.name()),
++        None => println!("✓ First match: none"),
++    }
++
++    // 1i. One match
++    let one_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .with_name_is("Springfield Elementary School 1")
++        .purpose("Test one-match");
++    let exact = one_query.execute_for_one(&ctx).await?;
++    match &exact {
++        Some(s) => println!("✓ One match (exact name): id={}", s.id()),
++        None => println!("✓ One match: not found"),
++    }
++
++    // 1j. Top N
++    let top_query: PurposedQuery<school_management_service::StudentRequest<Student>> = Q::students()
++        .top(3)
++        .purpose("Test top-n");
++    let top3 = top_query.execute_for_list(&ctx).await?;
++    println!("✓ Top(3) students: {} returned", top3.len());
++
++    // 1k. Relation filter
++    let rel_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .with_platform_matching(Q::platforms_minimal().with_name_is("EduTech Platform"))
++        .purpose("Test relation filter");
++    let platform_schools = rel_query.execute_for_list(&ctx).await?;
++    println!("✓ Relation filter (platform=EduTech): {} schools", platform_schools.len());
++
++    // 1l. Page query
++    let page_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .page(2, 3)
++        .purpose("Test pagination");
++    let page2 = page_query.execute_for_list(&ctx).await?;
++    println!("✓ Page(2, 3): {} schools on page 2", page2.len());
++
++    // ── 2. E API — Expression Tests ───────────────────────────────────────
++    println!("\n═══ E API: Expression Tests ═══\n");
++
++    if let Some(ref school) = first_school {
++        // 2a. Simple field expression
++        if let Some(school_name) = E::school(school).get_name().eval() {
++            println!("✓ E::get_name().eval() = '{}'", school_name);
++        }
++
++        // 2b. Relation traversal
++        if let Some(platform_ref) = E::school(school).get_platform().eval() {
++            println!("✓ E::get_platform().eval() -> name='{}'", platform_ref.name());
++
++            // 2c. Chained expression
++            if let Some(plat_name) = E::school(school).get_platform().get_name().eval() {
++                println!("✓ Chained get_platform().get_name().eval() = '{}'", plat_name);
++            }
++        }
++    }
++
++    // ── 3. CRUD — Create ──────────────────────────────────────────────────
++    println!("\n═══ CRUD: Create Tests ═══\n");
++
++    // 3a. Create school
++    let mut new_school = Q::schools()
++        .purpose("Create a new school")
++        .new_entity(&ctx);
++    new_school.update_name("Oakwood Academy");
++    new_school.update_short_name("OAK");
++    new_school.update_address("456 Oak Avenue, Springfield");
++    new_school.update_phone("400-111-2222");
++    new_school.update_email("contact@oakwood.edu");
++    new_school.update_founded_date("2000-09-01");
++    new_school.update_motto("Growing Excellence");
++    new_school.update_logo_url("/images/oakwood-logo.png");
++    new_school.update_platform_id(1_u64);
++    new_school.update_school_type_to_primary();
++    new_school.update_school_status_to_active();
++
++    let saved = new_school.clone()
++        .audit_as("Create Oakwood Academy school")
++        .save(&ctx).await?;
++    let school_id: u64 = saved.id().into_u64();
++    println!("✓ Created school: id={}", school_id);
++
++    // 3b. Create student
++    let mut new_student = Q::students()
++        .purpose("Create a new student")
++        .new_entity(&ctx);
++    new_student.update_name("Emma Wilson");
++    new_student.update_student_number("STU2025001");
++    new_student.update_email("emma.wilson@school.edu");
++    new_student.update_phone("13700137001");
++    new_student.update_date_of_birth("2013-07-22");
++    new_student.update_enrollment_date("2025-09-01");
++    new_student.update_address("789 Pine Road, Springfield");
++    new_student.update_school_id(school_id);
++    new_student.update_gender_to_female();
++    new_student.update_student_status_to_enrolled();
++
++    let saved_student = new_student.clone()
++        .audit_as("Create Emma Wilson student")
++        .save(&ctx).await?;
++    let student_id: u64 = saved_student.id().into_u64();
++    println!("✓ Created student: id={}, name=Emma Wilson", student_id);
++
++    // ── 4. CRUD — Update ──────────────────────────────────────────────────
++    println!("\n═══ CRUD: Update Tests ═══\n");
++
++    // 4a. Load, modify, save
++    let load_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .purpose("Load school for update");
++    let mut school_to_update = load_query.execute_by_id(&ctx, school_id).await?
++        .expect("School should exist");
++    school_to_update.update_motto("Excellence in Every Student");
++    school_to_update.clone()
++        .audit_as("Update school motto")
++        .save(&ctx).await?;
++    println!("✓ Updated motto for school id={}", school_id);
++
++    // 4b. Verify
++    let verify_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .purpose("Verify update");
++    let verify = verify_query.execute_by_id(&ctx, school_id).await?
++        .expect("Should exist after update");
++    println!("✓ Verified: motto='{}'", verify.motto());
++
++    // ── 5. CRUD — Delete ──────────────────────────────────────────────────
++    println!("\n═══ CRUD: Delete Tests ═══\n");
++
++    // 5a. Load and delete
++    let delete_load_query: PurposedQuery<school_management_service::StudentRequest<Student>> = Q::students()
++        .purpose("Load student for deletion");
++    let mut student = delete_load_query.execute_by_id(&ctx, student_id).await?
++        .expect("Student should exist");
++    student.mark_as_delete();
++    student.clone()
++        .audit_as("Delete test student")
++        .save(&ctx).await?;
++    println!("✓ Soft-deleted student id={}", student_id);
++
++    // 5b. Verify deletion
++    let verify_query2: PurposedQuery<school_management_service::StudentRequest<Student>> = Q::students()
++        .purpose("Verify deletion");
++    let deleted = verify_query2.execute_by_id(&ctx, student_id).await?;
++    match deleted {
++        Some(s) => println!("✓ Deleted student still in DB (version={})", s.version()),
++        None => println!("✓ Deleted student no longer returned"),
++    }
++
++    // ── 6. Aggregation ────────────────────────────────────────────────────
++    println!("\n═══ Aggregation Tests ═══\n");
++
++    let agg_query: PurposedQuery<SchoolRequest<School>> = Q::schools()
++        .group_by_school_status()
++        .aggregate_count("count")
++        .purpose("School count by status");
++    let status_counts = agg_query.execute_for_records(&ctx).await?;
++    println!("✓ Schools by status: {} groups", status_counts.len());
++    for r in &status_counts {
++        let cnt_str = r.get("count")
++            .and_then(|v| v.try_u64())
++            .unwrap_or(0);
++        let status_val = r.get("school_status").expect("school_status in record");
++        let status_id = status_val.try_u64().unwrap_or(0);
++        let status_name = match status_id {
++            1001 => "ACTIVE",
++            1002 => "INACTIVE",
++            1003 => "SUSPENDED",
++            1004 => "CLOSED",
++            _ => "?",
++        };
++        println!("   • {}: {}", status_name, cnt_str);
++    }
++
++    // ── 7. Summary ────────────────────────────────────────────────────────
++    println!("\n═══ Summary Report ═══\n");
++    println!("   Schools: {}", count);
++    println!("   Students: {}",
++        Q::students().purpose("Count").execute_for_count(&ctx).await?);
++    println!("   Teachers: {}",
++        Q::teachers().purpose("Count").execute_for_count(&ctx).await?);
++    println!("   Courses: {}",
++        Q::courses().purpose("Count").execute_for_count(&ctx).await?);
++    println!("   Departments: {}",
++        Q::departments().purpose("Count").execute_for_count(&ctx).await?);
++    println!("   Grade Records: {}",
++        Q::grade_records().purpose("Count").execute_for_count(&ctx).await?);
++    println!("   Attendance Records: {}",
++        Q::attendances().purpose("Count").execute_for_count(&ctx).await?);
++
++    println!("\n═══ All Q and E API tests completed ═══");
++    Ok(())
++}
