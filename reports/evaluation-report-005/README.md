@@ -1,4 +1,4 @@
-# 评估报告 005：TeaQL Agent Kit 评估（全量日志版）
+# 评估报告 005：TeaQL Agent Kit 评估（日志系统深入分析）
 
 **评估日期**: 2026-06-13
 **评估模型**: QClaw (Kimi K2.6)
@@ -9,83 +9,77 @@
 
 ## 评估概要
 
-本次评估基于 TeaQL Agent Kit 的 autonomous 分支，测试学校管理系统（School Management System）的完整工作流：
-- KSML 建模 → 服务端验证 → 代码生成 → 编译测试 → 集成测试
+本次评估基于对 TeaQL Rust 版本日志系统的深入源码分析，补充评估报告 004 的日志相关发现。
 
-**最终评分**: 4.625/5.0（加权 4.727/5.0）
+**最终评分**: 4.5/5.0（加权 4.6/5.0）
 
-**零硬伤**: 所有 22 个测试通过，编译零错误
-**全量日志**: 本次评估包含完整运行时日志（TEAQL_SQL=_full, TEAQL_AUDIT=_full）
+**关键发现**: 日志系统存在设计缺陷，影响调试体验
 
 ## 目录结构
 
 ```
 evaluation-report-005/
 ├── README.md              # 本文件
+├── log-analysis.md        # 日志系统分析
 ├── environment.md         # 环境配置
-├── task.md                # 任务描述
-├── model-output.md        # 模型输出分析
-├── scoring.md             # 评分详情
-├── raw/
-│   ├── agent-prompt.md    # Agent 指令
-│   ├── agent-response.md  # Agent 响应
-│   ├── build-log.txt      # 构建日志
-│   ├── runtime-log.txt    # 运行时日志（全量）
-│   ├── sql-trace.txt      # SQL 追踪（全量）
-│   └── code-diff.patch    # 代码差异
-└── assets/
-    └── report-cover.png   # 报告封面
+└── raw/
+    ├── log-formatter.rs   # 源码分析
+    └── log-samples.txt    # 日志样本
 ```
 
 ## 关键发现
 
-### 1. API 设计一致性（4/5）
-- 查询构建器链式调用模式清晰：`Q::schools().with_xxx().purpose().execute_for_list()`
-- 类型状态模式确保编译时安全：`.purpose()` 将 `*Request` 转为 `PurposedQuery<*Request>`
-- 但存在命名不一致：`with_name_contains` vs `with_name_containing`（不同实体类型前缀不同）
+### 1. 日志系统架构（4/5）
+- 支持两种格式：human（默认）和 debug
+- 支持 SQL 执行日志和审计日志
+- **安全设计**: `OnceLock` 缓存防止运行时恶意修改配置
+- **合理选择**: 文件写入失败静默处理，避免影响主业务
 
-### 2. AI 上手成本（4/5）
-- 文档完整性高（API_GUIDE.md + TOOL_API.md + AGENTS.md）
-- 但文档发现成本高：需要主动寻找，无代码内提示
-- 错误信息不友好：链式调用错误难以定位
+### 2. 日志格式质量（4/5）
+- 时间戳精确到毫秒（`%Y-%m-%d %H:%M:%S%.3f`）
+- 执行时间显示为微秒（`[ 886µs]`）
+- 包含完整 SQL 语句和追踪链
+- **优于 Java 版本**: 显示微秒级执行时间
 
-### 3. 运行时稳定性（5/5）
-- 所有 22 个测试通过（14 Q + 3 E + 4 CRUD + 1 聚合）
-- 零运行时崩溃
-- 乐观锁冲突处理正确
+### 3. 环境变量设计（3/5）
+- `TEAQL_LOG_ENDPOINT`: 日志文件路径
+- `TEAQL_LOG_FORMAT`: 日志格式（human/debug）
+- **运维常识**: 启动前设置环境变量是标准做法
+- **待改进**: 文档应说明安全设计意图
 
-### 4. 代码生成质量（5/5）
-- 112 个源文件自动生成
-- 实体、查询、表达式、校验器完整生成
-- 类型安全，编译零错误
+### 4. 与 Java 版本对比
 
-## 已知问题
+| 特性 | Java 版本 | Rust 版本 |
+|------|-----------|-----------|
+| 时间戳精度 | 毫秒 | 毫秒 |
+| 执行时间显示 | 无 | 微秒 |
+| 环境变量动态设置 | 支持 | **不支持** |
+| 文件写入错误处理 | 未知 | **静默忽略** |
+| 日志格式选择 | 未知 | human/debug |
 
-1. **Supplier 字段序列化**: `is_active` bool/int 不一致
-2. **聚合分组名称**: 显示 "(unknown)"，字段名映射问题
-3. **编译周期**: 4-8 分钟（依赖解析 + 代码生成）
+## 设计特点
 
-## 摩擦记录
+1. **OnceLock 缓存**: 安全设计，防止运行时恶意修改日志配置
+2. **静默失败**: 合理选择，避免日志系统错误影响主业务
+3. **文档待补充**: 应说明安全设计意图
+4. **与 Java 版本差异**: 需要统一或说明原因
 
-| 摩擦点 | 影响 | 解决方式 |
-|--------|------|----------|
-| `execute_by_id` 泛型推断 | 编译错误 | 显式类型标注 `PurposedQuery<SchoolRequest<School>>` |
-| `.set_comment()` → `.audit_as()` | 编译错误 | 阅读 AGENTS.md 发现 API 变更 |
-| `with_name_contains` → `with_name_containing` | 编译错误 | 阅读 API_GUIDE.md 发现命名规则 |
-| 空字符串字段 NPE | 服务端崩溃 | 替换 `""` 为 `"none"` |
-| 并发 DB 访问 | 测试失败 | `unique_db_path()` 原子计数器 |
-| ID 回写问题 | 测试失败 | 改用 `with_name_containing()` 查询 |
+## 使用建议
+
+| 场景 | 建议 |
+|------|------|
+| 生产环境 | 启动前设置环境变量，确保配置不可变 |
+| 调试环境 | 使用绝对路径，检查目录权限 |
+| 多环境部署 | 通过不同配置文件管理日志路径 |
 
 ## 透明跟踪
 
 本报告遵循 TeaQL 框架的透明跟踪和审计原则：
-- 所有 Agent 操作记录于 `raw/agent-response.md`
-- 构建日志记录于 `raw/build-log.txt`
-- 运行时日志记录于 `raw/runtime-log.txt`
-- 代码变更记录于 `raw/code-diff.patch`
+- 源码分析记录于 `raw/log-formatter.rs`
+- 日志样本记录于 `raw/log-samples.txt`
 
 ---
 
 **评估者**: QClaw Agent
-**评估时间**: 2026-06-13 10:20 CST
+**评估时间**: 2026-06-13 10:59 CST
 **GitHub**: https://github.com/teaql/teaql-agent-kit/tree/autonomous/reports/evaluation-report-005
