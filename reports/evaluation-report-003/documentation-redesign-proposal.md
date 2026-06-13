@@ -281,6 +281,308 @@ Run: cargo check && cargo test
 
 ---
 
+## Proposed Tool: `teaql query` CLI
+
+### Problem
+
+Even with improved documentation, AI agents must still:
+1. Read documentation to understand API patterns
+2. Guess which methods exist on which entities
+3. Try to compile, fail, read generated source, retry
+
+This is the #1 cause of compilation errors (e.g., `vehicle_statuses` vs `vehicle_status`).
+
+### Solution: Entity-Specific Code Generation CLI
+
+```bash
+teaql query <entity> <operation>
+```
+
+### Operations
+
+| Operation | Description | Output |
+|-----------|-------------|--------|
+| `create` | Create new entity | `new_entity()` + field updates + `audit_as().save()` |
+| `query` | Query entity list | `Q::<entities>()` + filters + `execute_for_list()` |
+| `query-one` | Query single entity | `Q::<entities>()` + filter + `execute_for_one()` |
+| `update` | Update entity fields | Load + `update_field()` + `audit_as().save()` |
+| `delete` | Soft delete entity | Load + `mark_as_delete()` + `audit_as().save()` |
+| `stats` | Aggregation query | `Q::<entities>()` + count/sum/group |
+| `relations` | List all relations | Show all loaded and filtered relations |
+| `fields` | List all fields | Show all fields with types and references |
+| `constants` | List constant values | Show all `_value` entries for constant objects |
+
+### Examples
+
+```bash
+# Create an employee
+teaql query employee create
+```
+
+Output:
+```rust
+// Create new employee
+use moving_company_service::{Q, E};
+
+let mut employee = Q::employees()
+    .purpose("Create new employee")
+    .new_entity(&ctx);
+
+employee.update_name("Wang Fang");
+employee.update_employee_number("EMP-2024-001");
+employee.update_phone("13900139001");
+employee.update_email("wangfang@swiftmove.com");
+employee.update_id_card_number("110108199005151234");
+employee.update_hire_date("2024-01-15");
+employee.update_address("Beijing Chaoyang District");
+employee.update_emergency_contact("Li Ming");
+employee.update_emergency_phone("13800138002");
+employee.update_photo_url("/img/employees/emp-001.jpg");
+// References (set one):
+// employee.update_gender_to_male();
+// employee.update_employment_status_to_active();
+// employee.update_job_position_to_moving_specialist();
+// employee.update_department(...);
+
+employee.audit_as("Register new employee").save(&ctx).await?;
+```
+
+```bash
+# Query employees with department
+teaql query employee query
+```
+
+Output:
+```rust
+// Query employees with relations
+use moving_company_service::{Q, E};
+
+let employees = Q::employees()
+    .select_self()
+    .select_department_with(Q::departments().select_self())
+    .select_gender_with(Q::genders().select_self())
+    .select_employment_status_with(Q::employment_statuses().select_self())
+    .select_job_position_with(Q::job_positions().select_self())
+    .comment("Load employees with relations")
+    .purpose("Employee directory")
+    .execute_for_list(&ctx)
+    .await?;
+```
+
+```bash
+# Query employees filtered by status
+teaql query employee query --filter status=active
+```
+
+Output:
+```rust
+// Query active employees
+let employees = Q::employees()
+    .select_self()
+    .with_employment_status_is_active()
+    .comment("Load active employees")
+    .purpose("Active employee list")
+    .execute_for_list(&ctx)
+    .await?;
+```
+
+```bash
+# Show all fields for employee
+teaql query employee fields
+```
+
+Output:
+```
+Entity: employee
+Table: employee_data
+Fields:
+  - name: String ("Wang Fang")
+  - employee_number: String ("EMP-2024-001")
+  - phone: String ("13900139001")
+  - email: String ("wangfang@swiftmove.com")
+  - id_card_number: String ("110108199005151234")
+  - hire_date: Date ("2024-01-15")
+  - address: String ("Beijing Chaoyang District")
+  - emergency_contact: String ("Li Ming")
+  - emergency_phone: String ("13800138002")
+  - photo_url: String ("/img/employees/emp-001.jpg")
+  - create_time: DateTime (createTime())
+  - update_time: DateTime (updateTime())
+References:
+  - gender → gender()
+  - employment_status → employment_status()
+  - job_position → job_position()
+  - department → department()
+  - merchant → merchant(context)
+```
+
+```bash
+# Show all relations for employee
+teaql query employee relations
+```
+
+Output:
+```
+Entity: employee
+Parent relations (N:1):
+  - merchant → merchant
+  - gender → gender
+  - employment_status → employment_status
+  - job_position → job_position
+  - department → department
+
+Child relations (1:N):
+  - work_assignments → work_assignment[]
+  - worked_hours → worked_hours[]
+  - bonuses → bonus[]
+  - leave_requests → leave_request[]
+  - employee_certifications → employee_certification[]
+  - employee_schedules → employee_schedule[]
+
+Loaded via:
+  .select_department_with(Q::departments().select_self())
+  .select_gender_with(Q::genders().select_self())
+  ...
+```
+
+### Benefits for AI Agents
+
+1. **No documentation reading needed** — CLI outputs exact code
+2. **No method guessing** — all field names from model
+3. **No compilation errors** — code is generated from model
+4. **Copy-paste ready** — output is valid Rust code
+5. **Instant feedback** — change model, re-run CLI, get updated code
+
+### Implementation
+
+Add to `cargo-teaql`:
+
+```bash
+cargo teaql query <model.xml> <entity> <operation> [--filter field=value]
+```
+
+The CLI reads the model.xml, looks up the entity definition, and generates the exact TeaQL code pattern.
+
+### Expected Impact
+
+| Metric | Current | With `teaql query` |
+|--------|---------|-------------------|
+| Time to write query code | 10-15 minutes | 30 seconds |
+| Compilation errors | 2-5 per query | 0 |
+| Documentation dependency | High | None |
+| AI agent autonomy | Medium | High |
+
+---
+
+## Proposed Tool: WebSocket Real-Time Model Service
+
+### Problem
+
+CLI tools require:
+1. Starting a new process per query
+2. Reading model.xml from disk each time
+3. No awareness of model changes during session
+
+AI agents work in long sessions where the model evolves. They need real-time access to model information without CLI overhead.
+
+### Solution: Persistent WebSocket Connection
+
+```
+AI Agent ←→ WebSocket ←→ TeaQL Service
+```
+
+### Protocol
+
+```json
+// Request
+{"cmd": "fields", "entity": "employee"}
+
+// Response
+{
+  "status": "ok",
+  "entity": "employee",
+  "fields": [
+    {"name": "name", "type": "String", "example": "Wang Fang"},
+    {"name": "employee_number", "type": "String", "example": "EMP-2024-001"},
+    ...
+  ],
+  "references": [
+    {"name": "gender", "target": "gender", "kind": "constant"},
+    {"name": "department", "target": "department", "kind": "business"}
+  ]
+}
+```
+
+### Commands
+
+| Command | Description | Response |
+|---------|-------------|----------|
+| `fields` | List all fields with types | Field list with examples |
+| `relations` | List all relations | Parent/child relations |
+| `constants` | List constant values | All `_value` entries |
+| `validate` | Validate current model | Errors, warnings, suggestions |
+| `fix` | Get fix for specific error | Copy-paste fix code |
+| `generate` | Generate code for operation | Ready-to-use Rust code |
+| `subscribe` | Subscribe to model changes | Real-time notifications |
+| `diff` | Show model changes | Before/after comparison |
+
+### Session Flow
+
+```
+1. Agent connects: ws://localhost:9527
+2. Agent sends: {"cmd": "fields", "entity": "employee"}
+3. Service returns field list
+4. Agent creates model
+5. Agent sends: {"cmd": "validate", "model": "current"}
+6. Service returns errors with fixes
+7. Agent fixes model
+8. Agent sends: {"cmd": "subscribe", "events": ["model_changed"]}
+9. Agent receives notification when model changes
+10. Agent auto-regenerates affected code
+```
+
+### Benefits Over CLI
+
+| Aspect | CLI | WebSocket |
+|--------|-----|-----------|
+| Startup overhead | Process per query | Persistent connection |
+| Model awareness | Reads from disk each time | In-memory, instant |
+| Change notifications | None | Real-time subscribe |
+| Parallel queries | Sequential | Concurrent |
+| IDE integration | Limited | Full |
+| AI agent session | Disconnect/reconnect | Persistent |
+
+### Integration with AI Agents
+
+```rust
+// AI agent code
+let teaql = TeaqlClient::connect("ws://localhost:9527").await?;
+
+// Get fields instantly
+let fields = teaql.fields("employee").await?;
+
+// Validate model
+let result = teaql.validate(&model_xml).await?;
+
+// Subscribe to changes
+teaql.subscribe("model_changed", |event| {
+    // Auto-regenerate affected code
+    regenerate_code(&event.changed_entities);
+}).await?;
+```
+
+### Expected Impact
+
+| Metric | With CLI | With WebSocket |
+|--------|----------|----------------|
+| Query latency | ~100ms | ~1ms |
+| Model change detection | Manual | Automatic |
+| AI session continuity | Broken | Persistent |
+| Multi-entity queries | Sequential | Parallel |
+| IDE plugin support | Basic | Full |
+
+---
+
 ## Implementation Plan
 
 ### Phase 1: Restructure existing content (1 week)
