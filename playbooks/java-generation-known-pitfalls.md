@@ -52,11 +52,11 @@ for example:
 Required command shape:
 
 ```bash
-mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib \
+mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib \
   -Dteaql.input=app-playground/models/model.xml \
   -Dteaql.output=app-playground/generate-lib
 
-mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace \
+mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace \
   -Dteaql.input=app-playground/models/model.xml \
   -Dteaql.workspaceDir=app-playground/java-workspace
 ```
@@ -103,13 +103,13 @@ the TeaQL version property, commonly:
 
 ```xml
 <properties>
-  <teaql.version>1.190-RELEASE</teaql.version>
+  <teaql.version>1.198-RELEASE</teaql.version>
 </properties>
 ```
 
 If `core/pom.xml`, `generate-lib` project files, or
 `java-workspace/pom.xml`/workspace build files contain different TeaQL runtime
-versions, align them before compiling or running. Prefer `1.190-RELEASE` or
+versions, align them before compiling or running. Prefer `1.198-RELEASE` or
 newer for Spring Boot starter based workspaces.
 
 If dependencies cannot be resolved, report the resolver failure and the missing
@@ -126,7 +126,7 @@ example:
 
 check the TeaQL Spring Boot starter version first. TeaQL Spring Boot starter
 versions before the `BaseEntitySerializer` fix can serialize `WebResponse.data`
-incorrectly. Upgrade the starter/runtime version to `1.190-RELEASE` or newer and
+incorrectly. Upgrade the starter/runtime version to `1.198-RELEASE` or newer and
 keep the generated library and workspace versions consistent.
 
 Verify with a real endpoint response after the application starts:
@@ -228,8 +228,8 @@ TeaQL service code remains read-only.
 
 | Category | Command |
 | --- | --- |
-| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
-| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.0.0:gen-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
+| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
+| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
 | Install generated library | `cd core && mvn install -DskipTests` |
 | Compile workspace | `cd java-workspace && mvn clean compile` |
 | Run app | `mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=19987"` |
