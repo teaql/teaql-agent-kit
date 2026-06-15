@@ -76,7 +76,13 @@ Run the validation tool:
 cargo-teaql eval model.xml
 ```
 *Tip: When errors occur, the CLI natively outputs a beautifully formatted Markdown report for easy reading and analysis.*
-- **If errors occur**: Read the output or Markdown report, then go straight to `agents/ERROR-FIX.md` and use the copy-paste fixes provided there.
+- **Prefer evaluate over rereading docs**: Evaluation is cheap and gives the
+  current model's exact errors. After each KSML fix, rerun evaluation
+  immediately.
+- **If errors occur**: Read the output or Markdown report first, then go
+  straight to `agents/ERROR-FIX.md` and use the copy-paste fixes provided
+  there. Consult long-form rules only for the specific rule named by the
+  report.
 - **If 0 errors**: Proceed to generation.
 
 ## Step 4: Generate the Workspace
