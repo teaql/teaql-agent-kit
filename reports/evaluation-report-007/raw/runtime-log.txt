@@ -1,0 +1,20 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.39s
+     Running `target/debug/school-service-workspace`
+=== A-003 School Management System - TeaQL API Demo ===
+
+[1] Runtime initialized (schema + seed data loaded)
+[2] Platforms found: 1 (expected: 1)
+    Platform: id=1, name=Standard Education Platform
+[3] School types found: 2 (expected: 2)
+    SchoolType: id=1001, name=Primary, code=PRIMARY
+    SchoolType: id=1002, name=Secondary, code=SECONDARY
+[4] E API: SchoolType name=Some("Primary"), code=Some("PRIMARY")
+[5] Created new School: name='Riverside Secondary Academy'
+[6] Loaded school: name=Riverside Secondary Academy, principal=Prof. James Liu, address=456 River Road, Riverside
+[7] Primary schools: 0, Secondary schools: 1
+[8] Counts: 1 platforms, 2 school types, 1 schools
+[9] School 'Riverside Secondary Academy' has is_secondary() = true
+[10] E API chained: platform name = Some("Standard Education Platform")
+    School type name = Some("Secondary"), code = Some("SECONDARY")
+
+=== All API demos completed successfully ===

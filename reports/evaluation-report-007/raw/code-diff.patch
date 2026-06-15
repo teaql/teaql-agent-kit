@@ -1,0 +1,223 @@
+=== Architecture Overview ===
+Generated library: lib/src/ (24 files)
+Hand-written: src/main.rs
+
+=== Generated file listing ===
+lib/src/e.rs
+lib/src/lib.rs
+lib/src/platform/behavior.rs
+lib/src/platform/checker.rs
+lib/src/platform/entity.rs
+lib/src/platform/expression.rs
+lib/src/platform/mod.rs
+lib/src/platform/request.rs
+lib/src/q.rs
+lib/src/request_support.rs
+lib/src/runtime.rs
+lib/src/sample_data.rs
+lib/src/school/behavior.rs
+lib/src/school/checker.rs
+lib/src/school/entity.rs
+lib/src/school/expression.rs
+lib/src/school/mod.rs
+lib/src/school/request.rs
+lib/src/school_type/behavior.rs
+lib/src/school_type/checker.rs
+lib/src/school_type/entity.rs
+lib/src/school_type/expression.rs
+lib/src/school_type/mod.rs
+lib/src/school_type/request.rs
+
+=== Workspace Cargo.toml ===
+# TEAQL WARNING: This project uses TeaQL. TeaQL was explicitly designed to PREVENT AI hallucinations and random guessing.
+# Do NOT apply traditional ORM logic here. You must strictly follow the generated API.
+[package]
+name = "school-service-workspace"
+version = "0.1.0"
+edition = "2021"
+description = "Application workspace for the TeaQL domain crate school-service"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+school_service = { package = "school-service", path = "lib" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+teaql-core = "4.0.3"
+=== Workspace src/lib.rs ===
+//! #  Service Workspace
+//!
+//! **Before writing queries**, read these generated documents:
+//! - [`build/API_GUIDE.md`](./build/API_GUIDE.md) — domain API (entities, filters, relations, E expressions)
+//! - [`build/TOOL_API.md`](./build/TOOL_API.md) — framework runtime (UserContext, SmartList, Save pipeline)
+
+pub use school_service::{teaql_core, E, Q};
+
+pub fn generated_domain_crate() -> &'static str {
+    "school-service"
+}
+=== Generated lib/Cargo.toml ===
+[package]
+name = "school-service"
+version = "0.1.0"
+edition = "2021"
+description = "Generated TeaQL service crate for school-service"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+log = "0.4"
+chrono = { version = "0.4", features = ["serde"] }
+rust_decimal = { version = "1", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+teaql-core = "4.0.3"
+teaql-macros = "4.0.3"
+teaql-runtime = "4.0.3"
+teaql-sql = "4.0.3"
+teaql-data-service = "4.0.3"
+teaql-tool-core = "1.0.0"
+teaql-provider-sqlite = "4.0.3"
+rusqlite = { version = "0.32", features = ["bundled", "chrono", "column_decltype"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+=== Hand-written src/main.rs ===
+use school_service::*;
+use teaql_core::Entity as _;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    println!("=== A-003 School Management System - TeaQL API Demo ===\n");
+
+    // Step 1: Initialize runtime (creates schema + initial_graph seed data)
+    let runtime = school_service::service_runtime_from_env().await?;
+    println!("[1] Runtime initialized (schema + seed data loaded)");
+
+    // Step 2: Q API - Query platforms
+    let platforms = Q::platforms()
+        .comment("Load all platforms")
+        .purpose("List platforms")
+        .execute_for_list(&runtime)
+        .await?;
+    println!("[2] Platforms found: {} (expected: 1)", platforms.len());
+    if let Some(platform) = platforms.first() {
+        println!("    Platform: id={}, name={}", platform.id(), platform.name());
+    }
+
+    // Step 3: Q API - Query school types (constants from initial_graph)
+    let school_types = Q::school_types()
+        .comment("Load all school types")
+        .purpose("List school types")
+        .execute_for_list(&runtime)
+        .await?;
+    println!("[3] School types found: {} (expected: 2)", school_types.len());
+    for st in &school_types {
+        println!("    SchoolType: id={}, name={}, code={}", st.id(), st.name(), st.code());
+    }
+
+    // Step 4: E API - Safe expression access on loaded entities
+    if let Some(st) = school_types.first() {
+        let st_name = E::school_type(st).get_name().eval();
+        let st_code = E::school_type(st).get_code().eval();
+        println!("[4] E API: SchoolType name={:?}, code={:?}", st_name, st_code);
+    }
+
+    // Step 5: Q API - Create and save a new School
+    let mut school = Q::schools()
+        .comment("Create a new school")
+        .purpose("Register school")
+        .new_entity(&runtime);
+
+    let platform = platforms.first().expect("Platform should exist");
+    school.update_name("Riverside Secondary Academy");
+    school.update_address("456 River Road, Riverside");
+    school.update_principal("Prof. James Liu");
+    school.update_student_count(680);
+    school.update_platform_id(platform.id());
+    school.update_school_type_to_secondary();
+
+    school.set_comment("Registering a new secondary school");
+    let _saved = school.audit_as("Admin registers Riverside Secondary Academy").save(&runtime).await?;
+    // ID is auto-generated by the runtime's ID space generator
+    // We'll query by name instead
+    let school_name = "Riverside Secondary Academy";
+    println!("[5] Created new School: name='{}'", school_name);
+
+    // Step 6: Q API - Query the newly created school by name
+    let new_school = Q::schools()
+        .with_name_is(school_name)
+        .comment("Load newly created school")
+        .purpose("Verify creation")
+        .execute_for_list(&runtime)
+        .await?;
+    if let Some(s) = new_school.first() {
+        println!("[6] Loaded school: name={}, principal={}, address={}", s.name(), s.principal(), s.address());
+    }
+
+    // Step 7: Q API - Filter by school type constant
+    let primary_schools = Q::schools()
+        .school_type_is_primary()
+        .comment("Filter primary schools")
+        .purpose("Filter by school type")
+        .execute_for_list(&runtime)
+        .await?;
+    let secondary_schools = Q::schools()
+        .school_type_is_secondary()
+        .comment("Filter secondary schools")
+        .purpose("Filter by school type")
+        .execute_for_list(&runtime)
+        .await?;
+    println!("[7] Primary schools: {}, Secondary schools: {}", primary_schools.len(), secondary_schools.len());
+
+    // Step 8: Q API - Aggregation counts
+    let platform_count = Q::platforms()
+        .comment("Count platforms")
+        .purpose("Statistics")
+        .execute_for_count(&runtime)
+        .await?;
+    let school_type_count = Q::school_types()
+        .comment("Count school types")
+        .purpose("Statistics")
+        .execute_for_count(&runtime)
+        .await?;
+    let school_count = Q::schools()
+        .comment("Count all schools")
+        .purpose("Statistics")
+        .execute_for_count(&runtime)
+        .await?;
+    println!("[8] Counts: {} platforms, {} school types, {} schools", platform_count, school_type_count, school_count);
+
+    // Step 9: Verify school_type constant helpers on a loaded school
+    if let Some(s) = new_school.first() {
+        let is_secondary = s.school_type_is_secondary();
+        println!("[9] School '{}' has is_secondary() = {}", s.name(), is_secondary);
+    }
+
+    // Step 10: E API - Chain through relations
+    if let Some(s) = new_school.first() {
+        // Load with relations
+        let schools_with_rel = Q::schools()
+            .with_id_is(s.id())
+            .select_platform_with(Q::platforms()
+                .comment("Load platform details")
+                .select_self())
+            .select_school_type_with(Q::school_types()
+                .comment("Load school type details")
+                .select_self())
+            .comment("Load school with relations")
+            .purpose("Test relation loading")
+            .execute_for_list(&runtime)
+            .await?;
+
+        if let Some(s_rel) = schools_with_rel.first() {
+            if let Some(plat) = s_rel.platform() {
+                let p_name = E::platform(plat).get_name().eval();
+                println!("[10] E API chained: platform name = {:?}", p_name);
+            }
+            if let Some(st) = s_rel.school_type() {
+                let st_name = E::school_type(st).get_name().eval();
+                let st_code = E::school_type(st).get_code().eval();
+                println!("    School type name = {:?}, code = {:?}", st_name, st_code);
+            }
+        }
+    }
+
+    println!("\n=== All API demos completed successfully ===");
+    Ok(())
+}
