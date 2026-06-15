@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>TeaQL 评估报告 #007 · 小红书版</title>
+  <style>
+    @page { size: A4 portrait; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #f5f5f0;
+      display: flex; flex-direction: column; align-items: center; gap: 24px;
+      padding: 24px 0; font-family: "PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+      color: #1a1a1a;
+    }
+    .card {
+      background: #fff;
+      width: 680px; min-height: 900px;
+      padding: 56px 64px;
+      border-radius: 16px;
+      box-shadow: 0 2px 20px rgba(0,0,0,.06);
+      display: flex; flex-direction: column; position: relative;
+      page-break-after: always; break-inside: avoid;
+    }
+
+    /* ===== Cover ===== */
+    .cover-tag {
+      font-size: 12px; color: #8a8a8a; letter-spacing: 3px;
+      border-bottom: 1px solid #e5e5e0; padding-bottom: 18px; margin-bottom: 60px;
+    }
+    .cover-title {
+      font-size: 54px; font-weight: 300; line-height: 1.15; color: #111;
+      margin-bottom: 48px;
+    }
+    .cover-title em { font-style: normal; font-weight: 500; }
+    .cover-t {
+      width: 52px; height: 52px;
+      border: 2px solid #8aaa78;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 30px; color: #8aaa78; font-weight: 300;
+      margin-bottom: 48px;
+    }
+    .cover-number {
+      font-size: 40px; font-weight: 200; color: #111;
+      margin-bottom: 16px;
+    }
+    .cover-line {
+      width: 48px; height: 2px; background: #8aaa78; margin-bottom: 32px;
+    }
+    .cover-subtitle {
+      font-size: 18px; line-height: 1.5; color: #333; margin-bottom: 8px;
+    }
+    .cover-subtitle2 {
+      font-size: 14px; color: #888; margin-bottom: auto;
+    }
+    .cover-footer {
+      border-top: 1px solid #eee; padding-top: 20px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .cover-footer-text {
+      font-size: 11px; letter-spacing: 1.5px; color: #666;
+    }
+
+    /* ===== Content ===== */
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: #999;
+      border-bottom: 1px solid #eee; padding-bottom: 14px; margin-bottom: 36px;
+    }
+    .page-header .label { font-weight: 600; color: #555; letter-spacing: 1px; }
+
+    .section-title {
+      font-size: 28px; font-weight: 400; color: #111;
+      margin: 0 0 24px 0; line-height: 1.3;
+    }
+    .section-title .emoji { margin-right: 12px; font-style: normal; }
+
+    .subsection-title {
+      font-size: 16px; font-weight: 600; color: #222;
+      margin: 24px 0 12px 0;
+    }
+    .subsection-title .emoji { margin-right: 8px; }
+
+    p { font-size: 15px; line-height: 1.8; color: #444; margin-bottom: 14px; }
+    p.small { font-size: 13px; color: #888; }
+
+    .highlight-text {
+      background: linear-gradient(180deg, transparent 50%, #e8f0e0 50%);
+      padding: 0 4px; font-weight: 500; color: #111;
+    }
+
+    /* ===== Stats cards ===== */
+    .stat-row {
+      display: flex; gap: 12px; margin: 16px 0;
+    }
+    .stat-card {
+      flex: 1; background: #f9f9f5; border-radius: 12px; padding: 16px; text-align: center;
+    }
+    .stat-card .num {
+      font-size: 28px; font-weight: 400; color: #8aaa78; line-height: 1.2;
+    }
+    .stat-card .lbl { font-size: 12px; color: #888; margin-top: 4px; }
+
+    /* ===== Info items ===== */
+    .info-item {
+      display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px;
+    }
+    .info-item:last-child { border: none; }
+    .info-item .k { flex: 0 0 100px; font-weight: 600; color: #333; }
+    .info-item .v { flex: 1; color: #555; }
+
+    /* ===== Savings ===== */
+    .saving-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .saving-item:first-child { border-top: 2px solid #e5e0d0; padding-top: 16px; }
+    .saving-item .icon { font-size: 24px; }
+    .saving-item .category { flex: 0 0 130px; font-weight: 600; font-size: 14px; color: #222; }
+    .saving-item .detail { flex: 1; font-size: 13px; color: #555; line-height: 1.5; }
+    .saving-item .pct { font-size: 20px; font-weight: 500; color: #8aaa78; }
+
+    /* ===== Audit flow ===== */
+    .flow {
+      background: #f9f9f5; border-radius: 12px; padding: 20px; margin: 16px 0;
+    }
+    .flow .flow-label { font-size: 11px; color: #aaa; letter-spacing: 1px; margin-bottom: 10px; }
+    .flow .flow-steps {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px;
+    }
+    .flow .flow-steps .tag {
+      background: #eef0ea; padding: 4px 10px; border-radius: 6px; font-family: monospace; font-size: 12px; color: #444;
+    }
+    .flow .flow-steps .arrow { color: #8aaa78; font-size: 16px; }
+
+    /* ===== Score ===== */
+    .score-big {
+      text-align: center; margin: 32px 0;
+    }
+    .score-big .num { font-size: 64px; font-weight: 200; color: #111; }
+    .score-big .denom { font-size: 24px; color: #888; }
+    .score-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0;
+    }
+    .score-item {
+      background: #f9f9f5; border-radius: 12px; padding: 16px;
+    }
+    .score-item .dim { font-size: 13px; color: #555; margin-bottom: 4px; }
+    .score-item .val { font-size: 22px; font-weight: 400; color: #8aaa78; }
+
+    /* ===== Badge ===== */
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+    .badge-green { background: #8aaa78; color: #fff; }
+
+    /* ===== Code inline ===== */
+    code {
+      font-family: "SF Mono","JetBrains Mono",monospace; font-size: 13px;
+      background: #f0ede8; padding: 1px 6px; border-radius: 4px; color: #333;
+    }
+
+    /* ===== Blockquote ===== */
+    blockquote {
+      font-size: 15px; font-weight: 400; color: #555;
+      border-left: 3px solid #8aaa78;
+      padding: 12px 0 12px 20px; margin: 20px 0;
+      background: #f9f9f5; border-radius: 0 8px 8px 0;
+    }
+
+    /* ===== Numbered list big ===== */
+    .step-list {
+      counter-reset: step; list-style: none; padding: 0; margin: 12px 0;
+    }
+    .step-list li {
+      counter-increment: step; padding: 8px 0 8px 36px; position: relative;
+      font-size: 14px; color: #444; line-height: 1.5; border-bottom: 1px solid #f5f5f0;
+    }
+    .step-list li::before {
+      content: counter(step); position: absolute; left: 0;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #eef0ea; color: #8aaa78; font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ===== Two-col ===== */
+    .two-col { display: flex; gap: 16px; margin: 16px 0; }
+    .two-col > div { flex: 1; }
+    .two-col h4 { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 8px; }
+    .two-col ul { padding-left: 16px; font-size: 13px; color: #555; line-height: 1.7; }
+
+    /* ===== Footer ===== */
+    .page-num {
+      position: absolute; bottom: 32px; right: 64px;
+      font-size: 12px; color: #bbb;
+    }
+    .page-footer-text {
+      position: absolute; bottom: 32px; left: 64px;
+      font-size: 11px; color: #ddd; letter-spacing: 1px;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; gap: 0; }
+      .card { box-shadow: none; border-radius: 0; break-after: page; width: 210mm; min-height: 297mm; padding: 20mm 25mm; }
+    }
+    @media (max-width: 700px) {
+      .card { width: 96vw; min-height: auto; padding: 32px 24px; border-radius: 12px; }
+      .cover-title { font-size: 36px; }
+      .cover-number { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== PAGE 0: 封面 ===== -->
+<div class="card">
+  <div class="cover-tag">连续评估系列 · CONTINUOUS EVALUATION</div>
+  <div class="cover-title">TeaQL<br /><em>评估报告</em></div>
+  <div class="cover-t">T</div>
+  <div class="cover-number">#007</div>
+  <div class="cover-line"></div>
+  <p class="cover-subtitle">从零构建 TeaQL 学校管理系统</p>
+  <p class="cover-subtitle2">KSML 建模 · 代码生成 · Q/E API · 审计追踪 · 运行时验证</p>
+  <div style="flex:1;"></div>
+  <div class="cover-footer">
+    <div class="cover-footer-text">Agent 工作流 &nbsp;·&nbsp; 约束 &nbsp;·&nbsp; 审计线索</div>
+    <div style="font-size:10px;color:#ccc;">2026.06.15</div>
+  </div>
+  <div class="page-num">封面</div>
+</div>
+
+<!-- ===== PAGE 1: 报告速览 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">📋</span>报告速览</div>
+
+  <div class="subsection-title">🎯 评估目标</div>
+  <p>检验 AI Agent 使用 TeaQL autonomous 分支工作流，<span class="highlight-text">从零构建一个可编译、可运行、可审计</span>的 Rust 学校管理系统所需的能力和表现。</p>
+
+  <div class="subsection-title">🏗️ 项目构成</div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">3</div><div class="lbl">实体</div></div>
+    <div class="stat-card"><div class="num">24</div><div class="lbl">Rust 源文件</div></div>
+    <div class="stat-card"><div class="num">3,500+</div><div class="lbl">生成代码行</div></div>
+    <div class="stat-card"><div class="num">10</div><div class="lbl">测试步骤</div></div>
+  </div>
+
+  <div class="subsection-title">🔧 技术栈</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;">
+    <span class="badge badge-green">TeaQL 1.0.0</span>
+    <span class="badge badge-green">teaql-core 4.0.3</span>
+    <span class="badge badge-green">Rust 1.94.1</span>
+    <span class="badge badge-green">SQLite 3.51.3</span>
+    <span class="badge badge-green">DeepSeek V4</span>
+  </div>
+
+  <div class="subsection-title">🗂️ 报告内容</div>
+  <p>评估环境 · Token 节省分析 · 审计机制 · 运行时日志 · 评分结果 · 总结</p>
+
+  <blockquote>"不做不必要的计算，不浪费注意力，不消耗信任。"</blockquote>
+
+  <div class="page-num">1</div>
+</div>
+
+<!-- ===== PAGE 2: 评估环境 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">🖥️</span>评估环境</div>
+
+  <p>本次评估刻意选择了 <span class="highlight-text">一台 10 年前的 Intel MacBook Pro</span>（而非高端工作站），目的是验证这套工作流在普通工程师设备上的实用性。</p>
+
+  <div class="subsection-title">💻 硬件</div>
+  <div class="info-item"><div class="k">设备</div><div class="v">MacBook Pro 15" Mid 2015</div></div>
+  <div class="info-item"><div class="k">CPU</div><div class="v">Intel Core i7 四核</div></div>
+  <div class="info-item"><div class="k">内存</div><div class="v">16 GB</div></div>
+  <div class="info-item"><div class="k">显卡</div><div class="v">未使用独立 GPU</div></div>
+
+  <div class="subsection-title">📦 软件</div>
+  <div class="info-item"><div class="k">系统</div><div class="v">macOS 12.7.6</div></div>
+  <div class="info-item"><div class="k">Rust</div><div class="v">1.94.1 (Homebrew)</div></div>
+  <div class="info-item"><div class="k">TeaQL CLI</div><div class="v">cargo-teaql 1.0.0</div></div>
+  <div class="info-item"><div class="k">运行时</div><div class="v">teaql-core 4.0.3</div></div>
+  <div class="info-item"><div class="k">数据库</div><div class="v">SQLite 3.51.3 (bundled)</div></div>
+
+  <div class="subsection-title">🤖 Agent</div>
+  <div class="info-item"><div class="k">运行时</div><div class="v">QClaw (OpenClaw) + lossless-claw 上下文管理</div></div>
+  <div class="info-item"><div class="k">模型</div><div class="v">DeepSeek V4 Flash (池化)</div></div>
+  <div class="info-item"><div class="k">模式</div><div class="v">自主构建（无人工干预）</div></div>
+
+  <div class="stat-row" style="margin-top:16px;">
+    <div class="stat-card"><div class="num">1m 17s</div><div class="lbl">冷编译时长</div></div>
+    <div class="stat-card"><div class="num">395 MB</div><div class="lbl">调试版输出</div></div>
+  </div>
+
+  <div class="page-num">2</div>
+</div>
+
+<!-- ===== PAGE 3: Token 节省分析 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">⚡</span>Token 节省分析</div>
+
+  <p>TeaQL 的核心设计理念之一是 <span class="highlight-text">「能量意识」</span>——避免不必要的计算、注意力和 Token 消耗。在 AI Agent 开发中，这直接体现为可量化的 Token 节省。</p>
+
+  <div class="saving-item">
+    <div class="icon">📄</div>
+    <div class="category">样板代码消除</div>
+    <div class="detail">50 行的 KSML 模型 → 24 个 Rust 源文件 (3,500+ 行)。无需手写 CRUD、序列化、SQL。</div>
+    <div class="pct">~95%</div>
+  </div>
+  <div class="saving-item">
+    <div class="icon">🔍</div>
+    <div class="category">API 发现成本</div>
+    <div class="detail"><code>update_name()</code>、<code>with_name_is()</code>、<code>execute_for_list()</code> 命名一致，Agent 只需读一次 entity.rs，不再猜方法名。</div>
+    <div class="pct">~60%</div>
+  </div>
+  <div class="saving-item">
+    <div class="icon">🛡️</div>
+    <div class="category">审计样板</div>
+    <div class="detail"><code>.purpose("原因").comment("说明")</code> 代替手写日志、监控、审计代码。</div>
+    <div class="pct">~80%</div>
+  </div>
+  <div class="saving-item">
+    <div class="icon">🗄️</div>
+    <div class="category">Schema & 迁移</div>
+    <div class="detail"><code>service_runtime_from_env()</code> 自动处理建表 + 种子数据 + 连接池。零迁移脚本。</div>
+    <div class="pct">~90%</div>
+  </div>
+  <div class="saving-item">
+    <div class="icon">💬</div>
+    <div class="category">上下文压缩</div>
+    <div class="detail">lossless-claw 将 10,000+ token 对话压缩为结构化摘要，保留决策和代码变更。</div>
+    <div class="pct">~70%</div>
+  </div>
+  <div class="saving-item">
+    <div class="icon">🐛</div>
+    <div class="category">错误恢复</div>
+    <div class="detail">生成的 entity.rs 防止幻觉方法调用。平均修复迭代：<strong>1 次（修了个变量名）</strong>。</div>
+    <div class="pct">~50%</div>
+  </div>
+
+  <p style="margin-top:16px;"><strong>整体估算：</strong>本次构建相比手写 Rust 业务逻辑服务，总计节省约 <span class="highlight-text">75–85%</span> 的 Token 消耗。</p>
+
+  <blockquote>TeaQL 让 Agent 把 Token 花在「业务意图」上，而不是「样板代码」上。</blockquote>
+
+  <div class="page-num">3</div>
+</div>
+
+<!-- ===== PAGE 4: 透明追踪 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">🔍</span>透明追踪 & 审计</div>
+
+  <p>TeaQL 的审计系统核心原则：<span class="highlight-text">每一次数据库操作都应该可解释</span>。从业务意图到 SQL 执行，整条链路透明、可审查。</p>
+
+  <div class="subsection-title">🗺️ 审计链路</div>
+
+  <div class="flow">
+    <div class="flow-label">意图 → 查询 → 持久化 → 追踪</div>
+    <div class="flow-steps">
+      <span class="tag">.purpose("列出活跃学校")</span>
+      <span class="arrow">→</span>
+      <span class="tag">.comment("按状态过滤")</span>
+      <span class="arrow">→</span>
+      <span class="tag">.execute_for_list()</span>
+      <span class="arrow">→</span>
+      <span class="tag">SQL Traces</span>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-label">操作人 → 操作 → 保存 → 审计记录</div>
+    <div class="flow-steps">
+      <span class="tag">audit_as("管理员注册学校")</span>
+      <span class="arrow">→</span>
+      <span class="tag">.save()</span>
+      <span class="arrow">→</span>
+      <span class="tag">audit_data 表插入</span>
+      <span class="arrow">→</span>
+      <span class="tag">变更历史保存</span>
+    </div>
+  </div>
+
+  <div class="subsection-title">📂 本报告的证据链</div>
+  <p>每一层都保留了原始数据，支持完整的溯因分析：</p>
+  <div class="info-item"><div class="k">🧠 提示</div><div class="v"><code>raw/agent-prompt.md</code> — 完整任务指令</div></div>
+  <div class="info-item"><div class="k">🤖 响应</div><div class="v"><code>raw/agent-response.md</code> — Agent 决策过程</div></div>
+  <div class="info-item"><div class="k">🔨 构建</div><div class="v"><code>raw/build-log.txt</code> — cargo 完整输出</div></div>
+  <div class="info-item"><div class="k">▶️ 运行</div><div class="v"><code>raw/runtime-log.txt</code> — 10 步演示输出</div></div>
+  <div class="info-item"><div class="k">📝 代码</div><div class="v"><code>raw/code-diff.patch</code> — 生成 + 手写代码</div></div>
+
+  <div class="subsection-title">🔎 可以回答的问题</div>
+  <ul style="font-size:13px;color:#555;line-height:1.7;padding-left:18px;margin-top:4px;">
+    <li>Agent 有没有遵守 AGENTS.md 规则？→ 查 runtime 日志中的 purpose/comment</li>
+    <li>Agent 有没有猜方法名？→ 对比 entity.rs 与 main.rs 的调用</li>
+    <li>Agent 有没有幻觉 API？→ 查 build 日志中的编译错误</li>
+    <li>审计链路是否完整？→ 查 .audit_as() 调用点</li>
+  </ul>
+
+  <div class="page-num">4</div>
+</div>
+
+<!-- ===== PAGE 5: 运行时日志 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">▶️</span>运行时验证</div>
+
+  <div class="subsection-title">10 步测试全部通过 ✅</div>
+
+  <ol class="step-list">
+    <li>运行时初始化（Schema + 种子数据自动加载）</li>
+    <li>查询平台：1 个 Standard Education Platform</li>
+    <li>查询学校类型：Primary + Secondary（各对应常量）</li>
+    <li>E API 访问常量字段：name=Primary, code=PRIMARY</li>
+    <li>创建新学校：Riverside Secondary Academy</li>
+    <li>按名称过滤加载学校 → 字段全部正确</li>
+    <li>按类型计数：Primary=0, Secondary=1</li>
+    <li>聚合查询：1 平台 / 2 类型 / 1 学校</li>
+    <li>实体方法 is_secondary() = true ✅</li>
+    <li>E API 链式跨关系：school→platform→name</li>
+  </ol>
+
+  <div class="subsection-title">📊 审计注释覆盖率</div>
+  <div style="display:flex;gap:12px;margin:12px 0;">
+    <div style="flex:1;text-align:center;background:#f9f9f5;padding:12px;border-radius:10px;">
+      <div style="font-size:24px;color:#8aaa78;font-weight:400;">7</div>
+      <div style="font-size:12px;color:#888;margin-top:4px;">.comment() 使用</div>
+    </div>
+    <div style="flex:1;text-align:center;background:#f9f9f5;padding:12px;border-radius:10px;">
+      <div style="font-size:24px;color:#8aaa78;font-weight:400;">7</div>
+      <div style="font-size:12px;color:#888;margin-top:4px;">.purpose() 使用</div>
+    </div>
+    <div style="flex:1;text-align:center;background:#f9f9f5;padding:12px;border-radius:10px;">
+      <div style="font-size:24px;color:#8aaa78;font-weight:400;">✓</div>
+      <div style="font-size:12px;color:#888;margin-top:4px;">audit_as 覆盖</div>
+    </div>
+  </div>
+
+  <p class="small">环境变量 TEAQL_SQL、TEAQL_SINK 已配置，SQL 追踪需要在特定运行时版本中验证输出。</p>
+
+  <div class="page-num">5</div>
+</div>
+
+<!-- ===== PAGE 6: 评估结果 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">🏆</span>评估结果</div>
+
+  <div class="score-big">
+    <div class="num">9.2</div>
+    <div class="denom">/ 10</div>
+  </div>
+
+  <div class="score-grid">
+    <div class="score-item"><div class="dim">项目理解</div><div class="val">9.0</div></div>
+    <div class="score-item"><div class="dim">TeaQL 规范遵从</div><div class="val">9.5</div></div>
+    <div class="score-item"><div class="dim">代码正确性</div><div class="val">10.0</div></div>
+    <div class="score-item"><div class="dim">可审计性</div><div class="val">8.5</div></div>
+    <div style="grid-column:1/-1;" class="score-item"><div class="dim">工程判断</div><div class="val">9.0</div></div>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h4>✅ 高亮表现</h4>
+      <ul>
+        <li>严格遵循 AGENTS.md 规则</li>
+        <li>读 entity.rs 找正确方法名（不猜）</li>
+        <li>每个查询都有 purpose+comment</li>
+        <li>保存操作有 audit_as</li>
+        <li>唯一编译修复：变量名</li>
+        <li>正确的 Relation 加载模式</li>
+      </ul>
+    </div>
+    <div>
+      <h4>📌 改进空间</h4>
+      <ul>
+        <li>SQL 追踪落地需适配版本</li>
+        <li>purpose 字符串可以更具体</li>
+        <li>Demo 使用 unwrap（非生产友好）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-num">6</div>
+</div>
+
+<!-- ===== PAGE 7: 洞察 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">💡</span>核心洞察</div>
+
+  <div class="subsection-title">Agent 在 TeaQL 框架下可以非常有效</div>
+  <p>只要给出项目专属文档和明确的约束规则。AGENTS.md 规则链（刷新 CLI → 读 entity.rs → purpose/comment → audit_as → 不编辑生成文件）形成了一套 <span class="highlight-text">自我纠错护栏</span>，能在 bug 进入生产之前拦截。</p>
+
+  <div class="subsection-title">年迈硬件 + 现代框架 = 实用</div>
+  <p>在一台 2015 年的 MacBook Pro 上，<span class="highlight-text">从零构建冷编译仅需 1 分 17 秒</span>，Agent 代码在编译通过后第一次运行即全部通过。验证了这套工作流在普通开发者设备上的实用性。</p>
+
+  <div class="subsection-title">TeaQL 为 Agent 评估而生</div>
+  <div class="two-col">
+    <div>
+      <h4>设计特性 → 评估优势</h4>
+      <ul>
+        <li><code>.purpose()</code> / <code>.comment()</code> — 查询语义可审查</li>
+        <li>生成 API — 命名一致性消除幻觉</li>
+        <li><code>.audit_as()</code> — 变更可追溯</li>
+        <li>SQL trace — 生成的 SQL 可取证</li>
+        <li>KSML + codegen — Agent 在边界内工作</li>
+      </ul>
+    </div>
+    <div>
+      <h4>版本栈（本报告）</h4>
+      <p style="font-size:13px;color:#555;font-family:monospace;line-height:1.8;">
+        cargo-teaql 1.0.0<br />
+        teaql-core 4.0.3<br />
+        rusqlite 0.32.1<br />
+        SQLite 3.51.3<br />
+        tokio 1.52.3<br />
+        serde 1.0.228
+      </p>
+    </div>
+  </div>
+
+  <div class="page-num">7</div>
+</div>
+
+<!-- ===== PAGE 8: 尾声 ===== -->
+<div class="card">
+  <div class="page-header"><span class="label">TeaQL 评估报告 #007</span><span>2026.06.15</span></div>
+  <div class="section-title"><span class="emoji">🔗</span>完整证据链</div>
+
+  <div class="info-item"><div class="k">🌐 官网</div><div class="v"><a href="https://teaql.io" style="color:#555;">teaql.io</a></div></div>
+  <div class="info-item"><div class="k">📂 开源</div><div class="v"><a href="https://github.com/teaql/teaql-agent-kit" style="color:#555;">github.com/teaql/teaql-agent-kit</a></div></div>
+  <div class="info-item"><div class="k">📁 报告路径</div><div class="v" style="font-size:12px;">reports/evaluation-report-007/</div></div>
+  <div class="info-item"><div class="k">📡 分支</div><div class="v">autonomous</div></div>
+  <div class="info-item"><div class="k">📝 Commit</div><div class="v" style="font-family:monospace;font-size:12px;">e681231c</div></div>
+
+  <div style="flex:1;"></div>
+
+  <blockquote style="border-left-color:#ddd;color:#888;font-size:14px;">
+    框定 token、text、test、trial、today、tomorrow ——<br />deterministic by design.
+  </blockquote>
+
+  <div style="margin-top:20px;display:flex;justify-content:center;">
+    <div style="width:40px;height:40px;border:2px solid #8aaa78;display:flex;justify-content:center;align-items:center;font-size:22px;color:#8aaa78;">T</div>
+  </div>
+
+  <div class="page-num">8</div>
+  <div class="page-footer-text">TeaQL 评估报告 #007</div>
+</div>
+
+</body>
+</html>
