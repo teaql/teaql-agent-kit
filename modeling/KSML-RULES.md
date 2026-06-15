@@ -7,6 +7,20 @@ language business descriptions into generated Java or Rust TeaQL projects.
 Source integrated and adapted from
 `openclaw-modeling-factory/prompts/ksml_rules_en_v2.md`.
 
+## 10-Second XML Shape Check
+
+Use this check before writing any KSML object:
+
+| Case | Correct shape |
+| --- | --- |
+| Business object fields | Fields are XML attributes: `<school name="Example School" phone="13800138000"/>` |
+| Constant object values | Values are `<_value>` child elements: `<school_type ...><_value id="1001" name="Primary" code="PRIMARY"/></school_type>` |
+| Common mistake | Do not write business fields as child elements: `<school><name>Example School</name></school>` |
+
+Business objects model persisted entities. Their fields are attributes on the
+object element. Constant objects define finite sets. Their allowed values are
+the only normal KSML child elements, and those children must be `<_value>`.
+
 ## Critical Rules
 
 ### Only Constant Objects Have `id="id()"`
