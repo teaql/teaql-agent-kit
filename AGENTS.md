@@ -5,11 +5,16 @@
 1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
 2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
 3. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
-4. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
-5. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
-6. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
-7. **Refresh TeaQL clients before generation**: Do not reuse an older local TeaQL client just because it worked before. Before evaluation or generation, verify the required versions in this repository and use Java `io.teaql:teaql-maven-plugin:1.1.0` or newer, and Rust `cargo-teaql` `1.0.0` or newer.
-8. **Do not read large background docs by default**: `TECH-INTRODUCTION.md` is optional background material, not an execution guide. Do not read it end-to-end during normal tasks. Use the focused files under `agents/`, `modeling/`, `reference/`, and `playbooks/` first.
+4. **Use Assist Tool for API Rules**: Before writing a query for an entity, do NOT guess the API methods. You MUST run the assist command to fetch the exact query template:
+   ```bash
+   cargo teaql --input modeling/<your-model>.xml rust-assist-query <EntityName>
+   ```
+   *(Read the console output and copy-paste the exact `select_xxx()` methods from it).*
+5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
+6. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
+7. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
+8. **Refresh TeaQL clients before generation**: Do not reuse an older local TeaQL client just because it worked before. Before evaluation or generation, verify the required versions in this repository and use Java `io.teaql:teaql-maven-plugin:1.1.0` or newer, and Rust `cargo-teaql` `1.0.0` or newer.
+9. **Do not read large background docs by default**: `TECH-INTRODUCTION.md` is optional background material, not an execution guide. Do not read it end-to-end during normal tasks. Use the focused files under `agents/`, `modeling/`, `reference/`, and `playbooks/` first.
 
 ## TOOL VERSION REFRESH RULE
 
