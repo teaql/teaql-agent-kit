@@ -178,9 +178,9 @@ custom context wiring, then regenerate. Do not present direct edits to
 generated service files as deliverable project changes.
 
 For Java generation, follow `playbooks/generate-with-toolchains.md`: use TeaQL
-Maven plugin version `1.0.1` or newer from the TeaQL Nexus releases repository
+Maven plugin version `1.1.0` or newer from the TeaQL Nexus releases repository
 and invoke the plugin with fully qualified coordinates, such as
-`io.teaql:teaql-maven-plugin:1.0.1:gen-lib`.
+`io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`.
 
 Recommended Java generation targets for this reference:
 
