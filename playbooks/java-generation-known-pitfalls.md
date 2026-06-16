@@ -10,8 +10,8 @@ Do not use Maven plugin prefix resolution for TeaQL generation.
 Wrong:
 
 ```bash
-mvn teaql:gen-lib
-mvn teaql:gen-workspace
+mvn teaql:generate -Dservice=java-lib
+mvn teaql:generate -Dservice=java-workspace
 ```
 
 Maven may resolve the `teaql` prefix against Maven Central or the wrong plugin
@@ -52,11 +52,11 @@ for example:
 Required command shape:
 
 ```bash
-mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib \
+mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib \
   -Dteaql.input=app-playground/models/model.xml \
   -Dteaql.output=app-playground/generate-lib
 
-mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace \
+mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace \
   -Dteaql.input=app-playground/models/model.xml \
   -Dteaql.workspaceDir=app-playground/java-workspace
 ```
@@ -228,8 +228,8 @@ TeaQL service code remains read-only.
 
 | Category | Command |
 | --- | --- |
-| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
-| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.0.1:gen-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
+| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
+| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
 | Install generated library | `cd core && mvn install -DskipTests` |
 | Compile workspace | `cd java-workspace && mvn clean compile` |
 | Run app | `mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=19987"` |
