@@ -7,7 +7,7 @@
 3. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
 4. **Use Assist Tool for API Rules**: Before writing a query for an entity, do NOT guess the API methods. You MUST run the assist command to fetch the exact query template:
    ```bash
-   cargo teaql --input modeling/<your-model>.xml rust-assist-query <EntityName>
+   cargo teaql --input modeling/<your-model>.xml rust-assist-query <entity_name>
    ```
    *(Read the console output and copy-paste the exact `select_xxx()` methods from it).*
 5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
