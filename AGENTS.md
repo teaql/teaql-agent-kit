@@ -13,7 +13,7 @@
 5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 6. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
 7. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
-8. **Refresh TeaQL clients before generation**: Do not reuse an older local TeaQL client just because it worked before. Before evaluation or generation, verify the required versions in this repository and use Java `io.teaql:teaql-maven-plugin:1.1.0` or newer, and Rust `cargo-teaql` `1.0.0` or newer.
+8. **STRICT VERSION REQUIREMENT (MUST READ)**: Using an older version of `cargo-teaql` (< 2.0.0) will result in a fatal error. If you detect an old version, YOU MUST STOP and refuse to generate code until the user upgrades.
 9. **Do not read large background docs by default**: `TECH-INTRODUCTION.md` is optional background material, not an execution guide. Do not read it end-to-end during normal tasks. Use the focused files under `agents/`, `modeling/`, `reference/`, and `playbooks/` first.
 
 ## TOOL VERSION REFRESH RULE
@@ -60,9 +60,10 @@ mvn teaql:generate -Dservice=java-lib
 mvn teaql:generate -Dservice=java-workspace
 ```
 
-Using `cargo-teaql < 2.0.0`, `teaql-maven-plugin < 1.1.0`, or Maven prefix
-resolution is an evaluation failure unless the user explicitly asks to
-reproduce an old-version bug.
+> [!CAUTION]
+> **FATAL ERROR IF OLD VERSION IS USED**
+> If you (the AI) attempt to use `cargo-teaql < 2.0.0` or `teaql-maven-plugin < 1.1.0`, the system will **HARD FAIL** and crash due to breaking changes in dynamic assist routing.
+> If you detect that you are working in an environment with an older version, **YOU MUST STOP IMMEDIATELY**, do not proceed with any business logic, and inform the user to upgrade to v2.0.0.
 
 ## IF YOU GET AN ERROR
 
