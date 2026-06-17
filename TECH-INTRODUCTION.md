@@ -164,7 +164,7 @@ rely on Maven Central freshness, and do not use Maven plugin prefix resolution
 such as `mvn teaql:generate -Dservice=java-lib`; Maven may search the wrong repositories. Invoke the
 plugin with fully qualified coordinates, and ensure the user Maven settings or
 project POM exposes the TeaQL Nexus releases repository as a repository and
-plugin repository. For Rust, install CLI package `cargo-teaql` version `1.1.0`
+plugin repository. For Rust, install CLI package `cargo-teaql` version `2.0.1`
 or newer from crates.io, then run `cargo-teaql install-links`. Do not ask users
 to download or build the client tool source code just to generate a service. If
 a generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool invocation
@@ -175,8 +175,8 @@ the blocker instead of trying source builds or alternate generation paths.
 | --- | --- | --- |
 | KSML evaluation, Rust/client path | `cargo install cargo-teaql` from crates.io, then `cargo-teaql install-links` | `cargo-teaql eval <model-file-or-directory>` |
 | KSML evaluation, Java/Maven path | TeaQL Maven plugin with `eval` goal from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:eval -Dteaql.input=<model-file-or-directory>` |
-| Rust | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 1.1.0`, then `cargo-teaql install-links` | `cargo-teaql rust-lib-core <model.xml>` |
-| Rust runnable workspace | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 1.1.0`, then `cargo-teaql install-links` | `cargo-teaql rust-workspace <model.xml> --output <workspace-dir>` |
+| Rust | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 2.0.1`, then `cargo-teaql install-links` | `cargo-teaql rust-lib-core <model.xml>` |
+| Rust runnable workspace | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 2.0.1`, then `cargo-teaql install-links` | `cargo-teaql rust-workspace <model.xml> --output <workspace-dir>` |
 | Java | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
 | Java runnable workspace | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
@@ -229,7 +229,7 @@ Model the domain first, validate the KSML model, then generate both Java and
 Rust TeaQL outputs.
 Before generation, summarize the model for review and wait for confirmation.
 Use the TeaQL client tools installed from package registries, including
-`cargo-teaql` version `1.1.0` or newer from crates.io followed by
+`cargo-teaql` version `2.0.1` or newer from crates.io followed by
 `cargo-teaql install-links`, to evaluate the KSML model and request TeaQL
 service code generation.
 Keep generated artifacts in the target project, run checks, and report the
