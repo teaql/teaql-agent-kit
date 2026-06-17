@@ -5,11 +5,11 @@
 1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
 2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
 3. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
-4. **Use Assist Tool for API Rules**: Before writing a query for an entity, do NOT guess the API methods. You MUST run the assist command to fetch the exact query template:
+4. **Use Assist Tool for API Rules**: Before writing code for an entity, do NOT guess the API methods. You MUST run the assist command to fetch the exact code template:
    ```bash
-   cargo teaql --input modeling/<your-model>.xml rust-assist-query <entity_name>
+   cargo teaql --input modeling/<your-model>.xml rust-assist-<action> <entity_name>
    ```
-   *(Read the console output and copy-paste the exact `select_xxx()` methods from it).*
+   *(Actions include: `query`, `create`, `update`, `delete`, `expression`, `list-page`. Read the console output and copy-paste the exact `select_xxx()` or `get_xxx()` methods from it).*
 5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 6. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
 7. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
