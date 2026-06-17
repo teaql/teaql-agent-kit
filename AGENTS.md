@@ -30,7 +30,7 @@ Current required versions:
 
 - Java: `io.teaql:teaql-maven-plugin:1.1.0` or newer from
   `https://nexus.teaql.io/repository/maven-releases/`
-- Rust: `cargo-teaql` `2.0.0` or newer from crates.io
+- Rust: `cargo-teaql` `2.0.1` or newer from crates.io
 
 Do not assume a locally installed TeaQL client is current. If an older TeaQL
 Maven plugin or `cargo-teaql` was used in a previous run, refresh or reinstall
