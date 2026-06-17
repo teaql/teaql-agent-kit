@@ -91,7 +91,7 @@ Generate the libraries and workspace code.
 cargo-teaql rust-lib-core model.xml
 cargo-teaql rust-workspace model.xml
 ```
-*Note: Never manually edit files inside the generated folders (`generate-lib/` or `generate-workspace/` or `bizcore/`).*
+*Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`generate-lib/` or `generate-workspace/` or `bizcore/`).*
 
 ## Step 5: Write the Code
 After generating, reference the API pattern document for your target language to write correct queries and updates:
