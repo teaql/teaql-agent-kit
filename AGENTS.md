@@ -6,11 +6,11 @@
 2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
 3. **Generated code has its own AGENTS.md**: After generation, check the generated output for a local `AGENTS.md` (for example under `generate-lib/`, `generate-lib/lib/`, `generate-workspace/`, `bizcore/`, or the generated application workspace). Read the nearest generated `AGENTS.md` before using, explaining, testing, or editing code in that generated area. If expected generated code has no `AGENTS.md`, stop and report the missing local guide.
 4. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
-5. **Use Assist Tool for API Rules**: Before writing Rust code for an entity, do NOT guess the API methods. Use the object-specific Rust assist output as the source of truth. See `agents/QUICK-START.md` for the command shape and supported actions.
+5. **Use cargo teaql with --input**: Every Rust TeaQL operation that reads or generates from a model must use `cargo teaql --input <model> <command> ...`. Rust generation in this Agent Kit uses only `rust-lib-core` and `rust-app-console`. Dynamic assist/help commands are also model-derived, so pass the current model with `--input` and read the current help/output before using them.
 6. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 7. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
-8. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
-9. **STRICT VERSION REQUIREMENT (MUST READ)**: Using an older version of `cargo-teaql` (< 2.0.0) will result in a fatal error. If you detect an old version, YOU MUST STOP and refuse to generate code until the user upgrades.
+8. **Markdown Reports**: Both clients (`cargo teaql --input <model> evaluate` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
+9. **STRICT VERSION REQUIREMENT (MUST READ)**: Using an older version of `cargo-teaql` (< 2.0.5) will result in a fatal error. If you detect an old version, YOU MUST STOP and refuse to generate code until the user upgrades.
 10. **This repo is the execution guide**: Use the focused files under `agents/`, `modeling/`, `playbooks/`, generated local `AGENTS.md` files, object-specific Rust assist output, and generated Java output as current guidance.
 11. **Reports and long background docs live elsewhere**: Historical evaluation reports and `TECH-INTRODUCTION.md` were moved to `/Users/Philip/githome/teaql-evaluation-reports`. Do not use that repository for current commands, API usage, versions, or modeling rules unless the task explicitly asks for historical report or background analysis.
 
@@ -28,7 +28,7 @@ Current required versions:
 
 - Java: `io.teaql:teaql-maven-plugin:1.1.0` or newer from
   `https://nexus.teaql.io/repository/maven-releases/`
-- Rust: `cargo-teaql` `2.0.1` or newer from crates.io
+- Rust: `cargo-teaql` `2.0.5` or newer from crates.io
 
 Do not assume a locally installed TeaQL client is current. If an older TeaQL
 Maven plugin or `cargo-teaql` was used in a previous run, refresh or reinstall
@@ -60,8 +60,8 @@ mvn teaql:generate -Dservice=java-workspace
 
 > [!CAUTION]
 > **FATAL ERROR IF OLD VERSION IS USED**
-> If you (the AI) attempt to use `cargo-teaql < 2.0.0` or `teaql-maven-plugin < 1.1.0`, the system will **HARD FAIL** and crash due to breaking changes in dynamic assist routing.
-> If you detect that you are working in an environment with an older version, **YOU MUST STOP IMMEDIATELY**, do not proceed with any business logic, and inform the user to upgrade to v2.0.0.
+> If you (the AI) attempt to use `cargo-teaql < 2.0.5` or `teaql-maven-plugin < 1.1.0`, the system will **HARD FAIL** and crash due to breaking changes in dynamic assist routing.
+> If you detect that you are working in an environment with an older version, **YOU MUST STOP IMMEDIATELY**, do not proceed with any business logic, and inform the user to upgrade to v2.0.5.
 
 ## IF YOU GET AN ERROR
 

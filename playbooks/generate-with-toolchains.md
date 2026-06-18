@@ -10,9 +10,9 @@ Rust, or both TeaQL code generation tracks.
 - Target project directory or playground local trial directory.
 - Optional Java workspace output when the user asks for a runnable Java
   workspace: service `java-workspace`.
-- Optional Rust workspace output when the user asks for a runnable Rust
-  workspace: service `rust-workspace`, which depends on the generated Rust
-  crate by local path.
+- Optional Rust app output when the user asks for a runnable Rust app:
+  generation target `rust-app-console`, which depends on the generated Rust
+  library crate.
 - TeaQL client tools installed from package registries. For Java, resolve TeaQL
   Maven plugin version `1.1.0` or newer from the TeaQL Nexus releases
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
@@ -20,11 +20,11 @@ Rust, or both TeaQL code generation tracks.
   coordinates such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`, not Maven
   prefix resolution such as `mvn teaql:generate -Dservice=java-lib`. Ensure Maven settings or the
   project POM exposes that URL as both a repository and a plugin repository. For
-  Rust, install `cargo-teaql` version `2.0.1` or newer from crates.io with
+  Rust, install `cargo-teaql` version `2.0.5` or newer from crates.io with
   `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
 - Optional server-side KSML evaluation target exposed by the installed client:
-  `cargo-teaql eval` for the Rust/client path, or the fully qualified Maven
-  plugin `eval` goal for the Java/Maven path.
+  `cargo teaql --input <model> evaluate` for the Rust/client path, or the fully
+  qualified Maven plugin `eval` goal for the Java/Maven path.
 - Optional TeaQL service URL, license file, output directory, and timeout.
 
 ## General Rules
@@ -35,22 +35,22 @@ Rust, or both TeaQL code generation tracks.
   evidence that it is valid for this repository. The repository-required
   versions are authoritative for every new run: Java
   `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL Nexus releases
-  repository, and Rust `cargo-teaql` `2.0.1` or newer from crates.io.
+  repository, and Rust `cargo-teaql` `2.0.5` or newer from crates.io.
 - For Rust, when network access is available, run
   `cargo install cargo-teaql --force`, then `cargo-teaql --version`, then
   `cargo-teaql install-links` before generation. If the available version is
-  older than `2.0.1`, stop and report the blocker.
+  older than `2.0.5`, stop and report the blocker.
 - For Java, never rely on a previously resolved plugin or Maven prefix
   resolution. Invoke the fully qualified plugin coordinate with version
   `1.0.0` or newer, such as
   `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`. If Maven resolves an older
   plugin, or the required version cannot be resolved from the TeaQL Nexus
   releases repository, stop and report the blocker.
-- Using `cargo-teaql < 2.0.1`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
+- Using `cargo-teaql < 2.0.5`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
   is an evaluation failure unless the user explicitly asks to reproduce an
   old-version bug.
 - Run server-side KSML evaluation before generation when the installed client
-  exposes an `eval` target. Evaluation `errors` must be fixed before generation.
+  exposes an `evaluate` target. Evaluation `errors` must be fixed before generation.
   Evaluation `warnings` and `suggestions` should be reported to the user but do
   not block generation by default.
 - Before generation, run `playbooks/model-review-gate.md`. The model must be
@@ -106,7 +106,7 @@ Rust, or both TeaQL code generation tracks.
   on Maven Central freshness. Invoke Java goals with fully qualified Maven
   plugin coordinates, for example
   `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`; do not use `mvn teaql:*`.
-  For Rust, install `cargo-teaql` version `2.0.1` or newer from crates.io with
+  For Rust, install `cargo-teaql` version `2.0.5` or newer from crates.io with
   `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
   repositories for normal generation work. If the Maven plugin, Maven plugin
@@ -166,7 +166,26 @@ Rust, or both TeaQL code generation tracks.
 Use the Rust CLI when the target runtime is Rust or when the user asks for the
 Cargo toolchain.
 
-1. Install `cargo-teaql` version `2.0.1` or newer from crates.io. If this
+Rust generation in this Agent Kit has exactly two legal generation targets. Keep
+their outputs separate:
+
+| Output | Command | Directory | Purpose | Editable? |
+| --- | --- | --- | --- | --- |
+| Generated library crate | `rust-lib-core` | `app-playground/generate-lib` | TeaQL runtime/domain code generated from the model | No |
+| Runnable app console | `rust-app-console` | `app-playground/rust-app-console` | Customer-owned Cargo app that depends on the generated crate | Yes |
+
+Always generate the library first, then the app console. Do not send both
+commands to the same output directory.
+
+Do not use `rust-workspace`, `markdown-doc`, `frontend-model`, or other command
+names as Rust generation targets in this repository. Every Rust TeaQL command
+that reads or generates from a model must be invoked as
+`cargo teaql --input <model> <command> ...`. The CLI may expose dynamic
+commands, especially assist commands generated from a model input. For dynamic
+commands, pass the current model with `--input` and read the current help/output
+before using them.
+
+1. Install `cargo-teaql` version `2.0.5` or newer from crates.io. If this
    command fails because the crate cannot be found, downloaded, installed,
    invoked, or executed, stop immediately and report the failure. Do not look
    for source code or try to build `cargo-teaql` from a local or remote
@@ -182,35 +201,39 @@ Cargo toolchain.
    cargo-teaql install-links
    ```
 
-3. Evaluate the reviewed model when the installed client exposes `eval`.
+3. Evaluate the reviewed model when the installed client exposes `evaluate`.
    Evaluation errors block generation; warnings and suggestions should be
    reported:
 
    ```bash
-   cargo-teaql eval /path/to/app-playground/models/model.xml
+   cargo teaql --input /path/to/app-playground/models/model.xml evaluate
    ```
 
-4. Generate backend/domain code from the model. In playground mode, create or
-   copy the reviewed model to `/path/to/app-playground/models/model.xml`, and
-   use `/path/to/app-playground/generate-lib` as the output path:
+4. Generate the read-only backend/domain library from the model. In playground
+   mode, create or copy the reviewed model to
+   `/path/to/app-playground/models/model.xml`, and use
+   `/path/to/app-playground/generate-lib` as the output path:
 
    ```bash
-   cargo-teaql rust-lib-core /path/to/app-playground/models/model.xml \
+   cargo teaql --input /path/to/app-playground/models/model.xml rust-lib-core \
      --output /path/to/app-playground/generate-lib \
      --cwd /path/to/app-playground
    ```
 
-5. Generate documentation or frontend model output when requested:
+5. Generate the editable Rust app console after `rust-lib-core`. Write it to
+   `/path/to/app-playground/rust-app-console`, not to `generate-lib`:
 
    ```bash
-   cargo-teaql markdown-doc /path/to/model.xml \
-     --output /path/to/target/build \
-     --cwd /path/to/target/project
-
-   cargo-teaql frontend-model /path/to/model.xml \
-     --output /path/to/target/build \
-     --cwd /path/to/target/project
+   cargo teaql --input /path/to/app-playground/models/model.xml rust-app-console \
+     --output /path/to/app-playground/rust-app-console \
+     --cwd /path/to/app-playground
    ```
+
+   The generated app console depends on the generated runtime crate. It is also
+   the project-specific handoff point for AI coding work: immediately read
+   `/path/to/app-playground/rust-app-console/AGENTS.md` after generation. Follow
+   that local guide before adding code, running checks, or explaining the app
+   console. If the file is missing, stop and report the missing generated guide.
 
 6. Run target-project Rust checks when a Cargo project is generated:
 
@@ -219,23 +242,8 @@ Cargo toolchain.
    cargo test
    ```
 
-For playground mode, generate the editable Rust workspace after `rust-lib-core`.
-Place the model under `app-playground/models`, place generated runtime code
-under `app-playground/generate-lib`, and write the workspace to
-`app-playground/rust-workspace`:
-
-```bash
-cargo-teaql rust-workspace /path/to/app-playground/models/model.xml \
-  --output /path/to/app-playground/rust-workspace \
-  --cwd /path/to/app-playground
-```
-
-The generated workspace depends on the generated runtime crate by local path.
-The default dependency path is `../generate-lib/lib` from
-`app-playground/rust-workspace`.
-
 Put customer query functions, business helper functions, tests, runtime wiring,
-and integration code inside `rust-workspace`. Keep `src/main.rs` as a thin
+and integration code inside `rust-app-console`. Keep `src/main.rs` as a thin
 Tokio async smoke entrypoint. Do not add a web framework unless the user
 explicitly asks for one.
 
@@ -246,7 +254,7 @@ app-playground/
   models/
     model.xml           # semantic source of truth for generation
   generate-lib/         # generated Java or Rust TeaQL runtime code
-  rust-workspace/       # editable Rust app from rust-workspace
+  rust-app-console/     # editable Rust app from rust-app-console
     AGENTS.md
     Cargo.toml
     src/
@@ -260,7 +268,7 @@ app-playground/
 Example:
 
 ```rust
-// rust-workspace/src/lib.rs
+// rust-app-console/src/lib.rs
 use generated_domain_crate::Q;
 
 pub fn stock_on_hand_query() {
@@ -274,7 +282,7 @@ pub fn stock_on_hand_query() {
 ```
 
 ```rust
-// rust-workspace/tests/inventory_queries.rs
+// rust-app-console/tests/inventory_queries.rs
 use generated_workspace_crate::stock_on_hand_query;
 
 #[test]
@@ -284,7 +292,7 @@ fn builds_stock_on_hand_query() {
 ```
 
 ```rust
-// rust-workspace/src/main.rs
+// rust-app-console/src/main.rs
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     generated_workspace_crate::stock_on_hand_query();
@@ -294,12 +302,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 Keep regenerated TeaQL code in `app-playground/generate-lib`. Do not mix
-generated runtime files into `rust-workspace/src/` or `rust-workspace/tests/`.
+generated runtime files into `rust-app-console/src/` or `rust-app-console/tests/`.
 Read `app-playground/generate-lib/lib/AGENTS.md` before using or explaining the
 generated Rust library APIs. If the crate is consumed from a Cargo registry,
 locate the unpacked dependency source with `cargo metadata` or materialize it
 with `cargo vendor`, then read the crate root `AGENTS.md`. When working inside
-`rust-workspace`, read its generated `AGENTS.md` first and read it again after
+`rust-app-console`, read its generated `AGENTS.md` first and read it again after
 regeneration.
 
 ## Playground Report
@@ -348,10 +356,9 @@ Recommended sections:
      generated `AGENTS.md`, Maven files, Spring Boot application class,
      `CustomUserContext`, `EnsureModelController`, application properties, and
      CRUD guide.
-   - For Rust `rust-workspace` output, list the workspace path and call out the
-     generated `AGENTS.md`, `Cargo.toml`, Tokio async entrypoint, local-path
-     dependency on `../generate-lib/lib`, and customer-owned source/test
-     directories.
+   - For Rust `rust-app-console` output, list the app path and call out the
+     generated `AGENTS.md`, `Cargo.toml`, Tokio async entrypoint, dependency on
+     the generated library, and customer-owned source/test directories.
    - State that generated files should be regenerated from the model, not
      hand-edited.
    - If `ensure_schema()` is called automatically in playground mode, state that
@@ -475,19 +482,7 @@ Before running Maven for a Java project, read
    read-only; workspace-owned Spring Boot code, controllers, tests, and
    configuration may be edited.
 
-5. Generate documentation or frontend model output when requested:
-
-   ```bash
-   mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=markdown-doc \
-     -Dteaql.input=/path/to/model.xml \
-     -Dteaql.output=/path/to/target/build
-
-   mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=frontend-model \
-     -Dteaql.input=/path/to/model.xml \
-     -Dteaql.output=/path/to/target/build
-   ```
-
-6. Run target-project Java checks when a Maven project is generated.
+5. Run target-project Java checks when a Maven project is generated.
    For `java-workspace`, run checks from the generated workspace directory:
 
    ```bash
@@ -539,7 +534,7 @@ https://api.teaql.io/latest/generate
      runtime wiring.
    - Toolchain error: CLI/plugin config, service URL, license, evaluation, or
      network.
-3. Fix model errors in `model.xml`, rerun `eval` when available, then
+3. Fix model errors in `model.xml`, rerun `evaluate` when available, then
    regenerate.
 4. Fix integration errors in the target project.
 5. For generation client installation, resolution, invocation, or execution
