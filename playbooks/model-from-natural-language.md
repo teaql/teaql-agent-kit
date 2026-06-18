@@ -47,7 +47,7 @@ language and wants a TeaQL/KSML domain model.
    - Use `prompts/modeling/checklist.md`.
    - Repair any rule violation.
    - Pay special attention to constant object rules and explicit tenancy.
-   - If a TeaQL client toolchain with `eval` is available, run server-side KSML
+   - If a TeaQL client toolchain with `evaluate` is available, run server-side KSML
      evaluation after checklist validation and before code generation. Fix
      evaluation `errors`; carry `warnings` and `suggestions` into the model
      review.

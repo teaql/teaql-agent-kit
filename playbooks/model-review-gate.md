@@ -15,7 +15,7 @@ assumptions match the business domain.
 Provide a short model review summary in business language. Include:
 
 - Model name and target runtime.
-- Server-side KSML evaluation result, when `eval` was available:
+- Server-side KSML evaluation result, when `evaluate` was available:
   - error count
   - warning count
   - suggestion count

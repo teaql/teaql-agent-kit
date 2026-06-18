@@ -1,6 +1,6 @@
 # ERROR REFERENCE
 
-## Validation Errors (`cargo-teaql eval`)
+## Validation Errors (`cargo teaql --input <model> evaluate`)
 
 | Error | Meaning | Fix |
 |-------|---------|-----|

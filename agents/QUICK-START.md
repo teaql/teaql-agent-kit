@@ -55,7 +55,7 @@ older local client from a previous run.
 Required versions:
 
 - Java: `io.teaql:teaql-maven-plugin:1.1.0` or newer
-- Rust: `cargo-teaql` `2.0.1` or newer
+- Rust: `cargo-teaql` `2.0.5` or newer
 
 For Rust:
 
@@ -73,7 +73,7 @@ mvn io.teaql:teaql-maven-plugin:1.1.0:eval -Dteaql.input=model.xml
 
 Run the validation tool:
 ```bash
-cargo-teaql eval model.xml
+cargo teaql --input model.xml evaluate
 ```
 *Tip: When errors occur, the CLI natively outputs a beautifully formatted Markdown report for easy reading and analysis.*
 - **Prefer evaluate over rereading docs**: Evaluation is cheap and gives the
@@ -85,19 +85,42 @@ cargo-teaql eval model.xml
   report.
 - **If 0 errors**: Proceed to generation.
 
-## Step 4: Generate the Workspace
-Generate the libraries and workspace code.
+## Step 4: Generate Rust Outputs
+For Rust generation in this Agent Kit, only two generation targets are valid:
+`rust-lib-core` and `rust-app-console`.
+
+Generate the read-only library first, then the runnable app console. Keep their
+output directories separate. Do not use `rust-workspace`, `markdown-doc`,
+`frontend-model`, or other command names as Rust generation targets in this
+repository.
+
 ```bash
-cargo-teaql rust-lib-core model.xml
-cargo-teaql rust-workspace model.xml
+cargo teaql --input app-playground/models/model.xml rust-lib-core \
+  --output app-playground/generate-lib \
+  --cwd app-playground
+
+cargo teaql --input app-playground/models/model.xml rust-app-console \
+  --output app-playground/rust-app-console \
+  --cwd app-playground
 ```
-*Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`generate-lib/` or `generate-workspace/` or `bizcore/`).*
+
+`rust-lib-core` writes generated TeaQL runtime/domain code to
+`app-playground/generate-lib`; do not edit it. `rust-app-console` writes the
+runnable customer-owned Cargo app to `app-playground/rust-app-console`; put
+custom Rust code there. The app console depends on the generated library.
+
+The `rust-app-console` output is a project-specific handoff point for the next
+AI coding step. Immediately after it is generated, read
+`app-playground/rust-app-console/AGENTS.md` and follow that local guide before
+adding code, running checks, or explaining the app console.
+
+*Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`generate-lib/` or `bizcore/`).*
 
 Immediately after generation, locate and read the nearest generated `AGENTS.md`
 before using any generated API. Common locations include
 `app-playground/generate-lib/AGENTS.md`,
 `app-playground/generate-lib/lib/AGENTS.md`,
-`app-playground/generate-workspace/AGENTS.md`, and the generated application
+`app-playground/rust-app-console/AGENTS.md`, and the generated application
 workspace root. If generated code is present but its local `AGENTS.md` is
 missing, stop and report the missing guide instead of guessing the API rules.
 
@@ -115,7 +138,9 @@ cargo teaql --input modeling/<your-model>.xml rust-assist-<action> <entity_name>
 ```
 
 For Rust, the assist output is the source of truth for exact generated method
-names and code shape.
+names and code shape. Dynamic Rust assist commands are generated from the input
+model; before using one, pass the current model input with `--input` and read
+its current help or output.
 
 Make sure you always include `.purpose()` / `.comment()` for queries, and `.audit_as()` / `.auditAs()` for updates.
 Finally, run checks to ensure correctness:
