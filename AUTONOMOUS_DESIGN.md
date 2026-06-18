@@ -186,12 +186,11 @@ evaluation/
   scorecard-template.md
   metrics-schema.json
   report-template.md
-
-reports/
-  001-autonomous-baseline.md
 ```
 
-This structure separates task definitions, actual runs, shared evaluation templates, and published reports.
+This structure separates task definitions, actual runs, and shared evaluation
+templates. Published reports live in the separate
+`/Users/Philip/githome/teaql-evaluation-reports` repository.
 
 ---
 

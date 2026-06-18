@@ -4,17 +4,15 @@
 
 1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
 2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
-3. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
-4. **Use Assist Tool for API Rules**: Before writing code for an entity, do NOT guess the API methods. You MUST run the assist command to fetch the exact code template:
-   ```bash
-   cargo teaql --input modeling/<your-model>.xml rust-assist-<action> <entity_name>
-   ```
-   *(Actions include: `query`, `create`, `update`, `delete`, `expression`, `list-page`. Read the console output and copy-paste the exact `select_xxx()` or `get_xxx()` methods from it).*
-5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
-6. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
-7. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
-8. **STRICT VERSION REQUIREMENT (MUST READ)**: Using an older version of `cargo-teaql` (< 2.0.0) will result in a fatal error. If you detect an old version, YOU MUST STOP and refuse to generate code until the user upgrades.
-9. **Do not read large background docs by default**: `TECH-INTRODUCTION.md` is optional background material, not an execution guide. Do not read it end-to-end during normal tasks. Use the focused files under `agents/`, `modeling/`, `reference/`, and `playbooks/` first.
+3. **Generated code has its own AGENTS.md**: After generation, check the generated output for a local `AGENTS.md` (for example under `generate-lib/`, `generate-lib/lib/`, `generate-workspace/`, `bizcore/`, or the generated application workspace). Read the nearest generated `AGENTS.md` before using, explaining, testing, or editing code in that generated area. If expected generated code has no `AGENTS.md`, stop and report the missing local guide.
+4. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
+5. **Use Assist Tool for API Rules**: Before writing Rust code for an entity, do NOT guess the API methods. Use the object-specific Rust assist output as the source of truth. See `agents/QUICK-START.md` for the command shape and supported actions.
+6. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
+7. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
+8. **Markdown Reports**: Both clients (`cargo-teaql eval` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
+9. **STRICT VERSION REQUIREMENT (MUST READ)**: Using an older version of `cargo-teaql` (< 2.0.0) will result in a fatal error. If you detect an old version, YOU MUST STOP and refuse to generate code until the user upgrades.
+10. **This repo is the execution guide**: Use the focused files under `agents/`, `modeling/`, `playbooks/`, generated local `AGENTS.md` files, object-specific Rust assist output, and generated Java output as current guidance.
+11. **Reports and long background docs live elsewhere**: Historical evaluation reports and `TECH-INTRODUCTION.md` were moved to `/Users/Philip/githome/teaql-evaluation-reports`. Do not use that repository for current commands, API usage, versions, or modeling rules unless the task explicitly asks for historical report or background analysis.
 
 ## TOOL VERSION REFRESH RULE
 
@@ -86,26 +84,28 @@ For comprehensive guides, templates, and patterns, please refer to the specific 
 - **Decision Trees**: `agents/DECISION-TREES.md` (How to choose roots/tenancy)
 - **Errors**: `agents/ERROR-FIX.md` (Full error lookup table)
 - **Examples**: `modeling/EXAMPLES/` (Full KSML modeling examples)
-- **Background Only**: `TECH-INTRODUCTION.md` (Optional architecture context; do not read end-to-end unless the task explicitly asks for TeaQL architecture, philosophy, or broad technical background)
 
 If these files appear to conflict, follow `modeling/KSML-RULES.md` first, then
 use the shorter `agents/` files as execution checklists and examples.
 
-## LARGE DOCUMENT READING RULE
+## CONTEXT BOUNDARY
 
-`TECH-INTRODUCTION.md` is a long background document. It is not required for
-normal modeling, generation, debugging, or API usage tasks.
+This repository is for AI coding agents working on TeaQL modeling, generation,
+debugging, and implementation tasks. Historical evidence and long-form
+background material are kept in `/Users/Philip/githome/teaql-evaluation-reports`
+to avoid polluting execution context.
 
 Default behavior:
 
-1. Do not read `TECH-INTRODUCTION.md` end-to-end.
-2. Use `AGENTS.md`, `agents/QUICK-START.md`, `agents/RULES.md`,
-   `modeling/KSML-RULES.md`, `agents/TEMPLATES.md`, `agents/ERROR-FIX.md`, and
-   `reference/API-PATTERN-*.md` first.
-3. If architecture context is needed, search `TECH-INTRODUCTION.md` for the
+1. Use `AGENTS.md`, `agents/QUICK-START.md`, `agents/RULES.md`,
+   `modeling/KSML-RULES.md`, `agents/TEMPLATES.md`, `agents/ERROR-FIX.md`,
+   generated local `AGENTS.md` files, object-specific Rust assist output, and
+   generated Java output first.
+2. Do not read `/Users/Philip/githome/teaql-evaluation-reports` unless the user
+   explicitly asks for historical reports, evaluation evidence, or broad TeaQL
+   architecture/background material.
+3. If such background context is needed, search the external repository for the
    specific topic and read only the matching section.
-4. Read the full `TECH-INTRODUCTION.md` only when the user explicitly asks for
-   TeaQL architecture, philosophy, or broad technical background.
 
 ## API Key Information
 

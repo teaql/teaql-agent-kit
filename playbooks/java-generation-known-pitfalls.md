@@ -22,7 +22,7 @@ Plugin org.apache.maven.plugins:teaql-maven-plugin not found in Maven Central
 ```
 
 Use fully qualified Maven plugin coordinates and resolve TeaQL Maven plugin
-version `1.0.0` or newer from:
+version `1.1.0` or newer from:
 
 ```text
 https://nexus.teaql.io/repository/maven-releases/
@@ -69,16 +69,16 @@ workspace files, copied generated code, or alternate generation paths.
 
 ## Two-Step Java Workspace Generation
 
-For a runnable Java/Spring Boot workspace, `gen-lib` and `gen-workspace` are both
-required.
+For a runnable Java/Spring Boot workspace, services `java-lib` and
+`java-workspace` are both required.
 
 ```text
-model.xml -> gen-lib -> gen-workspace
-  KSML      domain     Spring Boot workspace
+model.xml -> java-lib -> java-workspace
+  KSML      domain      Spring Boot workspace
 ```
 
-`gen-lib` generates domain library code, including entity, `Q`, request, and
-checker classes. `gen-workspace` generates the runnable Spring Boot project
+`java-lib` generates domain library code, including entity, `Q`, request, and
+checker classes. `java-workspace` generates the runnable Spring Boot project
 skeleton, including project files, application properties, application entry
 classes, `EnsureModelController`, and the generated workspace `AGENTS.md`.
 
@@ -91,7 +91,7 @@ not the valid Maven property spelling.
 
 If the user asks for a Java project, runnable workspace, Spring Boot application,
 or local Java playground, default to the full two-step pipeline. Only stop after
-`gen-lib` when the user explicitly asks for library-only generation.
+`java-lib` when the user explicitly asks for library-only generation.
 
 ## Starter Version Consistency
 
@@ -219,8 +219,8 @@ layout and run the normal model-to-generation pipeline again:
 mkdir -p app-playground/models app-playground/generate-lib app-playground/java-workspace
 ```
 
-Then create or copy `model.xml`, run fully qualified `gen-lib`, run fully
-qualified `gen-workspace` when a runnable app is needed, compile the workspace,
+Then create or copy `model.xml`, run fully qualified service `java-lib`, run
+fully qualified service `java-workspace` when a runnable app is needed, compile the workspace,
 and add only customer-owned controllers, tests, or scenario code. Generated
 TeaQL service code remains read-only.
 

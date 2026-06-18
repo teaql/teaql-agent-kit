@@ -93,12 +93,20 @@ Q.merchants().purpose("Load active merchants").comment("Home page").executeForLi
 ```
 
 ### Fix: Missing .audit_as() / .purpose() (Rust)
+For Rust, get the concrete query builder and method names from the
+object-specific `rust-assist-*` output first. The following example only shows
+where `.purpose()` and `.comment()` belong.
+
 ```rust
 // Before: Error
 merchant.save(&ctx).await?;
-Q::merchants().execute_for_list(&ctx).await?;
+query.execute_for_list(&ctx).await?;
 
 // After: Fix
 merchant.audit_as("Updating merchant details").save(&ctx).await?;
-Q::merchants().purpose("Load active merchants").comment("Home page").execute_for_list(&ctx).await?;
+query
+    .purpose("Load active records")
+    .comment("Home page")
+    .execute_for_list(&ctx)
+    .await?;
 ```
