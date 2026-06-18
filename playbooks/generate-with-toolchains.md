@@ -177,9 +177,8 @@ their outputs separate:
 Always generate the library first, then the app console. Do not send both
 commands to the same output directory.
 
-Do not use `rust-workspace`, `markdown-doc`, `frontend-model`, or other command
-names as Rust generation targets in this repository. Every Rust TeaQL command
-that reads or generates from a model must be invoked as
+Do not use any non-whitelisted Rust generation target names in this repository.
+Every Rust TeaQL command that reads or generates from a model must be invoked as
 `cargo teaql --input <model> <command> ...`. The CLI may expose dynamic
 commands, especially assist commands generated from a model input. For dynamic
 commands, pass the current model with `--input` and read the current help/output

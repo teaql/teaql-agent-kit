@@ -90,9 +90,8 @@ For Rust generation in this Agent Kit, only two generation targets are valid:
 `rust-lib-core` and `rust-app-console`.
 
 Generate the read-only library first, then the runnable app console. Keep their
-output directories separate. Do not use `rust-workspace`, `markdown-doc`,
-`frontend-model`, or other command names as Rust generation targets in this
-repository.
+output directories separate. Do not use any non-whitelisted Rust generation
+target names in this repository.
 
 ```bash
 cargo teaql --input app-playground/models/model.xml rust-lib-core \

@@ -1,8 +1,8 @@
 # B-001 School Management — Running Report
 
-**Date**: 2026-06-18 (Asia/Shanghai)  
-**Tools**: cargo-teaql 2.0.1 / teaql-core 4.0.5 / rusqlite 0.32.1  
-**Gen Scope**: `rust-app-console` (rust-workspace 500)  
+**Date**: 2026-06-18 (Asia/Shanghai)
+**Tools**: cargo-teaql 2.0.7 / teaql-core 4.0.5 / rusqlite 0.32.1
+**Gen Scope**: `rust-app-console`
 **Gen Server**: latest
 
 ---
@@ -27,11 +27,10 @@ Platform (root) ──< School
 | 1 | Read KSML-RULES.md + RULES.md | Complete |
 | 2a | Decision Tree: platform is root (single-tenant) | platform as root, no merchant |
 | 2b | TEMPLATES.md: model.xml | Written |
-| 3 | `cargo-teaql eval model.xml` | 0 errors, 0 warnings, 15 solids |
-| 4a | `cargo-teaql rust-lib-core model.xml` | ✅ |
-| 4b | `cargo-teaql rust-workspace model.xml` | ❌ 500 (scope not supported) |
-| 4c | `cargo-teaql rust-app-console model.xml` | ✅ (fallback) |
-| 4d | Copy generated files + rename workspace package | ✅ |
+| 3 | `cargo teaql --input model.xml evaluate` | 0 errors, 0 warnings, 15 solids |
+| 4a | `cargo teaql --input model.xml rust-lib-core` | ✅ |
+| 4b | `cargo teaql --input model.xml rust-app-console` | ✅ |
+| 4c | Copy generated files + rename app package | ✅ |
 | 5 | `cargo check` | ✅ |
 | 5 | `cargo run` | ✅ All 12 tests pass |
 
