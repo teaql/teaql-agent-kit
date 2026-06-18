@@ -54,10 +54,11 @@ evaluation/
   scorecard-template.md
   metrics-schema.json
   report-template.md
-
-reports/
-  001-autonomous-baseline.md
 ```
+
+Historical evaluation reports and long-form background material live in the
+separate repository `/Users/Philip/githome/teaql-evaluation-reports`. This
+repository is the current execution guide for AI coding agents.
 
 ## Evaluation Rules
 
@@ -68,7 +69,7 @@ reports/
 - If human intervention occurs, record it in the run scorecard.
 - Preserve evidence in `runs/<agent>/<task-id>/<run-date>/`.
 - Score the run with `evaluation/scorecard-template.md`.
-- Use reports in `reports/` for evidence-first summaries.
+- Publish evidence-first summaries in `/Users/Philip/githome/teaql-evaluation-reports`.
 
 ## Evaluation Focus
 

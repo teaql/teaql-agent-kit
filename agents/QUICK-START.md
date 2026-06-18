@@ -93,15 +93,31 @@ cargo-teaql rust-workspace model.xml
 ```
 *Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`generate-lib/` or `generate-workspace/` or `bizcore/`).*
 
+Immediately after generation, locate and read the nearest generated `AGENTS.md`
+before using any generated API. Common locations include
+`app-playground/generate-lib/AGENTS.md`,
+`app-playground/generate-lib/lib/AGENTS.md`,
+`app-playground/generate-workspace/AGENTS.md`, and the generated application
+workspace root. If generated code is present but its local `AGENTS.md` is
+missing, stop and report the missing guide instead of guessing the API rules.
+
 ## Step 5: Write the Code
-After generating, reference the API pattern document for your target language to write correct queries and updates:
-- **Java**: Read `reference/API-PATTERN-JAVA.md`
-- **Rust**: Read `reference/API-PATTERN-RUST.md`
+After generating, do not use generic API pattern documents as the source of
+truth. Use the generated output for your target language:
+
+- **Java**: Follow the generated workspace `AGENTS.md` and generated source
+  files for the exact service, controller, query, and entity API shape.
+- **Rust**: Run the object-specific assist command for the entity and action you
+  are coding:
+
+```bash
+cargo teaql --input modeling/<your-model>.xml rust-assist-<action> <entity_name>
+```
+
+For Rust, the assist output is the source of truth for exact generated method
+names and code shape.
 
 Make sure you always include `.purpose()` / `.comment()` for queries, and `.audit_as()` / `.auditAs()` for updates.
-
-Read the nearest generated `AGENTS.md` before using generated APIs. In the
-default playground layout this is usually `app-playground/generate-lib/lib/AGENTS.md`.
 Finally, run checks to ensure correctness:
 ```bash
 cargo check && cargo test
