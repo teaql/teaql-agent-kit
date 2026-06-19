@@ -79,14 +79,14 @@ Rust, or both TeaQL code generation tracks.
   Spring Boot application class, `CustomUserContext`, `EnsureModelController`,
   and `docs/teaql-java-crud-guide.md`. Do not recreate these files by hand when
   the goal is available.
-- After generating the TeaQL library under `app-playground/generate-lib`, read
-  `app-playground/generate-lib/AGENTS.md` before using, explaining, testing, or
-  wiring the generated library APIs. If that library guide is missing after
-  generation, stop and report it as a blocker. If the generated library is
-  consumed from a package repository instead of a local generated directory,
-  locate the unpacked dependency source first; for Cargo dependencies, use
-  `cargo metadata` or `cargo vendor`, then read the crate root `AGENTS.md`
-  before writing code against that crate.
+- After generating the TeaQL library under `app-playground/generate-lib`, do not
+  require a local `AGENTS.md` there. Library outputs may not include one. Use
+  generated source plus `rust-assist-*` commands for API discovery. If the
+  generated library is consumed from a package repository instead of a local
+  generated directory, locate the unpacked dependency source first; for Cargo
+  dependencies, use `cargo metadata` or `cargo vendor`, then inspect the
+  generated source and use the model-specific assist output before writing code
+  against that crate.
 - When working inside a generated Java workspace, read and follow its generated
   `AGENTS.md` in addition to this kit-level playbook before reading, editing,
   testing, running, or explaining workspace code. The generated workspace guide
@@ -302,12 +302,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 Keep regenerated TeaQL code in `app-playground/generate-lib`. Do not mix
 generated runtime files into `rust-app-console/src/` or `rust-app-console/tests/`.
-Read `app-playground/generate-lib/lib/AGENTS.md` before using or explaining the
-generated Rust library APIs. If the crate is consumed from a Cargo registry,
-locate the unpacked dependency source with `cargo metadata` or materialize it
-with `cargo vendor`, then read the crate root `AGENTS.md`. When working inside
-`rust-app-console`, read its generated `AGENTS.md` first and read it again after
-regeneration.
+Do not require `app-playground/generate-lib/AGENTS.md` or
+`app-playground/generate-lib/lib/AGENTS.md`; generated libraries may not include
+one. Use generated source plus `rust-assist-*` commands for API discovery. If
+the crate is consumed from a Cargo registry, locate the unpacked dependency
+source with `cargo metadata` or materialize it with `cargo vendor`, then inspect
+the generated source and assist output. When working inside `rust-app-console`,
+read its generated `AGENTS.md` first and read it again after regeneration.
 
 ## Playground Report
 

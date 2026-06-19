@@ -5,7 +5,7 @@
 ### Core Framework Rules
 1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
 2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
-3. **Generated code has its own AGENTS.md**: After generation, check the generated output for a local `AGENTS.md` (for example under `generate-lib/`, `generate-lib/lib/`, `generate-workspace/`, `bizcore/`, or the generated application workspace). Read the nearest generated `AGENTS.md` before using, explaining, testing, or editing code in that generated area. If expected generated code has no `AGENTS.md`, stop and report the missing local guide.
+3. **Generated AGENTS.md**: After generation, check for a local `AGENTS.md` in generated workspace/app outputs. Workspace outputs such as `rust-app-console/` and `java-workspace/` must have `AGENTS.md`; if missing, stop and report. Library outputs such as `generate-lib/` may not have `AGENTS.md`; use generated source plus `rust-assist-*` commands for API discovery instead.
 4. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
 5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 
