@@ -115,13 +115,13 @@ adding code, running checks, or explaining the app console.
 
 *Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`generate-lib/` or `bizcore/`).*
 
-Immediately after generation, locate and read the nearest generated `AGENTS.md`
-before using any generated API. Common locations include
-`app-playground/generate-lib/AGENTS.md`,
-`app-playground/generate-lib/lib/AGENTS.md`,
-`app-playground/rust-app-console/AGENTS.md`, and the generated application
-workspace root. If generated code is present but its local `AGENTS.md` is
-missing, stop and report the missing guide instead of guessing the API rules.
+## Generated AGENTS.md
+After generation, check for a local `AGENTS.md` in the generated output:
+
+- **Workspace/app outputs** (`rust-app-console/`, `java-workspace/`): must have
+  `AGENTS.md`. If missing, stop and report.
+- **Library outputs** (`generate-lib/`): may not have `AGENTS.md`. Use generated
+  source plus `rust-assist-*` commands for API discovery instead.
 
 ## Step 5: Write the Code
 After generating, do not use generic API pattern documents as the source of
