@@ -2,6 +2,13 @@
 
 ## READ THIS BEFORE CODING
 
+## AI-Native Reminder
+
+TeaQL is for AI coding agents, not manual CRUD programming.
+
+Work model-first: generate, validate, inspect generated APIs, then implement
+business logic against the generated contract.
+
 1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
 2. **Never edit generated files**: Do not manually modify files under `generate-lib/` or `generate-workspace/` or `bizcore/` (unless instructed otherwise).
 3. **Generated AGENTS.md**: After generation, check for a local `AGENTS.md` in generated workspace/app outputs. Workspace outputs such as `rust-app-console/` and `java-workspace/` must have `AGENTS.md`; if missing, stop and report. Library outputs such as `generate-lib/` may not have `AGENTS.md`; use generated source plus `rust-assist-*` commands for API discovery instead.
