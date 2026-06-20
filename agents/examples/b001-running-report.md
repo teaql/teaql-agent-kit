@@ -1,7 +1,7 @@
 # B-001 School Management — Running Report
 
 **Date**: 2026-06-18 (Asia/Shanghai)
-**Tools**: cargo-teaql 2.0.7 / teaql-core 4.0.5 / rusqlite 0.32.1
+**Tools**: cargo-teaql 2.0.8 / teaql-core 4.0.5 / rusqlite 0.32.1
 **Gen Scope**: `rust-app-console`
 **Gen Server**: latest
 

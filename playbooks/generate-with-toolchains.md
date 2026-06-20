@@ -20,8 +20,8 @@ Rust, or both TeaQL code generation tracks.
   coordinates such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`, not Maven
   prefix resolution such as `mvn teaql:generate -Dservice=java-lib`. Ensure Maven settings or the
   project POM exposes that URL as both a repository and a plugin repository. For
-  Rust, install `cargo-teaql` version `2.0.7` or newer from crates.io with
-  `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
+  Rust, install `cargo-teaql` exactly `2.0.8` from crates.io with
+  `cargo install cargo-teaql --version 2.0.8`, then run `cargo-teaql install-links`.
 - Optional server-side KSML evaluation target exposed by the installed client:
   `cargo teaql --input <model> evaluate` for the Rust/client path, or the fully
   qualified Maven plugin `eval` goal for the Java/Maven path.
@@ -35,18 +35,18 @@ Rust, or both TeaQL code generation tracks.
   evidence that it is valid for this repository. The repository-required
   versions are authoritative for every new run: Java
   `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL Nexus releases
-  repository, and Rust `cargo-teaql` `2.0.7` or newer from crates.io.
+  repository, and Rust `cargo-teaql` exactly `2.0.8` from crates.io.
 - For Rust, when network access is available, run
-  `cargo install cargo-teaql --force`, then `cargo-teaql --version`, then
-  `cargo-teaql install-links` before generation. If the available version is
-  older than `2.0.7`, stop and report the blocker.
+  `cargo install cargo-teaql --version 2.0.8 --force`, then
+  `cargo-teaql --version`, then `cargo-teaql install-links` before generation.
+  If the installed version is not exactly `2.0.8`, stop and report the blocker.
 - For Java, never rely on a previously resolved plugin or Maven prefix
   resolution. Invoke the fully qualified plugin coordinate with version
   `1.0.0` or newer, such as
   `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`. If Maven resolves an older
   plugin, or the required version cannot be resolved from the TeaQL Nexus
   releases repository, stop and report the blocker.
-- Using `cargo-teaql < 2.0.7`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
+- Using any `cargo-teaql` version other than `2.0.8`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
   is an evaluation failure unless the user explicitly asks to reproduce an
   old-version bug.
 - Run server-side KSML evaluation before generation when the installed client
@@ -60,15 +60,16 @@ Rust, or both TeaQL code generation tracks.
   repositories or artifact publishing.
 - In playground mode, keep model input and generated runtime code inside
   `app-playground` for easy review: use `app-playground/models` for `model.xml`
-  and related model inputs, and `app-playground/generate-lib` for generated
-  TeaQL runtime code. Keep generated runtime code separate from the user's
-  experiment source and test code. Use a local path dependency when the
-  playground needs to call generated APIs.
+  and related model inputs. For Rust, write each generated target to a directory
+  with the same name as the target, such as `app-playground/rust-lib-core` and
+  `app-playground/rust-app-console`. Keep generated runtime code separate from
+  the user's experiment source and test code. Use a local path dependency when
+  the playground needs to call generated APIs.
 - Use concrete paths in command-line examples and invocations. Do not pass
   Maven/POM expressions such as `${project.basedir}` or `${project.baseDir}` to
   `-Dteaql.input`, `-Dteaql.output`, `-Dteaql.workspaceDir`, or `--output`. Maven only interpolates project expressions in POM/plugin
   configuration contexts, not arbitrary CLI property values; use an actual path
-  such as `/path/to/app-playground/generate-lib` or `app-playground/generate-lib`.
+  such as `/path/to/app-playground/rust-lib-core` or `app-playground/rust-lib-core`.
 - For Java playgrounds that should be runnable as an application, generate the
   Java library first with the fully qualified Maven plugin coordinate and
   `-Dservice=java-lib`, then generate the workspace with
@@ -79,7 +80,7 @@ Rust, or both TeaQL code generation tracks.
   Spring Boot application class, `CustomUserContext`, `EnsureModelController`,
   and `docs/teaql-java-crud-guide.md`. Do not recreate these files by hand when
   the goal is available.
-- After generating the TeaQL library under `app-playground/generate-lib`, do not
+- After generating the Rust TeaQL library under `app-playground/rust-lib-core`, do not
   require a local `AGENTS.md` there. Library outputs may not include one. Use
   generated source plus `rust-assist-*` commands for API discovery. If the
   generated library is consumed from a package repository instead of a local
@@ -106,8 +107,8 @@ Rust, or both TeaQL code generation tracks.
   on Maven Central freshness. Invoke Java goals with fully qualified Maven
   plugin coordinates, for example
   `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`; do not use `mvn teaql:*`.
-  For Rust, install `cargo-teaql` version `2.0.7` or newer from crates.io with
-  `cargo install cargo-teaql`, then run `cargo-teaql install-links`.
+  For Rust, install `cargo-teaql` exactly `2.0.8` from crates.io with
+  `cargo install cargo-teaql --version 2.0.8`, then run `cargo-teaql install-links`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
   repositories for normal generation work. If the Maven plugin, Maven plugin
   goal, TeaQL plugin/tool invocation, or crates.io crate cannot be installed,
@@ -171,7 +172,7 @@ their outputs separate:
 
 | Output | Command | Directory | Purpose | Editable? |
 | --- | --- | --- | --- | --- |
-| Generated library crate | `rust-lib-core` | `app-playground/generate-lib` | TeaQL runtime/domain code generated from the model | No |
+| Generated library crate | `rust-lib-core` | `app-playground/rust-lib-core` | TeaQL runtime/domain code generated from the model | No |
 | Runnable app console | `rust-app-console` | `app-playground/rust-app-console` | Customer-owned Cargo app that depends on the generated crate | Yes |
 
 Always generate the library first, then the app console. Do not send both
@@ -184,14 +185,14 @@ commands, especially assist commands generated from a model input. For dynamic
 commands, pass the current model with `--input` and read the current help/output
 before using them.
 
-1. Install `cargo-teaql` version `2.0.7` or newer from crates.io. If this
+1. Install `cargo-teaql` exactly `2.0.8` from crates.io. If this
    command fails because the crate cannot be found, downloaded, installed,
    invoked, or executed, stop immediately and report the failure. Do not look
    for source code or try to build `cargo-teaql` from a local or remote
    repository.
 
    ```bash
-   cargo install cargo-teaql
+   cargo install cargo-teaql --version 2.0.8
    ```
 
 2. Install the local command links exposed by the CLI:
@@ -211,16 +212,16 @@ before using them.
 4. Generate the read-only backend/domain library from the model. In playground
    mode, create or copy the reviewed model to
    `/path/to/app-playground/models/model.xml`, and use
-   `/path/to/app-playground/generate-lib` as the output path:
+   `/path/to/app-playground/rust-lib-core` as the output path:
 
    ```bash
    cargo teaql --input /path/to/app-playground/models/model.xml rust-lib-core \
-     --output /path/to/app-playground/generate-lib \
+     --output /path/to/app-playground/rust-lib-core \
      --cwd /path/to/app-playground
    ```
 
 5. Generate the editable Rust app console after `rust-lib-core`. Write it to
-   `/path/to/app-playground/rust-app-console`, not to `generate-lib`:
+   `/path/to/app-playground/rust-app-console`, not to `rust-lib-core`:
 
    ```bash
    cargo teaql --input /path/to/app-playground/models/model.xml rust-app-console \
@@ -252,7 +253,7 @@ Recommended playground shape:
 app-playground/
   models/
     model.xml           # semantic source of truth for generation
-  generate-lib/         # generated Java or Rust TeaQL runtime code
+  rust-lib-core/        # generated Rust TeaQL runtime code from rust-lib-core
   rust-app-console/     # editable Rust app from rust-app-console
     AGENTS.md
     Cargo.toml
@@ -300,10 +301,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-Keep regenerated TeaQL code in `app-playground/generate-lib`. Do not mix
+Keep regenerated Rust TeaQL code in `app-playground/rust-lib-core`. Do not mix
 generated runtime files into `rust-app-console/src/` or `rust-app-console/tests/`.
-Do not require `app-playground/generate-lib/AGENTS.md` or
-`app-playground/generate-lib/lib/AGENTS.md`; generated libraries may not include
+Do not require `app-playground/rust-lib-core/AGENTS.md` or
+`app-playground/rust-lib-core/lib/AGENTS.md`; generated libraries may not include
 one. Use generated source plus `rust-assist-*` commands for API discovery. If
 the crate is consumed from a Cargo registry, locate the unpacked dependency
 source with `cargo metadata` or materialize it with `cargo vendor`, then inspect
@@ -328,7 +329,7 @@ Recommended sections:
    - State the target runtime.
 
 2. `Directory Layout`
-   - List `app-playground/models`, `app-playground/generate-lib`, and the
+   - List `app-playground/models`, `app-playground/rust-lib-core`, and the
      customer-owned playground source/test paths.
    - State explicitly that generated runtime code and customer experiment code
      are separate.

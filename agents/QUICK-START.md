@@ -55,12 +55,12 @@ older local client from a previous run.
 Required versions:
 
 - Java: `io.teaql:teaql-maven-plugin:1.1.0` or newer
-- Rust: `cargo-teaql` `2.0.7` or newer
+- Rust: `cargo-teaql` exactly `2.0.8`
 
 For Rust:
 
 ```bash
-cargo install cargo-teaql --force
+cargo install cargo-teaql --version 2.0.8 --force
 cargo-teaql --version
 cargo-teaql install-links
 ```
@@ -95,7 +95,7 @@ target names in this repository.
 
 ```bash
 cargo teaql --input app-playground/models/model.xml rust-lib-core \
-  --output app-playground/generate-lib \
+  --output app-playground/rust-lib-core \
   --cwd app-playground
 
 cargo teaql --input app-playground/models/model.xml rust-app-console \
@@ -104,7 +104,7 @@ cargo teaql --input app-playground/models/model.xml rust-app-console \
 ```
 
 `rust-lib-core` writes generated TeaQL runtime/domain code to
-`app-playground/generate-lib`; do not edit it. `rust-app-console` writes the
+`app-playground/rust-lib-core`; do not edit it. `rust-app-console` writes the
 runnable customer-owned Cargo app to `app-playground/rust-app-console`; put
 custom Rust code there. The app console depends on the generated library.
 
@@ -113,14 +113,14 @@ AI coding step. Immediately after it is generated, read
 `app-playground/rust-app-console/AGENTS.md` and follow that local guide before
 adding code, running checks, or explaining the app console.
 
-*Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`generate-lib/` or `bizcore/`).*
+*Note: The generated Rust library crate name will automatically append `-core` to the model name (e.g., `bookstore-service-core`), but the Rust module name remains unchanged (e.g., `bookstore_service`). Never manually edit files inside the generated folders (`rust-lib-core/` or `bizcore/`).*
 
 ## Generated AGENTS.md
 After generation, check for a local `AGENTS.md` in the generated output:
 
 - **Workspace/app outputs** (`rust-app-console/`, `java-workspace/`): must have
   `AGENTS.md`. If missing, stop and report.
-- **Library outputs** (`generate-lib/`): may not have `AGENTS.md`. Use generated
+- **Library outputs** (`rust-lib-core/`): may not have `AGENTS.md`. Use generated
   source plus `rust-assist-*` commands for API discovery instead.
 
 ## Step 5: Write the Code
