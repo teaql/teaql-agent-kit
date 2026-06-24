@@ -3,9 +3,9 @@
 ## READ THIS BEFORE CODING
 
 ### Core Framework Rules
-1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
-2. **Never edit generated files**: Do not manually modify files under `rust-lib-core/`, `generate-lib/`, `generate-workspace/`, or `bizcore/` (unless instructed otherwise).
-3. **Generated AGENTS.md**: After generation, check for a local `AGENTS.md` in generated workspace/app outputs. Workspace outputs such as `rust-app-console/` and `java-workspace/` must have `AGENTS.md`; if missing, stop and report. Library outputs such as `rust-lib-core/` may not have `AGENTS.md`; use generated source plus `rust-assist-*` commands for API discovery instead.
+1. **Never guess method names**: Use the generated local `AGENTS.md` and object-specific assist output before writing business code. Do not bypass assist by reading low-level generated/runtime source first. Generated source may only be used after assist when the local guide explicitly tells you to inspect it or when assist output is incomplete; state that reason in your report.
+2. **Never edit generated files**: Do not manually modify files under `rust-lib-core/`, `java-lib-core/`, `java-web-spring-boot/`, or `bizcore/` (unless instructed otherwise).
+3. **Generated AGENTS.md**: After generation, check for a local `AGENTS.md` in generated app/workspace outputs. Outputs such as `rust-app-console/`, `java-app-console/`, and `java-web-spring-boot/` must have `AGENTS.md`; if missing, stop and report. Rust library output `rust-lib-core/` may not have `AGENTS.md`; use object-specific `rust-assist-*` commands before writing business code, with generated source only as an assist-incomplete fallback.
 4. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
 5. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 

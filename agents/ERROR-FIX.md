@@ -15,7 +15,7 @@
 
 | Error | Meaning | Fix |
 |-------|---------|-----|
-| `no method named update_xxx` | Guessing method names | Read the entity source file for the exact correct method name. |
+| `no method named update_xxx` | Guessing method names | Run the object-specific assist command for that entity/action first. Inspect generated source only if assist is incomplete. |
 | `Missing .audit_as()` | Unaudited save/update | Add `.audit_as("description")` before `.save()` or `.update()`. |
 | `Missing .purpose()` | Unjustified query | Add `.purpose("why")` and `.comment("what")` before `.execute_for_list()`. |
 

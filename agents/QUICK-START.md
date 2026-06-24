@@ -118,17 +118,21 @@ adding code, running checks, or explaining the app console.
 ## Generated AGENTS.md
 After generation, check for a local `AGENTS.md` in the generated output:
 
-- **Workspace/app outputs** (`rust-app-console/`, `java-workspace/`): must have
+- **Workspace/app outputs** (`rust-app-console/`, `java-app-console/`, `java-web-spring-boot/`): must have
   `AGENTS.md`. If missing, stop and report.
-- **Library outputs** (`rust-lib-core/`): may not have `AGENTS.md`. Use generated
-  source plus `rust-assist-*` commands for API discovery instead.
+- **Library outputs** (`rust-lib-core/`): may not have `AGENTS.md`. Use
+  object-specific `rust-assist-*` commands before writing business code, with
+  generated source only as an assist-incomplete fallback.
 
 ## Step 5: Write the Code
 After generating, do not use generic API pattern documents as the source of
 truth. Use the generated output for your target language:
 
-- **Java**: Follow the generated workspace `AGENTS.md` and generated source
-  files for the exact service, controller, query, and entity API shape.
+- **Java**: Follow the generated workspace `AGENTS.md` and use its
+  object-specific assist commands before writing business code. Do not bypass
+  assist by reading generated/runtime source first. Inspect generated source
+  only when the local guide requires it or assist output is incomplete, and
+  state that reason in your report.
 - **Rust**: Run the object-specific assist command for the entity and action you
   are coding:
 
@@ -140,6 +144,10 @@ For Rust, the assist output is the source of truth for exact generated method
 names and code shape. Dynamic Rust assist commands are generated from the input
 model; before using one, pass the current model input with `--input` and read
 its current help or output.
+
+Before editing business code, write down the assist command(s) you used and the
+API facts you will rely on. If you cannot produce that evidence, stop and run
+assist before continuing.
 
 Make sure you always include `.purpose()` / `.comment()` for queries, and `.audit_as()` / `.auditAs()` for updates.
 Finally, run checks to ensure correctness:
