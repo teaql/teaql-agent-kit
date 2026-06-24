@@ -9,16 +9,16 @@ TeaQL is for AI coding agents, not manual CRUD programming.
 Work model-first: generate, validate, inspect generated APIs, then implement
 business logic against the generated contract.
 
-1. **Never guess method names**: Read the generated entity source files for the exact method names (e.g., `update_status`, not `set_status`).
-2. **Never edit generated files**: Do not manually modify files under `rust-lib-core/`, `generate-lib/`, `generate-workspace/`, or `bizcore/` (unless instructed otherwise).
-3. **Generated AGENTS.md**: After generation, check for a local `AGENTS.md` in generated workspace/app outputs. Workspace outputs such as `rust-app-console/` and `java-workspace/` must have `AGENTS.md`; if missing, stop and report. Library outputs such as `rust-lib-core/` may not have `AGENTS.md`; use generated source plus `rust-assist-*` commands for API discovery instead.
+1. **Never guess method names**: Use the generated local `AGENTS.md` and object-specific assist output before writing business code. Do not bypass assist by reading low-level generated/runtime source first. Generated source may only be used after assist when the local guide explicitly tells you to inspect it or when assist output is incomplete; state that reason in your report.
+2. **Never edit generated files**: Do not manually modify files under `rust-lib-core/`, `java-lib-core/`, `java-web-spring-boot/`, or `bizcore/` (unless instructed otherwise).
+3. **Generated AGENTS.md**: After generation, check for a local `AGENTS.md` in generated app/workspace outputs. Outputs such as `rust-app-console/`, `java-app-console/`, and `java-web-spring-boot/` must have `AGENTS.md`; if missing, stop and report. Rust library output `rust-lib-core/` may not have `AGENTS.md`; use object-specific `rust-assist-*` commands before writing business code, with generated source only as an assist-incomplete fallback.
 4. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
 5. **Use cargo teaql with --input**: Every Rust TeaQL operation that reads or generates from a model must use `cargo teaql --input <model> <command> ...`. Rust generation in this Agent Kit uses only `rust-lib-core` and `rust-app-console`. Dynamic assist/help commands are also model-derived, so pass the current model with `--input` and read the current help/output before using them.
 6. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 7. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
 8. **Markdown Reports**: Both clients (`cargo teaql --input <model> evaluate` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
 9. **STRICT VERSION REQUIREMENT (MUST READ)**: This repository requires `cargo-teaql` exactly `2.0.8`. If you detect any other version, YOU MUST STOP and refuse to generate code until the user installs `2.0.8`.
-10. **This repo is the execution guide**: Use the focused files under `agents/`, `modeling/`, `playbooks/`, generated local `AGENTS.md` files, object-specific Rust assist output, and generated Java output as current guidance.
+10. **This repo is the execution guide**: Use the focused files under `agents/`, `modeling/`, `playbooks/`, generated local `AGENTS.md` files, object-specific assist output, and generated Java output as current guidance.
 11. **Reports and long background docs live elsewhere**: Historical evaluation reports and `TECH-INTRODUCTION.md` were moved to `/Users/Philip/githome/teaql-evaluation-reports`. Do not use that repository for current commands, API usage, versions, or modeling rules unless the task explicitly asks for historical report or background analysis.
 
 ## TOOL VERSION REFRESH RULE
@@ -54,15 +54,15 @@ For Java, invoke the fully qualified plugin version explicitly:
 
 ```bash
 mvn io.teaql:teaql-maven-plugin:1.1.0:eval
-mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib
-mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace
+mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core
+mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot
 ```
 
 Never use Maven prefix resolution such as:
 
 ```bash
-mvn teaql:generate -Dservice=java-lib
-mvn teaql:generate -Dservice=java-workspace
+mvn teaql:generate -Dservice=java-lib-core
+mvn teaql:generate -Dservice=java-web-spring-boot
 ```
 
 > [!CAUTION]
@@ -74,7 +74,7 @@ mvn teaql:generate -Dservice=java-workspace
 
 | Error type | What to do |
 |-----------|------------|
-| `no method named update_xxx` | Read the entity source file for correct method name |
+| `no method named update_xxx` | Run the object-specific assist command for that entity/action first; inspect generated source only if assist is incomplete |
 | `Missing .audit_as()` | Add `.audit_as("description")` before `.save()` |
 | `Missing .purpose()` | Add `.purpose("why")` before `.execute_for_list()` |
 | `Empty attribute` in KSML | Delete it or fill with a concrete value |
@@ -106,7 +106,7 @@ Default behavior:
 
 1. Use `AGENTS.md`, `agents/QUICK-START.md`, `agents/RULES.md`,
    `modeling/KSML-RULES.md`, `agents/TEMPLATES.md`, `agents/ERROR-FIX.md`,
-   generated local `AGENTS.md` files, object-specific Rust assist output, and
+   generated local `AGENTS.md` files, object-specific assist output, and
    generated Java output first.
 2. Do not read `/Users/Philip/githome/teaql-evaluation-reports` unless the user
    explicitly asks for historical reports, evaluation evidence, or broad TeaQL

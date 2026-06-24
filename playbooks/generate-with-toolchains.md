@@ -8,8 +8,9 @@ Rust, or both TeaQL code generation tracks.
 - Valid KSML model file or model directory.
 - Target runtime: Java, Rust, or both.
 - Target project directory or playground local trial directory.
-- Optional Java workspace output when the user asks for a runnable Java
-  workspace: service `java-workspace`.
+- Optional Java app/workspace output when the user asks for a runnable Java
+  workspace: service `java-web-spring-boot` by default, or another generated
+  Java app target such as `java-app-console`.
 - Optional Rust app output when the user asks for a runnable Rust app:
   generation target `rust-app-console`, which depends on the generated Rust
   library crate.
@@ -17,8 +18,8 @@ Rust, or both TeaQL code generation tracks.
   Maven plugin version `1.1.0` or newer from the TeaQL Nexus releases
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
   on Maven Central freshness, and invoke the plugin with fully qualified
-  coordinates such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`, not Maven
-  prefix resolution such as `mvn teaql:generate -Dservice=java-lib`. Ensure Maven settings or the
+  coordinates such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`, not Maven
+  prefix resolution such as `mvn teaql:generate -Dservice=java-lib-core`. Ensure Maven settings or the
   project POM exposes that URL as both a repository and a plugin repository. For
   Rust, install `cargo-teaql` exactly `2.0.8` from crates.io with
   `cargo install cargo-teaql --version 2.0.8`, then run `cargo-teaql install-links`.
@@ -43,7 +44,7 @@ Rust, or both TeaQL code generation tracks.
 - For Java, never rely on a previously resolved plugin or Maven prefix
   resolution. Invoke the fully qualified plugin coordinate with version
   `1.0.0` or newer, such as
-  `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`. If Maven resolves an older
+  `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`. If Maven resolves an older
   plugin, or the required version cannot be resolved from the TeaQL Nexus
   releases repository, stop and report the blocker.
 - Using any `cargo-teaql` version other than `2.0.8`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
@@ -60,21 +61,22 @@ Rust, or both TeaQL code generation tracks.
   repositories or artifact publishing.
 - In playground mode, keep model input and generated runtime code inside
   `app-playground` for easy review: use `app-playground/models` for `model.xml`
-  and related model inputs. For Rust, write each generated target to a directory
+  and related model inputs. For Java and Rust, write each generated target to a directory
   with the same name as the target, such as `app-playground/rust-lib-core` and
-  `app-playground/rust-app-console`. Keep generated runtime code separate from
+  `app-playground/rust-app-console`, or `app-playground/java-lib-core` and
+  `app-playground/java-web-spring-boot`. Keep generated runtime code separate from
   the user's experiment source and test code. Use a local path dependency when
   the playground needs to call generated APIs.
 - Use concrete paths in command-line examples and invocations. Do not pass
   Maven/POM expressions such as `${project.basedir}` or `${project.baseDir}` to
   `-Dteaql.input`, `-Dteaql.output`, `-Dteaql.workspaceDir`, or `--output`. Maven only interpolates project expressions in POM/plugin
   configuration contexts, not arbitrary CLI property values; use an actual path
-  such as `/path/to/app-playground/rust-lib-core` or `app-playground/rust-lib-core`.
+  such as `/path/to/app-playground/java-lib-core` or `app-playground/rust-lib-core`.
 - For Java playgrounds that should be runnable as an application, generate the
   Java library first with the fully qualified Maven plugin coordinate and
-  `-Dservice=java-lib`, then generate the workspace with
-  `-Dservice=java-workspace` and write the workspace output to
-  `app-playground/java-workspace` with `teaql.workspaceDir`. The workspace
+  `-Dservice=java-lib-core`, then generate the workspace with
+  `-Dservice=java-web-spring-boot` and write the workspace output to
+  `app-playground/java-web-spring-boot` with `teaql.workspaceDir`. The workspace
   request generates a Spring Boot/Maven workspace from the model, including `AGENTS.md`,
   `pom.xml`, `.gitignore`, `src/main/resources/application.properties`, the
   Spring Boot application class, `CustomUserContext`, `EnsureModelController`,
@@ -82,11 +84,12 @@ Rust, or both TeaQL code generation tracks.
   the goal is available.
 - After generating the Rust TeaQL library under `app-playground/rust-lib-core`, do not
   require a local `AGENTS.md` there. Library outputs may not include one. Use
-  generated source plus `rust-assist-*` commands for API discovery. If the
+  object-specific `rust-assist-*` commands before writing business code; generated
+  source is only a fallback when assist output is incomplete. If the
   generated library is consumed from a package repository instead of a local
   generated directory, locate the unpacked dependency source first; for Cargo
-  dependencies, use `cargo metadata` or `cargo vendor`, then inspect the
-  generated source and use the model-specific assist output before writing code
+  dependencies, use `cargo metadata` or `cargo vendor`, then use the
+  model-specific assist output before writing code
   against that crate.
 - When working inside a generated Java workspace, read and follow its generated
   `AGENTS.md` in addition to this kit-level playbook before reading, editing,
@@ -106,7 +109,7 @@ Rust, or both TeaQL code generation tracks.
   repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not rely
   on Maven Central freshness. Invoke Java goals with fully qualified Maven
   plugin coordinates, for example
-  `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`; do not use `mvn teaql:*`.
+  `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`; do not use `mvn teaql:*`.
   For Rust, install `cargo-teaql` exactly `2.0.8` from crates.io with
   `cargo install cargo-teaql --version 2.0.8`, then run `cargo-teaql install-links`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
@@ -305,10 +308,11 @@ Keep regenerated Rust TeaQL code in `app-playground/rust-lib-core`. Do not mix
 generated runtime files into `rust-app-console/src/` or `rust-app-console/tests/`.
 Do not require `app-playground/rust-lib-core/AGENTS.md` or
 `app-playground/rust-lib-core/lib/AGENTS.md`; generated libraries may not include
-one. Use generated source plus `rust-assist-*` commands for API discovery. If
+one. Use object-specific `rust-assist-*` commands before writing business code;
+generated source is only a fallback when assist output is incomplete. If
 the crate is consumed from a Cargo registry, locate the unpacked dependency
-source with `cargo metadata` or materialize it with `cargo vendor`, then inspect
-the generated source and assist output. When working inside `rust-app-console`,
+source with `cargo metadata` or materialize it with `cargo vendor`, then use
+the assist output. When working inside `rust-app-console`,
 read its generated `AGENTS.md` first and read it again after regeneration.
 
 ## Playground Report
@@ -353,7 +357,7 @@ Recommended sections:
    - List the generated crate path and the key generated APIs, such as `Q`,
      entity structs, request builders, relation loaders, aggregation helpers,
      runtime registration, and schema bootstrap helpers when present.
-   - For Java `java-workspace` output, list the workspace path and call out the
+   - For Java `java-web-spring-boot` output, list the workspace path and call out the
      generated `AGENTS.md`, Maven files, Spring Boot application class,
      `CustomUserContext`, `EnsureModelController`, application properties, and
      CRUD guide.
@@ -425,8 +429,8 @@ Before running Maven for a Java project, read
    releases repository:
    `https://nexus.teaql.io/repository/maven-releases/`. Do not rely on Maven
    Central freshness. Invoke goals with fully qualified Maven plugin coordinates
-   such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`; do not use Maven prefix
-   resolution such as `mvn teaql:generate -Dservice=java-lib`, because Maven may resolve the prefix
+   such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`; do not use Maven prefix
+   resolution such as `mvn teaql:generate -Dservice=java-lib-core`, because Maven may resolve the prefix
    against Central or the wrong plugin group. Ensure Maven settings or the
    project POM exposes the TeaQL Nexus releases URL as both a repository and a
    plugin repository. If Maven cannot resolve the plugin from the TeaQL Nexus
@@ -448,27 +452,27 @@ Before running Maven for a Java project, read
 3. Generate backend/domain library code from the reviewed model. In playground
    mode, create or copy the reviewed model to
    `/path/to/app-playground/models/model.xml`, and use
-   `/path/to/app-playground/generate-lib` as the output path:
+   `/path/to/app-playground/java-lib-core` as the output path:
 
    ```bash
-   mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib \
+   mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core \
      -Dteaql.input=/path/to/app-playground/models/model.xml \
-     -Dteaql.output=/path/to/app-playground/generate-lib
+     -Dteaql.output=/path/to/app-playground/java-lib-core
    ```
 
-4. After `java-lib` generation succeeds, generate a runnable Java playground
+4. After `java-lib-core` generation succeeds, generate a runnable Java playground
    workspace when the user wants a local Spring Boot application. Use service
-   `java-workspace` and
+   `java-web-spring-boot` and
    write the workspace to
-   `/path/to/app-playground/java-workspace`:
+   `/path/to/app-playground/java-web-spring-boot`:
 
    ```bash
-   mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace \
+   mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot \
      -Dteaql.input=/path/to/app-playground/models/model.xml \
-     -Dteaql.workspaceDir=/path/to/app-playground/java-workspace
+     -Dteaql.workspaceDir=/path/to/app-playground/java-web-spring-boot
    ```
 
-   If the installed Maven plugin does not expose service `java-workspace`, or if
+   If the installed Maven plugin does not expose service `java-web-spring-boot`, or if
    that invocation fails, stop and report that plugin capability or
    invocation failure as the blocker. Do not hand-build the workspace or fall
    back to source checkouts in normal generation mode.
@@ -484,7 +488,7 @@ Before running Maven for a Java project, read
    configuration may be edited.
 
 5. Run target-project Java checks when a Maven project is generated.
-   For `java-workspace`, run checks from the generated workspace directory:
+   For `java-web-spring-boot`, run checks from the generated workspace directory:
 
    ```bash
    mvn clean compile
@@ -492,14 +496,14 @@ Before running Maven for a Java project, read
    ```
 
 For Java playground mode, always start from the reviewed model, run
-fully qualified `generate -Dservice=java-lib`, and then run fully qualified
-`generate -Dservice=java-workspace` when the expected result is a runnable directory. Keep the model under
-`app-playground/models`, the generated library under `app-playground/generate-lib`,
-and the generated workspace under `app-playground/java-workspace`. The workspace
+fully qualified `generate -Dservice=java-lib-core`, and then run fully qualified
+`generate -Dservice=java-web-spring-boot` when the expected result is a runnable directory. Keep the model under
+`app-playground/models`, the generated library under `app-playground/java-lib-core`,
+and the generated workspace under `app-playground/java-web-spring-boot`. The workspace
 is the application playground: keep user controllers, query experiments,
 scenario code, and integration configuration there, while continuing to treat
 generated TeaQL library classes as read-only. For library-only Java generation,
-stop after fully qualified `generate -Dservice=java-lib` and wire any playground application to the
+stop after fully qualified `generate -Dservice=java-lib-core` and wire any playground application to the
 generated library locally.
 
 ## Configuration
