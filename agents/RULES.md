@@ -17,7 +17,7 @@
 10. Never use `_constant="true"` on business objects.
 11. References to business objects must use `object_name()` directly (e.g., `school="school()"`), NOT `school="object(school)"`.
 12. Status and finite-set fields must reference constant objects (e.g., `status="appointment_status()"`).
-13. Use typical real-world values for business object fields (e.g., `species="dog"`), NOT `species="string()"`.
+13. Use typical real-world literal values for business object fields (e.g., `species="dog"`, `external_id="1000000000000000000l"`), NOT scalar type functions such as `species="string()"` or `external_id="long()"`.
 14. Only constant objects use `string()` for `name` and `code`.
 15. Do not add `merchant`, `tenant`, or `platform` unless explicitly modeling a multi-tenant system.
 16. Single-tenant systems have no tenant boundary fields.

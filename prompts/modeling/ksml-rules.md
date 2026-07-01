@@ -442,6 +442,27 @@ Correct:
           hire_date="2024-01-15"/>
 ```
 
+### Scalar Type Inference
+
+For business objects, prefer representative literal values over scalar type
+functions. Do not write `count="integer()"`, `amount="number()"`, or
+`external_id="long()"` for normal business fields.
+
+Use literals that trigger TeaQL type inference:
+
+- `count="12"` -> `integer`.
+- `external_id="1000000000000000000l"` -> `long`.
+- `amount="1299.50"` -> `number`.
+- `enabled="true"` -> `bool`.
+- `birth_date="2024-01-15"` -> `date`.
+- `checked_at="2024-01-15T10:30:00"` -> `dateTime`.
+
+Use scalar functions in business objects only when the field needs special
+generator semantics or no realistic literal can express it well, such as
+`create_time="createTime()"`, `update_time="updateTime()"`,
+`description="text()"`, `payload="jsonMe()"`, or
+`password_hash="password()"`.
+
 ## Status and Classification Fields
 
 Fields that represent a finite set must reference constant objects.
@@ -496,7 +517,9 @@ Use `object_name()` directly. Do not write `object(object_name)`.
 | Gender | `gender()` or a domain-specific constant |
 | Date fields | Concrete date such as `2024-01-15` |
 | `create_time`, `update_time` | `createTime()`, `updateTime()` |
-| Numeric IDs, counts, amounts | Concrete number |
+| Counts | Concrete integer literal such as `3` |
+| Large numeric external IDs or sequence-like values | Long literal with `l`, such as `1000000000000000000l` |
+| Amounts or precise measurements | Decimal literal such as `1299.50` |
 | Reference to another object | `object_name()` |
 
 ## Built-In Functions
