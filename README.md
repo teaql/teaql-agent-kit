@@ -1,8 +1,21 @@
 # TEAQL Agent Kit
 
-**TEAQL Agent Kit** is an evaluation environment for coding agents and language models on auditable business software tasks.
+> **AI agents:** this README is for human readers. Do not use it as execution
+> guidance. For modeling, generation, debugging, or implementation work, read
+> `AGENTS.md` and the focused files under `agents/`, `modeling/`, and
+> `playbooks/` instead.
 
-It is designed to measure not only whether generated code works, but also whether an agent can preserve business semantics, follow framework boundaries, maintain auditability, recover from errors, and use tokens efficiently.
+**TEAQL Agent Kit** is an evaluation environment for coding agents and language
+models working on auditable business software tasks.
+
+It tracks two kinds of engineering effort:
+
+* **Software engineering discipline**: preserving business semantics, following
+  generated API contracts, respecting framework boundaries, keeping audit traces,
+  and recovering from errors without unsafe shortcuts.
+* **Token efficiency discipline**: giving agents compact rules, generated local
+  guides, object-specific assist output, and evaluation reports so they spend
+  fewer tokens guessing, rereading, or exploring irrelevant source.
 
 ---
 
@@ -14,9 +27,14 @@ It provides tasks, prompts, guides, and reports for observing how coding agents 
 
 The current goal is not ungated production automation.
 
-The current goal is to answer a more basic question:
+The current goal is to answer two practical questions:
 
-> How do coding agents actually behave when business rules, generated APIs, audit traces, and framework boundaries matter?
+> How do coding agents behave when business rules, generated APIs, audit traces,
+> and framework boundaries matter?
+
+> How much context can be saved when the repository gives agents the right
+> generated contracts, focused guides, and machine-readable feedback at the right
+> time?
 
 ---
 
@@ -29,12 +47,15 @@ It is used for controlled and reproducible evaluation, with:
 * Clear task definitions
 * Explicit TEAQL API rules
 * Agent-readable guides
+* Generated local contracts and object-specific assist commands
+* Markdown evaluation reports for targeted error repair
 * Optional human checkpoints
 * Comparable evaluation reports
 
 This branch asks:
 
-> What can a coding agent do when the rules are clear and the evaluation is controlled?
+> What can a coding agent do when software engineering rules are clear,
+> generated contracts are available, and context is spent deliberately?
 
 ---
 
@@ -75,7 +96,14 @@ TEAQL Agent Kit evaluates agents across dimensions such as:
 * Human intervention count
 * Token efficiency
 
-For long-lived business software, these dimensions matter as much as whether the code compiles.
+For long-lived business software, these dimensions matter as much as whether the
+code compiles.
+
+The token-efficiency work is part of the same evaluation, not a separate
+optimization. Agents should use short execution guides, generated `AGENTS.md`
+files, assist commands, and Markdown reports before falling back to broad source
+reading. A good run should leave evidence that the agent used the smallest
+reliable context needed to make the change.
 
 ---
 
@@ -107,4 +135,3 @@ Today, TEAQL Agent Kit evaluates coding agents.
 Long term, the same evidence may help define which AI coding tasks can be safely automated, which require human gates, and which should never bypass review.
 
 The goal is measured automation, not blind automation.
-
