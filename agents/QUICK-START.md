@@ -8,6 +8,7 @@ This guide provides the fastest path for an AI agent to build a TeaQL project fr
 - All business and constant objects MUST be direct children of `<root>`.
 - Business objects MUST NOT use `id="id()"`.
 - Constant objects MUST use `id="id()"`, `name="string()"`, `code="string()"`, `_constant="true"`, and `_identifier="code"`.
+- Business objects should use representative literal values, not scalar type functions, for normal fields. Use `external_id="1000000000000000000l"` instead of `external_id="long()"`.
 
 ## Step 2: Create the Model (`model.xml`)
 Use `agents/TEMPLATES.md` to copy the exact XML blocks.

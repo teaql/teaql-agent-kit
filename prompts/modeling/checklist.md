@@ -46,6 +46,9 @@ Use this checklist before delivering or generating code from a KSML model.
 - Every non-root business object references at least one other object and is
   connected to the domain root graph.
 - Use concrete example values, not `string()`, for normal business fields.
+- Use literal values, not scalar type functions, for normal business fields:
+  `count="12"`, `external_id="1000000000000000000l"`,
+  `amount="1299.50"`, and `enabled="true"`.
 - Do not assume multi-tenancy by default.
 - Include tenant ownership only when the user confirmed a tenant boundary or the
   model records an explicit autonomous playground assumption.
