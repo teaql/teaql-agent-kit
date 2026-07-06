@@ -21,6 +21,8 @@ Use this checklist before delivering or generating code from a KSML model.
 - All objects are direct children of `<root>`.
 - No nested objects except `<_value>` children inside constant objects.
 - Object names are lowercase snake_case.
+- Object and attribute names use complete domain words, not compressed fragments
+  or ambiguous abbreviations.
 - Each element type is unique.
 - Object names and attribute names do not exactly match reserved keywords from
   Java, JavaScript, Dart, Rust, Go, and Python.

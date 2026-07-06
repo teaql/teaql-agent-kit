@@ -120,6 +120,23 @@ Use this order for business object attributes:
 
 This reads as: who you are, who you belong to, then system records.
 
+### Complete Domain Word Naming
+
+Use complete, domain-specific words for object names and attribute names. Avoid
+compressed fragments, ambiguous partial words, and context-free abbreviations such
+as `acct`, `addr`, `mob`, `exp`, `pwd`, `cfg`, or `stat` unless the
+abbreviation is the established business term.
+
+Prefer names that carry enough context for generated code, privacy review, and human review:
+
+- `account_number` instead of `acct_no`.
+- `mobile_phone` instead of `mobile` when the value is a phone number.
+- `quotation_expiry_date` or `valid_until` for quote validity.
+- `card_expiry_date` only when the field is payment-card expiry.
+
+Established acronyms such as `id`, `api`, `url`, `sku`, and `ip` are acceptable
+when they are the normal domain term.
+
 ### Reserved Keyword Naming
 
 To keep model names stable and consistent across generated code, JSON, frontend

@@ -28,6 +28,8 @@ Requirements:
 - Use `merchant="merchant(context)"` only when `merchant` is the confirmed
   tenant owner.
 - Use concrete realistic sample values for business fields.
+- Use complete domain words for object and attribute names; avoid compressed
+  fragments or ambiguous abbreviations unless they are established terms.
 - Use constant objects for status, category, kind, classification, gender,
   priority, and other finite enumerations.
 - Do not use object or attribute names that exactly match reserved keywords in
