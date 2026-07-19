@@ -49,8 +49,8 @@ Use Java to build a school management system with these domain concepts:
 - School Type, with values Primary and Secondary
 
 Create the semantic TeaQL model first, review it, then generate the Java TeaQL
-code. Generate both the Java library with gen-lib and the runnable Spring Boot
-workspace with gen-workspace.
+code. Generate the read-only library with service java-lib-core and the runnable
+Spring Boot application with service java-web-spring-boot.
 
 Build only:
 - a query API for schools
@@ -109,25 +109,26 @@ single local playground that keeps reviewable artifacts together, for example:
 
 ```text
 app-playground/
-  models/        # model.xml and generation input
-  generate-lib/  # generated Java or Rust TeaQL code
-  java-workspace/# runnable Java Spring Boot workspace from gen-workspace
-  rust-workspace/# editable Rust Tokio workspace from gen-workspace
-  src/           # optional ad hoc user functions and query experiments
-  tests/         # optional ad hoc scenario experiments
+  models/                 # model.xml and generation input
+  java-lib-core/          # generated read-only Java TeaQL library
+  java-web-spring-boot/   # runnable, customer-editable Spring Boot application
+  generate-lib/           # generated Rust TeaQL code for the Rust track
+  rust-workspace/         # editable Rust Tokio workspace
+  src/                    # optional ad hoc user functions and query experiments
+  tests/                  # optional ad hoc scenario experiments
 ```
 
 The playground should depend on the generated runtime by local path. It should
 not copy generated source into the same directory as the user's own experiment
-code. Keeping `models/` and `generate-lib/` under `app-playground` makes both
-the semantic model and generated library easy for the user to review without
-requiring a Maven/Cargo artifact repository before adoption.
+code. Keeping the model and each named generation target under `app-playground`
+makes the semantic model and generated library easy to review without requiring
+a Maven/Cargo artifact repository before adoption.
 
 For Java playgrounds that should run as a Spring Boot application, generate the
-Java library first with the fully qualified `gen-lib` Maven plugin coordinate,
-then use the fully qualified `gen-workspace` coordinate. The workspace goal
-requests the generator's `java-workspace` output and extracts a runnable
-Spring Boot/Maven workspace under `app-playground/java-workspace`, including
+Java library first with the fully qualified Maven plugin coordinate and
+`-Dservice=java-lib-core`, then generate the application with
+`-Dservice=java-web-spring-boot`. The second request extracts a runnable
+Spring Boot/Maven workspace under `app-playground/java-web-spring-boot`, including
 project files,
 application properties, Java entry classes, a CRUD guide, and a domain-specific
 `AGENTS.md` for coding inside that workspace. That workspace `AGENTS.md` is
@@ -161,7 +162,7 @@ exists. Users should install the TeaQL client tools from package registries. For
 Java, resolve TeaQL Maven plugin version `1.1.0` or newer from the TeaQL Nexus
 releases repository: `https://nexus.teaql.io/repository/maven-releases/`. Do not
 rely on Maven Central freshness, and do not use Maven plugin prefix resolution
-such as `mvn teaql:generate -Dservice=java-lib`; Maven may search the wrong repositories. Invoke the
+such as `mvn teaql:generate -Dservice=java-lib-core`; Maven may search the wrong repositories. Invoke the
 plugin with fully qualified coordinates, and ensure the user Maven settings or
 project POM exposes the TeaQL Nexus releases repository as a repository and
 plugin repository. For Rust, install CLI package `cargo-teaql` version `2.0.2`
@@ -177,11 +178,11 @@ the blocker instead of trying source builds or alternate generation paths.
 | KSML evaluation, Java/Maven path | TeaQL Maven plugin with `eval` goal from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:eval -Dteaql.input=<model-file-or-directory>` |
 | Rust | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 2.0.2`, then `cargo-teaql install-links` | `cargo-teaql rust-lib-core <model.xml>` |
 | Rust runnable workspace | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 2.0.2`, then `cargo-teaql install-links` | `cargo-teaql rust-workspace <model.xml> --output <workspace-dir>` |
-| Java | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
-| Java runnable workspace | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
+| Java | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
+| Java runnable workspace | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
-The Java runnable workspace path requires a Maven plugin/client version that can
-run `gen-workspace`; use version `1.1.0` or newer from the TeaQL Nexus
+The Java runnable workspace path requires a Maven plugin/client version that
+provides service `java-web-spring-boot`; use version `1.1.0` or newer from the TeaQL Nexus
 releases repository. If the plugin cannot be resolved from that repository, if
 the installed client does not provide that goal, or if any TeaQL plugin/tool
 call fails, report that as the blocker and stop instead of hand-building the

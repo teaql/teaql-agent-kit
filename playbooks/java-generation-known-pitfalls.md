@@ -10,8 +10,8 @@ Do not use Maven plugin prefix resolution for TeaQL generation.
 Wrong:
 
 ```bash
-mvn teaql:generate -Dservice=java-lib
-mvn teaql:generate -Dservice=java-workspace
+mvn teaql:generate -Dservice=java-lib-core
+mvn teaql:generate -Dservice=java-web-spring-boot
 ```
 
 Maven may resolve the `teaql` prefix against Maven Central or the wrong plugin
@@ -52,13 +52,13 @@ for example:
 Required command shape:
 
 ```bash
-mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib \
+mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core \
   -Dteaql.input=app-playground/models/model.xml \
-  -Dteaql.output=app-playground/generate-lib
+  -Dteaql.output=app-playground/java-lib-core
 
-mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace \
+mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot \
   -Dteaql.input=app-playground/models/model.xml \
-  -Dteaql.workspaceDir=app-playground/java-workspace
+  -Dteaql.workspaceDir=app-playground/java-web-spring-boot
 ```
 
 If Maven cannot resolve the plugin from the TeaQL Nexus releases repository, if
@@ -69,18 +69,18 @@ workspace files, copied generated code, or alternate generation paths.
 
 ## Two-Step Java Workspace Generation
 
-For a runnable Java/Spring Boot workspace, `gen-lib` and `gen-workspace` are both
-required.
+For a runnable Java/Spring Boot workspace, `java-lib-core` and
+`java-web-spring-boot` generation are both required.
 
 ```text
-model.xml -> gen-lib -> gen-workspace
-  KSML      domain     Spring Boot workspace
+model.xml -> java-lib-core -> java-web-spring-boot
+  KSML       domain library    Spring Boot application
 ```
 
-`gen-lib` generates domain library code, including entity, `Q`, request, and
-checker classes. `gen-workspace` generates the runnable Spring Boot project
-skeleton, including project files, application properties, application entry
-classes, `EnsureModelController`, and the generated workspace `AGENTS.md`.
+`java-lib-core` generates domain library code, including entity, `Q`, request,
+and checker classes. `java-web-spring-boot` generates the runnable Spring Boot
+project skeleton, including project files, application properties, application
+entry classes, `EnsureModelController`, and the generated workspace `AGENTS.md`.
 
 When invoking Maven goals from the command line, use concrete paths for
 `-Dteaql.input`, `-Dteaql.output`, and `-Dteaql.workspaceDir`. Do not pass
@@ -91,7 +91,7 @@ not the valid Maven property spelling.
 
 If the user asks for a Java project, runnable workspace, Spring Boot application,
 or local Java playground, default to the full two-step pipeline. Only stop after
-`gen-lib` when the user explicitly asks for library-only generation.
+`java-lib-core` when the user explicitly asks for library-only generation.
 
 ## Starter Version Consistency
 
@@ -107,8 +107,8 @@ the TeaQL version property, commonly:
 </properties>
 ```
 
-If `core/pom.xml`, `generate-lib` project files, or
-`java-workspace/pom.xml`/workspace build files contain different TeaQL runtime
+If `core/pom.xml`, `java-lib-core` project files, or
+`java-web-spring-boot/pom.xml`/workspace build files contain different TeaQL runtime
 versions, align them before compiling or running. Prefer `1.198-RELEASE` or
 newer for Spring Boot starter based workspaces.
 
@@ -216,21 +216,21 @@ If a previous playground directory has been removed, recreate the expected
 layout and run the normal model-to-generation pipeline again:
 
 ```bash
-mkdir -p app-playground/models app-playground/generate-lib app-playground/java-workspace
+mkdir -p app-playground/models app-playground/java-lib-core app-playground/java-web-spring-boot
 ```
 
-Then create or copy `model.xml`, run fully qualified `gen-lib`, run fully
-qualified `gen-workspace` when a runnable app is needed, compile the workspace,
-and add only customer-owned controllers, tests, or scenario code. Generated
-TeaQL service code remains read-only.
+Then create or copy `model.xml`, generate `java-lib-core`, generate
+`java-web-spring-boot` when a runnable app is needed, compile the workspace, and
+add only customer-owned controllers, tests, or scenario code. Generated TeaQL
+library code remains read-only.
 
 ## Quick Reference
 
 | Category | Command |
 | --- | --- |
-| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib -Dteaql.input=models/model.xml -Dteaql.output=generate-lib` |
-| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-workspace` |
+| Generate Java library | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core -Dteaql.input=models/model.xml -Dteaql.output=java-lib-core` |
+| Generate Java workspace | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot -Dteaql.input=models/model.xml -Dteaql.workspaceDir=java-web-spring-boot` |
 | Install generated library | `cd core && mvn install -DskipTests` |
-| Compile workspace | `cd java-workspace && mvn clean compile` |
+| Compile workspace | `cd java-web-spring-boot && mvn clean compile` |
 | Run app | `mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=19987"` |
 | Test endpoint | `curl -d @/tmp/teaql-request.json http://localhost:19987/school/register` |

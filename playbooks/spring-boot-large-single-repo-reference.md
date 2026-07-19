@@ -15,7 +15,7 @@ generated code, custom context boundaries, application entrypoints, shared
 libraries, and AI coding tasks separate in a single repository.
 
 The single repository is for coordinated review and examples. Each top-level
-`generated-*`, `custom-context-*`, `app-*`, and `shared-*` directory is
+`java-*`, `custom-context-*`, `app-*`, and `shared-*` directory is
 intentionally shaped as a future standalone repository boundary.
 
 ## Reference Name
@@ -62,8 +62,8 @@ teaql-serviceops-spring-boot/
     audit/
     view/
 
-  generated-serviceops-lib/
-  generated-serviceops-workspace/
+  java-lib-core/
+  java-web-spring-boot/
 
   custom-context-tenant/
   custom-context-customer/
@@ -101,7 +101,7 @@ Use flat top-level directories so customers can see how the single repository
 could split into multiple repositories later.
 
 ```text
-generated-<artifact>
+java-<generation-target>
 custom-context-<actor>
 app-<entrypoint>
 shared-<library>
@@ -109,8 +109,9 @@ shared-<library>
 
 Examples:
 
-- `generated-serviceops-lib`: generated TeaQL library.
-- `generated-serviceops-workspace`: generated runnable Spring Boot workspace.
+- `java-lib-core`: generated TeaQL domain/runtime library; treat it as read-only.
+- `java-web-spring-boot`: generated runnable Spring Boot application and the
+  customer-owned Java coding surface.
 - `custom-context-tenant`: custom tenant context, data scope, and default TeaQL
   constraints.
 - `custom-context-customer`: custom customer context, customer data scope, and portal
@@ -162,40 +163,37 @@ that reference them.
 
 ## Generated Code
 
-TeaQL generation should distinguish generated service code from generated
-editable scaffolding.
+TeaQL generation should distinguish the generated read-only library from the
+generated, customer-editable application.
 
-Generated TeaQL service code belongs under the generated service directories:
+Use the current TeaQL Java service names as the output directory names:
 
 ```text
-generated-serviceops-lib/
-generated-serviceops-workspace/
+java-lib-core/
+java-web-spring-boot/
 ```
 
-Treat generated TeaQL service code as read-only. If generated code is wrong,
+Treat `java-lib-core/` as read-only. If generated library code is wrong,
 fix `models/*.xml`, generator configuration, TeaQL generator behavior, or
 custom context wiring, then regenerate. Do not present direct edits to
-generated service files as deliverable project changes.
+generated library files as deliverable project changes.
 
 For Java generation, follow `playbooks/generate-with-toolchains.md`: use TeaQL
 Maven plugin version `1.1.0` or newer from the TeaQL Nexus releases repository
 and invoke the plugin with fully qualified coordinates, such as
-`io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib`.
+`io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`.
 
 Recommended Java generation targets for this reference:
 
 | Target | Writes | Edit policy | Required guide |
 | --- | --- | --- | --- |
-| `java-lib` | `generated-serviceops-lib/` | Generated TeaQL service code is read-only. | Generated workspace or library guide when available. |
-| `java-workspace` | `generated-serviceops-workspace/` | Generated workspace code follows its generated guide. | `generated-serviceops-workspace/AGENTS.md` |
-| `java-custom-context` | `custom-context-*` modules | Editable custom context scaffolding. Regenerate carefully and preserve customer changes. | Each `custom-context-*` module must contain `AGENTS.md`. |
-| `java-api-implementation` | `app-*` modules | Editable API/job scaffolding. Regenerate carefully and preserve customer changes. | Each `app-*` module must contain `AGENTS.md`. |
+| `java-lib-core` | `java-lib-core/` | Generated TeaQL domain/runtime library is read-only. | Generated library guide when available. |
+| `java-web-spring-boot` | `java-web-spring-boot/` | Runnable application code follows its generated guide; generated library classes remain read-only. | `java-web-spring-boot/AGENTS.md` |
 
-`java-custom-context` and `java-api-implementation` are not replacements for
-the semantic model or generated TeaQL service code. They are scaffold targets
-that create customer-owned implementation surfaces with local agent rules.
-Agents must read the local `AGENTS.md` before editing any generated custom
-context or API implementation module.
+`custom-context-*` and `app-*` are customer-owned implementation modules in
+this large-repository reference, not TeaQL service target names. They do not
+replace the semantic model or the generated TeaQL library. Each module must
+carry local agent rules, and agents must read its `AGENTS.md` before editing it.
 
 If a requested generation target is not available in the installed TeaQL Maven
 plugin, stop and report that blocker. Do not hand-build a replacement generator
@@ -278,8 +276,8 @@ platform-wide query.
 
 ## Custom Context Implementation Pattern
 
-The `java-custom-context` target should scaffold each `custom-context-*` module
-with a local `AGENTS.md` and the same implementation pattern:
+Each `custom-context-*` module should be created as a customer-owned module with
+a local `AGENTS.md` and the same implementation pattern:
 
 ```text
 <Actor>ContextFactory
@@ -299,7 +297,7 @@ Responsibilities:
 - `<Actor>ContextConfig`: provides Spring Boot configuration, beans, limits,
   feature flags, and audit policy wiring.
 
-Rules for generated `custom-context-*` scaffolding:
+Rules for `custom-context-*` modules:
 
 - Keep the module customer-editable, but keep its local `AGENTS.md` as the
   implementation authority.
@@ -377,8 +375,8 @@ Hard rule:
 
 ## API Implementation Pattern
 
-The `java-api-implementation` target should scaffold each `app-*` module with a
-local `AGENTS.md` and a consistent Spring Boot API pattern:
+Each `app-*` module should be created as a customer-owned module with a local
+`AGENTS.md` and a consistent Spring Boot API pattern:
 
 ```text
 controller/  HTTP endpoints, request parsing, response status.
@@ -403,7 +401,7 @@ Controller
   -> map to response DTO
 ```
 
-Rules for generated `app-*` scaffolding:
+Rules for `app-*` modules:
 
 - Controllers must not construct TeaQL Q API queries directly.
 - Controllers must not create naked `UserContext` or TeaQL query contexts.
@@ -422,8 +420,8 @@ Represent boundaries explicitly in `settings.gradle` and Gradle dependencies.
 `settings.gradle` should include flat modules:
 
 ```gradle
-include "generated-serviceops-lib"
-include "generated-serviceops-workspace"
+include "java-lib-core"
+include "java-web-spring-boot"
 
 include "custom-context-tenant"
 include "custom-context-customer"
@@ -445,11 +443,12 @@ include "shared-test-fixtures"
 Use these dependency directions:
 
 ```text
-app-*       -> custom-context-* + shared-* + generated-serviceops-lib
-custom-context-*   -> generated-serviceops-lib + shared-*
+app-*       -> custom-context-* + shared-* + java-lib-core
+custom-context-*   -> java-lib-core + shared-*
 shared-*    -> no dependency on app-* or custom-context-*
 models/     -> no code dependency; generation input only
-generated-* -> generated service code is read-only
+java-lib-core -> generated TeaQL library code is read-only
+java-web-spring-boot -> generated application handoff; follow its AGENTS.md
 ```
 
 ## Query And Update Rules
@@ -518,7 +517,7 @@ Forbidden:
 - Do not use custom-context-platform-admin.
 - Do not query without CustomerDataScope.
 - Do not use raw SQL.
-- Do not edit generated-serviceops-lib.
+- Do not edit `java-lib-core`.
 
 Expected query shape:
 - Start from Q.serviceOrders()
@@ -558,16 +557,17 @@ Please create a TeaQL large single repo Spring Boot project.
 Reference mode:
 - Project name: teaql-serviceops-spring-boot
 - Use models/ as the only KSML semantic source.
-- Use generated-* for TeaQL generated code. Generated service code is read-only.
+- Generate the read-only TeaQL library with service `java-lib-core` into
+  `java-lib-core/`.
+- Generate the runnable application with service `java-web-spring-boot` into
+  `java-web-spring-boot/`, then follow its generated AGENTS.md.
 - Use custom-context-* for actor/use-case custom TeaQL context boundaries.
 - Use app-* for Spring Boot API and job entrypoints.
 - Use shared-* for reusable libraries.
 - Use docs-ai-tasks/ for AI coding task contracts.
-- Use the java-custom-context generation target for custom-context-* scaffolding when
-  the installed TeaQL generator supports it.
-- Use the java-api-implementation generation target for app-* scaffolding when
-  the installed TeaQL generator supports it.
-- Ensure every generated custom-context-* and app-* module has a local AGENTS.md.
+- Treat custom-context-* and app-* as customer-owned modules, not TeaQL service
+  target names.
+- Ensure every custom-context-* and app-* module has a local AGENTS.md.
 
 Business domain:
 [Describe the business domain here.]
@@ -578,12 +578,13 @@ Before writing application code, complete:
    context boundaries.
 3. Explain which app-* uses which custom-context-* module.
 4. Run the model review gate before TeaQL generation.
-5. Generate or scaffold custom context and API implementation modules only
-   after the model and context boundaries are reviewed.
+5. Generate `java-lib-core` and `java-web-spring-boot`, then create custom
+   context and API implementation modules only after the model and context
+   boundaries are reviewed.
 
 Do not directly write controller/service code before the model and custom
 context boundaries are reviewed.
-Do not hand-edit generated-* TeaQL service code.
+Do not hand-edit `java-lib-core` TeaQL service code.
 Before editing a custom-context-* or app-* module, read its local AGENTS.md.
 ```
 
@@ -606,7 +607,7 @@ Forbidden:
 - Do not use an unrelated custom context module.
 - Do not query without the custom context module data scope.
 - Do not use raw SQL for normal TeaQL queries.
-- Do not edit generated-* TeaQL service code.
+- Do not edit `java-lib-core` TeaQL service code.
 
 First check:
 1. Whether models/ already has the required objects and relationships.
@@ -659,11 +660,12 @@ The reference should include these docs:
 The reference is ready when:
 
 - `models/` is the only semantic source and has a clear `main.xml` entrypoint.
-- Generated TeaQL code is isolated under `generated-*`.
-- `java-custom-context` scaffolding, when generated, creates `custom-context-*`
-  modules with local `AGENTS.md` guides.
-- `java-api-implementation` scaffolding, when generated, creates `app-*`
-  modules with local `AGENTS.md` guides.
+- Generated TeaQL library code is isolated under `java-lib-core/` and remains
+  read-only.
+- The runnable generated application is isolated under
+  `java-web-spring-boot/` and carries its generated `AGENTS.md` handoff guide.
+- Customer-owned `custom-context-*` modules have local `AGENTS.md` guides.
+- Customer-owned `app-*` modules have local `AGENTS.md` guides.
 - Every app entrypoint has a matching custom context module boundary.
 - Every `custom-context-*` module follows the custom context implementation pattern.
 - Every `app-*` module follows the API implementation pattern.
