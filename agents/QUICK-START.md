@@ -7,8 +7,9 @@ This guide provides the fastest path for an AI agent to build a TeaQL project fr
 - Every XML document MUST use `<root>` as its document element; a multi-file
   model has one authoritative logical root in `main.xml`.
 - All business and constant objects MUST be direct children of `<root>`.
-- Business objects MUST NOT use `id="id()"`.
-- Constant objects MUST use `id="id()"`, `name="string()"`, `code="string()"`, `_constant="true"`, and `_identifier="code"`.
+- Business objects MUST NOT declare any `id` attribute; the framework injects the generated primary key automatically (`u64` for Rust).
+- Constant objects MUST declare exactly `id="id()"`, plus `name="string()"`, `code="string()"`, `_constant="true"`, and `_identifier="code"`.
+- Either ID-rule violation is a fatal evaluation error and MUST stop generation.
 - Business objects should use representative literal values, not scalar type functions, for normal fields. Use `external_id="1000000000000000000l"` instead of `external_id="long()"`.
 - When business and constant objects total more than 20, prefer splitting the
   model by business subdomain with `<_include>`.

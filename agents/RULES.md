@@ -11,9 +11,9 @@
 
 ### KSML Modeling Rules (Hard)
 6. Every business object must have `_name`, `_module`, and `_module_key`.
-7. Constant objects must have `id="id()"`, `name="string()"`, `code="string()"`.
+7. Constant objects must declare exactly `id="id()"`, `name="string()"`, `code="string()"`; a missing or different object-level `id` is a fatal evaluation error.
 8. Constant objects must have `_constant="true"` and `_identifier="code"`.
-9. Never use `id="id()"` on business objects.
+9. Business objects must never declare any `id` attribute, regardless of its value. The framework injects the generated primary key automatically (`u64` for Rust); an explicit business-object `id` is a fatal evaluation error.
 10. Never use `_constant="true"` on business objects.
 11. References to business objects must use `object_name()` directly (e.g., `school="school()"`), NOT `school="object(school)"`.
 12. Status and finite-set fields must reference constant objects (e.g., `status="appointment_status()"`).

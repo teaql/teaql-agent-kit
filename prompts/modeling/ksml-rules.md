@@ -23,21 +23,27 @@ the only normal KSML child elements, and those children must be `<_value>`.
 
 ## Critical Rules
 
-### Only Constant Objects Have `id="id()"`
+### Object-Level `id` Is Constant-Only
 
 Constant objects:
 
-- Must have `id="id()"`.
+- Must declare exactly `id="id()"`.
 - Must have `_constant="true"`.
 - Must have `_identifier="code"`.
 - Must have `<_value>` children.
 
 Business objects:
 
-- Must never have `id="id()"`.
+- Must never declare an `id` attribute, regardless of its value.
 - Must never have `_constant="true"`.
 - Must never have `_identifier`.
 - Must never have `<_value>` children.
+
+The framework injects the generated primary key automatically (`u64` for Rust).
+Missing or non-exact constant-object `id="id()"`, or any object-level `id`
+attribute on a business object, is a fatal evaluation error and must stop code
+generation. The `id` attributes on constant `<_value>` entries identify the
+allowed values and are not object-level field declarations.
 
 Wrong:
 
@@ -380,7 +386,7 @@ Correct:
 
 Business objects must not include:
 
-- `id="id()"`.
+- Any `id` attribute, regardless of its value.
 - `version`.
 - `_constant="true"`.
 - `_identifier`.
@@ -571,7 +577,7 @@ Use `object_name()` directly. Do not write `object(object_name)`.
 
 | Rule | Constant Object | Business Object |
 | --- | --- | --- |
-| `id="id()"` | Required | Forbidden |
+| Object-level `id` attribute | Exactly `id="id()"` required | Forbidden entirely |
 | `name="string()"` | Required | Forbidden for normal values |
 | `code="string()"` | Required | Usually forbidden |
 | `_constant="true"` | Required | Forbidden |

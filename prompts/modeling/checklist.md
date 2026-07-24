@@ -46,7 +46,8 @@ Use this checklist before delivering or generating code from a KSML model.
 ## Business Objects
 
 - Must have `_name`, `_module`, and `_module_key`.
-- Must not have `id="id()"`.
+- Must not declare any `id` attribute, regardless of its value; the framework
+  injects the generated primary key automatically (`u64` for Rust).
 - Must not have `_constant="true"`.
 - Must not have `_identifier`.
 - Must not have `<_value>` children.
@@ -76,7 +77,8 @@ Use this checklist before delivering or generating code from a KSML model.
 
 ## Constant Objects
 
-- Must have `id="id()"`.
+- Must declare exactly `id="id()"`; a missing or different value is a fatal
+  evaluation error.
 - Must have `name="string()"`.
 - Must have `code="string()"`.
 - Must have `_constant="true"`.
