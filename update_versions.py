@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 
-DEFAULT_TARGET_VERSION = "2.0.2"
+DEFAULT_TARGET_VERSION = "2.0.8"
 
 # Regexes that match different ways the cargo-teaql version is written in docs.
 # Each pattern must contain a single capturing group for the version digits.
@@ -24,6 +24,9 @@ DEFAULT_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"(cargo-teaql >= )[0-9\.]+"), r"\g<1>{version}"),
     (re.compile(r"(cargo-teaql )0\.2\.0"), r"\g<1>{version}"),
     (re.compile(r"(cargo-teaql` `)[0-9\.]+"), r"\g<1>{version}"),
+    (re.compile(r"(cargo-teaql` exactly `)[0-9\.]+"), r"\g<1>{version}"),
+    (re.compile(r"(cargo-teaql --version )[0-9\.]+"), r"\g<1>{version}"),
+    (re.compile(r"(cargo-teaql --version `)[0-9\.]+"), r"\g<1>{version}"),
 ]
 
 

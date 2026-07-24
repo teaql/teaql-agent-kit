@@ -112,8 +112,8 @@ app-playground/
   models/                 # model.xml and generation input
   java-lib-core/          # generated read-only Java TeaQL library
   java-web-spring-boot/   # runnable, customer-editable Spring Boot application
-  generate-lib/           # generated Rust TeaQL code for the Rust track
-  rust-workspace/         # editable Rust Tokio workspace
+  rust-lib-core/          # generated read-only Rust TeaQL library
+  rust-app-console/       # editable Rust Tokio console application
   src/                    # optional ad hoc user functions and query experiments
   tests/                  # optional ad hoc scenario experiments
 ```
@@ -139,12 +139,13 @@ again after regeneration. If the expected generated `AGENTS.md` is missing, stop
 and report the missing workspace guide instead of guessing the rules.
 
 For Rust playgrounds that should run locally, generate the Rust library first
-with `cargo-teaql rust-lib-core`, then run `cargo-teaql rust-workspace` and extract the
-editable workspace under `app-playground/rust-workspace`. That workspace depends
-on the generated crate at `../generate-lib/lib`, contains a thin Tokio async
-entrypoint, and has its own generated `AGENTS.md`. Read that workspace guide
-before coding inside the Rust workspace and again after regeneration. Do not add
-a web framework unless the user explicitly asks for one.
+with `cargo teaql --input <model> rust-lib-core`, then generate the editable
+application with `cargo teaql --input <model> rust-app-console`. Write the
+outputs to `app-playground/rust-lib-core` and
+`app-playground/rust-app-console`. The app depends on the generated library and
+has its own generated `AGENTS.md`. Read that guide before coding inside the app
+and again after regeneration. Do not add a web framework unless the user
+explicitly asks for one.
 
 Playground mode may automatically call `ensure_schema()` during runtime setup so
 the first local run can create demo tables, seed sample data, and show a real
@@ -165,8 +166,8 @@ rely on Maven Central freshness, and do not use Maven plugin prefix resolution
 such as `mvn teaql:generate -Dservice=java-lib-core`; Maven may search the wrong repositories. Invoke the
 plugin with fully qualified coordinates, and ensure the user Maven settings or
 project POM exposes the TeaQL Nexus releases repository as a repository and
-plugin repository. For Rust, install CLI package `cargo-teaql` version `2.0.2`
-or newer from crates.io, then run `cargo-teaql install-links`. Do not ask users
+plugin repository. For Rust, install CLI package `cargo-teaql` exactly `2.0.8`
+from crates.io, then run `cargo-teaql install-links`. Do not ask users
 to download or build the client tool source code just to generate a service. If
 a generation client, TeaQL Maven plugin goal, or TeaQL plugin/tool invocation
 cannot be installed, resolved, invoked, or executed, stop immediately and report
@@ -174,10 +175,10 @@ the blocker instead of trying source builds or alternate generation paths.
 
 | Target | User-installed client | Main command |
 | --- | --- | --- |
-| KSML evaluation, Rust/client path | `cargo install cargo-teaql` from crates.io, then `cargo-teaql install-links` | `cargo-teaql eval <model-file-or-directory>` |
+| KSML evaluation, Rust/client path | `cargo install cargo-teaql --version 2.0.8`, then `cargo-teaql install-links` | `cargo teaql --input <model-file-or-directory> evaluate` |
 | KSML evaluation, Java/Maven path | TeaQL Maven plugin with `eval` goal from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:eval -Dteaql.input=<model-file-or-directory>` |
-| Rust | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 2.0.2`, then `cargo-teaql install-links` | `cargo-teaql rust-lib-core <model.xml>` |
-| Rust runnable workspace | `cargo install cargo-teaql` from crates.io, `cargo-teaql >= 2.0.2`, then `cargo-teaql install-links` | `cargo-teaql rust-workspace <model.xml> --output <workspace-dir>` |
+| Rust | `cargo install cargo-teaql --version 2.0.8`, then `cargo-teaql install-links` | `cargo teaql --input <model.xml> rust-lib-core --output <output-dir>` |
+| Rust runnable app | `cargo install cargo-teaql --version 2.0.8`, then `cargo-teaql install-links` | `cargo teaql --input <model.xml> rust-app-console --output <app-dir>` |
 | Java | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core -Dteaql.input=<model.xml> -Dteaql.output=<output-dir>` |
 | Java runnable workspace | TeaQL Maven plugin `>= 1.1.0` from `https://nexus.teaql.io/repository/maven-releases/` | `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot -Dteaql.input=<model.xml> -Dteaql.workspaceDir=<workspace-dir>` |
 
@@ -188,14 +189,13 @@ the installed client does not provide that goal, or if any TeaQL plugin/tool
 call fails, report that as the blocker and stop instead of hand-building the
 workspace.
 
-The Rust runnable workspace path follows the same model-first sequence:
-generate the Rust library with `cargo-teaql rust-lib-core`, then generate the editable
-workspace with `cargo-teaql rust-workspace`. In playground mode, write the model
-to `app-playground/models`, generated runtime code to
-`app-playground/generate-lib`, and the editable Rust workspace to
-`app-playground/rust-workspace`. The workspace depends on the generated crate at
-`../generate-lib/lib` by local path and starts as a Tokio async application
-skeleton without a web framework.
+The Rust runnable app path follows the same model-first sequence: generate the
+Rust library with `rust-lib-core`, then generate the editable application with
+`rust-app-console`. In playground mode, write the model to
+`app-playground/models`, generated runtime code to
+`app-playground/rust-lib-core`, and the editable Rust application to
+`app-playground/rust-app-console`. The app depends on the generated crate and
+starts as a Tokio async application skeleton without a web framework.
 
 The TeaQL client is only the request tool. Generated Java or Rust service code
 still comes from the TeaQL service endpoint, for example
@@ -212,7 +212,7 @@ high-level loop is:
 
 1. Model the domain as KSML XML.
 2. Validate the model with `prompts/modeling/checklist.md`.
-3. Run server-side KSML evaluation with the client toolchain when the `eval`
+3. Run server-side KSML evaluation with the client toolchain when the `evaluate`
    target is available. Fix evaluation `errors`; carry `warnings` and
    `suggestions` into review.
 4. Run the model review gate and confirm the model before code generation.
@@ -230,7 +230,7 @@ Model the domain first, validate the KSML model, then generate both Java and
 Rust TeaQL outputs.
 Before generation, summarize the model for review and wait for confirmation.
 Use the TeaQL client tools installed from package registries, including
-`cargo-teaql` version `2.0.2` or newer from crates.io followed by
+`cargo-teaql` version `2.0.8` from crates.io followed by
 `cargo-teaql install-links`, to evaluate the KSML model and request TeaQL
 service code generation.
 Keep generated artifacts in the target project, run checks, and report the

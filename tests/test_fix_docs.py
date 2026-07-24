@@ -19,9 +19,9 @@ def updated_sample() -> str:
     return """\
 Run the old goal:
 
-    mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib
+    mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core
 
-Requires cargo-teaql >= 1.1.0 and version `1.1.0` of the CLI.
+Requires cargo-teaql exactly 2.0.8 and version `2.0.8` of the CLI.
 """
 
 

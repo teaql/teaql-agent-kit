@@ -1,0 +1,3 @@
+# One-time documentation migration scripts; not current execution guidance.
+fix_docs.py
+update_versions.py

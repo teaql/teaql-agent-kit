@@ -45,6 +45,13 @@ def test_update_content_no_match_unchanged() -> None:
     assert update_content(content, DEFAULT_TARGET_VERSION) == content
 
 
+def test_update_content_handles_exact_and_version_flag_forms() -> None:
+    content = "Use cargo-teaql` exactly `2.0.7` and cargo-teaql --version 2.0.7.\n"
+    expected = "Use cargo-teaql` exactly `2.0.8` and cargo-teaql --version 2.0.8.\n"
+
+    assert update_content(content, DEFAULT_TARGET_VERSION) == expected
+
+
 def test_update_file_updates_and_reports(tmp_path, mixed_content: str, updated_content: str) -> None:
     doc = tmp_path / "README.md"
     doc.write_text(mixed_content, encoding="utf-8")
@@ -74,7 +81,7 @@ def test_collect_files_respects_globs(tmp_path) -> None:
 def test_update_versions_integration(tmp_path, mixed_content: str, updated_content: str) -> None:
     (tmp_path / "README.md").write_text(mixed_content, encoding="utf-8")
 
-    changed = update_versions(tmp_path, version="2.0.2", globs=["*.md"])
+    changed = update_versions(tmp_path, version=DEFAULT_TARGET_VERSION, globs=["*.md"])
 
     assert changed == 1
     assert (tmp_path / "README.md").read_text(encoding="utf-8") == updated_content

@@ -1,0 +1,39 @@
+<root alias_model_name="school_management"
+      chinese_name="学校管理"
+      english_name="School Management"
+      name="school-service"
+      cfg_mask_china_mobile="false"
+      data_service="sqlite"
+      org="doublechaintech"
+      _module_key="root">
+  <platform _name="Platform"
+            _module="Platform Management"
+            _module_key="platform-management"
+            _audit_mask_fields="contact_phone"
+            name="Standard Education Platform"
+            contact_phone="400-888-0000"
+            create_time="createTime()"
+            update_time="updateTime()"/>
+  <school_type _name="School Type"
+               _module="School Management"
+               _module_key="school-management"
+               id="id()" name="string()" code="string()"
+               platform="platform()"
+               display_order="number()"
+               _constant="true" _identifier="code">
+    <_value id="1001" name="Primary" code="PRIMARY" display_order="1"/>
+    <_value id="1002" name="Secondary" code="SECONDARY" display_order="2"/>
+  </school_type>
+  <school _name="School"
+          _module="School Management"
+          _module_key="school-management"
+          _audit_mask_fields="address"
+          name="Sunshine Elementary"
+          address="123 Education Ave"
+          principal="Dr. Wang"
+          student_count="850"
+          platform="platform()"
+          school_type="school_type()"
+          create_time="createTime()"
+          update_time="updateTime()"/>
+</root>

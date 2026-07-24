@@ -18,17 +18,17 @@ from pathlib import Path
 # Replacements are applied in order. Each tuple is ``(old, new)``.
 DEFAULT_REPLACEMENTS: list[tuple[str, str]] = [
     # Maven plugin coordinates used in older samples.
-    ("teaql-maven-plugin:1.0.1:gen-lib", "teaql-maven-plugin:1.1.0:generate -Dservice=java-lib"),
-    ("teaql-maven-plugin:1.0.1:gen-workspace", "teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace"),
+    ("teaql-maven-plugin:1.0.1:gen-lib", "teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core"),
+    ("teaql-maven-plugin:1.0.1:gen-workspace", "teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot"),
     ("teaql-maven-plugin:1.0.1:gen-doc", "teaql-maven-plugin:1.1.0:generate -Dservice=markdown-doc"),
     ("teaql-maven-plugin:1.0.1:gen-model", "teaql-maven-plugin:1.1.0:generate -Dservice=frontend-model"),
-    ("teaql-maven-plugin:1.1.0:gen-lib", "teaql-maven-plugin:1.1.0:generate -Dservice=java-lib"),
-    ("teaql-maven-plugin:1.1.0:gen-workspace", "teaql-maven-plugin:1.1.0:generate -Dservice=java-workspace"),
+    ("teaql-maven-plugin:1.1.0:gen-lib", "teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core"),
+    ("teaql-maven-plugin:1.1.0:gen-workspace", "teaql-maven-plugin:1.1.0:generate -Dservice=java-web-spring-boot"),
     ("teaql-maven-plugin:1.1.0:gen-doc", "teaql-maven-plugin:1.1.0:generate -Dservice=markdown-doc"),
     ("teaql-maven-plugin:1.1.0:gen-model", "teaql-maven-plugin:1.1.0:generate -Dservice=frontend-model"),
     # Version references for Rust tooling.
-    ("version `0.2.2`", "version `1.1.0`"),
-    ("cargo-teaql >= 0.2.2", "cargo-teaql >= 1.1.0"),
+    ("version `0.2.2`", "version `2.0.8`"),
+    ("cargo-teaql >= 0.2.2", "cargo-teaql exactly 2.0.8"),
 ]
 
 
