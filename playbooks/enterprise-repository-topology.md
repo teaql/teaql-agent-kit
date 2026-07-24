@@ -27,6 +27,8 @@ The model repository should be the source of truth for business semantics.
 Recommended contents:
 
 - `model.xml` or a structured model directory.
+- When the model has more than 20 domain objects, prefer a structured directory
+  split by business subdomain; its mandatory entrypoint is `main.xml`.
 - Model ownership and review rules.
 - Model changelog and release notes.
 - Compatibility policy for field, relationship, constant, and lifecycle changes.

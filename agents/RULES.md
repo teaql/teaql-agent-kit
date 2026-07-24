@@ -24,7 +24,8 @@
 17. Multi-tenant systems must use `{tenant_owner}="merchant(context)"` on tenant-owned objects.
 18. Object names and attribute names must use lowercase `snake_case`.
 19. Attribute names must not exactly match SQL2016 reserved keywords (e.g., use `item_kind` instead of `type`).
-20. There must be exactly one `<root>` element at the top level.
+20. There must be exactly one logical root and one `<root>` container per XML
+    document. In a multi-file model, `main.xml` owns the authoritative root.
 21. All objects must be direct children of `<root>`.
 22. Root metadata `name` must be `kebab-case` with `-service` suffix.
 23. Every non-root business object must reference at least one other business object or constant object (no disconnected graphs).
@@ -37,5 +38,20 @@
 28. Do not include narrative explanations in the output.
 29. No duplicate elements in the KSML.
 30. No nested business objects.
+
+### Multi-File Models
+31. When a model has more than 20 domain objects, counting business and constant
+    objects together, prefer splitting it by business subdomain with
+    `<_include>`.
+    If one subdomain still has more than 20 objects, split it again by a smaller
+    cohesive business process.
+32. Every multi-file model MUST use `main.xml` as its entrypoint.
+33. Included XML files use `<root>` containers; their objects remain direct
+    children of the logical root after expansion.
+34. Include paths are relative to the including file, and the include graph
+    must be acyclic and complete.
+35. Object names must be globally unique and references must resolve across all
+    included files.
+36. Pass the complete model directory to TeaQL. Never pass only `main.xml`.
 
 *See `ERROR-FIX.md` if you encounter issues during validation or generation.*

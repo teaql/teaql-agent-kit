@@ -7,8 +7,9 @@ Domain: `{domain}`
 Requirements:
 
 - Generate valid XML.
-- Include exactly one `<root>` element.
-- The `<root>` element must include a non-empty `name` attribute.
+- Keep exactly one logical root and exactly one `<root>` container in each XML
+  document.
+- The authoritative `<root>` element must include a non-empty `name` attribute.
 - The outermost XML tag must be `<root>`. Never use `<model>`, `<ksml>`,
   `<domain>`, or any other wrapper tag.
 - Generate dynamic root metadata from the domain.
@@ -18,6 +19,14 @@ Requirements:
   references `platform`.
 - Include at least 20 objects for a full business application unless the user
   explicitly asks for a smaller model.
+- When the requested model contains more than 20 domain objects, counting
+  business and constant objects together, prefer a multi-file model split by
+  business subdomain with `<_include>`.
+- If one subdomain still contains more than 20 objects, split it again by a
+  smaller cohesive business process with nested includes.
+- A multi-file model must use `main.xml` as its entrypoint. Put authoritative
+  root metadata in `main.xml`, use `<root>` containers in included files, and
+  submit the complete directory rather than `main.xml` alone.
 - Include at least 5 constant objects.
 - Do not assume multi-tenancy by default.
 - Decide whether the model is single-tenant, multi-tenant, platform-managed
@@ -33,6 +42,7 @@ Requirements:
 - Do not use object or attribute names that exactly match reserved keywords in
   Java, JavaScript, Dart, Rust, Go, or Python.
 - Do not use attribute names that exactly match SQL2016 reserved keywords.
-- Output only XML unless the user asks for analysis.
+- Output or write only the requested XML file set unless the user asks for
+  analysis.
 
 Source integrated from `openclaw-modeling-factory/prompts/task_template.md`.

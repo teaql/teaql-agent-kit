@@ -1,7 +1,8 @@
 # Generate With TeaQL Toolchains
 
-Use this playbook after a valid KSML `model.xml` exists and the user wants Java,
-Rust, or both TeaQL code generation tracks.
+Use this playbook after a valid single-file KSML model or multi-file model
+directory exists and the user wants Java, Rust, or both TeaQL code generation
+tracks.
 
 ## Inputs
 
@@ -60,8 +61,9 @@ Rust, or both TeaQL code generation tracks.
 - Playground mode is the default mode for local trials. Do not require git
   repositories or artifact publishing.
 - In playground mode, keep model input and generated runtime code inside
-  `app-playground` for easy review: use `app-playground/models` for `model.xml`
-  and related model inputs. For Java and Rust, write each generated target to a directory
+  `app-playground` for easy review: use `app-playground/models/model.xml` for a
+  single-file model or `app-playground/models/main.xml` plus subdomain files for
+  a multi-file model. For Java and Rust, write each generated target to a directory
   with the same name as the target, such as `app-playground/rust-lib-core` and
   `app-playground/rust-app-console`, or `app-playground/java-lib-core` and
   `app-playground/java-web-spring-boot`. Keep generated runtime code separate from
@@ -188,6 +190,12 @@ commands, especially assist commands generated from a model input. For dynamic
 commands, pass the current model with `--input` and read the current help/output
 before using them.
 
+`<model>` is either a single XML file or a complete model directory. When the
+expanded model contains more than 20 domain objects, prefer a directory split
+by business subdomain. That directory must contain `main.xml` as its entrypoint.
+Always pass the directory itself; passing only `main.xml` omits included files
+from the upload.
+
 1. Install `cargo-teaql` exactly `2.0.8` from crates.io. If this
    command fails because the crate cannot be found, downloaded, installed,
    invoked, or executed, stop immediately and report the failure. Do not look
@@ -212,6 +220,12 @@ before using them.
    cargo teaql --input /path/to/app-playground/models/model.xml evaluate
    ```
 
+   For a multi-file model:
+
+   ```bash
+   cargo teaql --input /path/to/app-playground/models evaluate
+   ```
+
 4. Generate the read-only backend/domain library from the model. In playground
    mode, create or copy the reviewed model to
    `/path/to/app-playground/models/model.xml`, and use
@@ -223,6 +237,9 @@ before using them.
      --cwd /path/to/app-playground
    ```
 
+   For a multi-file model, use
+   `--input /path/to/app-playground/models`.
+
 5. Generate the editable Rust app console after `rust-lib-core`. Write it to
    `/path/to/app-playground/rust-app-console`, not to `rust-lib-core`:
 
@@ -231,6 +248,9 @@ before using them.
      --output /path/to/app-playground/rust-app-console \
      --cwd /path/to/app-playground
    ```
+
+   For a multi-file model, use
+   `--input /path/to/app-playground/models`.
 
    The generated app console depends on the generated runtime crate. It is also
    the project-specific handoff point for AI coding work: immediately read
@@ -255,7 +275,10 @@ Recommended playground shape:
 ```text
 app-playground/
   models/
-    model.xml           # semantic source of truth for generation
+    model.xml           # single-file semantic source of truth
+    # Or, for a multi-file model:
+    # main.xml          # mandatory entrypoint
+    # subdomain/*.xml  # files referenced through <_include>
   rust-lib-core/        # generated Rust TeaQL runtime code from rust-lib-core
   rust-app-console/     # editable Rust app from rust-app-console
     AGENTS.md
@@ -351,7 +374,8 @@ Recommended sections:
 4. `Model Summary`
    - List the main business objects, constants, tenancy classification, tenant
      boundary if any, and important relationships.
-   - Explain that `model.xml` is the semantic source of truth.
+   - Explain that the single model file or complete model directory is the
+     semantic source of truth.
 
 5. `Generated Runtime`
    - List the generated crate path and the key generated APIs, such as `Q`,
@@ -539,8 +563,8 @@ https://api.teaql.io/latest/generate
      runtime wiring.
    - Toolchain error: CLI/plugin config, service URL, license, evaluation, or
      network.
-3. Fix model errors in `model.xml`, rerun `evaluate` when available, then
-   regenerate.
+3. Fix model errors in the single model file or affected subdomain files, rerun
+   `evaluate` when available, then regenerate.
 4. Fix integration errors in the target project.
 5. For generation client installation, resolution, invocation, or execution
    failures, including TeaQL Maven plugin goal failures and TeaQL plugin/tool

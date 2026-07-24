@@ -4,7 +4,7 @@ Use this checklist before delivering or generating code from a KSML model.
 
 ## Root
 
-- Exactly one `<root>` element.
+- Exactly one logical root and one `<root>` container per XML document.
 - The document element is `<root>`, not `<model>`, `<ksml>`, `<domain>`, or any
   other wrapper tag.
 - Root `name` is present and non-empty.
@@ -25,6 +25,25 @@ Use this checklist before delivering or generating code from a KSML model.
 - Object names and attribute names do not exactly match reserved keywords from
   Java, JavaScript, Dart, Rust, Go, and Python.
 - Attribute names do not exactly match SQL2016 reserved keywords.
+
+## Multi-File Models
+
+- The multi-file layout is preferred when the expanded model contains more than
+  20 domain objects, counting business and constant objects together.
+- Objects are split by business subdomain.
+- Any subdomain that still contains more than 20 objects is split again by a
+  smaller cohesive business process.
+- The model directory entrypoint is named exactly `main.xml`.
+- `main.xml` contains the authoritative root metadata.
+- Each included file has a `<root>` container.
+- Every `<_include>` path is relative to the file that declares it and resolves
+  to a file inside the submitted model directory.
+- Include order places foundational and referenced objects before their
+  dependents.
+- The include graph is acyclic and its full closure is present.
+- Object names are unique and references resolve across the fully expanded
+  model.
+- Evaluation and generation receive the model directory, not `main.xml` alone.
 
 ## Business Objects
 

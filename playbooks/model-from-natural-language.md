@@ -37,11 +37,20 @@ language and wants a TeaQL/KSML domain model.
    - Use `_module_key` as lowercase kebab-case.
    - Put constants in `Basic Data` unless a process-specific module is clearer.
    - Avoid single-object modules.
+   - Count business and constant objects together. When the total is greater
+     than 20, prefer a multi-file model split by business subdomain.
+   - If a subdomain still contains more than 20 objects, split it again by a
+     smaller cohesive business process and use nested includes.
 
 4. Generate KSML XML.
    - Use `prompts/modeling/ksml-rules.md`.
    - Use `prompts/modeling/task-template.md`.
-   - Output one `<root>` element with direct child objects.
+   - For 20 or fewer objects, output one `model.xml` with direct child objects.
+   - For more than 20 objects, create a model directory whose mandatory
+     entrypoint is `main.xml`. Keep authoritative root metadata there and add
+     `<_include>` entries for subdomain XML files.
+   - Wrap each included file in `<root>`. Treat its objects as direct children
+     of the logical root after expansion.
 
 5. Validate before delivery.
    - Use `prompts/modeling/checklist.md`.
@@ -51,6 +60,8 @@ language and wants a TeaQL/KSML domain model.
      evaluation after checklist validation and before code generation. Fix
      evaluation `errors`; carry `warnings` and `suggestions` into the model
      review.
+   - For a multi-file model, pass the complete directory to TeaQL. Passing only
+     `main.xml` omits the included files from the upload.
 
 6. Run the model review gate before code generation.
    - Use `playbooks/model-review-gate.md`.
@@ -58,8 +69,8 @@ language and wants a TeaQL/KSML domain model.
      boundary if any, constants, and assumptions in business language.
    - Get user confirmation, or record explicit assumptions when the user asked
      for autonomous playground execution.
-   - If the user asks for changes, update `model.xml`, validate again, and
-     repeat the review gate.
+   - If the user asks for changes, update the single-file model or the affected
+     subdomain files, validate again, and repeat the review gate.
 
 ## Done
 

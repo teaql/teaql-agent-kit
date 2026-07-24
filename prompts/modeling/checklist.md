@@ -4,7 +4,7 @@ Use this checklist before delivering or generating code from a KSML model.
 
 ## Root
 
-- Exactly one `<root>` element.
+- Exactly one logical root and one `<root>` container per XML document.
 - The document element is `<root>`, not `<model>`, `<ksml>`, `<domain>`, or any
   other wrapper tag.
 - Root `name` is present and non-empty.
@@ -25,6 +25,23 @@ Use this checklist before delivering or generating code from a KSML model.
 - Object names and attribute names do not exactly match reserved keywords from
   Java, JavaScript, Dart, Rust, Go, and Python.
 - Attribute names do not exactly match SQL2016 reserved keywords.
+
+## Multi-File Models
+
+- Prefer a multi-file layout when the expanded model contains more than 20
+  domain objects, counting business and constant objects together.
+- Split objects by business subdomain.
+- Split a subdomain again by a smaller cohesive business process when it still
+  contains more than 20 objects.
+- Use `main.xml` as the mandatory model-directory entrypoint.
+- Keep authoritative root metadata in `main.xml`.
+- Wrap every included file in `<root>`.
+- Resolve include paths relative to the including file.
+- Include foundational and referenced objects before their dependents.
+- Ensure the include graph is acyclic and the complete include closure is
+  present.
+- Check global object-name uniqueness and cross-file references after expansion.
+- Pass the complete directory to TeaQL, never `main.xml` alone.
 
 ## Business Objects
 

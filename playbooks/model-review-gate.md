@@ -1,7 +1,7 @@
 # Model Review Gate
 
-Use this gate after a valid `model.xml` candidate exists and before TeaQL code
-generation starts.
+Use this gate after a valid single-file model or multi-file model directory
+exists and before TeaQL code generation starts.
 
 ## Purpose
 
@@ -41,8 +41,8 @@ Before generation, obtain one of these outcomes:
   generate code.
 - `confirmed_with_assumptions`: the user accepts stated assumptions for
   playground or prototype generation.
-- `needs_revision`: the user asks for model changes. Update `model.xml`,
-  validate again, and repeat this gate.
+- `needs_revision`: the user asks for model changes. Update `model.xml` or the
+  affected subdomain files, validate again, and repeat this gate.
 
 For autonomous playground work, the agent may proceed only when assumptions are
 explicitly listed in the report and the user has asked for autonomous execution.

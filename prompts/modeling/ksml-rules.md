@@ -175,8 +175,11 @@ Use domain-specific alternatives instead:
 
 ## Root Definition
 
-The model must contain exactly one `<root>` element. The root must include a
-non-empty `name` attribute; TeaQL generation uses it as the domain name.
+A single-file model must contain exactly one `<root>` element. A multi-file
+model has one authoritative logical root in `main.xml`; every included XML file
+also uses a `<root>` container for its fragment. The authoritative root must
+include a non-empty `name` attribute; TeaQL generation uses it as the domain
+name.
 
 The outermost XML tag must be `<root>`. Never wrap KSML in `<model>`, `<ksml>`,
 `<domain>`, or any other top-level element. If the document starts with anything
@@ -212,7 +215,7 @@ Example shape:
 
 ## Structure
 
-- Only one `<root>`.
+- One logical root, and exactly one `<root>` container per XML document.
 - All objects must be direct children of `<root>`.
 - No object nesting except `<_value>` entries inside constant objects.
 - Each element type must be unique.
@@ -221,6 +224,31 @@ Example shape:
   Java, JavaScript, Dart, Rust, Go, or Python.
 - Attribute names must not exactly match SQL2016 reserved keywords.
 - Dates use ISO format such as `2024-01-15`.
+
+### Multi-File Models with `<_include>`
+
+Use one XML file by default. When the model contains more than 20 domain
+objects, counting business objects and constant objects together, prefer a
+model directory split by business subdomain.
+If one subdomain still contains more than 20 objects, split it again by a
+smaller cohesive business process and use nested includes.
+
+- A multi-file model must use `main.xml` as its entrypoint.
+- `main.xml` owns the root metadata and includes subdomain files with
+  `<_include file="./subdomain/file.xml"/>`.
+- Each included file is a well-formed XML document with a `<root>` container.
+  After expansion, its objects are direct children of the one logical root.
+- Include paths are relative to the including file. Nested includes are
+  allowed, but the include graph must be acyclic and every file must exist.
+- Include foundational and referenced objects before files whose objects
+  reference them.
+- Object names remain globally unique and references may cross files.
+- Evaluate or generate from the complete directory, never from `main.xml`
+  alone:
+
+  ```bash
+  cargo teaql --input app-playground/models evaluate
+  ```
 
 ## Object Rules
 

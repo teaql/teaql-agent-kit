@@ -4,13 +4,16 @@ This guide provides the fastest path for an AI agent to build a TeaQL project fr
 
 ## Step 1: Read the Rules (2 mins)
 **CRITICAL**: Read `modeling/KSML-RULES.md` and `agents/RULES.md` before writing any XML or code. `modeling/KSML-RULES.md` is the canonical source for KSML XML.
-- The document element MUST be `<root>`.
+- Every XML document MUST use `<root>` as its document element; a multi-file
+  model has one authoritative logical root in `main.xml`.
 - All business and constant objects MUST be direct children of `<root>`.
 - Business objects MUST NOT use `id="id()"`.
 - Constant objects MUST use `id="id()"`, `name="string()"`, `code="string()"`, `_constant="true"`, and `_identifier="code"`.
 - Business objects should use representative literal values, not scalar type functions, for normal fields. Use `external_id="1000000000000000000l"` instead of `external_id="long()"`.
+- When business and constant objects total more than 20, prefer splitting the
+  model by business subdomain with `<_include>`.
 
-## Step 2: Create the Model (`model.xml`)
+## Step 2: Create the Model
 Use `agents/TEMPLATES.md` to copy the exact XML blocks.
 Follow `agents/DECISION-TREES.md` to pick the right root and tenancy strategy.
 
@@ -49,6 +52,46 @@ Follow `agents/DECISION-TREES.md` to pick the right root and tenancy strategy.
 </root>
 ```
 
+Use `model.xml` for a single-file model. When the model contains more than 20
+domain objects, counting business and constant objects together, prefer this
+layout:
+
+```text
+app-playground/
+  models/
+    main.xml
+    customer-management/
+      customer.xml
+    finance-accounting/
+      invoice.xml
+    operations-logistics/
+      move-order.xml
+```
+
+`main.xml` is mandatory for a multi-file model. It owns the root metadata and
+includes the subdomain files:
+
+```xml
+<root alias_model_name="moving_company_management"
+      cfg_mask_china_mobile="false"
+      chinese_name="搬家公司管理"
+      english_name="Moving Company Management"
+      data_service="sqlite"
+      name="moving-company-service"
+      org="doublechaintech"
+      _module_key="root">
+  <_include file="./customer-management/customer.xml"/>
+  <_include file="./finance-accounting/invoice.xml"/>
+  <_include file="./operations-logistics/move-order.xml"/>
+</root>
+```
+
+Each included file uses a `<root>` container. Include paths are relative to the
+including file, nested includes are allowed, and all object names and
+relationships are validated across the expanded model.
+If one subdomain still contains more than 20 objects, split it again by a
+smaller cohesive business process with nested includes.
+
 ## Step 3: Validate and Fix Errors
 Before validation, refresh and verify the TeaQL client version. Do not reuse an
 older local client from a previous run.
@@ -76,6 +119,15 @@ Run the validation tool:
 ```bash
 cargo teaql --input model.xml evaluate
 ```
+
+For a multi-file model, pass the complete directory so the upload contains
+every included XML file and TeaQL resolves `main.xml`:
+
+```bash
+cargo teaql --input app-playground/models evaluate
+```
+
+Never pass only `app-playground/models/main.xml`.
 *Tip: When errors occur, the CLI natively outputs a beautifully formatted Markdown report for easy reading and analysis.*
 - **Prefer evaluate over rereading docs**: Evaluation is cheap and gives the
   current model's exact errors. After each KSML fix, rerun evaluation
@@ -103,6 +155,10 @@ cargo teaql --input app-playground/models/model.xml rust-app-console \
   --output app-playground/rust-app-console \
   --cwd app-playground
 ```
+
+For a multi-file model, replace
+`--input app-playground/models/model.xml` with
+`--input app-playground/models` in both generation commands.
 
 `rust-lib-core` writes generated TeaQL runtime/domain code to
 `app-playground/rust-lib-core`; do not edit it. `rust-app-console` writes the

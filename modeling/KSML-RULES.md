@@ -175,8 +175,11 @@ Use domain-specific alternatives instead:
 
 ## Root Definition
 
-The model must contain exactly one `<root>` element. The root must include a
-non-empty `name` attribute; TeaQL generation uses it as the domain name.
+A single-file model must contain exactly one `<root>` element. A multi-file
+model has one authoritative logical root in `main.xml`; every included XML file
+also uses a `<root>` container for its fragment. The authoritative root must
+include a non-empty `name` attribute; TeaQL generation uses it as the domain
+name.
 
 The outermost XML tag must be `<root>`. Never wrap KSML in `<model>`, `<ksml>`,
 `<domain>`, or any other top-level element. If the document starts with anything
@@ -212,7 +215,7 @@ Example shape:
 
 ## Structure
 
-- Only one `<root>`.
+- One logical root, and exactly one `<root>` container per XML document.
 - All objects must be direct children of `<root>`.
 - No object nesting except `<_value>` entries inside constant objects.
 - Each element type must be unique.
@@ -221,6 +224,53 @@ Example shape:
   Java, JavaScript, Dart, Rust, Go, or Python.
 - Attribute names must not exactly match SQL2016 reserved keywords.
 - Dates use ISO format such as `2024-01-15`.
+
+### Multi-File Models with `<_include>`
+
+A single XML file remains the default. When a model contains more than 20
+domain objects, counting business objects and constant objects together,
+prefer a model directory split by business subdomain with `<_include>`.
+If one subdomain still contains more than 20 objects, split it again by a
+smaller cohesive business process and compose it with nested includes.
+
+Multi-file models have these additional rules:
+
+- The model directory must use `main.xml` as its entrypoint. Do not use
+  `model.xml` or an arbitrary filename as the entrypoint of a multi-file model.
+- `main.xml` owns the authoritative root metadata and contains the top-level
+  `<_include file="./relative/path.xml"/>` declarations.
+- Every included XML file is a well-formed document with a `<root>` container.
+  Its objects are treated as direct children of the logical root after include
+  expansion; the fragment `<root>` is not a second domain root.
+- Include paths are relative to the file that declares them. Included files may
+  include other files, so a subdomain may be subdivided further.
+- Keep include order explicit: include foundational and referenced objects
+  before files whose objects reference them.
+- The include graph must be acyclic, every referenced file must exist, and the
+  complete expanded model must still satisfy global object-name uniqueness and
+  relationship-resolution rules.
+- Submit the entire model directory to TeaQL. Do not submit `main.xml` alone,
+  because the upload would omit the included files:
+
+  ```bash
+  cargo teaql --input app-playground/models evaluate
+  ```
+
+Use a directory layout such as:
+
+```text
+models/
+  main.xml
+  customer-management/
+    customer.xml
+  finance-accounting/
+    invoice.xml
+    payment.xml
+  operations-logistics/
+    order.xml
+```
+
+See `modeling/EXAMPLES/multi-file-model.md` for a complete minimal pattern.
 
 ## Object Rules
 
