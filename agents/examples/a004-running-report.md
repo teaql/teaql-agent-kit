@@ -1,7 +1,7 @@
 # A-004 School Management System — Running Report
 
 **Date**: 2026-06-18 (Asia/Shanghai)
-**TeaQL CLI**: cargo-teaql **2.0.8**
+**TeaQL CLI**: cargo-teaql **2.0.10**
 **TeaQL Core**: **4.0.5**
 **Gen Scope**: `rust-app-console`
 **Gen Server**: latest (20260618)
@@ -19,7 +19,7 @@
 ## Generation
 
 ```bash
-cargo install cargo-teaql --version 2.0.8 --force
+cargo install cargo-teaql --version 2.0.10 --force
 cargo-teaql install-links               # symlinks
 cargo teaql --input model.xml evaluate          # 0 errors, 0 warnings, 15 solids
 cargo teaql --input model.xml rust-lib-core     # → rust-lib-core/
@@ -54,7 +54,7 @@ cargo teaql --input model.xml rust-app-console  # → rust-app-console/
 | Update | Rename school | ✅ Sunshine → Sunshine International |
 | Delete | Soft-delete | ✅ 202 → 201 active |
 
-## Key API Patterns (cargo-teaql v2.0.8 + core 4.0.5)
+## Key API Patterns (cargo-teaql v2.0.10 + core 4.0.5)
 
 ```rust
 // Q: List with filters

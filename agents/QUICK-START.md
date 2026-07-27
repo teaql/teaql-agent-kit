@@ -56,12 +56,12 @@ older local client from a previous run.
 Required versions:
 
 - Java: `io.teaql:teaql-maven-plugin:1.1.0` or newer
-- Rust: `cargo-teaql` exactly `2.0.8`
+- Rust: `cargo-teaql` exactly `2.0.10`
 
 For Rust:
 
 ```bash
-cargo install cargo-teaql --version 2.0.8 --force
+cargo install cargo-teaql --version 2.0.10 --force
 cargo-teaql --version
 cargo-teaql install-links
 ```
