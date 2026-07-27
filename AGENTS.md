@@ -17,7 +17,7 @@ business logic against the generated contract.
 6. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
 7. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
 8. **Markdown Reports**: Both clients (`cargo teaql --input <model> evaluate` and `mvn teaql:eval` / generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
-9. **STRICT VERSION REQUIREMENT (MUST READ)**: This repository requires `cargo-teaql` exactly `2.0.8`. If you detect any other version, YOU MUST STOP and refuse to generate code until the user installs `2.0.8`.
+9. **STRICT VERSION REQUIREMENT (MUST READ)**: This repository requires `cargo-teaql` exactly `2.0.10`. If you detect any other version, YOU MUST STOP and refuse to generate code until the user installs `2.0.10`.
 10. **This repo is the execution guide**: Use the focused files under `agents/`, `modeling/`, `playbooks/`, generated local `AGENTS.md` files, object-specific assist output, and generated Java output as current guidance.
 11. **Reports and long background docs live elsewhere**: Historical evaluation reports and `TECH-INTRODUCTION.md` were moved to `/Users/Philip/githome/teaql-evaluation-reports`. Do not use that repository for current commands, API usage, versions, or modeling rules unless the task explicitly asks for historical report or background analysis.
 
@@ -35,7 +35,7 @@ Current required versions:
 
 - Java: `io.teaql:teaql-maven-plugin:1.1.0` or newer from
   `https://nexus.teaql.io/repository/maven-releases/`
-- Rust: `cargo-teaql` exactly `2.0.8` from crates.io
+- Rust: `cargo-teaql` exactly `2.0.10` from crates.io
 
 Do not assume a locally installed TeaQL client is current. If an older TeaQL
 Maven plugin or `cargo-teaql` was used in a previous run, refresh or reinstall
@@ -45,7 +45,7 @@ For Rust, force-refresh the installed CLI before generation when network access
 is available:
 
 ```bash
-cargo install cargo-teaql --version 2.0.8 --force
+cargo install cargo-teaql --version 2.0.10 --force
 cargo-teaql --version
 cargo-teaql install-links
 ```
@@ -67,8 +67,8 @@ mvn teaql:generate -Dservice=java-web-spring-boot
 
 > [!CAUTION]
 > **FATAL ERROR IF OLD VERSION IS USED**
-> If you (the AI) attempt to use any `cargo-teaql` version other than `2.0.8` or `teaql-maven-plugin < 1.1.0`, the system will **HARD FAIL** and crash due to breaking changes in dynamic assist routing.
-> If you detect that you are working in an environment with any other `cargo-teaql` version, **YOU MUST STOP IMMEDIATELY**, do not proceed with any business logic, and inform the user to install v2.0.8.
+> If you (the AI) attempt to use any `cargo-teaql` version other than `2.0.10` or `teaql-maven-plugin < 1.1.0`, the system will **HARD FAIL** and crash due to breaking changes in dynamic assist routing.
+> If you detect that you are working in an environment with any other `cargo-teaql` version, **YOU MUST STOP IMMEDIATELY**, do not proceed with any business logic, and inform the user to install v2.0.10.
 
 ## IF YOU GET AN ERROR
 

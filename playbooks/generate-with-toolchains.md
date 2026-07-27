@@ -22,8 +22,8 @@ tracks.
   coordinates such as `io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`, not Maven
   prefix resolution such as `mvn teaql:generate -Dservice=java-lib-core`. Ensure Maven settings or the
   project POM exposes that URL as both a repository and a plugin repository. For
-  Rust, install `cargo-teaql` exactly `2.0.8` from crates.io with
-  `cargo install cargo-teaql --version 2.0.8`, then run `cargo-teaql install-links`.
+  Rust, install `cargo-teaql` exactly `2.0.10` from crates.io with
+  `cargo install cargo-teaql --version 2.0.10`, then run `cargo-teaql install-links`.
 - Optional server-side KSML evaluation target exposed by the installed client:
   `cargo teaql --input <model> evaluate` for the Rust/client path, or the fully
   qualified Maven plugin `eval` goal for the Java/Maven path.
@@ -37,18 +37,18 @@ tracks.
   evidence that it is valid for this repository. The repository-required
   versions are authoritative for every new run: Java
   `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL Nexus releases
-  repository, and Rust `cargo-teaql` exactly `2.0.8` from crates.io.
+  repository, and Rust `cargo-teaql` exactly `2.0.10` from crates.io.
 - For Rust, when network access is available, run
-  `cargo install cargo-teaql --version 2.0.8 --force`, then
+  `cargo install cargo-teaql --version 2.0.10 --force`, then
   `cargo-teaql --version`, then `cargo-teaql install-links` before generation.
-  If the installed version is not exactly `2.0.8`, stop and report the blocker.
+  If the installed version is not exactly `2.0.10`, stop and report the blocker.
 - For Java, never rely on a previously resolved plugin or Maven prefix
   resolution. Invoke the fully qualified plugin coordinate with version
   `1.0.0` or newer, such as
   `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`. If Maven resolves an older
   plugin, or the required version cannot be resolved from the TeaQL Nexus
   releases repository, stop and report the blocker.
-- Using any `cargo-teaql` version other than `2.0.8`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
+- Using any `cargo-teaql` version other than `2.0.10`, `teaql-maven-plugin < 1.1.0`, or `mvn teaql:*`
   is an evaluation failure unless the user explicitly asks to reproduce an
   old-version bug.
 - Run server-side KSML evaluation before generation when the installed client
@@ -112,8 +112,8 @@ tracks.
   on Maven Central freshness. Invoke Java goals with fully qualified Maven
   plugin coordinates, for example
   `mvn io.teaql:teaql-maven-plugin:1.1.0:generate -Dservice=java-lib-core`; do not use `mvn teaql:*`.
-  For Rust, install `cargo-teaql` exactly `2.0.8` from crates.io with
-  `cargo install cargo-teaql --version 2.0.8`, then run `cargo-teaql install-links`.
+  For Rust, install `cargo-teaql` exactly `2.0.10` from crates.io with
+  `cargo install cargo-teaql --version 2.0.10`, then run `cargo-teaql install-links`.
 - Do not clone, search for, or build local or remote TeaQL toolchain source
   repositories for normal generation work. If the Maven plugin, Maven plugin
   goal, TeaQL plugin/tool invocation, or crates.io crate cannot be installed,
@@ -196,14 +196,14 @@ by business subdomain. That directory must contain `main.xml` as its entrypoint.
 Always pass the directory itself; passing only `main.xml` omits included files
 from the upload.
 
-1. Install `cargo-teaql` exactly `2.0.8` from crates.io. If this
+1. Install `cargo-teaql` exactly `2.0.10` from crates.io. If this
    command fails because the crate cannot be found, downloaded, installed,
    invoked, or executed, stop immediately and report the failure. Do not look
    for source code or try to build `cargo-teaql` from a local or remote
    repository.
 
    ```bash
-   cargo install cargo-teaql --version 2.0.8
+   cargo install cargo-teaql --version 2.0.10
    ```
 
 2. Install the local command links exposed by the CLI:
