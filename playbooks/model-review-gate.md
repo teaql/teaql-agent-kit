@@ -1,14 +1,18 @@
-# Model Review Gate
+# Model Notification and Parallel Review
 
-Use this gate after a valid single-file model or multi-file model directory
-exists and before TeaQL code generation starts.
+Use this playbook after a valid single-file model or multi-file model directory
+exists. The historical filename is retained for compatibility, but this is not
+a blocking gate.
 
 ## Purpose
 
-The model review gate makes the semantic model visible to the user. Natural
-language must not jump directly to generated Java or Rust service code. The user
-should first confirm that the entities, fields, relationships, constants, and
-assumptions match the business domain.
+Make the semantic model visible without stopping agent execution. Natural
+language still becomes an explicit model before generated Java or Rust service
+code, but user confirmation is not required before generation.
+
+After evaluation succeeds, send a model-ready notification and continue with
+generation, implementation, and verification. The user may review the model or
+running application in parallel and provide asynchronous feedback.
 
 ## Review Summary
 
@@ -28,33 +32,35 @@ Provide a short model review summary in business language. Include:
 - Tenant boundary, only if multi-tenancy is confirmed or explicitly assumed.
 - Constants and finite state/type/category objects.
 - Assumptions made by the agent.
-- Questions or risks that need user confirmation.
+- Open questions or risks that would benefit from review.
 
-Keep the summary concise enough for a business user to review. Do not paste the
-entire XML unless the user asks for it.
+Keep the summary concise enough for a business user to review asynchronously.
+Do not paste the entire XML unless the user asks for it.
 
-## Required Confirmation
+## Non-blocking Notification
 
-Before generation, obtain one of these outcomes:
+After successful evaluation, record one of these states:
 
-- `confirmed`: the user explicitly confirms the model is correct enough to
-  generate code.
-- `confirmed_with_assumptions`: the user accepts stated assumptions for
-  playground or prototype generation.
-- `needs_revision`: the user asks for model changes. Update `model.xml` or the
-  affected subdomain files, validate again, and repeat this gate.
+- `model_ready_notified`: the model summary was sent and agent execution
+  continued.
+- `review_in_progress`: the user is reviewing while the agent continues.
+- `feedback_received`: asynchronous feedback arrived and is being assessed.
+- `revised`: feedback changed the model; evaluation and generation were rerun.
 
-For autonomous playground work, the agent may proceed only when assumptions are
-explicitly listed in the report and the user has asked for autonomous execution.
+Do not ask for confirmation merely because the model is ready. The notification
+is a milestone update, not a permission request or waiting node.
 
 If server-side KSML evaluation reports `errors`, do not generate code. Fix the
 model and run evaluation again. `warnings` and `suggestions` do not block
-generation by default, but they must be disclosed in the review summary when
-present.
+generation by default, but disclose them in the notification when present.
+
+Pause only for a genuine blocker that cannot be resolved safely, such as
+missing business information that would materially change the system or a new
+action requiring user authority.
 
 ## What To Check
 
-Ask the user to review:
+Make these points available for parallel review:
 
 - Are the business objects correct?
 - Are key fields missing or wrongly named?
@@ -64,14 +70,20 @@ Ask the user to review:
 - If multi-tenant, is the tenant boundary correct?
 - Are any generated names likely to conflict with the user's domain language?
 
+Feedback may arrive while generation or implementation is already running. If
+it invalidates the current contract, update the model, evaluate it again,
+regenerate affected outputs, and continue. Do not manually patch generated
+files.
+
 ## Report Requirement
 
 Playground reports must include a `Model Review` section with:
 
-- Review status.
-- Confirmation source, such as user confirmation or autonomous assumptions.
+- Notification/review state.
+- Notification time or milestone.
 - The model path.
-- The reviewed entities, relationships, constants, and assumptions.
+- The summarized entities, relationships, constants, and assumptions.
+- Asynchronous feedback received and any resulting revisions.
 
-Code generation results should appear after this section so the report shows
-that the model was reviewed before TeaQL service code was generated.
+The report should show that the model was made visible before generation. It
+must not imply that generation waited for confirmation.

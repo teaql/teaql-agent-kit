@@ -1,5 +1,12 @@
 # TEAQL Agent Kit — Autonomous Branch Design
 
+> [!IMPORTANT]
+> This document records the earlier split between controlled and autonomous
+> evaluation branches. It is retained as design history, not as the current
+> execution model. The current model is continuous autonomous agent execution
+> with non-blocking model-ready notifications and parallel human review. Follow
+> `AGENTS.md` and `playbooks/model-review-gate.md` for current instructions.
+
 ## 1. Purpose
 
 The `autonomous` branch is designed for no-gate evaluation of coding agents and language models on TEAQL-based business software tasks.

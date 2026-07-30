@@ -577,12 +577,13 @@ Before writing application code, complete:
 2. Explain tenant, customer, assigned-admin, platform-admin, and system custom
    context boundaries.
 3. Explain which app-* uses which custom-context-* module.
-4. Run the model review gate before TeaQL generation.
-5. Generate or scaffold custom context and API implementation modules only
-   after the model and context boundaries are reviewed.
+4. Publish the model-ready summary before TeaQL generation, then continue
+   without waiting for confirmation. Human review can proceed in parallel.
+5. Generate or scaffold custom context and API implementation modules from the
+   validated model and stated context-boundary assumptions.
 
 Do not directly write controller/service code before the model and custom
-context boundaries are reviewed.
+context boundaries are explicit and validated.
 Do not hand-edit generated-* TeaQL service code.
 Before editing a custom-context-* or app-* module, read its local AGENTS.md.
 ```
