@@ -14,7 +14,8 @@ human review can happen in parallel.
 
 1. Read the target repository's nearest `AGENTS.md`.
 2. Before any TeaQL evaluation or generation, verify the installed client
-   against the exact version required by that repository. Stop and report a
+   against the exact version required by that repository, or the defaults in
+   [`references/toolchains.md`](references/toolchains.md). Stop and report a
    mismatch.
 3. Capture the original business requirement, model target path, requested
    Java/Rust outputs, and runnable or testable outcome.
@@ -60,8 +61,8 @@ Repair from the Markdown evaluation report:
 3. Re-evaluate after each repair round.
 4. Resolve Warnings using the business requirement.
 5. Treat Suggestions as optional.
-6. If a message is not actionable, look up only its Rule ID in the repository's
-   KSML rules or error guide.
+6. Follow the report's concrete repair guidance rather than guessing or
+   memorizing a separate rule catalog.
 
 Do not generate from a model with errors.
 
@@ -82,6 +83,8 @@ and regenerate if the domain contract changed.
 ## Generate and Implement
 
 Generate only the outputs requested by the user.
+Load [`references/toolchains.md`](references/toolchains.md) now, not during
+modeling, and use its exact Java or Rust commands.
 
 - Never edit generated domain-library files.
 - Find and read the generated local `AGENTS.md` before business code. If an

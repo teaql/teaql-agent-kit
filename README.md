@@ -52,8 +52,14 @@ relationships, modules, and storage:
       name="bookstore-service"
       org="example"
       _module_key="root">
-  <bookstore name="TeaQL Books"/>
-  <book title="Domain Modeling with TeaQL"
+  <bookstore _name="Bookstore"
+             _module="Organization"
+             _module_key="organization"
+             name="TeaQL Books"/>
+  <book _name="Book"
+        _module="Catalog"
+        _module_key="catalog"
+        title="Domain Modeling with TeaQL"
         bookstore="bookstore()"/>
 </root>
 ```
@@ -171,11 +177,8 @@ Service.
 ## Explore the Kit
 
 - [Build TeaQL App skill](skills/build-teaql-app/SKILL.md)
-- [KSML modeling rules](modeling/KSML-RULES.md)
-- [Five-minute agent workflow](agents/QUICK-START.md)
-- [Modeling templates](agents/TEMPLATES.md)
-- [Error repair patterns](agents/ERROR-FIX.md)
-- [Java and Rust generation playbook](playbooks/generate-with-toolchains.md)
-- [Natural-language modeling playbook](playbooks/model-from-natural-language.md)
+- [TeaQL Java runtime](https://github.com/teaql/teaql-java)
+- [TeaQL Rust runtime](https://github.com/teaql/teaql-rs)
+- [Open-source Rust generator](https://github.com/teaql/teaql-forge-rs)
 
 [teaql.io](https://teaql.io)

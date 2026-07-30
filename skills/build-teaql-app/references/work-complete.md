@@ -38,8 +38,8 @@ API Constraint Harness Evidence
 - Code evidence: <links to query and write call sites>
 
 Agent Kit Impact
-- Token strategy: minimal skill + golden example; detailed rules by Rule ID
-- Context: full rule catalog loaded <count> times; Rule ID lookups <count>
+- Token strategy: minimal skill + golden example; dynamic guidance from Generation Service evaluation
+- Context: full local rule catalogs loaded <count> times; evaluation rounds <count>
 - Token usage: <actual usage, or "not reported">
 - Estimated context avoided: <estimate and basis, or "not measured">
 - Review automation: <mechanical checks completed before human review>
