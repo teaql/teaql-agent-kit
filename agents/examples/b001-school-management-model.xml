@@ -1,7 +1,7 @@
 <root name="school-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
-      org="doublechaintech"
+      org="example"
       _module_key="root">
   <platform _name="Platform"
             _module="Platform Management"

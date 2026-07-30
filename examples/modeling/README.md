@@ -20,4 +20,7 @@ That source workspace contains generated KSML examples for domains such as:
 
 This kit keeps the entry repository lightweight. Use the examples in the source
 workspace as reference material when available, but treat
-`prompts/modeling/ksml-rules.md` as the rules source of truth.
+Use `prompts/modeling/system.md`, `prompts/modeling/task-template.md`, and the
+evaluated `prompts/modeling/golden-example.xml`. Use
+`modeling/KSML-RULES.md` only as a Rule ID reference when evaluation feedback
+is incomplete.

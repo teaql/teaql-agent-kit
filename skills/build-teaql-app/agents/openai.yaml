@@ -1,0 +1,6 @@
+interface:
+  display_name: "Build TeaQL App"
+  short_description: "Model, generate, verify, and report a TeaQL application"
+  default_prompt: "Use $build-teaql-app to turn this business requirement into a validated, runnable TeaQL application."
+policy:
+  allow_implicit_invocation: true

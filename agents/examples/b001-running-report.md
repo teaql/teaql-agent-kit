@@ -24,7 +24,7 @@ Platform (root) ──< School
 
 | Step | Action | Result |
 |------|--------|--------|
-| 1 | Read KSML-RULES.md + RULES.md | Complete |
+| 1 | Load minimal prompt + evaluated golden example | Complete |
 | 2a | Decision Tree: platform is root (single-tenant) | platform as root, no merchant |
 | 2b | TEMPLATES.md: model.xml | Written |
 | 3 | `cargo teaql --input model.xml evaluate` | 0 errors, 0 warnings, 15 solids |

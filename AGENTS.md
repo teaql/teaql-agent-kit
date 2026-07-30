@@ -38,7 +38,11 @@ business logic against the generated contract.
 4. **Query constraints**: Every query using `execute_for_list()` or `execute()` must be preceded by `.purpose("why")` and `.comment("what")`.
 5. **Use cargo teaql with --input**: Every Rust TeaQL operation that reads or generates from a model must use `cargo teaql --input <model> <command> ...`. Rust generation in this Agent Kit uses only `rust-lib-core` and `rust-app-console`. Dynamic assist/help commands are also model-derived, so pass the current model with `--input` and read the current help/output before using them.
 6. **Save constraints**: Every save using `.save()` or `.update()` must be preceded by `.audit_as("description")`.
-7. **Read the Full Rules**: For modeling, read all rules in `agents/RULES.md`.
+7. **Use the Minimal Modeling Prompt**: For modeling, load
+   `prompts/modeling/system.md`, fill `prompts/modeling/task-template.md`, and
+   supply `prompts/modeling/golden-example.xml`. Do not preload the complete
+   rule catalog. Read `modeling/KSML-RULES.md` or `agents/ERROR-FIX.md` only for
+   a Rule ID whose evaluation message is incomplete.
 8. **Markdown Reports**: Both clients (`cargo teaql --input <model> evaluate` and the fully qualified Maven `eval`/generation commands) natively output Markdown reports when errors occur. Read the Markdown report directly in the console to analyze errors before fixing them.
 9. **STRICT VERSION REQUIREMENT (MUST READ)**: This repository requires `cargo-teaql` exactly `2.0.10`. If you detect any other version, YOU MUST STOP and refuse to generate code until the user installs `2.0.10`.
 10. **This repo is the execution guide**: Use the focused files under `agents/`, `modeling/`, `playbooks/`, generated local `AGENTS.md` files, object-specific assist output, and generated Java output as current guidance.
@@ -107,16 +111,22 @@ mvn teaql:generate -Dservice=java-web-spring-boot
 
 For comprehensive guides, templates, and patterns, please refer to the specific files:
 
-- **KSML Source of Truth**: `modeling/KSML-RULES.md` (Canonical KSML XML rules)
-- **Rules**: `agents/RULES.md` (Strict rules for KSML formatting)
+- **Minimal Prompt**: `prompts/modeling/system.md` (Model-first behavior)
+- **Golden Example**: `prompts/modeling/golden-example.xml` (Evaluated KSML)
+- **Task Frame**: `prompts/modeling/task-template.md` (Requirement and commands)
+- **Completion Report**: `prompts/reporting/work-complete.md` (Load only after work)
+- **Installable Skill**: `skills/build-teaql-app/SKILL.md` (End-to-end workflow)
+- **KSML Rule Catalog**: `modeling/KSML-RULES.md` (Rule ID reference)
+- **Compact Rules**: `agents/RULES.md` (On-demand execution reference)
 - **Quick Start**: `agents/QUICK-START.md` (5-minute guide for generation)
 - **Templates**: `agents/TEMPLATES.md` (Copy-paste XML patterns)
 - **Decision Trees**: `agents/DECISION-TREES.md` (How to choose roots/tenancy)
 - **Errors**: `agents/ERROR-FIX.md` (Full error lookup table)
 - **Examples**: `modeling/EXAMPLES/` (Full KSML modeling examples)
 
-If these files appear to conflict, follow `modeling/KSML-RULES.md` first, then
-use the shorter `agents/` files as execution checklists and examples.
+Generation Service evaluation is authoritative for the submitted model. If an
+evaluation message is incomplete, use `modeling/KSML-RULES.md` first and the
+shorter `agents/` files as on-demand references.
 
 ## CONTEXT BOUNDARY
 
@@ -127,10 +137,12 @@ to avoid polluting execution context.
 
 Default behavior:
 
-1. Use `AGENTS.md`, `agents/QUICK-START.md`, `agents/RULES.md`,
-   `modeling/KSML-RULES.md`, `agents/TEMPLATES.md`, `agents/ERROR-FIX.md`,
-   generated local `AGENTS.md` files, object-specific assist output, and
-   generated Java output first.
+1. For modeling, use the three files under `prompts/modeling/` and
+   `playbooks/model-from-natural-language.md` first. Use
+   `modeling/KSML-RULES.md`, `agents/RULES.md`, `agents/TEMPLATES.md`, and
+   `agents/ERROR-FIX.md` only when evaluation feedback requires more detail.
+   After generation, use generated local `AGENTS.md` files, object-specific
+   assist output, and generated Java output.
 2. Do not read `/Users/Philip/githome/teaql-evaluation-reports` unless the user
    explicitly asks for historical reports, evaluation evidence, or broad TeaQL
    architecture/background material.

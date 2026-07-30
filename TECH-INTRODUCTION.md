@@ -211,11 +211,10 @@ Java, Rust, or both tracks from the same model. For Java projects, read
 high-level loop is:
 
 1. Model the domain as KSML XML.
-2. Validate the model with `prompts/modeling/checklist.md`.
-3. Run server-side KSML evaluation with the client toolchain when the `evaluate`
-   target is available. Fix evaluation `errors`; carry `warnings` and
-   `suggestions` into review.
-4. Run the model review gate and confirm the model before code generation.
+2. Use the minimal modeling prompt and evaluated golden example.
+3. Run server-side KSML evaluation. Fix evaluation `errors`; carry accepted
+   `warnings` and optional `suggestions` into parallel review.
+4. Send the Model Ready signal and continue without waiting for confirmation.
 5. Generate Java and/or Rust code with the selected toolchain.
 6. Run target-project compile checks and tests.
 7. Decide schema bootstrap or migration explicitly for project/production mode.
@@ -249,11 +248,12 @@ The key files are:
 | --- | --- |
 | `AGENTS.md` | Agent entry instructions for Codex, Claude Code, and similar tools. |
 | `playbooks/model-from-natural-language.md` | Step-by-step workflow for natural-language to KSML modeling. |
-| `playbooks/model-review-gate.md` | Required model confirmation gate before TeaQL code generation. |
-| `prompts/modeling/system.md` | Modeling role prompt. |
-| `prompts/modeling/task-template.md` | Reusable task frame for a requested domain. |
-| `prompts/modeling/ksml-rules.md` | Source-of-truth KSML modeling rules. |
-| `prompts/modeling/checklist.md` | Validation checklist before code generation. |
+| `playbooks/model-review-gate.md` | Model Ready signal and parallel review workflow. |
+| `prompts/modeling/system.md` | Minimal model-first prompt with quality feedback. |
+| `prompts/modeling/golden-example.xml` | Evaluated KSML grammar example. |
+| `prompts/modeling/task-template.md` | Business requirement, model target, and evaluation command. |
+| `prompts/reporting/work-complete.md` | Completion-only impact and execution-log report. |
+| `modeling/KSML-RULES.md` | Rule ID reference for incomplete evaluation messages. |
 | `playbooks/generate-with-toolchains.md` | Java/Rust generation workflow after the model is valid. |
 | `playbooks/enterprise-repository-topology.md` | Large-project repository split and CI/CD workflow guidance. |
 
@@ -262,8 +262,8 @@ Example agent request:
 ```text
 Model a warehouse inventory management system.
 Follow AGENTS.md and playbooks/model-from-natural-language.md.
-Use prompts/modeling/ksml-rules.md.
-Create a valid KSML model.xml first, then explain any assumptions.
+Use the minimal prompt set under prompts/modeling/.
+Create and evaluate model.xml, repair all errors, then send Model Ready.
 ```
 
 ## What TeaQL Is

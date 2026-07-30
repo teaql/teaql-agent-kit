@@ -7,7 +7,7 @@ For every common pattern, copy and paste the relevant template below, and replac
 <root name="{kebab-case-domain-name}-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
-      org="doublechaintech"
+      org="example"
       _module_key="root">
   <!-- All objects go here -->
 </root>
@@ -23,7 +23,7 @@ For every common pattern, copy and paste the relevant template below, and replac
                update_time="updateTime()"/>
 ```
 
-Add a tenant boundary reference only when multi-tenancy is explicitly confirmed:
+Add a tenant boundary reference only when multi-tenancy is explicitly modeled:
 
 ```xml
 {tenant_owner}="{tenant_owner}(context)"

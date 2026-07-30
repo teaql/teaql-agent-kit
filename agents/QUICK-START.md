@@ -2,24 +2,25 @@
 
 This guide provides the fastest path for an AI agent to build a TeaQL project from scratch. By following these 5 steps, you will construct a correctly structured model, validate it, generate the code, and use the APIs.
 
-## Step 1: Read the Rules (2 mins)
-**CRITICAL**: Read `modeling/KSML-RULES.md` and `agents/RULES.md` before writing any XML or code. `modeling/KSML-RULES.md` is the canonical source for KSML XML.
-- The document element MUST be `<root>`.
-- All business and constant objects MUST be direct children of `<root>`.
-- Business objects MUST NOT use `id="id()"`.
-- Constant objects MUST use `id="id()"`, `name="string()"`, `code="string()"`, `_constant="true"`, and `_identifier="code"`.
-- Business objects should use representative literal values, not scalar type functions, for normal fields. Use `external_id="1000000000000000000l"` instead of `external_id="long()"`.
+## Step 1: Load the Minimal Prompt
+
+Use `prompts/modeling/system.md`, fill
+`prompts/modeling/task-template.md`, and supply
+`prompts/modeling/golden-example.xml`.
+
+Do not preload the complete rule catalog. Use `modeling/KSML-RULES.md` and
+`agents/ERROR-FIX.md` only when an evaluation message needs more detail.
 
 ## Step 2: Create the Model (`model.xml`)
-Use `agents/TEMPLATES.md` to copy the exact XML blocks.
-Follow `agents/DECISION-TREES.md` to pick the right root and tenancy strategy.
+Adapt the evaluated `prompts/modeling/golden-example.xml`. Follow
+`agents/DECISION-TREES.md` only when the business boundary is ambiguous.
 
 **Example Minimal Model:**
 ```xml
 <root name="bookstore-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
-      org="doublechaintech"
+      org="example"
       _module_key="root">
   <bookstore _name="Bookstore"
              _module="Store"

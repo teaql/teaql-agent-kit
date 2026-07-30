@@ -9,6 +9,25 @@ Instead of asking an agent to invent persistence code from scratch, TeaQL gives
 it a smaller and safer path: build a business model, evaluate it, generate a
 typed domain contract, and implement business logic against that contract.
 
+## Install the Agent Skill
+
+Install the complete model-to-application workflow with the community Skills
+CLI:
+
+```bash
+npx skills add teaql/teaql-agent-kit --skill build-teaql-app
+```
+
+Then ask your coding agent:
+
+```text
+Use $build-teaql-app to turn this business requirement into a validated,
+runnable TeaQL application: ...
+```
+
+This repository can publish multiple focused Skills. `build-teaql-app` is the
+end-to-end workflow: model, evaluate, generate, implement, verify, and report.
+
 ## What TeaQL Does
 
 ```mermaid
@@ -31,7 +50,7 @@ relationships, modules, and storage:
 <root cfg_mask_china_mobile="false"
       data_service="sqlite"
       name="bookstore-service"
-      org="doublechaintech"
+      org="example"
       _module_key="root">
   <bookstore name="TeaQL Books"/>
   <book title="Domain Modeling with TeaQL"
@@ -151,6 +170,7 @@ Service.
 
 ## Explore the Kit
 
+- [Build TeaQL App skill](skills/build-teaql-app/SKILL.md)
 - [KSML modeling rules](modeling/KSML-RULES.md)
 - [Five-minute agent workflow](agents/QUICK-START.md)
 - [Modeling templates](agents/TEMPLATES.md)

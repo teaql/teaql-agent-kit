@@ -19,7 +19,7 @@ This document provides complete, copy-paste examples of business objects in KSML
 ```
 
 ## 2. Multi-Tenant Business Object
-*(Requires explicitly confirmed tenancy)*
+*(Requires explicitly modeled tenancy)*
 
 ```xml
 <store_order _name="Store Order"

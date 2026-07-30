@@ -1,100 +1,70 @@
 # KSML Modeling Checklist
 
-Use this checklist before delivering or generating code from a KSML model.
+Use this checklist before evaluating or generating from a KSML model.
+`modeling/KSML-RULES.md` remains authoritative.
 
-## Root
+## MUST — Validity Gate
 
-- Exactly one `<root>` element.
-- The document element is `<root>`, not `<model>`, `<ksml>`, `<domain>`, or any
-  other wrapper tag.
-- Root `name` is present and non-empty.
-- `name` is kebab-case ending in `-service`.
-- Root does not contain `alias_model_name`, `english_name`, or `chinese_name`.
-- `data_service="sqlite"`.
-- `org="doublechaintech"`.
-- `_module_key="root"`.
+### Root and Structure
 
-## Structure
+- [ ] Exactly one outer `<root>` element.
+- [ ] Root `name` is non-empty, lowercase kebab-case, and ends in `-service`.
+- [ ] Root has no `alias_model_name`, `english_name`, or `chinese_name`.
+- [ ] Every object is a direct child of `<root>`.
+- [ ] Only constant objects contain children, and those children are `<_value>`.
+- [ ] Object and attribute names use lowercase snake_case.
+- [ ] Attribute names do not exactly match SQL2016 reserved keywords.
+- [ ] No duplicate object elements.
 
-- All objects are direct children of `<root>`.
-- No nested objects except `<_value>` children inside constant objects.
-- Object names are lowercase snake_case.
-- Object and attribute names use complete domain words, not compressed fragments
-  or ambiguous abbreviations.
-- Each element type is unique.
-- Object names and attribute names do not exactly match reserved keywords from
-  Java, JavaScript, Dart, Rust, Go, and Python.
-- Attribute names do not exactly match SQL2016 reserved keywords.
+### Business Objects and Connectivity
 
-## Business Objects
+- [ ] Every business object has `_name`, `_module`, and `_module_key`.
+- [ ] No business object has `id="id()"`, `_constant`, `_identifier`, or
+  `<_value>` children.
+- [ ] Exactly one business object is the domain root.
+- [ ] The domain-root business object references no other business object.
+- [ ] Every non-root business object has a business relationship path to the
+  domain root; an isolated constant reference does not satisfy this rule.
+- [ ] Normal business fields use representative literals, not scalar placeholder
+  functions.
 
-- Must have `_name`, `_module`, and `_module_key`.
-- Must not have `id="id()"`.
-- Must not have `_constant="true"`.
-- Must not have `_identifier`.
-- Must not have `<_value>` children.
-- Exactly one business object is the domain root object.
-- The domain root object matches the user's stated largest system boundary,
-  not merely the system title.
-- If the model includes both `platform` and `school`, and the platform manages,
-  hosts, registers, or contains schools, `platform` is the domain root and
-  `school` references `platform`.
-- `school` is the domain root only when one school is the largest scope and no
-  higher-level platform, operator, group, organization, company, or owner object
-  manages that school.
-- The domain root business object does not reference any other object.
-- Every non-root business object references at least one other object and is
-  connected to the domain root graph.
-- Use concrete example values, not `string()`, for normal business fields.
-- Use literal values, not scalar type functions, for normal business fields:
-  `count="12"`, `external_id="1000000000000000000l"`,
-  `amount="1299.50"`, and `enabled="true"`.
-- Do not assume multi-tenancy by default.
-- Include tenant ownership only when the user confirmed a tenant boundary or the
-  model records an explicit autonomous playground assumption.
-- Use `merchant="merchant(context)"` only when `merchant` is the confirmed
-  tenant owner.
-- Put attributes in this order: identity, relationships, tenant boundary if
-  confirmed, system fields.
+### Constants and References
 
-## Constant Objects
+- [ ] Every constant has complete object metadata.
+- [ ] Every constant has `id="id()"`, `name="string()"`, `code="string()"`,
+  `_constant="true"`, and `_identifier="code"`.
+- [ ] Every constant has one or more `<_value>` entries.
+- [ ] `<_value>` ids start at `1001` and increment sequentially.
+- [ ] `<_value>` codes use `UPPERCASE_WITH_UNDERSCORES`.
+- [ ] Constants do not contain tenant context.
+- [ ] References use `object_name()` directly, not `object(object_name)`.
+- [ ] Lifecycle states and finite classifications reference constants.
+- [ ] Simple independent yes/no switches use Boolean literals.
+- [ ] `_module_key` uses lowercase kebab-case.
 
-- Must have `id="id()"`.
-- Must have `name="string()"`.
-- Must have `code="string()"`.
-- Must have `_constant="true"`.
-- Must have `_identifier="code"`.
-- Must have `<_value>` children.
-- Must not have `merchant="merchant(context)"`.
-- Must reference the domain root business object directly unless explicitly
-  modeled as cross-system global platform data.
-- `<_value>` ids start from `1001` and increment sequentially.
-- `<_value>` code values are `UPPERCASE_WITH_UNDERSCORES`.
+## SHOULD — Modeling Decisions
 
-## References
-
-- Use `object_name()` directly.
-- Do not use `_id` suffixes for references.
-- Status, category, kind, classification, gender, priority, and boolean-like
-  states reference constant objects.
-
-## Tenancy
-
-- Classify the model as single-tenant, multi-tenant, platform-managed
+- [ ] The domain root is the highest real owner inside the requested system
+  boundary, not an object inferred only from the system title.
+- [ ] Constant objects reference the domain root directly unless explicitly
+  modeled as cross-system global data.
+- [ ] Object and attribute names use complete, unambiguous domain words.
+- [ ] Tenancy is classified as single-tenant, multi-tenant, platform-managed
   multi-tenant, or undecided.
-- Do not add `platform`, `merchant`, `tenant`, or `merchant(context)` only
-  because an example template included them.
-- For single-tenant models, do not add tenant boundary fields unless they are
-  real business concepts.
-- For multi-tenant models, identify the tenant owner object explicitly and apply
-  tenant ownership only to data that must be isolated by that boundary.
-- Record the tenancy decision or assumption in the model review summary.
+- [ ] Tenant objects and context fields are not copied from templates by default.
+- [ ] Multi-tenant ownership is applied only to data requiring isolation.
+- [ ] `merchant="merchant(context)"` is used only when `merchant` is the actual
+  tenant owner.
+- [ ] An undecided tenancy assumption is recorded for parallel review without
+  blocking autonomous modeling.
+- [ ] Repository root metadata defaults are used unless the target overrides
+  them: `data_service="sqlite"`, `org="example"`,
+  `_module_key="root"`.
 
-## Modules
+## MAY — Readability
 
-- `_module` is a display name, usually Title Case with spaces.
-- `_module_key` is lowercase kebab-case.
-- Group objects by functional domain or business process.
-- If a constant object is referenced by exactly one business object, it uses the
-  same `_module` and `_module_key` as that business object.
-- Avoid single-object modules.
+- [ ] Related objects share coherent modules where useful.
+- [ ] Single-object modules are avoided where practical.
+- [ ] Attributes follow the preferred order: presentation metadata, identity
+  values, classifications and relationships, tenant context, system fields,
+  then constant mechanics.

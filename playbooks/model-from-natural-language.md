@@ -22,13 +22,10 @@ language and wants a TeaQL/KSML domain model.
      multi-tenant, or undecided.
    - Add platform, merchant, tenant, employee, organization, company, school,
      hospital, store, or similar baseline objects only when they are real
-     business concepts or confirmed architecture assumptions.
+     business concepts or documented architecture assumptions.
    - Add concrete business objects for the domain.
    - Add constant objects for status, category, kind, classification, gender,
      priority, and finite enumerations.
-   - Do not use object or attribute names that exactly match reserved keywords in
-     Java, JavaScript, Dart, Rust, Go, or Python.
-   - Do not use attribute names that exactly match SQL2016 reserved keywords.
 
 3. Organize modules.
    - Use `_module` as the first-level menu display name.
@@ -36,23 +33,27 @@ language and wants a TeaQL/KSML domain model.
    - Put constants in `Basic Data` unless a process-specific module is clearer.
    - Avoid single-object modules.
 
-4. Generate KSML XML.
-   - Use `prompts/modeling/ksml-rules.md`.
-   - Use `prompts/modeling/task-template.md`.
-   - Output one `<root>` element with direct child objects.
+4. Generate KSML XML from the minimal prompt set.
+   - Use `prompts/modeling/system.md`.
+   - Fill `prompts/modeling/task-template.md` with the business requirement,
+     concrete model target, and evaluation command.
+   - Supply `prompts/modeling/golden-example.xml` as the grammar example.
+   - Do not preload the complete KSML rule catalog.
 
-5. Validate before delivery.
-   - Use `prompts/modeling/checklist.md`.
-   - Repair any rule violation.
-   - Pay special attention to constant object rules and explicit tenancy.
-   - If a TeaQL client toolchain with `evaluate` is available, run server-side KSML
-     evaluation after checklist validation and before code generation. Fix
-     evaluation `errors`; carry `warnings` and `suggestions` into the
-     model-ready notification.
+5. Evaluate and repair before delivery.
+   - Run server-side KSML evaluation after saving the first complete model and
+     before code generation.
+   - Read the Markdown report directly, fix evaluation `errors`, and rerun
+     evaluation immediately.
+   - Use the report's Rule ID to read only the matching section of
+     `modeling/KSML-RULES.md` or `agents/ERROR-FIX.md` when the report itself is
+     not actionable.
+   - Carry accepted `warnings` and optional `suggestions` into the model-ready
+     notification.
    - For a multi-file model, pass the complete directory to TeaQL. Passing only
      `main.xml` omits the included files from the upload.
 
-6. Send the Model Ready signal and continue.
+6. Send the intermediate Model Ready signal and continue.
    - Use `playbooks/model-review-gate.md`.
    - Give the user the concrete model file/directory path and evaluation result,
      including error, warning, and suggestion counts.
@@ -63,9 +64,26 @@ language and wants a TeaQL/KSML domain model.
    - If asynchronous feedback arrives, update the single-file model or affected
      subdomain files, validate again, regenerate, and continue.
 
+7. Send the Work Complete report.
+   - Load `prompts/reporting/work-complete.md` only after the
+     requested result—not evaluation alone—is complete.
+   - Report actual verification results and artifact paths.
+   - Explain token efficiency through the minimal-prompt and on-demand Rule ID
+     strategy.
+   - Quantify mechanical Review work completed before human review.
+   - Include the original business prompt and the resulting model contract.
+   - Link generated `AGENTS.md`, assist output, and actual business-code
+     evidence for the API constraint harness.
+   - Count query execution paths with `purpose` and `comment`, and write paths
+     with `audit_as` or `auditAs`.
+   - Never invent token savings; mark unavailable telemetry as `not reported`
+     and estimates as `Estimated` with their basis.
+   - Give one concrete next-use command and a short chronological execution log.
+
 ## Done
 
-The task is done when the model is valid KSML XML, follows the checklist, and
-the Model Ready signal has been sent. If the user asked for a runnable TeaQL
-project, continue with code generation, compile checks, and repair loops without
-waiting for model confirmation.
+For a model-only request, the task is done when Generation Service evaluation
+reports zero errors and the Work Complete report has been sent. For a runnable
+TeaQL project, finish generation, compile checks, tests, and startup before
+sending Work Complete. Model Ready remains a non-blocking intermediate signal
+for parallel human review.

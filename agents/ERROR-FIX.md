@@ -8,7 +8,7 @@
 | Missing root ref | Constant not linked to root | Add reference to the actual domain root object (e.g. `bookstore="bookstore()"` when `bookstore` is the root). |
 | Depth exceeded | Too many nested references | Remove one reference or use string field. |
 | Sensitive field | Token/key/password detected | Add `_audit_mask_fields="field_name"`. |
-| Disconnected graph | Entity not connected to root | Connect it to its natural parent or actual root object. Use a tenant context reference only when multi-tenancy is explicitly confirmed. |
+| Disconnected graph | Entity not connected to root | Connect it to its natural parent or actual root object. Use a tenant context reference only when multi-tenancy is explicitly modeled. |
 | Reserved keyword | Using a language keyword | Rename attribute (e.g., `type` -> `item_kind`, `user` -> `user_account`). |
 
 ## Code Generation / Compilation Errors
