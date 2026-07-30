@@ -577,8 +577,9 @@ Before writing application code, complete:
 2. Explain tenant, customer, assigned-admin, platform-admin, and system custom
    context boundaries.
 3. Explain which app-* uses which custom-context-* module.
-4. Publish the model-ready summary before TeaQL generation, then continue
-   without waiting for confirmation. Human review can proceed in parallel.
+4. Publish the Model Ready signal with the concrete model path and evaluation
+   result, then continue without waiting for confirmation. Human review can
+   proceed in parallel.
 5. Generate or scaffold custom context and API implementation modules from the
    validated model and stated context-boundary assumptions.
 

@@ -54,12 +54,12 @@ language and wants a TeaQL/KSML domain model.
    - For a multi-file model, pass the complete directory to TeaQL. Passing only
      `main.xml` omits the included files from the upload.
 
-6. Publish the model summary and continue.
+6. Send the Model Ready signal and continue.
    - Use `playbooks/model-review-gate.md`.
-   - Summarize entities, fields, relationships, tenancy classification, tenant
-     boundary if any, constants, and assumptions in business language.
-   - Notify the user that the model is ready, then continue directly to
-     generation when a runnable project was requested.
+   - Give the user the concrete model file/directory path and evaluation result,
+     including error, warning, and suggestion counts.
+   - Keep the signal compact so the user can open and review the model directly.
+   - Continue directly to generation when a runnable project was requested.
    - Do not wait for confirmation. The user can review the model or application
      while the agent continues.
    - If asynchronous feedback arrives, update the single-file model or affected
@@ -68,6 +68,6 @@ language and wants a TeaQL/KSML domain model.
 ## Done
 
 The task is done when the model is valid KSML XML, follows the checklist, and
-the model-ready summary has been sent. If the user asked for a runnable TeaQL
+the Model Ready signal has been sent. If the user asked for a runnable TeaQL
 project, continue with code generation, compile checks, and repair loops without
 waiting for model confirmation.

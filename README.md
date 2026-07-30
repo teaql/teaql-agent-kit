@@ -80,9 +80,15 @@ object-specific assist instead of guessing.
 ## Continuous Execution, Parallel Review
 
 TeaQL does not treat review as a mode switch or a mandatory waiting point.
-After a model passes evaluation, the agent publishes a concise model summary,
-notifies the user that it is ready, and continues with generation,
-implementation, and verification.
+After a model passes evaluation, the agent sends a compact signal containing
+the model path and evaluation result, then continues with generation,
+implementation, and verification:
+
+```text
+Model Ready
+- Model: /path/to/app-playground/models/model.xml
+- Evaluation: passed — 0 errors, 2 warnings, 1 suggestion
+```
 
 Human review happens alongside that work:
 
@@ -93,7 +99,7 @@ sequenceDiagram
     participant G as "Generation Service"
     A->>G: Evaluate model
     G-->>A: Valid model report
-    A-->>U: Model-ready notification
+    A-->>U: Model path + evaluation result
     par Agent continues
         A->>G: Generate contract and application
         A->>A: Implement, test, and repair

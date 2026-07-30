@@ -17,8 +17,8 @@ unavailable, fall back to normal file search.
 
 The `main` branch supports continuous autonomous execution. After successful
 model evaluation, follow `playbooks/model-review-gate.md`, publish the
-model-ready summary, and continue with generation without waiting for user
-confirmation.
+model-ready signal with the model path and evaluation result, and continue with
+generation without waiting for user confirmation.
 
 Human review is parallel and non-blocking. The user may review the model,
 generated application, or running effect while the agent continues. When

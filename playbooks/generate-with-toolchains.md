@@ -55,9 +55,9 @@ Rust, or both TeaQL code generation tracks.
   Evaluation `warnings` and `suggestions` should be reported to the user but do
   not block generation by default.
 - Before generation, run `playbooks/model-review-gate.md` as a non-blocking
-  notification step. Publish the model summary and assumptions, then continue
-  without waiting for confirmation. Human review may proceed in parallel and
-  provide asynchronous feedback.
+  notification step. Publish the concrete model path and evaluation result,
+  then continue without waiting for confirmation. Human review may proceed in
+  parallel and provide asynchronous feedback.
 - Playground mode is the default mode for local trials. Do not require git
   repositories or artifact publishing.
 - In playground mode, keep model input and generated runtime code inside
@@ -339,14 +339,10 @@ Recommended sections:
    - State explicitly that generated runtime code and customer experiment code
      are separate.
 
-3. `Model Notification and Parallel Review`
-   - State the notification/review state: `model_ready_notified`,
-     `review_in_progress`, `feedback_received`, or `revised`.
+3. `Model Ready Signal`
+   - Record the exact model file/directory path sent to the user.
+   - Record the evaluation result and error, warning, and suggestion counts.
    - State when the model-ready notification was sent.
-   - List the model path.
-   - Summarize entities, important fields, relationships, constants,
-     tenancy classification, tenant boundary if any, assumptions, and open
-     questions.
    - Record asynchronous review feedback and any resulting model revisions.
 
 4. `Model Summary`
@@ -384,8 +380,8 @@ Recommended sections:
 8. `TeaQL Value Demonstrated`
    - Explain the concrete guardrails demonstrated:
      - Natural language was converted to a semantic model first.
-     - The model was summarized and announced before code generation without
-       creating a blocking confirmation step.
+     - The model path and evaluation result were announced before code
+       generation without creating a blocking confirmation step.
      - Human review and agent implementation could proceed in parallel.
      - Generated API names came from the model.
      - Query code used typed generated methods instead of ad-hoc SQL.
