@@ -49,21 +49,25 @@ language and wants a TeaQL/KSML domain model.
    - Pay special attention to constant object rules and explicit tenancy.
    - If a TeaQL client toolchain with `evaluate` is available, run server-side KSML
      evaluation after checklist validation and before code generation. Fix
-     evaluation `errors`; carry `warnings` and `suggestions` into the model
-     review.
+     evaluation `errors`; carry `warnings` and `suggestions` into the
+     model-ready notification.
+   - For a multi-file model, pass the complete directory to TeaQL. Passing only
+     `main.xml` omits the included files from the upload.
 
-6. Run the model review gate before code generation.
+6. Publish the model summary and continue.
    - Use `playbooks/model-review-gate.md`.
    - Summarize entities, fields, relationships, tenancy classification, tenant
      boundary if any, constants, and assumptions in business language.
-   - Get user confirmation, or record explicit assumptions when the user asked
-     for autonomous playground execution.
-   - If the user asks for changes, update `model.xml`, validate again, and
-     repeat the review gate.
+   - Notify the user that the model is ready, then continue directly to
+     generation when a runnable project was requested.
+   - Do not wait for confirmation. The user can review the model or application
+     while the agent continues.
+   - If asynchronous feedback arrives, update the single-file model or affected
+     subdomain files, validate again, regenerate, and continue.
 
 ## Done
 
 The task is done when the model is valid KSML XML, follows the checklist, and
-has passed the model review gate. If the user asked for a runnable TeaQL project,
-continue with code generation, compile checks, and repair loops after the model
-is confirmed.
+the model-ready summary has been sent. If the user asked for a runnable TeaQL
+project, continue with code generation, compile checks, and repair loops without
+waiting for model confirmation.

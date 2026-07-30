@@ -13,13 +13,17 @@ full-file scans. Use CodeGraph especially for symbol definitions, references,
 call chains, dependency impact, and related tests. If CodeGraph tools are
 unavailable, fall back to normal file search.
 
-## Main Branch Review Gate
+## Continuous Execution and Parallel Review
 
-The `main` branch uses controlled execution. Before TeaQL service code
-generation, follow `playbooks/model-review-gate.md`, present the model review
-summary, and obtain the required user confirmation. Autonomous assumptions may
-replace confirmation only when the user explicitly requests autonomous
-playground execution and accepts the listed assumptions.
+The `main` branch supports continuous autonomous execution. After successful
+model evaluation, follow `playbooks/model-review-gate.md`, publish the
+model-ready summary, and continue with generation without waiting for user
+confirmation.
+
+Human review is parallel and non-blocking. The user may review the model,
+generated application, or running effect while the agent continues. When
+asynchronous feedback arrives, assess it, update the model when needed,
+regenerate affected outputs, and continue.
 
 ## AI-Native Reminder
 

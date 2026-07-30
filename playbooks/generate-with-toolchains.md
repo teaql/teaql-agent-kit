@@ -54,9 +54,10 @@ Rust, or both TeaQL code generation tracks.
   exposes an `evaluate` target. Evaluation `errors` must be fixed before generation.
   Evaluation `warnings` and `suggestions` should be reported to the user but do
   not block generation by default.
-- Before generation, run `playbooks/model-review-gate.md`. The model must be
-  confirmed by the user, or autonomous playground assumptions must be explicitly
-  listed and accepted by the user's request.
+- Before generation, run `playbooks/model-review-gate.md` as a non-blocking
+  notification step. Publish the model summary and assumptions, then continue
+  without waiting for confirmation. Human review may proceed in parallel and
+  provide asynchronous feedback.
 - Playground mode is the default mode for local trials. Do not require git
   repositories or artifact publishing.
 - In playground mode, keep model input and generated runtime code inside
@@ -204,7 +205,7 @@ before using them.
    cargo-teaql install-links
    ```
 
-3. Evaluate the reviewed model when the installed client exposes `evaluate`.
+3. Evaluate the validated model when the installed client exposes `evaluate`.
    Evaluation errors block generation; warnings and suggestions should be
    reported:
 
@@ -213,7 +214,7 @@ before using them.
    ```
 
 4. Generate the read-only backend/domain library from the model. In playground
-   mode, create or copy the reviewed model to
+   mode, create or copy the validated model to
    `/path/to/app-playground/models/model.xml`, and use
    `/path/to/app-playground/rust-lib-core` as the output path:
 
@@ -338,15 +339,15 @@ Recommended sections:
    - State explicitly that generated runtime code and customer experiment code
      are separate.
 
-3. `Model Review`
-   - State the review status: `confirmed`, `confirmed_with_assumptions`, or
-     `needs_revision`.
-   - State who or what confirmed it: user confirmation, or explicit autonomous
-     assumptions for playground mode.
+3. `Model Notification and Parallel Review`
+   - State the notification/review state: `model_ready_notified`,
+     `review_in_progress`, `feedback_received`, or `revised`.
+   - State when the model-ready notification was sent.
    - List the model path.
-   - Summarize reviewed entities, important fields, relationships, constants,
+   - Summarize entities, important fields, relationships, constants,
      tenancy classification, tenant boundary if any, assumptions, and open
      questions.
+   - Record asynchronous review feedback and any resulting model revisions.
 
 4. `Model Summary`
    - List the main business objects, constants, tenancy classification, tenant
@@ -383,7 +384,9 @@ Recommended sections:
 8. `TeaQL Value Demonstrated`
    - Explain the concrete guardrails demonstrated:
      - Natural language was converted to a semantic model first.
-     - The model was reviewed before code generation.
+     - The model was summarized and announced before code generation without
+       creating a blocking confirmation step.
+     - Human review and agent implementation could proceed in parallel.
      - Generated API names came from the model.
      - Query code used typed generated methods instead of ad-hoc SQL.
      - Generated code and customer code stayed separated.
@@ -440,7 +443,7 @@ Before running Maven for a Java project, read
    a local or remote repository, hand-build generated output, or try an alternate
    generation path in normal generation mode.
 
-2. Evaluate the reviewed model when the installed Maven plugin exposes `eval`.
+2. Evaluate the validated model when the installed Maven plugin exposes `eval`.
    Use the fully qualified Maven plugin coordinate. Evaluation errors block
    generation; warnings and suggestions should be reported:
 
@@ -449,8 +452,8 @@ Before running Maven for a Java project, read
      -Dteaql.input=/path/to/app-playground/models/model.xml
    ```
 
-3. Generate backend/domain library code from the reviewed model. In playground
-   mode, create or copy the reviewed model to
+3. Generate backend/domain library code from the validated model. In playground
+   mode, create or copy the validated model to
    `/path/to/app-playground/models/model.xml`, and use
    `/path/to/app-playground/java-lib-core` as the output path:
 
@@ -495,7 +498,7 @@ Before running Maven for a Java project, read
    mvn test
    ```
 
-For Java playground mode, always start from the reviewed model, run
+For Java playground mode, always start from the validated model, run
 fully qualified `generate -Dservice=java-lib-core`, and then run fully qualified
 `generate -Dservice=java-web-spring-boot` when the expected result is a runnable directory. Keep the model under
 `app-playground/models`, the generated library under `app-playground/java-lib-core`,
