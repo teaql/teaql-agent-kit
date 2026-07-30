@@ -7,7 +7,8 @@ modeling, generation, or application work, read and follow
 ## Hard Requirements
 
 1. Work model-first: save complete KSML, evaluate it with the Generation
-   Service, and fix all Errors before generation.
+   Service, and fix all Errors before generation. Never run evaluation before
+   the first complete model target exists.
 2. Rust requires `cargo-teaql` exactly `2.0.10`. Verify it before every TeaQL
    operation; stop on any mismatch.
 3. Java requires `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL

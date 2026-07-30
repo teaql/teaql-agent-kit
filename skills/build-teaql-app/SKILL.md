@@ -1,25 +1,32 @@
 ---
 name: build-teaql-app
-description: Build or change a TeaQL Java or Rust application from a natural-language business requirement. Use when a task involves KSML domain modeling, TeaQL model evaluation, typed domain generation, generated assist APIs, auditable query/save implementation, application verification, or reporting a model and runnable result for parallel human review.
+description: "Build or change a TeaQL Java or Rust application from a natural-language business requirement. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
 ---
 
 # Build TeaQL App
 
-Turn a business requirement into an evaluated KSML contract and a verified
-TeaQL application. Work autonomously through modeling, generation,
-implementation, and verification; notify the user when the model is ready so
-human review can happen in parallel.
+Turn a business requirement into a KSML contract and a verified TeaQL
+application. Never run model evaluation before the first complete KSML model
+has been written and saved.
 
-## Establish the Contract
+## Mandatory Workflow Order
+
+Do not reorder these stages:
+
+1. Understand the requirement and choose the model target.
+2. Draft and save the first complete KSML model.
+3. Only after the model exists, verify the TeaQL client.
+4. Evaluate the saved model.
+5. Repair from the report and re-evaluate repeatedly.
+6. At zero Errors, signal Model Ready and continue without waiting.
+7. Generate, implement, compile, test, run, and report.
+
+## Prepare the Model Target
 
 1. Read the target repository's nearest `AGENTS.md`.
-2. Before any TeaQL evaluation or generation, verify the installed client
-   against the exact version required by that repository, or the defaults in
-   [`references/toolchains.md`](references/toolchains.md). Stop and report a
-   mismatch.
-3. Capture the original business requirement, model target path, requested
+2. Capture the original business requirement, model target path, requested
    Java/Rust outputs, and runnable or testable outcome.
-4. Keep a compact evidence ledger while working. Record commands, evaluation
+3. Keep a compact evidence ledger while working. Record commands, evaluation
    counts, generated guides, assist calls, policy checks, tests, and artifact
    paths as they occur.
 
@@ -29,7 +36,8 @@ example and adapt its structure—not its pet-clinic concepts—to the domain.
 
 ## Model First
 
-Create and save one complete KSML model before generating application code.
+Create and save one complete KSML model before running any TeaQL command. Do
+not evaluate an absent, empty, or placeholder model target.
 
 Apply this minimal contract:
 
@@ -46,6 +54,13 @@ Apply this minimal contract:
   contain `<_value>` children.
 - Use generated functions such as `createTime()` only for their intended
   semantics.
+
+## Evaluate and Repair the Saved Model
+
+Now—and only now—load
+[`references/toolchains.md`](references/toolchains.md). Verify the installed
+client against the exact version required by the target repository or that
+reference. Stop and report a mismatch.
 
 Submit the complete model target to the repository's Generation Service
 evaluation command. For Rust, every model-derived operation must include:
@@ -83,8 +98,7 @@ and regenerate if the domain contract changed.
 ## Generate and Implement
 
 Generate only the outputs requested by the user.
-Load [`references/toolchains.md`](references/toolchains.md) now, not during
-modeling, and use its exact Java or Rust commands.
+Use the exact Java or Rust generation commands in `references/toolchains.md`.
 
 - Never edit generated domain-library files.
 - Find and read the generated local `AGENTS.md` before business code. If an

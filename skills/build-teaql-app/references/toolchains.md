@@ -1,7 +1,8 @@
 # TeaQL Toolchains
 
-Load this reference only after the model evaluates with zero errors and the
-task requires generated code or a runnable application.
+Load this reference only after the first complete model has been written and
+saved. Use the client requirements before evaluation; use the generation
+sections only after evaluation reaches zero errors.
 
 ## Required Clients
 

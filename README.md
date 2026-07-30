@@ -21,8 +21,8 @@ npx skills add teaql/teaql-agent-kit --skill build-teaql-app
 Then ask your coding agent:
 
 ```text
-Use $build-teaql-app to turn this business requirement into a validated,
-runnable TeaQL application: ...
+Use $build-teaql-app to first draft and save a complete KSML model, then
+evaluate and repair it before generating a runnable TeaQL application: ...
 ```
 
 This repository can publish multiple focused Skills. `build-teaql-app` is the
