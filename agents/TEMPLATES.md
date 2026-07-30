@@ -4,10 +4,7 @@ For every common pattern, copy and paste the relevant template below, and replac
 
 <!-- TEMPLATE: Root Metadata -->
 ```xml
-<root alias_model_name="{snake_case_domain_name}"
-      chinese_name="{domain_translation}"
-      english_name="{Title Case Domain Name}"
-      name="{kebab-case-domain-name}-service"
+<root name="{kebab-case-domain-name}-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
       org="doublechaintech"

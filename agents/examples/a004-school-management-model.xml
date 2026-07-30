@@ -1,7 +1,4 @@
-<root alias_model_name="school_management"
-      chinese_name="学校管理"
-      english_name="School Management"
-      name="school-service"
+<root name="school-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
       org="doublechaintech"

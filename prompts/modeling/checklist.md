@@ -8,10 +8,8 @@ Use this checklist before delivering or generating code from a KSML model.
 - The document element is `<root>`, not `<model>`, `<ksml>`, `<domain>`, or any
   other wrapper tag.
 - Root `name` is present and non-empty.
-- `alias_model_name` is snake_case.
-- `english_name` is Title Case.
-- `chinese_name` is domain-specific.
 - `name` is kebab-case ending in `-service`.
+- Root does not contain `alias_model_name`, `english_name`, or `chinese_name`.
 - `data_service="sqlite"`.
 - `org="doublechaintech"`.
 - `_module_key="root"`.

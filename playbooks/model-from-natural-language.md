@@ -13,10 +13,8 @@ language and wants a TeaQL/KSML domain model.
 ## Steps
 
 1. Normalize the domain name.
-   - `alias_model_name`: snake_case.
-   - `english_name`: Title Case.
-   - `chinese_name`: translate the domain name when possible.
    - `name`: kebab-case plus `-service`.
+   - Do not add `alias_model_name`, `english_name`, or `chinese_name`.
 
 2. Identify the core model.
    - Do not assume multi-tenancy by default.

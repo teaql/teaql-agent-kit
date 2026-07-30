@@ -27,15 +27,16 @@
 20. There must be exactly one `<root>` element at the top level.
 21. All objects must be direct children of `<root>`.
 22. Root metadata `name` must be `kebab-case` with `-service` suffix.
-23. Every non-root business object must reference at least one other business object or constant object (no disconnected graphs).
-24. `_module_key` must be lowercase `kebab-case` (e.g., `basic-data`), never with spaces.
-25. Constant objects' `<_value>` children must have an `id` starting from `1001` and sequentially incrementing.
-26. Constant objects' `<_value>` code values must be UPPERCASE with underscores (e.g., `IN_PROGRESS`).
+23. Root `name` is the only model-name attribute. Do not add `alias_model_name`, `english_name`, or `chinese_name`.
+24. Every non-root business object must reference at least one other business object or constant object (no disconnected graphs).
+25. `_module_key` must be lowercase `kebab-case` (e.g., `basic-data`), never with spaces.
+26. Constant objects' `<_value>` children must have an `id` starting from `1001` and sequentially incrementing.
+27. Constant objects' `<_value>` code values must be UPPERCASE with underscores (e.g., `IN_PROGRESS`).
 
 ### Output Rules for Generators
-27. Output XML only for pure model generation. No markdown fences.
-28. Do not include narrative explanations in the output.
-29. No duplicate elements in the KSML.
-30. No nested business objects.
+28. Output XML only for pure model generation. No markdown fences.
+29. Do not include narrative explanations in the output.
+30. No duplicate elements in the KSML.
+31. No nested business objects.
 
 *See `ERROR-FIX.md` if you encounter issues during validation or generation.*

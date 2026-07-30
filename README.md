@@ -28,10 +28,7 @@ A compact KSML model describes business objects, fields, constants,
 relationships, modules, and storage:
 
 ```xml
-<root alias_model_name="bookstore_management"
-      cfg_mask_china_mobile="false"
-      chinese_name="书店管理"
-      english_name="Bookstore Management"
+<root cfg_mask_china_mobile="false"
       data_service="sqlite"
       name="bookstore-service"
       org="doublechaintech"

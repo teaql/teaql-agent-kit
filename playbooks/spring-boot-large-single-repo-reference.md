@@ -134,8 +134,8 @@ Examples:
 model classes, as the source for TeaQL generation.
 
 `models/main.xml` is the only generation entrypoint. It owns the complete root
-metadata, including `alias_model_name`, `english_name`, `chinese_name`, `name`,
-`org`, `data_service`, and `_module_key`.
+metadata, including `name`, `org`, `data_service`, and `_module_key`. The only
+model-name attribute is `name`; do not add aliases or translated-name fields.
 
 Split model files by stable business subdomain:
 

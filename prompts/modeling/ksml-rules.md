@@ -199,14 +199,11 @@ The outermost XML tag must be `<root>`. Never wrap KSML in `<model>`, `<ksml>`,
 `<domain>`, or any other top-level element. If the document starts with anything
 other than `<root ...>`, it is invalid KSML.
 
-Generate root metadata dynamically from the user's domain. Do not copy example
-values.
+The root's only model-name attribute is `name`. Do not add
+`alias_model_name`, `english_name`, or `chinese_name`.
 
 For domain `pet hospital management`, generate:
 
-- `alias_model_name`: `pet_hospital_management`.
-- `english_name`: `Pet Hospital Management`.
-- `chinese_name`: domain-specific translation, such as `宠物医院管理`.
 - `name`: kebab-case plus `-service`, such as `pet-hospital-service`.
 - `cfg_mask_china_mobile`: always `false`.
 - `data_service`: always `sqlite`.
@@ -216,10 +213,7 @@ For domain `pet hospital management`, generate:
 Example shape:
 
 ```xml
-<root alias_model_name="pet_hospital_management"
-      cfg_mask_china_mobile="false"
-      chinese_name="宠物医院管理"
-      english_name="Pet Hospital Management"
+<root cfg_mask_china_mobile="false"
       data_service="sqlite"
       name="pet-hospital-service"
       org="doublechaintech"
@@ -554,7 +548,8 @@ Use `object_name()` directly. Do not write `object(object_name)`.
 - No markdown fences.
 - No duplicate elements.
 - No nested business objects.
-- Root metadata must be dynamically generated from the requested domain.
+- Root `name` must be dynamically generated from the requested domain.
+- Do not add `alias_model_name`, `english_name`, or `chinese_name`.
 
 ## Quick Reference
 

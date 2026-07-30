@@ -16,10 +16,7 @@ Follow `agents/DECISION-TREES.md` to pick the right root and tenancy strategy.
 
 **Example Minimal Model:**
 ```xml
-<root alias_model_name="bookstore_management"
-      chinese_name="书店管理"
-      english_name="Bookstore Management"
-      name="bookstore-service"
+<root name="bookstore-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
       org="doublechaintech"
