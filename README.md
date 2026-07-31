@@ -14,6 +14,31 @@ the agent the exact API available for the current domain.
 The goal is not deterministic AI. It is deterministic structure around
 non-deterministic AI.
 
+**Correct-by-process, governed-by-runtime.** TeaQL governs both how software is
+produced and how it behaves when it runs.
+
+## Two Layers of Reliability
+
+TeaQL applies constraints at two different times.
+
+### Do Things Right: Development-time Process
+
+The Agent Kit controls how a coding agent moves from requirement to working
+software: model first, evaluate and repair, generate a typed contract, request
+current model-aware assist, implement within that contract, and verify the
+result with evidence.
+
+### Do the Right Thing: Runtime Governance
+
+The TeaQL runtime controls how the resulting application acts: operations
+carry identity and intent, reads declare purpose and comment, writes declare
+an audit reason, external capabilities are explicitly granted, and typed
+entity graphs constrain mutation.
+
+Runtime governance does not choose the correct business policy. It makes
+application actions contextual, bounded, observable, and auditable once that
+policy has been chosen.
+
 ## What This Repository Introduces
 
 Most coding agents operate in a prompt-to-code loop:
