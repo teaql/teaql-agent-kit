@@ -37,6 +37,7 @@ The golden example exists only to demonstrate KSML syntax. Never carry over its
 domain names (clinic, pet, appointment, species, microchipped) or its
 organizational structure into a different business domain.
 
+<!-- phase:model_generation -->
 ## Model First
 
 Create and save a complete KSML model before running any TeaQL command. Do
@@ -63,6 +64,10 @@ Apply this minimal contract:
   semantics.
 - IMPORTANT: When writing large split models, create and write the files one by one using sequential tool calls. Do not attempt to output the entire schema for all modules in a single response.
 
+When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
+<!-- /phase:model_generation -->
+
+<!-- phase:evaluate_repair -->
 ## Evaluate and Repair the Saved Model
 
 Now—and only now—load
@@ -116,10 +121,17 @@ Continue working. Human model or application review is asynchronous, not an
 approval gate. Incorporate review feedback when it arrives, then re-evaluate
 and regenerate if the domain contract changed.
 
+When you finish the repair phase and reach zero errors, output `<phase-complete>evaluate_repair</phase-complete>`.
+<!-- /phase:evaluate_repair -->
+
 ## Generate and Implement
 
+<!-- phase:codegen -->
 Generate only the outputs requested by the user.
 Use the exact Java or Rust generation commands in `references/toolchains.md`.
+
+When generation commands complete successfully, output `<phase-complete>codegen</phase-complete>`.
+<!-- /phase:codegen -->
 
 - Never edit generated domain-library files.
 - Find and read the generated local `AGENTS.md` before business code. If an
