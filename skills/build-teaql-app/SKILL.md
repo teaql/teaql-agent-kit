@@ -91,6 +91,7 @@ Repair from the Markdown evaluation report:
 5. Treat Suggestions as optional.
 6. Follow the report's concrete repair guidance rather than guessing or
    memorizing a separate rule catalog.
+7. **IMPORTANT:** When dealing with extremely long evaluation logs (e.g., thousands of lines), DO NOT use paginated reading commands (like `sed -n '1,300p'`) in an endless loop to read the entire file. Use targeted `grep` (e.g., `grep -A 15 -B 5 "Error"` or `grep -A 10 -B 10 "error:"`) or read only the head/tail to quickly isolate and fix issues without wasting context.
 
 Do not generate from a model with errors.
 
