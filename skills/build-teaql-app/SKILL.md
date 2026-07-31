@@ -33,19 +33,26 @@ Do not reorder these stages:
 Do not load a full KSML rule catalog before modeling. Use
 [`references/golden-example.xml`](references/golden-example.xml) as the grammar
 example and adapt its structure—not its pet-clinic concepts—to the domain.
+The golden example exists only to demonstrate KSML syntax. Never carry over its
+domain names (clinic, pet, appointment, species, microchipped) or its
+organizational structure into a different business domain.
 
 ## Model First
 
-Create and save one complete KSML model before running any TeaQL command. Do
+Create and save a complete KSML model before running any TeaQL command. Do
 not evaluate an absent, empty, or placeholder model target.
+
+If the model is large (e.g., more than 15 objects), you MUST split it into multiple module files.
+- Group objects by business domain into separate XML files (e.g., `auth.xml`, `operations.xml`).
+- Keep each file to around 15 objects maximum to avoid exceeding generation limits.
+- Create a main entry file with one outer `<root>` and include the modules using `<_include file="module.xml" />`.
 
 Apply this minimal contract:
 
-- Use one outer `<root>`.
 - Make root `name` the sole model name, in lowercase kebab-case ending with
   `-service`.
 - Use `org="example"` when the user does not specify an organization.
-- Put objects directly below `<root>`.
+- Put objects directly below `<root>` or within the included module files.
 - Give every object `_name`, `_module`, and `_module_key`.
 - Use representative literals for ordinary fields so TeaQL can infer types.
 - Express a relationship as `target_object()`.
@@ -54,6 +61,7 @@ Apply this minimal contract:
   contain `<_value>` children.
 - Use generated functions such as `createTime()` only for their intended
   semantics.
+- IMPORTANT: When writing large split models, create and write the files one by one using sequential tool calls. Do not attempt to output the entire schema for all modules in a single response.
 
 ## Evaluate and Repair the Saved Model
 
@@ -80,6 +88,19 @@ Repair from the Markdown evaluation report:
    memorizing a separate rule catalog.
 
 Do not generate from a model with errors.
+
+### Repair Budget
+
+Run at most **5 evaluation–repair rounds** by default. If errors remain after
+5 rounds, stop and present the current evaluation report to the user with a
+summary of what was fixed and what still fails. Ask the user to provide
+additional guidance or model corrections before continuing. Do not loop
+indefinitely.
+
+On small-context models (≤ 64K tokens), evaluation may be treated as
+best-effort: if the evaluation report itself exceeds the available context
+budget, skip detailed evaluation parsing and proceed to generation with the
+best available model, noting the limitation in the work-complete report.
 
 ## Signal Model Ready
 
