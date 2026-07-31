@@ -131,7 +131,10 @@ When you finish the repair phase and reach zero errors, output `<phase-complete>
 Generate only the outputs requested by the user.
 Use the exact Java or Rust generation commands in `references/toolchains.md`.
 
-When generation commands complete successfully, output `<phase-complete>codegen</phase-complete>`.
+CRITICAL: Do NOT output `<phase-complete>codegen</phase-complete>` if ANY generation command returns an error or `success=false`. You MUST fix the command (e.g., incorrect directory paths) and retry until it succeeds. 
+WARNING: When chaining commands, do NOT use `cd dir && cmd && cd dir && cmd`. The second `cd` will fail because you are already in `dir`. Instead, use `cd dir && cmd1 && cmd2` or use subshells `(cd dir && cmd1) && (cd dir && cmd2)`.
+
+When generation commands complete successfully with `success=true`, output `<phase-complete>codegen</phase-complete>`.
 <!-- /phase:codegen -->
 
 - Never edit generated domain-library files.
