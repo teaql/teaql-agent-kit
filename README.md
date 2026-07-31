@@ -1,13 +1,106 @@
 # TeaQL Agent Kit
 
-> Deterministic execution for non-deterministic AI.
+> A model-mediated harness for reliable agentic software development.
 
-TeaQL Agent Kit helps coding agents turn business requirements into auditable
-Java and Rust applications.
+TeaQL Agent Kit demonstrates a new harness pattern for coding agents. Instead
+of letting an agent move directly from requirements to implementation, it
+places an executable domain model between intent and code.
 
-Instead of asking an agent to invent persistence code from scratch, TeaQL gives
-it a smaller and safer path: build a business model, evaluate it, generate a
-typed domain contract, and implement business logic against that contract.
+The model becomes an inspectable intermediate representation. A deterministic
+evaluation service checks it and provides repair guidance. Generation turns
+the validated model into a typed API boundary, while model-aware assist teaches
+the agent the exact API available for the current domain.
+
+The goal is not deterministic AI. It is deterministic structure around
+non-deterministic AI.
+
+## What This Repository Introduces
+
+Most coding agents operate in a prompt-to-code loop:
+
+```text
+requirement → agent → code → test → repair
+```
+
+TeaQL inserts a model-mediated control layer:
+
+```text
+requirement
+    ↓
+inspectable domain model
+    ↓
+deterministic evaluation and repair
+    ↓
+generated typed contract
+    ↓
+constrained agent implementation
+    ↓
+compile, test, runtime, and audit evidence
+```
+
+This changes the role of the agent. The agent no longer invents the domain
+contract, persistence surface, and business logic at the same time. It models
+intent first, works against a generated contract, and demonstrates completion
+with concrete evidence.
+
+TeaQL Agent Kit is therefore not merely a code-generation Skill. It is a
+reference implementation of a model-mediated harness for coding agents.
+
+## The Harness Pattern
+
+```mermaid
+flowchart TD
+    R["Business requirement"] --> A["Coding agent"]
+    A --> M["Inspectable KSML model"]
+    M --> E["Deterministic evaluation"]
+    E -->|"Errors and repair guidance"| A
+    E -->|"Validated model"| G["Generated typed contract"]
+    G --> I["Constrained implementation"]
+    G --> H["Model-aware assist"]
+    H --> A
+    I --> V["Compile, test, runtime, and policy checks"]
+    V -->|"Implementation defect"| A
+    V -->|"Model defect"| M
+    V --> O["Evidence-backed result"]
+
+    U["Human reviewer"] -. "Asynchronous feedback" .-> M
+    U -. "Asynchronous feedback" .-> I
+```
+
+The harness has five cooperating parts:
+
+1. **Inspectable intermediate representation** — KSML turns business intent
+   into a saved artifact that agents, tools, and people can inspect and revise.
+2. **Deterministic feedback oracle** — model evaluation returns errors,
+   warnings, suggestions, and current repair guidance instead of relying on the
+   agent to memorize a large rule catalog.
+3. **Generated action boundary** — typed domain APIs and model-aware assist
+   narrow the implementation surface and reduce API invention.
+4. **Policy-bearing APIs** — identity context, query purpose, query comments,
+   and write audits travel with execution rather than remaining prompt advice.
+5. **Evidence-based completion** — evaluation, generated guidance, policy
+   checks, compilation, tests, and runtime results form a traceable evidence
+   chain from requirement to application.
+
+These constraints do not make an agent infallible. They make its actions
+smaller, more observable, and easier to review.
+
+## Where the Harness Lives
+
+The repository publishes the harness as a focused Agent Skill:
+
+- [`SKILL.md`](skills/build-teaql-app/SKILL.md) defines the mandatory
+  model-first execution order and agent constraints.
+- [`golden-example.xml`](skills/build-teaql-app/references/golden-example.xml)
+  provides a compact grammar example without loading a full rule catalog.
+- [`toolchains.md`](skills/build-teaql-app/references/toolchains.md) binds the
+  workflow to versioned clients, evaluation, generation, and model-aware
+  assist.
+- [`work-complete.md`](skills/build-teaql-app/references/work-complete.md)
+  defines the evidence required before the agent reports completion.
+
+Together, these artifacts coordinate the agent, the model evaluator, generated
+contracts, runtime policies, verification tools, and parallel human review.
 
 ## Install the Agent Skill
 
@@ -28,20 +121,7 @@ evaluate and repair it before generating a runnable TeaQL application: ...
 This repository can publish multiple focused Skills. `build-teaql-app` is the
 end-to-end workflow: model, evaluate, generate, implement, verify, and report.
 
-## What TeaQL Does
-
-```mermaid
-flowchart LR
-    R["Business requirements"] --> A["Coding agent"]
-    A --> M["KSML business model"]
-    M --> G["TeaQL Generation Service"]
-    G --> C["Generated typed domain contract"]
-    G --> W["Editable application workspace"]
-    G --> H["Model-aware assist"]
-    C --> T["teaql-java / teaql-rs"]
-    W --> T
-    T --> D["Databases and granted tools"]
-```
+## From Business Intent to Typed Contract
 
 A compact KSML model describes business objects, fields, constants,
 relationships, modules, and storage:
@@ -64,9 +144,10 @@ relationships, modules, and storage:
 </root>
 ```
 
-The Generation Service turns the model into entities, relation metadata, typed
-queries, null-safe expressions, graph persistence, checker and behavior hooks,
-repository registration, documentation, and a runnable application workspace.
+The Generation Service turns the validated model into entities, relation
+metadata, typed queries, null-safe expressions, graph persistence, checker and
+behavior hooks, repository registration, documentation, and a runnable
+application workspace.
 
 Application code then reads in domain language rather than generic ORM
 plumbing:
@@ -80,6 +161,9 @@ let merchants = Q::merchants()
     .execute_for_list(&ctx)
     .await?;
 ```
+
+The generated domain library is a model-derived contract and remains
+regenerable. Business logic stays in a separate editable application workspace.
 
 ## Continuous Agent Work, Parallel Human Review
 
@@ -117,7 +201,7 @@ sequenceDiagram
 
 Review is a parallel activity, not a waiting node.
 
-## Safeguards for AI Coding
+## Runtime Safeguards
 
 TeaQL constrains how agents interact with business data:
 
@@ -131,9 +215,6 @@ TeaQL constrains how agents interact with business data:
    coordinated SQL updates and relationship loops.
 5. **Semantic error translation** — infrastructure failures can become stable,
    actionable application errors.
-
-These constraints do not make an agent infallible. They make its actions
-smaller, more observable, and easier to review.
 
 ## Java and Rust Foundations
 
@@ -163,9 +244,6 @@ The Generation Service provides the most complete model-derived output set:
 - Runtime and tool guides generated for the current domain
 - Data-design, model-view, and frontend model outputs
 
-Generated domain libraries are regenerated from the model. Customer business
-logic stays in a separate editable application workspace.
-
 ### Open-source Rust generation
 
 Developers who want to inspect or extend an open-source generation service
@@ -176,9 +254,12 @@ Service.
 
 ## Explore the Kit
 
-- [Build TeaQL App skill](skills/build-teaql-app/SKILL.md)
+- [Build TeaQL App Skill](skills/build-teaql-app/SKILL.md)
 - [TeaQL Java runtime](https://github.com/teaql/teaql-java)
 - [TeaQL Rust runtime](https://github.com/teaql/teaql-rs)
 - [Open-source Rust generator](https://github.com/teaql/teaql-forge-rs)
+- [TeaQL](https://teaql.io)
 
-[teaql.io](https://teaql.io)
+## License
+
+TeaQL Agent Kit is available under the [MIT License](LICENSE).
