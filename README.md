@@ -102,6 +102,32 @@ The repository publishes the harness as a focused Agent Skill:
 Together, these artifacts coordinate the agent, the model evaluator, generated
 contracts, runtime policies, verification tools, and parallel human review.
 
+## Explore the Live Harness
+
+The live Generation Service presents the same model-mediated path as a guided,
+five-stage walkthrough:
+
+[Walk through the live TeaQL harness](https://api.teaql.io/latest/)
+
+1. Turn a business requirement into a saved KSML domain contract.
+2. Inspect the model as an interactive entity graph or data dictionary.
+3. Evaluate the model, repair reported Errors, and retain the report as
+   evidence.
+4. Generate stable domain libraries and separate editable Java or Rust
+   application workspaces.
+5. Develop against the generated contract with model-, language-, action-, and
+   object-specific assist.
+
+The page also exposes a live evaluation report, generation target catalog,
+workspace API guides, and side-by-side Java and Rust previews for create,
+update, query, list, expression, delete, debugging, granted tool API, and
+runtime customization guidance.
+
+This live surface demonstrates that the evaluator, generators, typed
+contracts, and just-in-time assist are concrete parts of the harness rather
+than conventions described only in a prompt. The `/latest/` endpoint follows
+the current published demo and may evolve with the service.
+
 ## Install the Agent Skill
 
 Install the complete model-to-application workflow with the community Skills
