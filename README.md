@@ -216,6 +216,29 @@ TeaQL constrains how agents interact with business data:
 5. **Semantic error translation** — infrastructure failures can become stable,
    actionable application errors.
 
+## Runnable Examples and Harness Evidence
+
+The Agent Kit defines the shared harness pattern. Runnable applications remain
+in language-specific repositories so their toolchains, dependencies, and
+release cycles can evolve independently:
+
+- [TeaQL Java App Examples](https://github.com/teaql/teaql-java-app-examples)
+- [TeaQL Rust App Examples](https://github.com/teaql/teaql-rust-app-examples)
+
+| Example | Application surface | Harness behavior demonstrated |
+| --- | --- | --- |
+| [Java Robot Task Board](https://github.com/teaql/teaql-java-app-examples/tree/main/001-robot-task-board-android) | Local Android application | Model-derived typed CRUD, query purpose and comment, audited writes, and visible SQL execution logs |
+| [Java Vending Machine Desktop](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop) | Compose Desktop and SQLite | A generated domain library embedded in a local desktop application |
+| [Java World Cup CLI](https://github.com/teaql/teaql-java-app-examples/tree/main/003-world-cpu-2006-cli) | Interactive CLI and SQLite | Declarative domain modeling, generated query and entity APIs, relational queries, and audited persistence |
+| [Java Vending Machine](https://github.com/teaql/teaql-java-app-examples/tree/main/005-vending-machine-web-spring-boot) | Spring Boot, [Quarkus](https://github.com/teaql/teaql-java-app-examples/tree/main/006-vending-machine-web-quarkus), and [Micronaut](https://github.com/teaql/teaql-java-app-examples/tree/main/007-vending-machine-web-micronaut) | One modeled domain hosted across multiple Java application frameworks |
+| [Rust World Cup CLI](https://github.com/teaql/teaql-rust-app-examples/tree/main/001-world-cpu-2006-cli) and [TUI](https://github.com/teaql/teaql-rust-app-examples/tree/main/002-world-cup-2006-tui) | Interactive CLI, TUI, and SQLite | Model-to-generated-library separation, typed `Q` and `E` APIs, and audited graph persistence |
+| [Rust Linux System Info](https://github.com/teaql/teaql-rust-app-examples/tree/main/003-linux-sysinfo-using-teaql) | Linux `/proc` provider and console UI | A generated typed query boundary applied to an operating-system capability rather than a conventional database |
+
+These examples provide runnable application and code evidence. An end-to-end
+recording can complement them with agent-execution evidence: the initial model,
+evaluation and repair rounds, generated assist, policy checks, compilation,
+tests, and runtime results.
+
 ## Java and Rust Foundations
 
 TeaQL Agent Kit builds on the open-source
