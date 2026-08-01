@@ -64,6 +64,33 @@ Apply this minimal contract:
   semantics.
 - IMPORTANT: When writing large split models, create and write the files one by one using sequential tool calls. Do not attempt to output the entire schema for all modules in a single response.
 
+### Validation Pitfalls — Avoid on First Attempt
+
+These are the most common first-attempt failures. Avoiding them saves multiple
+repair rounds:
+
+1. **Non-empty attribute values.** EVERY attribute MUST have a non-empty
+   representative value. Never write `attr=""` or `attr=" "`. Use a realistic
+   example (e.g., `email="john@example.com"`, `url="https://example.com/doc.pdf"`).
+2. **Language keyword avoidance.** Entity and field names must not collide with
+   programming language keywords (Rust: `move`, `type`, `match`, `self`, `ref`,
+   `mod`, `box`, `trait`, `impl`, `use`, `let`, `fn`, `async`, `yield`;
+   Java: `class`, `new`, `import`, `public`, `default`, `return`;
+   SQL: `select`, `table`, `transaction`). When a natural business concept is a
+   single keyword (e.g., "move"), always use a **two-word compound name** instead
+   (e.g., `move_order`, `move_task`, `type_code`, `match_record`).
+3. **Privacy audit masking.** Person-like objects (`user`, `customer`, `employee`,
+   `driver`, etc.) that hold sensitive fields (`password`, `password_hash`,
+   `token`, `magic_link_token`, `api_key`, `secret`, `ssn`, `id_card`,
+   `mobile_phone`) MUST declare `_audit_mask_fields` listing those fields.
+   Example: `<user _audit_mask_fields="password_hash,magic_link_token" .../>`
+4. **No circular reference chains.** If A references B, B references C, and C
+   references A, the parser may fail at depth limit. Keep reference chains short
+   and acyclic.
+5. **Audit log user field.** Logging/audit objects (`audit_log`, `change_log`,
+   etc.) MUST include a recognizable user/operator field (e.g.,
+   `operator="user()"`, `actor="user()"`).
+
 When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
 <!-- /phase:model_generation -->
 
@@ -122,6 +149,8 @@ Model Ready
 Continue working. Human model or application review is asynchronous, not an
 approval gate. Incorporate review feedback when it arrives, then re-evaluate
 and regenerate if the domain contract changed.
+
+CRITICAL: Do NOT output `<phase-complete>evaluate_repair</phase-complete>` if there are ANY `❌ Errors (Must Fix)` listed in the text output of your evaluation command, even if the command execution returned `success=true` (which can happen if you pipe to `tee`). You MUST open the corresponding XML files and fix the errors (e.g., renaming fields that conflict with Rust keywords) before outputting the phase-complete tag.
 
 When you finish the repair phase and reach zero errors, output `<phase-complete>evaluate_repair</phase-complete>`.
 <!-- /phase:evaluate_repair -->
