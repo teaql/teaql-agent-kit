@@ -93,6 +93,9 @@ repair rounds:
    etc.) MUST include a recognizable user/operator field (e.g.,
    `operator="user()"`, `actor="user()"`).
 6. **No isolated entities (Disconnected Graphs).** To avoid `KSML-DOMAIN-ROOT-002`, ensure that ALL entities are connected via relationships (references) to the main graph. Do not leave any entity as an isolated island. Every object should either reference another object or be referenced by another object in the domain model.
+7. **No XML special characters in attribute values.** Never use `&`, `<`, `>`,
+   `"` directly in attribute values. Use `and` instead of `&` (e.g.,
+   `_module="Operations and Logistics"` not `_module="Operations & Logistics"`).
 
 When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
 <!-- /phase:model_generation -->
