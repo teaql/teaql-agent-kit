@@ -48,6 +48,9 @@ If the model is large (e.g., more than 15 objects), you MUST split it into multi
 - Keep each file to around 15 objects maximum to avoid exceeding generation limits.
 - Create a main entry file with one outer `<root>` and include the modules using `<_include file="module.xml" />`.
 
+- **CRITICAL**: To avoid keyword collisions in generated languages (like `type`, `move`, `match`, `fn`, `struct` in Rust or Java), **ALWAYS use two-word field names and entity names** when there is any risk of conflict (e.g. use `bonus_type` instead of `type`, `move_order` instead of `move`, `leave_type` instead of `type`). Do not use bare single words like `type` or `move` as entity or field names.
+
+
 Apply this minimal contract:
 
 - Make root `name` the sole model name, in lowercase kebab-case ending with
