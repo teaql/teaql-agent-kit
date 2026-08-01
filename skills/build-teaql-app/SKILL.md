@@ -93,6 +93,7 @@ repair rounds:
 5. **Audit log user field.** Logging/audit objects (`audit_log`, `change_log`,
    etc.) MUST include a recognizable user/operator field (e.g.,
    `operator="user()"`, `actor="user()"`).
+6. **No isolated entities (Disconnected Graphs).** To avoid `KSML-DOMAIN-ROOT-002`, ensure that ALL entities are connected via relationships (references) to the main graph. Do not leave any entity as an isolated island. Every object should either reference another object or be referenced by another object in the domain model.
 
 When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
 <!-- /phase:model_generation -->
