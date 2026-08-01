@@ -43,22 +43,12 @@ organizational structure into a different business domain.
 Create and save a complete KSML model before running any TeaQL command. Do
 not evaluate an absent, empty, or placeholder model target.
 
-- **CRITICAL: You MUST split the model into multiple module files using `<_include>`.** Do NOT output all entities in a single XML file. Group objects by business domain (e.g., `operations.xml`, `employees.xml`, `customers.xml`), keeping each file to around 10–15 objects maximum. Create a `main.xml` that ONLY contains the `<root>` wrapper and `<_include>` references, like this:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<root name="my-service" org="example" data_service="sqlite" _module_key="root">
-    <_include file="operations.xml" />
-    <_include file="employees.xml" />
-    <_include file="customers.xml" />
-    <_include file="finance.xml" />
-</root>
-```
-
-  The `main.xml` itself must contain ZERO business objects — only `<_include>` tags. This ensures each generation request stays well within the token limit.
+If the model is large (e.g., more than 15 objects), you MAY split it into
+multiple module files using `<_include file="module.xml" />`, but this is
+optional. The system supports dynamic output limits so a single-file model
+will also work.
 
 - **CRITICAL**: To avoid keyword collisions in generated languages (like `type`, `move`, `match`, `fn`, `struct` in Rust or Java), **ALWAYS use two-word field names and entity names** when there is any risk of conflict (e.g. use `bonus_type` instead of `type`, `move_order` instead of `move`, `leave_type` instead of `type`). Do not use bare single words like `type` or `move` as entity or field names.
-
 
 Apply this minimal contract:
 
