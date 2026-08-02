@@ -37,7 +37,7 @@ The golden example exists only to demonstrate KSML syntax. Never carry over its
 domain names (clinic, pet, appointment, species, microchipped) or its
 organizational structure into a different business domain.
 
-<!-- phase:model_generation -->
+<!-- BLOCK_ID: phase_modeling -->
 ## Model First
 
 Create and save a complete KSML model before running any TeaQL command. Do
@@ -98,9 +98,7 @@ repair rounds:
    `_module="Operations and Logistics"` not `_module="Operations & Logistics"`).
 
 When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
-<!-- /phase:model_generation -->
 
-<!-- phase:evaluate_repair -->
 ## Evaluate and Repair the Saved Model
 
 Now—and only now—load
@@ -159,11 +157,11 @@ and regenerate if the domain contract changed.
 CRITICAL: Do NOT output `<phase-complete>evaluate_repair</phase-complete>` if there are ANY `❌ Errors (Must Fix)` listed in the text output of your evaluation command, even if the command execution returned `success=true` (which can happen if you pipe to `tee`). You MUST open the corresponding XML files and fix the errors (e.g., renaming fields that conflict with Rust keywords) before outputting the phase-complete tag.
 
 When you finish the repair phase and reach zero errors, output `<phase-complete>evaluate_repair</phase-complete>`.
-<!-- /phase:evaluate_repair -->
+<!-- /BLOCK_ID: phase_modeling -->
 
 ## Generate and Implement
 
-<!-- phase:codegen -->
+<!-- BLOCK_ID: phase_codegen -->
 Generate only the outputs requested by the user.
 Use the exact Java or Rust generation commands in `references/toolchains.md`.
 
@@ -173,7 +171,7 @@ CRITICAL: Do NOT output `<phase-complete>codegen</phase-complete>` if ANY genera
 WARNING: When chaining commands, do NOT use `cd dir && cmd && cd dir && cmd`. The second `cd` will fail because you are already in `dir`. Instead, use `cd dir && cmd1 && cmd2` or use subshells `(cd dir && cmd1) && (cd dir && cmd2)`.
 
 When generation commands complete successfully with `success=true`, output `<phase-complete>codegen</phase-complete>`.
-<!-- /phase:codegen -->
+<!-- /BLOCK_ID: phase_codegen -->
 
 - Never edit generated domain-library files.
 - Find and read the generated local `AGENTS.md` before business code. If an
