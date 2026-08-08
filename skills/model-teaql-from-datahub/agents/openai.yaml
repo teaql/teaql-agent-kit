@@ -1,0 +1,4 @@
+interface:
+  display_name: "Model TeaQL from DataHub"
+  short_description: "Ground TeaQL models in existing DataHub metadata"
+  default_prompt: "Use $model-teaql-from-datahub to ground a complete TeaQL model in existing DataHub metadata and record every fact, inference, and framework addition."

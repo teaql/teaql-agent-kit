@@ -112,10 +112,14 @@ smaller, more observable, and easier to review.
 
 ## Where the Harness Lives
 
-The repository publishes the harness as a focused Agent Skill:
+The repository publishes the harness as focused Agent Skills:
 
 - [`SKILL.md`](skills/build-teaql-app/SKILL.md) defines the mandatory
   model-first execution order and agent constraints.
+- [`model-teaql-from-datahub`](skills/model-teaql-from-datahub/SKILL.md)
+  grounds an initial or evolving KSML model in existing DataHub schemas,
+  classifications, glossary terms, and relationships while recording facts,
+  inferences, and framework additions separately.
 - [`golden-example.xml`](skills/build-teaql-app/references/golden-example.xml)
   provides a compact grammar example without loading a full rule catalog.
 - [`toolchains.md`](skills/build-teaql-app/references/toolchains.md) binds the
@@ -171,6 +175,21 @@ evaluate and repair it before generating a runnable TeaQL application: ...
 
 This repository can publish multiple focused Skills. `build-teaql-app` is the
 end-to-end workflow: model, evaluate, generate, implement, verify, and report.
+
+When enterprise context already exists in DataHub, install the grounding Skill
+as well:
+
+```bash
+npx skills add teaql/teaql-agent-kit --skill model-teaql-from-datahub
+```
+
+Then provide dataset URNs or another resolvable DataHub locator:
+
+```text
+Use $model-teaql-from-datahub to ground the TeaQL model in these existing
+DataHub datasets, record facts and inferences, and then continue with
+$build-teaql-app: ...
+```
 
 ## From Business Intent to Typed Contract
 
@@ -329,6 +348,7 @@ Service.
 ## Explore the Kit
 
 - [Build TeaQL App Skill](skills/build-teaql-app/SKILL.md)
+- [Model TeaQL from DataHub Skill](skills/model-teaql-from-datahub/SKILL.md)
 - [TeaQL Java runtime](https://github.com/teaql/teaql-java)
 - [TeaQL Rust runtime](https://github.com/teaql/teaql-rs)
 - [Open-source Rust generator](https://github.com/teaql/teaql-forge-rs)

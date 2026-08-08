@@ -1,8 +1,9 @@
 # AGENTS.md — TeaQL Agent Kit
 
-This repository publishes the `build-teaql-app` Agent Skill. For TeaQL
-modeling, generation, or application work, read and follow
-`skills/build-teaql-app/SKILL.md`.
+This repository publishes focused TeaQL Agent Skills. For TeaQL modeling,
+generation, or application work, read and follow
+`skills/build-teaql-app/SKILL.md`. When DataHub metadata is a source for the
+model, also read and follow `skills/model-teaql-from-datahub/SKILL.md`.
 
 ## Hard Requirements
 
