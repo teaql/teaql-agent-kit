@@ -341,6 +341,11 @@ TeaQL natively supports six major languages. While the core philosophy remains i
 | Typed DSL Generation | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
 | Dynamic String Interpreter | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
 
+> **💡 Note on Java Database Support:**
+> The Java ecosystem has highly adaptable data provider support depending on its execution environment:
+> - **Server / Backend (Spring Boot, Quarkus, etc.):** Leverages `teaql-provider-jdbc` to support an extensive array of enterprise databases beyond what is listed above, including **Oracle, DB2, DM8 (Dameng), DuckDB, SAP HANA, and Snowflake**.
+> - **Android / Mobile (`teaql-android`):** When running natively on mobile, database support is strictly constrained to **SQLite** to ensure local compatibility, zero-configuration, and memory efficiency without pulling in heavy JDBC drivers.
+
 ## TeaQL Generation Service
 
 The Generation Service provides the most complete model-derived output set:
