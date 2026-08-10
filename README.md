@@ -307,6 +307,35 @@ TeaQL Agent Kit builds on the open-source
 The implementations differ in breadth and maturity while sharing the same
 model-first, typed, and auditable programming approach.
 
+## Cross-Language Feature Matrix
+
+TeaQL natively supports six major languages. While the core philosophy remains identical, the implementation maturity of specific features varies by ecosystem.
+
+**Legend:**
+- 🟢 **Supported:** Feature is implemented and working.
+- 🟡 **Partial / WIP:** Feature is partially implemented or under active development.
+- ⚪ **Not Supported:** Feature is not yet implemented or not applicable for this language tier.
+
+| Feature Area | Java | Rust | Go | Python | C# (.NET) | TypeScript |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Core Runtime** | | | | | | |
+| AST Parsing & Query Execution | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Audited Graph Persistence | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| UserContext & Identity | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Triple-Intent Policy | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| **Data Providers** | | | | | | |
+| SQLite | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
+| MySQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
+| PostgreSQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
+| MS SQL Server | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| **Advanced Integrations** | | | | | | |
+| Federation Protocol (TFP) | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | 🟢 |
+| Web Framework Integration | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
+| Redis Cache | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
+| **Tooling & Code Generation** | | | | | | |
+| Typed DSL Generation | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Dynamic String Interpreter | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
+
 ## TeaQL Generation Service
 
 The Generation Service provides the most complete model-derived output set:
