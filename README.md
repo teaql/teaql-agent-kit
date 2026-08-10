@@ -290,22 +290,7 @@ recording can complement them with agent-execution evidence: the initial model,
 evaluation and repair rounds, generated assist, policy checks, compilation,
 tests, and runtime results.
 
-## Java and Rust Foundations
 
-TeaQL Agent Kit builds on the open-source
-[teaql-java](https://github.com/teaql/teaql-java) and
-[teaql-rs](https://github.com/teaql/teaql-rs) runtimes.
-
-| Area | TeaQL Java | TeaQL Rust |
-| --- | --- | --- |
-| Strength | Mature modular runtime across server, console, desktop, and Android | Rust-native typed runtime focused on query compilation and relation graphs |
-| Queries | Typed requests, policies, relations, aggregation, and JSON queries | Query AST, SQL compilation, aggregation, subqueries, and nested relation loading |
-| Mutations | Audited entity and graph persistence | Transactional graph planning, nested graph diff, optimistic locking, delete, and recover |
-| Extension | Replaceable policies, stores, locks, translators, tools, and framework integrations | Runtime modules, behaviors, checkers, mutation events, typed resources, and memory execution |
-| Databases | Broad portable SQL and database support | Native PostgreSQL, SQLite, MySQL, and rusqlite providers |
-
-The implementations differ in breadth and maturity while sharing the same
-model-first, typed, and auditable programming approach.
 
 ## Cross-Language Feature Matrix
 
