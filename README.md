@@ -327,12 +327,16 @@ TeaQL natively supports six major languages. While the core philosophy remains i
 | SQLite | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
 | MySQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
 | PostgreSQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
-| MS SQL Server | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| MS SQL Server | 🟢 | ⚪ | ⚪ | ⚪ | 🟢 | ⚪ |
 | **Advanced Integrations** | | | | | | |
-| TFP Endpoint Handler (Server) | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | ⚪ |
+| Federation Protocol (TFP) Server | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | ⚪ |
 | TFP HTTP Provider (Client) | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
 | Web Framework Integration | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
 | Redis Cache | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
+| **Cloud Native (Microservices)** | | | | | | |
+| Nacos Integration | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ |
+| Consul Integration | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ |
+| Health Actuator & Metrics | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ |
 | **Tooling & Code Generation** | | | | | | |
 | Typed DSL Generation | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
 | Dynamic String Interpreter | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
