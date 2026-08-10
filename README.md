@@ -329,7 +329,8 @@ TeaQL natively supports six major languages. While the core philosophy remains i
 | PostgreSQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
 | MS SQL Server | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
 | **Advanced Integrations** | | | | | | |
-| Federation Protocol (TFP) | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | 🟢 |
+| TFP Endpoint Handler (Server) | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | ⚪ |
+| TFP HTTP Provider (Client) | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
 | Web Framework Integration | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
 | Redis Cache | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
 | **Tooling & Code Generation** | | | | | | |
