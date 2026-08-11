@@ -311,7 +311,7 @@ release availability can lag behind this engineering snapshot.
 
 | Language runtime | Latest verified runtime evidence | Verified databases | Qualification |
 | :--- | :--- | :--- | :--- |
-| [Java](https://github.com/teaql/teaql-java) | Full database matrix: `8 tests / 0 failures / 0 errors / 0 skipped` | PostgreSQL, MySQL, SQLite, Oracle, DB2, SAP HANA, SQL Server, DuckDB | Broadest enterprise database coverage; Android remains SQLite-only |
+| [Java](https://github.com/teaql/teaql-java) | Full database matrix: `9 tests / 0 failures / 0 errors / 0 skipped` | PostgreSQL, MySQL, SQLite, Oracle, DB2, DM8, SAP HANA, SQL Server, DuckDB | Broadest enterprise database coverage; Android remains SQLite-only |
 | [Rust](https://github.com/teaql/teaql-rs) | Generated API chain and runtime suite passed; runtime branch coverage reached 95.5% | PostgreSQL, MySQL, SQLite | SQL Server is intentionally out of scope |
 | [Go](https://github.com/teaql/teaql-golang) | Runtime suite and generated SQL matrix passed; statement coverage reached 94.9% | PostgreSQL, MySQL, SQLite | Includes generated-query `WithComment` compatibility |
 | [Python](https://github.com/teaql/teaql-python) | `73` runtime tests passed plus generated real-SQL integration | PostgreSQL, MySQL, SQLite | Uses real async SQL providers; no longer counted as JSON/fake persistence |
@@ -334,7 +334,7 @@ release availability can lag behind this engineering snapshot.
 | DB2 | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
 | SAP HANA | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
 | DuckDB | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| DM8 (Dameng) | 🟡 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| DM8 (Dameng) | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
 | Snowflake | 🟡 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
 | **Advanced Integrations** | | | | | | |
 | Federation Protocol (TFP) Server | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | ⚪ |
@@ -351,7 +351,7 @@ release availability can lag behind this engineering snapshot.
 
 > **💡 Note on Java Database Support:**
 > The Java ecosystem has highly adaptable data provider support depending on its execution environment:
-> - **Server / Backend (Spring Boot, Quarkus, etc.):** The latest full-chain matrix verifies **PostgreSQL, MySQL, SQLite, Oracle, DB2, SAP HANA, SQL Server, and DuckDB**. DM8 has a JDBC provider path but is not part of the latest complete matrix. Snowflake is not counted as verified because no official locally runnable Snowflake database service image was found.
+> - **Server / Backend (Spring Boot, Quarkus, etc.):** The latest full-chain matrix verifies **PostgreSQL, MySQL, SQLite, Oracle, DB2, DM8, SAP HANA, SQL Server, and DuckDB**. Snowflake is not counted as verified because no official locally runnable Snowflake database service image was found.
 > - **Android / Mobile (`teaql-android`):** When running natively on mobile, database support is strictly constrained to **SQLite** to ensure local compatibility, zero-configuration, and memory efficiency without pulling in heavy JDBC drivers.
 
 > **💡 Note on TypeScript Profiles:**
