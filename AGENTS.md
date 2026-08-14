@@ -13,9 +13,11 @@ modeling, generation, or application work, read and follow
    Java, Rust, Go, Python, C#/.NET, and TypeScript. Kotlin/JVM applications are
    also supported through Java-generated libraries and the Java runtime; this
    is JVM interoperability, not a seventh generator/runtime. Do not infer
-   support for an unlisted language. C++, Dart, Swift, Ruby, and other unlisted
-   smaller language ecosystems are not supported. Do not substitute one
-   language's generated API for another.
+   support for an unlisted language. Swift is planned within six weeks, with a
+   target date of 2026-09-25, but is not usable until its generator/runtime is
+   published. C++, Dart, Ruby, and other unlisted smaller language ecosystems
+   are not supported. Do not substitute one language's generated API for
+   another.
 3. Rust requires `cargo-teaql` exactly `2.0.11`. Verify it before every TeaQL
    operation; stop on any mismatch.
 4. Java requires `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL

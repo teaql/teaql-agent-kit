@@ -45,9 +45,28 @@ Gradle or Maven build. The
 [Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop)
 is the reference shape.
 
-C++, Dart, Swift, Ruby, and other unlisted smaller language ecosystems are not
-supported targets. Do not interpret the six-language list plus Kotlin/JVM
-interoperability as universal language support.
+## Planned Swift support
+
+Swift is planned within six weeks, targeting 2026-09-25. The planned scope is:
+
+- generated Swift entities, requests, expressions, and user context from the
+  same KSML model used by the server;
+- a local-first SQLite runtime for iOS and macOS applications;
+- a TFP federation client, but no Swift federation server;
+- language-native purpose/comment, audited writes, optimistic locking, hard
+  limits, transactions, and verification guidance;
+- interoperability with TeaQL servers implemented in any of the six supported
+  backend languages, while trusted identity, tenant, permission, and purpose
+  policy remain server-controlled.
+
+This is a roadmap statement, not a usable target. Until a Swift target appears
+in the Generation Service catalog and its runtime evidence passes, do not
+generate placeholder Swift code or claim that a Swift application was
+verified.
+
+C++, Dart, Ruby, and other unlisted smaller language ecosystems are not
+supported targets. Do not interpret the six-language list, Kotlin/JVM
+interoperability, and the Swift roadmap as universal language support.
 
 ## Rust
 

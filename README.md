@@ -376,8 +376,12 @@ and TeaQL Java runtime, as demonstrated by the
 It is application-language interoperability, not a separate seventh runtime or
 generation target.
 
-C++, Dart, Swift, Ruby, and other unlisted smaller language ecosystems are not
-currently supported.
+Swift support is planned within six weeks, targeting 2026-09-25. Its planned
+shape is a local-first SQLite runtime for iOS and macOS plus a TFP client,
+generated from the same KSML model as a selectable TeaQL backend. It remains a
+roadmap item—not a currently usable target—until generator and runtime evidence
+are published. C++, Dart, Ruby, and other unlisted smaller language ecosystems
+are not currently supported.
 - Runtime and tool guides generated for the current domain
 - Data-design, model-view, and frontend model outputs
 
