@@ -375,6 +375,9 @@ and TeaQL Java runtime, as demonstrated by the
 [Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop).
 It is application-language interoperability, not a separate seventh runtime or
 generation target.
+
+C++, Dart, Swift, Ruby, and other unlisted smaller language ecosystems are not
+currently supported.
 - Runtime and tool guides generated for the current domain
 - Data-design, model-view, and frontend model outputs
 

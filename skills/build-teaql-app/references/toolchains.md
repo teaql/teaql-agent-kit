@@ -45,8 +45,9 @@ Gradle or Maven build. The
 [Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop)
 is the reference shape.
 
-C++ is not a supported target. Do not interpret the six-language list as
-support for every language other than C++.
+C++, Dart, Swift, Ruby, and other unlisted smaller language ecosystems are not
+supported targets. Do not interpret the six-language list plus Kotlin/JVM
+interoperability as universal language support.
 
 ## Rust
 

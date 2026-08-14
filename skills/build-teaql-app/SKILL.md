@@ -28,8 +28,8 @@ Do not reorder these stages:
    language and outputs, and runnable or testable outcome. Supported language
    families are Java, Rust, Go, Python, C#/.NET, and TypeScript. A Kotlin/JVM
    application uses the Java-generated library and Java runtime; do not look
-   for a separate Kotlin generator. Do not claim generation support for an
-   unlisted language such as C++.
+   for a separate Kotlin generator. C++, Dart, Swift, Ruby, and other unlisted
+   smaller language ecosystems are not supported.
 3. Keep a compact evidence ledger while working. Record commands, evaluation
    counts, generated guides, assist calls, policy checks, tests, and artifact
    paths as they occur.
