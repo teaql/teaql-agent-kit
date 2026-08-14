@@ -1,6 +1,6 @@
 ---
 name: build-teaql-app
-description: "Build or change a TeaQL application in Java, Rust, Go, Python, C#/.NET, or TypeScript from a natural-language business requirement. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, six-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
+description: "Build or change a TeaQL application in Java, Rust, Go, Python, C#/.NET, or TypeScript, including Kotlin/JVM applications that consume Java-generated libraries. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, six-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
 ---
 
 # Build TeaQL App
@@ -26,8 +26,10 @@ Do not reorder these stages:
 1. Read the target repository's nearest `AGENTS.md`.
 2. Capture the original business requirement, model target path, requested
    language and outputs, and runnable or testable outcome. Supported language
-   families are Java, Rust, Go, Python, C#/.NET, and TypeScript. Do not claim
-   generation support for an unlisted language such as C++.
+   families are Java, Rust, Go, Python, C#/.NET, and TypeScript. A Kotlin/JVM
+   application uses the Java-generated library and Java runtime; do not look
+   for a separate Kotlin generator. Do not claim generation support for an
+   unlisted language such as C++.
 3. Keep a compact evidence ledger while working. Record commands, evaluation
    counts, generated guides, assist calls, policy checks, tests, and artifact
    paths as they occur.
@@ -86,6 +88,7 @@ repair rounds:
    Java/C#: `class`, `new`, `import`, `public`, `default`, `return`;
    Go: `type`, `map`, `range`, `go`, `select`, `interface`;
    Python: `class`, `def`, `from`, `import`, `lambda`, `yield`;
+   Kotlin/JVM application code: `object`, `when`, `is`, `fun`, `val`, `var`;
    TypeScript: `class`, `interface`, `function`, `import`, `export`, `typeof`;
    SQL: `select`, `table`, `transaction`). When a natural business concept is a
    single keyword (e.g., "move"), always use a **two-word compound name** instead

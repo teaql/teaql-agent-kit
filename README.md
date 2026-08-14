@@ -369,6 +369,12 @@ The Generation Service provides the most complete model-derived output set:
 - Editable application workspaces
 - Model evaluation and repair guidance
 - Object-specific query, create, update, delete, and expression assist
+
+Kotlin/JVM application code is supported through the generated Java library
+and TeaQL Java runtime, as demonstrated by the
+[Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop).
+It is application-language interoperability, not a separate seventh runtime or
+generation target.
 - Runtime and tool guides generated for the current domain
 - Data-design, model-view, and frontend model outputs
 

@@ -38,6 +38,13 @@ supported core and editable application targets include:
 | C#/.NET | `dotnet-lib-core` | `dotnet-web-aspnet` |
 | TypeScript | `typescript-lib-core` | `typescript-web-hono` |
 
+Kotlin/JVM applications use `java-lib-core` and the TeaQL Java runtime. Kotlin
+is a supported application language through JVM interoperability, but there is
+no separate `kotlin-*` generation target. Compile and test it with the target
+Gradle or Maven build. The
+[Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop)
+is the reference shape.
+
 C++ is not a supported target. Do not interpret the six-language list as
 support for every language other than C++.
 

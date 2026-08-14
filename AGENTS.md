@@ -10,9 +10,11 @@ modeling, generation, or application work, read and follow
    Service, and fix all Errors before generation. Never run evaluation before
    the first complete model target exists.
 2. TeaQL application generation supports exactly these six language families:
-   Java, Rust, Go, Python, C#/.NET, and TypeScript. Do not infer support for an
-   unlisted language (including C++), and do not substitute one language's
-   generated API for another.
+   Java, Rust, Go, Python, C#/.NET, and TypeScript. Kotlin/JVM applications are
+   also supported through Java-generated libraries and the Java runtime; this
+   is JVM interoperability, not a seventh generator/runtime. Do not infer
+   support for an unlisted language (including C++), and do not substitute one
+   language's generated API for another.
 3. Rust requires `cargo-teaql` exactly `2.0.11`. Verify it before every TeaQL
    operation; stop on any mismatch.
 4. Java requires `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL
