@@ -1,6 +1,6 @@
 ---
 name: build-teaql-app
-description: "Build or change a TeaQL Java or Rust application from a natural-language business requirement. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
+description: "Build or change a TeaQL application in Java, Rust, Go, Python, C#/.NET, or TypeScript from a natural-language business requirement. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, six-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
 ---
 
 # Build TeaQL App
@@ -25,7 +25,9 @@ Do not reorder these stages:
 
 1. Read the target repository's nearest `AGENTS.md`.
 2. Capture the original business requirement, model target path, requested
-   Java/Rust outputs, and runnable or testable outcome.
+   language and outputs, and runnable or testable outcome. Supported language
+   families are Java, Rust, Go, Python, C#/.NET, and TypeScript. Do not claim
+   generation support for an unlisted language such as C++.
 3. Keep a compact evidence ledger while working. Record commands, evaluation
    counts, generated guides, assist calls, policy checks, tests, and artifact
    paths as they occur.
@@ -48,7 +50,11 @@ multiple module files using `<_include file="module.xml" />`, but this is
 optional. The system supports dynamic output limits so a single-file model
 will also work.
 
-- **CRITICAL**: To avoid keyword collisions in generated languages (like `type`, `move`, `match`, `fn`, `struct` in Rust or Java), **ALWAYS use two-word field names and entity names** when there is any risk of conflict (e.g. use `bonus_type` instead of `type`, `move_order` instead of `move`, `leave_type` instead of `type`). Do not use bare single words like `type` or `move` as entity or field names.
+- **CRITICAL**: To avoid keyword collisions in any of the six generated
+  languages, **ALWAYS use two-word field names and entity names** when there
+  is any risk of conflict (e.g. use `bonus_type` instead of `type`,
+  `move_order` instead of `move`, `leave_type` instead of `type`). Do not use
+  bare single words like `type` or `move` as entity or field names.
 
 Apply this minimal contract:
 
@@ -77,7 +83,10 @@ repair rounds:
 2. **Language keyword avoidance.** Entity and field names must not collide with
    programming language keywords (Rust: `move`, `type`, `match`, `self`, `ref`,
    `mod`, `box`, `trait`, `impl`, `use`, `let`, `fn`, `async`, `yield`;
-   Java: `class`, `new`, `import`, `public`, `default`, `return`;
+   Java/C#: `class`, `new`, `import`, `public`, `default`, `return`;
+   Go: `type`, `map`, `range`, `go`, `select`, `interface`;
+   Python: `class`, `def`, `from`, `import`, `lambda`, `yield`;
+   TypeScript: `class`, `interface`, `function`, `import`, `export`, `typeof`;
    SQL: `select`, `table`, `transaction`). When a natural business concept is a
    single keyword (e.g., "move"), always use a **two-word compound name** instead
    (e.g., `move_order`, `move_task`, `type_code`, `match_record`).
@@ -163,7 +172,9 @@ When you finish the repair phase and reach zero errors, output `<phase-complete>
 
 <!-- BLOCK_ID: phase_codegen -->
 Generate only the outputs requested by the user.
-Use the exact Java or Rust generation commands in `references/toolchains.md`.
+Use the exact language target and verification guidance in
+`references/toolchains.md`. Generate only targets actually advertised by the
+Generation Service; never manufacture a target name.
 
 IMPORTANT: If your model is split into multiple files in a directory (e.g., `models/`), you MUST pass the directory path (e.g., `--input models/`), NOT the main entry file (`main.xml`) to the generation commands. Passing only the main file will cause the generation to fail with missing included files.
 
@@ -184,10 +195,14 @@ When generation commands complete successfully with `success=true`, output `<pha
 
 Enforce the API constraint harness:
 
-- Every query execution has `.purpose("why")` and `.comment("what")`.
-- Every Rust `.save()` or `.update()` has `.audit_as("description")`.
-- Every Java save/update has the generated equivalent, normally
-  `.auditAs("description")`.
+- Every query execution has purpose and comment through the generated
+  language-specific API. Comment may be added earlier in the query chain;
+  purpose is the capability boundary that exposes execution.
+- Every save/update has an audit reason through the generated
+  language-specific API.
+- Read assist or generated source before using those APIs. Java and Rust
+  spellings are examples, not names to copy into Go, Python, .NET, or
+  TypeScript.
 - Use the identity/request context required by the generated API.
 
 Compile, test, and smoke-test the requested result. Repair model-derived

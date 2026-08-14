@@ -23,6 +23,24 @@ invoked. Do not clone toolchain source, hand-build generated outputs, or use an
 older cached client as a fallback. The built-in Generation Service credential
 supports normal use; do not search for an additional API key.
 
+## Supported language targets
+
+TeaQL supports six language families. Ask the Generation Service for its
+current target list and use only a returned target name. The currently
+supported core and editable application targets include:
+
+| Language | Core library | Editable application |
+| --- | --- | --- |
+| Java | `java-lib-core` | `java-web-spring-boot` |
+| Rust | `rust-lib-core` | `rust-app-console` |
+| Go | `golang-lib-core` | `golang-app-console`, `golang-web-gin` |
+| Python | `python-lib-core` | `python-web-fastapi` |
+| C#/.NET | `dotnet-lib-core` | `dotnet-web-aspnet` |
+| TypeScript | `typescript-lib-core` | `typescript-web-hono` |
+
+C++ is not a supported target. Do not interpret the six-language list as
+support for every language other than C++.
+
 ## Rust
 
 Every model-derived command, including dynamic assist, must use
@@ -96,3 +114,23 @@ Verify from the generated workspace:
 mvn clean compile
 mvn test
 ```
+
+## Go, Python, C#/.NET, and TypeScript
+
+Use the Generation Service client available in the target repository, passing
+the saved model and one exact target from the table above. Before adding
+business logic, read the generated workspace `AGENTS.md`, its README, and the
+current object/action assist. The generated API—not a translated Java or Rust
+example—is authoritative.
+
+Run the native verification appropriate to the generated workspace:
+
+```text
+Go:         go test ./...
+Python:     python -m pytest
+C#/.NET:    dotnet build -p:UseSharedCompilation=false; dotnet test -p:UseSharedCompilation=false
+TypeScript: use Node.js 22, install from the lockfile, then run the generated package's test and build scripts
+```
+
+Do not silently skip a missing compiler, runtime, database driver, test script,
+or generated assist surface. Report it as a concrete verification gap.

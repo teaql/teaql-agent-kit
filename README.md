@@ -138,15 +138,16 @@ five-stage walkthrough:
 2. Inspect the model as an interactive entity graph or data dictionary.
 3. Evaluate the model, repair reported Errors, and retain the report as
    evidence.
-4. Generate stable domain libraries and separate editable Java or Rust
-   application workspaces.
+4. Generate stable domain libraries and separate editable application
+   workspaces for Java, Rust, Go, Python, C#/.NET, or TypeScript.
 5. Develop against the generated contract with model-, language-, action-, and
    object-specific assist.
 
 The page also exposes a live evaluation report, generation target catalog,
-workspace API guides, and side-by-side Java and Rust previews for create,
+workspace API guides, and language-specific previews and assist for create,
 update, query, list, expression, delete, debugging, granted tool API, and
-runtime customization guidance.
+runtime customization guidance. Preview depth can vary by language; the
+current target catalog and generated assist are authoritative.
 
 This live surface demonstrates that the evaluator, generators, typed
 contracts, and just-in-time assist are concrete parts of the harness rather
@@ -364,7 +365,7 @@ release availability can lag behind this engineering snapshot.
 
 The Generation Service provides the most complete model-derived output set:
 
-- Java and Rust typed domain libraries
+- Java, Rust, Go, Python, C#/.NET, and TypeScript typed domain libraries
 - Editable application workspaces
 - Model evaluation and repair guidance
 - Object-specific query, create, update, delete, and expression assist
