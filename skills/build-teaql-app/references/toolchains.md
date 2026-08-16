@@ -25,7 +25,7 @@ supports normal use; do not search for an additional API key.
 
 ## Supported language targets
 
-TeaQL supports six language families. Ask the Generation Service for its
+TeaQL supports seven language families. Ask the Generation Service for its
 current target list and use only a returned target name. The currently
 supported core and editable application targets include:
 
@@ -34,6 +34,7 @@ supported core and editable application targets include:
 | Java | `java-lib-core` | `java-web-spring-boot` |
 | Rust | `rust-lib-core` | `rust-app-console` |
 | Go | `golang-lib-core` | `golang-app-console`, `golang-web-gin` |
+| Swift | `swift-lib-core` | — (embed the generated package in an iOS/macOS application) |
 | Python | `python-lib-core` | `python-web-fastapi` |
 | C#/.NET | `dotnet-lib-core` | `dotnet-web-aspnet` |
 | TypeScript | `typescript-lib-core` | `typescript-web-hono` |
@@ -45,9 +46,9 @@ Gradle or Maven build. The
 [Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop)
 is the reference shape.
 
-## Planned Swift support
+## Swift
 
-Swift is planned within six weeks, targeting 2026-09-25. The planned scope is:
+Swift is a current generation target. Its verified scope is:
 
 - generated Swift entities, requests, expressions, and user context from the
   same KSML model used by the server;
@@ -55,18 +56,26 @@ Swift is planned within six weeks, targeting 2026-09-25. The planned scope is:
 - a TFP federation client, but no Swift federation server;
 - language-native purpose/comment, audited writes, optimistic locking, hard
   limits, transactions, and verification guidance;
-- interoperability with TeaQL servers implemented in any of the six supported
+- interoperability with TeaQL servers implemented in any of the other supported
   backend languages, while trusted identity, tenant, permission, and purpose
   policy remain server-controlled.
 
-This is a roadmap statement, not a usable target. Until a Swift target appears
-in the Generation Service catalog and its runtime evidence passes, do not
-generate placeholder Swift code or claim that a Swift application was
-verified.
+Generate the package with the exact advertised target:
+
+```bash
+cargo teaql --input /path/to/models/model.xml swift-lib-core \
+  --output /path/to/app-playground/swift-lib-core \
+  --cwd /path/to/app-playground
+```
+
+Read the generated package guide and current `swift-assist-*` output before
+writing application code. Verify the generated package and application
+integration with `swift build` and `swift test`. Do not claim a Swift TFP
+server or a separate generated editable application workspace.
 
 C++, Dart, Ruby, and other unlisted smaller language ecosystems are not
-supported targets. Do not interpret the six-language list, Kotlin/JVM
-interoperability, and the Swift roadmap as universal language support.
+supported targets. Do not interpret the seven-language list or Kotlin/JVM
+interoperability as universal language support.
 
 ## Rust
 

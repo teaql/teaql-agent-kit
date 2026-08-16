@@ -66,9 +66,9 @@ methods must come from the local generated guide and assist output.
 
 Typical constrained shapes:
 
-The Java and Rust snippets below are examples only. For Go, Python, C#/.NET,
-and TypeScript, record and use the exact generated assist surface instead of
-translating these method names mechanically.
+The Java and Rust snippets below are examples only. For Go, Swift, Python,
+C#/.NET, and TypeScript, record and use the exact generated assist surface
+instead of translating these method names mechanically.
 
 ```rust
 Q::merchants()

@@ -139,7 +139,7 @@ five-stage walkthrough:
 3. Evaluate the model, repair reported Errors, and retain the report as
    evidence.
 4. Generate stable domain libraries and separate editable application
-   workspaces for Java, Rust, Go, Python, C#/.NET, or TypeScript.
+   workspaces and libraries for Java, Rust, Go, Swift, Python, C#/.NET, or TypeScript.
 5. Develop against the generated contract with model-, language-, action-, and
    object-specific assist.
 
@@ -295,7 +295,7 @@ tests, and runtime results.
 
 ## Cross-Language Feature Matrix
 
-TeaQL natively supports six major languages. While the core philosophy remains identical, the implementation maturity of specific features varies by ecosystem.
+TeaQL natively supports seven major languages. While the core philosophy remains identical, the implementation maturity of specific features varies by ecosystem.
 
 **Legend:**
 - 🟢 **Supported:** Feature is implemented and working.
@@ -315,40 +315,41 @@ release availability can lag behind this engineering snapshot.
 | [Java](https://github.com/teaql/teaql-java) | Full database matrix: `9 tests / 0 failures / 0 errors / 0 skipped` | PostgreSQL, MySQL, SQLite, Oracle, DB2, DM8, SAP HANA, SQL Server, DuckDB | Broadest enterprise database coverage; Android remains SQLite-only |
 | [Rust](https://github.com/teaql/teaql-rs) | Generated API chain and runtime suite passed; runtime branch coverage reached 95.5% | PostgreSQL, MySQL, SQLite | SQL Server is intentionally out of scope |
 | [Go](https://github.com/teaql/teaql-golang) | Runtime suite and generated SQL matrix passed; statement coverage reached 94.9% | PostgreSQL, MySQL, SQLite | Includes generated-query `WithComment` compatibility |
+| [Swift](https://github.com/teaql/teaql-swift) | Generated Swift package and runtime suite pass on the current conformance baseline | SQLite | Local-first runtime for iOS/macOS plus a TFP federation client; no federation server |
 | [Python](https://github.com/teaql/teaql-python) | `73` runtime tests passed plus generated real-SQL integration | PostgreSQL, MySQL, SQLite | Uses real async SQL providers; no longer counted as JSON/fake persistence |
 | [C# / .NET](https://github.com/teaql/teaql-dotnet) | `124` runtime tests passed plus generated database integration | PostgreSQL, MySQL, SQLite, SQL Server | SQL Server support is specific to Java and .NET |
 | [TypeScript](https://github.com/teaql/teaql-ts) | `6` runtime tests plus `4 tests / 0 failures / 0 errors / 0 skipped` generated matrix | PostgreSQL, MySQL, SQLite | Canonical Node SQL runtime; the browser/TFP entry installs and loads no database driver |
 
-| Feature Area | Java | Rust | Go | Python | C# (.NET) | TypeScript |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Core Runtime** | | | | | | |
-| AST Parsing & Query Execution | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| Audited Graph Persistence | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| UserContext & Identity | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| Triple-Intent Policy | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| **Data Providers** | | | | | | |
-| SQLite | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| MySQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| PostgreSQL | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| MS SQL Server | 🟢 | ⚪ | ⚪ | ⚪ | 🟢 | ⚪ |
-| Oracle | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| DB2 | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| SAP HANA | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| DuckDB | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| DM8 (Dameng) | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| Snowflake | 🟡 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
-| **Advanced Integrations** | | | | | | |
-| Federation Protocol (TFP) Server | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | ⚪ |
-| TFP HTTP Provider (Client) | ⚪ | ⚪ | ⚪ | 🟢 | ⚪ | 🟢 |
-| Web Framework Integration | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
-| Redis Cache | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | ⚪ |
-| **Cloud Native (Microservices)** | | | | | | |
-| Nacos Integration | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ |
-| Consul Integration | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ |
-| Health Actuator & Metrics | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ |
-| **Tooling & Code Generation** | | | | | | |
-| Typed DSL Generation | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
-| Dynamic String Interpreter | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
+| Feature Area | Java | Rust | Go | Swift | Python | C# (.NET) | TypeScript |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Core Runtime** | | | | | | | |
+| AST Parsing & Query Execution | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Audited Graph Persistence | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| UserContext & Identity | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Triple-Intent Policy | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| **Data Providers** | | | | | | | |
+| SQLite | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| MySQL | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | 🟢 | 🟢 |
+| PostgreSQL | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | 🟢 | 🟢 |
+| MS SQL Server | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 | ⚪ |
+| Oracle | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| DB2 | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| SAP HANA | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| DuckDB | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| DM8 (Dameng) | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| Snowflake | 🟡 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ |
+| **Advanced Integrations** | | | | | | | |
+| Federation Protocol (TFP) Server | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | 🟢 | ⚪ |
+| TFP HTTP Provider (Client) | ⚪ | ⚪ | ⚪ | 🟢 | 🟢 | ⚪ | 🟢 |
+| Web Framework Integration | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | 🟢 | ⚪ |
+| Redis Cache | 🟢 | 🟢 | 🟢 | ⚪ | 🟢 | 🟢 | ⚪ |
+| **Cloud Native (Microservices)** | | | | | | | |
+| Nacos Integration | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ |
+| Consul Integration | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ |
+| Health Actuator & Metrics | 🟢 | 🟢 | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ |
+| **Tooling & Code Generation** | | | | | | | |
+| Typed DSL Generation | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Dynamic String Interpreter | 🟢 | ⚪ | ⚪ | ⚪ | ⚪ | ⚪ | 🟢 |
 
 > **💡 Note on Java Database Support:**
 > The Java ecosystem has highly adaptable data provider support depending on its execution environment:
@@ -365,7 +366,7 @@ release availability can lag behind this engineering snapshot.
 
 The Generation Service provides the most complete model-derived output set:
 
-- Java, Rust, Go, Python, C#/.NET, and TypeScript typed domain libraries
+- Java, Rust, Go, Swift, Python, C#/.NET, and TypeScript typed domain libraries
 - Editable application workspaces
 - Model evaluation and repair guidance
 - Object-specific query, create, update, delete, and expression assist
@@ -373,15 +374,14 @@ The Generation Service provides the most complete model-derived output set:
 Kotlin/JVM application code is supported through the generated Java library
 and TeaQL Java runtime, as demonstrated by the
 [Compose Desktop vending-machine example](https://github.com/teaql/teaql-java-app-examples/tree/main/002-vending-machine-compose-desktop).
-It is application-language interoperability, not a separate seventh runtime or
+It is application-language interoperability, not a separate eighth runtime or
 generation target.
 
-Swift support is planned within six weeks, targeting 2026-09-25. Its planned
-shape is a local-first SQLite runtime for iOS and macOS plus a TFP client,
-generated from the same KSML model as a selectable TeaQL backend. It remains a
-roadmap item—not a currently usable target—until generator and runtime evidence
-are published. C++, Dart, Ruby, and other unlisted smaller language ecosystems
-are not currently supported.
+Swift is a current `swift-lib-core` generation target with a local-first SQLite
+runtime for iOS and macOS and a TFP client. It does not currently provide a
+Swift TFP server or a separate editable application-workspace target. C++,
+Dart, Ruby, and other unlisted smaller language ecosystems are not currently
+supported.
 - Runtime and tool guides generated for the current domain
 - Data-design, model-view, and frontend model outputs
 

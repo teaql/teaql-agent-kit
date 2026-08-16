@@ -1,6 +1,6 @@
 interface:
   display_name: "Build TeaQL App"
   short_description: "Build a verified TeaQL app in any supported language"
-  default_prompt: "Use $build-teaql-app to select Java, Rust, Go, Python, C#/.NET, or TypeScript—or Java output for a Kotlin/JVM app; first draft and save a complete KSML model, then evaluate and repair it before generating and testing a runnable TeaQL application."
+  default_prompt: "Use $build-teaql-app to select Java, Rust, Go, Swift, Python, C#/.NET, or TypeScript—or Java output for a Kotlin/JVM app; first draft and save a complete KSML model, then evaluate and repair it before generating and testing a runnable TeaQL application."
 policy:
   allow_implicit_invocation: true

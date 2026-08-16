@@ -1,6 +1,6 @@
 ---
 name: build-teaql-app
-description: "Build or change a TeaQL application in Java, Rust, Go, Python, C#/.NET, or TypeScript, including Kotlin/JVM applications that consume Java-generated libraries. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, six-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
+description: "Build or change a TeaQL application in Java, Rust, Go, Swift, Python, C#/.NET, or TypeScript, including Kotlin/JVM applications that consume Java-generated libraries. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, seven-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
 ---
 
 # Build TeaQL App
@@ -26,12 +26,11 @@ Do not reorder these stages:
 1. Read the target repository's nearest `AGENTS.md`.
 2. Capture the original business requirement, model target path, requested
    language and outputs, and runnable or testable outcome. Supported language
-   families are Java, Rust, Go, Python, C#/.NET, and TypeScript. A Kotlin/JVM
-   application uses the Java-generated library and Java runtime; do not look
-   for a separate Kotlin generator. Swift support is planned within six weeks
-   (target: 2026-09-25), but must be reported as unavailable until its target
-   appears in the Generation Service. C++, Dart, Ruby, and other unlisted
-   smaller language ecosystems are not supported.
+   families are Java, Rust, Go, Swift, Python, C#/.NET, and TypeScript. A
+   Kotlin/JVM application uses the Java-generated library and Java runtime; do not look
+   for a separate Kotlin generator. Swift uses the `swift-lib-core` target for
+   a generated Swift package with local SQLite and TFP client support. C++,
+   Dart, Ruby, and other unlisted smaller language ecosystems are not supported.
 3. Keep a compact evidence ledger while working. Record commands, evaluation
    counts, generated guides, assist calls, policy checks, tests, and artifact
    paths as they occur.
@@ -54,7 +53,7 @@ multiple module files using `<_include file="module.xml" />`, but this is
 optional. The system supports dynamic output limits so a single-file model
 will also work.
 
-- **CRITICAL**: To avoid keyword collisions in any of the six generated
+- **CRITICAL**: To avoid keyword collisions in any of the seven generated
   languages, **ALWAYS use two-word field names and entity names** when there
   is any risk of conflict (e.g. use `bonus_type` instead of `type`,
   `move_order` instead of `move`, `leave_type` instead of `type`). Do not use
@@ -89,6 +88,8 @@ repair rounds:
    `mod`, `box`, `trait`, `impl`, `use`, `let`, `fn`, `async`, `yield`;
    Java/C#: `class`, `new`, `import`, `public`, `default`, `return`;
    Go: `type`, `map`, `range`, `go`, `select`, `interface`;
+   Swift: `class`, `struct`, `protocol`, `extension`, `actor`, `associatedtype`,
+   `inout`, `some`, `any`, `Self`, `init`, `deinit`, `subscript`, `operator`;
    Python: `class`, `def`, `from`, `import`, `lambda`, `yield`;
    Kotlin/JVM application code: `object`, `when`, `is`, `fun`, `val`, `var`;
    TypeScript: `class`, `interface`, `function`, `import`, `export`, `typeof`;
@@ -206,7 +207,7 @@ Enforce the API constraint harness:
 - Every save/update has an audit reason through the generated
   language-specific API.
 - Read assist or generated source before using those APIs. Java and Rust
-  spellings are examples, not names to copy into Go, Python, .NET, or
+  spellings are examples, not names to copy into Go, Swift, Python, .NET, or
   TypeScript.
 - Use the identity/request context required by the generated API.
 
