@@ -17,9 +17,9 @@ modeling, generation, or application work, read and follow
    support for an unlisted language. C++, Dart, Ruby, and other unlisted
    smaller language ecosystems are not supported. Do not substitute one
    language's generated API for another.
-3. Rust requires `cargo-teaql` exactly `2.0.11`. Verify it before every TeaQL
+3. Rust requires `cargo-teaql` exactly `2.0.12`. Verify it before every TeaQL
    operation; stop on any mismatch.
-4. Java requires `io.teaql:teaql-maven-plugin:1.1.0` or newer from the TeaQL
+4. Java requires `io.teaql:teaql-maven-plugin:1.1.1` or newer from the TeaQL
    Nexus releases repository. Use fully qualified Maven coordinates, never
    `mvn teaql:*`.
 5. Every Rust model-derived command, including assist, uses
