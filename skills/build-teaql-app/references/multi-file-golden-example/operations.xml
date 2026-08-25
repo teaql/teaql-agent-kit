@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <work_order_status _name="Work Order Status"
+                     _module="Operations"
+                     _module_key="operations"
+                     id="id()"
+                     name="string()"
+                     code="string()"
+                     display_order="number()"
+                     _constant="true"
+                     _identifier="code">
+    <_value id="1001" name="Open" code="OPEN" display_order="1" />
+    <_value id="1002" name="Completed" code="COMPLETED" display_order="2" />
+  </work_order_status>
+
+  <service_work_order _name="Service Work Order"
+                      _module="Operations"
+                      _module_key="operations"
+                      organization="business_organization()"
+                      order_status="work_order_status()"
+                      order_number="WO-2026-0001"
+                      order_summary="Inspect production equipment"
+                      create_time="createTime()"
+                      update_time="updateTime()" />
+</root>

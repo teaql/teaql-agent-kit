@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root name="multi-file-example-service"
+      cfg_mask_china_mobile="false"
+      data_service="sqlite"
+      org="example"
+      _module_key="root">
+  <_include file="organization.xml" />
+  <_include file="operations.xml" />
+</root>

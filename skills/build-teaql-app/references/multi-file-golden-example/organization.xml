@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <business_organization _name="Business Organization"
+                         _module="Organization"
+                         _module_key="organization"
+                         organization_name="Example Operations Ltd"
+                         organization_code="ORG-001"
+                         create_time="createTime()"
+                         update_time="updateTime()" />
+</root>

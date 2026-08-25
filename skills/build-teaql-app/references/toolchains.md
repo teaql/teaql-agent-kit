@@ -6,14 +6,14 @@ sections only after evaluation reaches zero errors.
 
 ## Required Clients
 
-- Rust: `cargo-teaql` exactly `2.0.12` from crates.io.
+- Rust: `cargo-teaql` exactly `2.0.13` from crates.io.
 - Java: `io.teaql:teaql-maven-plugin:1.1.1` or newer from
   `https://nexus.teaql.io/repository/maven-releases/`.
 
 Verify or refresh before every new generation run:
 
 ```bash
-cargo install cargo-teaql --version 2.0.12 --force
+cargo install cargo-teaql --version 2.0.13 --force
 cargo-teaql --version
 cargo-teaql install-links
 ```
@@ -64,7 +64,7 @@ Generate the package with the exact advertised target:
 
 ```bash
 cargo teaql --input /path/to/models/model.xml swift-lib-core \
-  --output /path/to/app-playground/swift-lib-core \
+  --output swift-lib-core \
   --cwd /path/to/app-playground
 ```
 
@@ -86,7 +86,7 @@ Generate the read-only library first:
 
 ```bash
 cargo teaql --input /path/to/models/model.xml rust-lib-core \
-  --output /path/to/app-playground/rust-lib-core \
+  --output rust-lib-core \
   --cwd /path/to/app-playground
 ```
 
@@ -94,7 +94,7 @@ For a runnable result, generate the editable console application second:
 
 ```bash
 cargo teaql --input /path/to/models/model.xml rust-app-console \
-  --output /path/to/app-playground/rust-app-console \
+  --output rust-app-console \
   --cwd /path/to/app-playground
 ```
 

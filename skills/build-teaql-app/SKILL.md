@@ -53,6 +53,32 @@ multiple module files using `<_include file="module.xml" />`, but this is
 optional. The system supports dynamic output limits so a single-file model
 will also work.
 
+For a split model, follow the complete
+[`multi-file-golden-example`](references/multi-file-golden-example/README.md).
+Every included file MUST be a well-formed XML document with exactly one
+top-level `<root>` element. Put all module objects inside that `<root>`.
+Never write multiple bare top-level objects in an included file. Only the
+entry file's `<root>` carries service-level attributes such as `name`, `org`,
+`data_service`, and `_module_key`; an included module normally uses plain
+`<root>...</root>`.
+
+Incorrect included file:
+
+```xml
+<customer_account ... />
+<sales_order ... />
+```
+
+Correct included file:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <customer_account ... />
+  <sales_order ... />
+</root>
+```
+
 - **CRITICAL**: To avoid keyword collisions in any of the seven generated
   languages, **ALWAYS use two-word field names and entity names** when there
   is any risk of conflict (e.g. use `bonus_type` instead of `type`,
@@ -186,6 +212,21 @@ IMPORTANT: If your model is split into multiple files in a directory (e.g., `mod
 
 CRITICAL: Do NOT output `<phase-complete>codegen</phase-complete>` if ANY generation command returns an error or `success=false`. You MUST fix the command (e.g., incorrect directory paths) and retry until it succeeds. 
 WARNING: When chaining commands, do NOT use `cd dir && cmd && cd dir && cmd`. The second `cd` will fail because you are already in `dir`. Instead, use `cd dir && cmd1 && cmd2` or use subshells `(cd dir && cmd1) && (cd dir && cmd2)`.
+
+### CLI path semantics
+
+`--cwd` is the base directory for every relative `--output` path. When both
+flags are present, pass the workspace directory once: use an absolute
+`--cwd /path/to/app-playground` together with a child-only output such as
+`--output rust-lib-core`. Never repeat the cwd suffix in output (for example,
+do not combine `--cwd app-playground` with
+`--output app-playground/rust-lib-core`), because that creates
+`app-playground/app-playground/rust-lib-core`.
+
+Before generation, resolve the intended output path conceptually as
+`<cwd>/<relative-output>` and confirm it equals the requested destination. An
+absolute `--output` is also valid and is not joined to `--cwd`, but do not mix
+the two styles within one generation run.
 
 When generation commands complete successfully with `success=true`, output `<phase-complete>codegen</phase-complete>`.
 <!-- /BLOCK_ID: phase_codegen -->
