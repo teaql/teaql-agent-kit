@@ -127,6 +127,37 @@ The repository publishes the harness as a focused Agent Skill:
 Together, these artifacts coordinate the agent, the model evaluator, generated
 contracts, runtime policies, verification tools, and parallel human review.
 
+## Select Runtime Source Explicitly
+
+Generated manifests always declare published TeaQL dependencies. They never
+contain a maintainer's local filesystem paths. A consumer workspace selects
+the source independently with `teaql-workspace.yaml`:
+
+- `runtimeSource: workspace` resolves the seven runtime repositories, records
+  their exact commits and dirty state, and is used while changing a runtime;
+- `runtimeSource: release` requires package versions and rejects path
+  overrides, and is used for published-package regression.
+
+Start from
+[`teaql-workspace.workspace.yaml`](examples/teaql-workspace.workspace.yaml) or
+[`teaql-workspace.release.yaml`](examples/teaql-workspace.release.yaml). These
+files use JSON-compatible YAML so the verifier has no third-party dependency.
+
+```bash
+./tools/teaql_workspace.py apply \
+  --config teaql-workspace.yaml \
+  --workspace /path/to/generated-application
+
+./tools/teaql_workspace.py verify --config teaql-workspace.yaml
+```
+
+`apply` writes `.teaql/runtime-source-evidence.json` in the application
+workspace. Native package-manager overrides remain workspace-owned: Maven
+reactor/local repository, Cargo patch, Go workspace/replace, npm workspace,
+Swift package edit, .NET project reference, or Python editable install. The
+Harness verifies the selected repositories before those native commands run;
+the generator neither creates nor guesses these overrides.
+
 ## Explore the Live Harness
 
 The live Generation Service presents the same model-mediated path as a guided,

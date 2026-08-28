@@ -255,6 +255,27 @@ Enforce the API constraint harness:
 Compile, test, and smoke-test the requested result. Repair model-derived
 problems at the model level and regenerate.
 
+### Runtime source selection
+
+Do not edit a generated dependency declaration to switch between a local
+runtime checkout and a published runtime. If the target repository contains
+`teaql-workspace.yaml`, run the repository's `teaql_workspace.py verify`
+before compiling and retain its output as evidence.
+
+- In `workspace` mode, the config must resolve each selected runtime to a Git
+  repository. Record its absolute path, commit, and dirty state. Apply the
+  language's native workspace override outside the generated domain library.
+- In `release` mode, every runtime must declare a package and version; local
+  path, patch, replace, editable install, or project-reference overrides are
+  forbidden.
+- KSML may declare the required runtime version, but it never declares local
+  paths. The generator always emits published dependency coordinates.
+- Runtime repository examples use repository-local source. Published release
+  regression belongs in a separate consumer workspace.
+
+Use [`../../examples/teaql-workspace.workspace.yaml`](../../examples/teaql-workspace.workspace.yaml)
+as the seven-language workspace configuration example.
+
 ## Report Work Complete
 
 Load

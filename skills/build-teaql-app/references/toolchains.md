@@ -170,3 +170,20 @@ TypeScript: use Node.js 22, install from the lockfile, then run the generated pa
 
 Do not silently skip a missing compiler, runtime, database driver, test script,
 or generated assist surface. Report it as a concrete verification gap.
+
+## Workspace runtime versus published runtime
+
+Dependency source is a consumer-workspace decision, not a generator decision.
+Before native verification, inspect `teaql-workspace.yaml` when present and run:
+
+```bash
+/path/to/teaql-agent-kit/tools/teaql_workspace.py verify \
+  --config /path/to/application/teaql-workspace.yaml
+```
+
+Workspace mode uses the language's native override mechanism outside generated
+domain-library files. Release mode must resolve published coordinates and must
+not retain a Cargo patch, Go replace/workspace substitution, Maven reactor or
+local-only repository substitution, npm local workspace/link, Swift package
+edit, .NET project reference, or Python editable install. Preserve the
+resulting source-resolution evidence with compile and test evidence.

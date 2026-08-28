@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "runtimeSource": "workspace",
+  "runtimes": {
+    "java": { "path": "../../teaql-java", "version": "1.538-RELEASE" },
+    "rust": { "path": "../../teaql-rs", "version": "4.2.24" },
+    "golang": { "path": "../../teaql-golang", "version": "v0.1.14" },
+    "typescript": { "path": "../../teaql-ts", "version": "0.1.19" },
+    "swift": { "path": "../../teaql-swift", "version": "0.1.13" },
+    "dotnet": { "path": "../../teaql-dotnet", "version": "0.1.6" },
+    "python": { "path": "../../teaql-python", "version": "0.1.7" }
+  }
+}

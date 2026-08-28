@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "runtimeSource": "release",
+  "runtimes": {
+    "java": { "package": "io.teaql:teaql", "version": "1.538-RELEASE" },
+    "rust": { "package": "teaql", "version": "4.2.24" },
+    "golang": { "package": "github.com/teaql/teaql-golang", "version": "v0.1.14" },
+    "typescript": { "package": "@teaql/teaql", "version": "0.1.19" },
+    "swift": { "package": "teaql-swift", "version": "0.1.13" },
+    "dotnet": { "package": "TeaQL.Runtime", "version": "0.1.6" },
+    "python": { "package": "teaql", "version": "0.1.7" }
+  }
+}
