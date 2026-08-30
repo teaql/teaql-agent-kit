@@ -400,7 +400,11 @@ The Generation Service provides the most complete model-derived output set:
 - Java, Rust, Go, Swift, Python, C#/.NET, and TypeScript typed domain libraries
 - Editable application workspaces
 - Model evaluation and repair guidance
-- Object-specific query, create, update, delete, and expression assist
+- Progressive query assist: request `language-assist-query/entity` for the
+  executable base query and field index, then
+  `language-assist-query/entity.field` for exact select/filter/order/group/
+  facet/aggregate methods. Assist locations always use canonical KSML names.
+- Object-specific create, update, delete, and expression assist
 
 Kotlin/JVM application code is supported through the generated Java library
 and TeaQL Java runtime, as demonstrated by the

@@ -236,6 +236,15 @@ When generation commands complete successfully with `success=true`, output `<pha
   expected generated application guide is missing, stop and report it.
 - Read current model-aware help and object-specific assist for each
   entity/action. Never guess generated methods.
+- For queries, first request `<language>-assist-query/<entity>` using the exact
+  KSML entity name. This returns the executable base query and a compact field
+  index. Before using a field-specific select, filter, order, group, facet, or
+  aggregate method, request
+  `<language>-assist-query/<entity>.<field>` using the exact case-sensitive
+  KSML field name from that index. Do not translate `snake_case` KSML into a
+  language member name in the Assist location, and do not request nested paths
+  such as `order.customer.name`. Query Assist is intentionally progressive so
+  the agent does not load every combinatorial field API into context.
 - Inspect generated source only when the local guide permits it or assist is
   incomplete; record the reason.
 - Keep editable business logic in the generated application workspace.
