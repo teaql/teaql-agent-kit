@@ -100,8 +100,9 @@ Apply this minimal contract:
 - In a constant object, every `<_value>` must explicitly provide every declared
   data field, including `id`, `name`, `code`, and additional fields such as
   `display_order`, `color`, or `progress`. Nullable declarations still require
-  a concrete representative value. Do not repeat `_...` model metadata or the
-  domain-root relationship injected from context in each `<_value>`.
+  a concrete representative value. Do not repeat `_...` model metadata,
+  version, Fix-managed `createTime()`/`updateTime()` fields, or the domain-root
+  relationship injected from context in each `<_value>`.
 - Use generated functions such as `createTime()` only for their intended
   semantics.
 - IMPORTANT: When writing large split models, create and write the files one by one using sequential tool calls. Do not attempt to output the entire schema for all modules in a single response.
@@ -144,8 +145,9 @@ repair rounds:
    `_module="Operations and Logistics"` not `_module="Operations & Logistics"`).
 8. **Complete constant value records.** Every `<_value>` must provide every
    declared constant data field. A nullable type declaration does not permit a
-   value record to omit that field. The domain-root relationship is injected
-   from context and is the only declared relationship omitted from each row.
+   value record to omit that business field. Version, Fix-managed
+   `createTime()`/`updateTime()` fields, and the domain-root relationship are
+   runtime managed and omitted from each row.
 
    ```xml
    <school_type platform="platform()" id="id()" name="string()"

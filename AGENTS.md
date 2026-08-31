@@ -38,8 +38,8 @@ modeling, generation, or application work, read and follow
     token/context evidence. Never invent savings or verification results.
 13. Every `<_value>` in a constant object must explicitly provide every data
     field declared by that constant object, even when a field is nullable.
-    Do not repeat `_...` metadata or the domain-root relationship injected by
-    the runtime context in each value record.
+    Do not repeat `_...` metadata, version, `createTime()`/`updateTime()` fields,
+    or the domain-root relationship injected by runtime Fix/Context.
 
 The complete pre-simplification repository is recoverable from Git Tag
 `archive/pre-simplification-20260730`.
