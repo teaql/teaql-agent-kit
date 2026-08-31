@@ -97,6 +97,11 @@ Apply this minimal contract:
 - Do not declare `id` on business objects.
 - Represent reusable finite states as constant objects; only constant objects
   contain `<_value>` children.
+- In a constant object, every `<_value>` must explicitly provide every declared
+  data field, including `id`, `name`, `code`, and additional fields such as
+  `display_order`, `color`, or `progress`. Nullable declarations still require
+  a concrete representative value. Do not repeat `_...` model metadata or the
+  domain-root relationship injected from context in each `<_value>`.
 - Use generated functions such as `createTime()` only for their intended
   semantics.
 - IMPORTANT: When writing large split models, create and write the files one by one using sequential tool calls. Do not attempt to output the entire schema for all modules in a single response.
@@ -137,6 +142,21 @@ repair rounds:
 7. **No XML special characters in attribute values.** Never use `&`, `<`, `>`,
    `"` directly in attribute values. Use `and` instead of `&` (e.g.,
    `_module="Operations and Logistics"` not `_module="Operations & Logistics"`).
+8. **Complete constant value records.** Every `<_value>` must provide every
+   declared constant data field. A nullable type declaration does not permit a
+   value record to omit that field. The domain-root relationship is injected
+   from context and is the only declared relationship omitted from each row.
+
+   ```xml
+   <school_type platform="platform()" id="id()" name="string()"
+                code="string()" display_order="number()" color="string()?"
+                _constant="true" _identifier="code">
+     <_value id="1001" name="Primary" code="PRIMARY"
+             display_order="1" color="blue"/>
+     <_value id="1002" name="Secondary" code="SECONDARY"
+             display_order="2" color="green"/>
+   </school_type>
+   ```
 
 When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
 
