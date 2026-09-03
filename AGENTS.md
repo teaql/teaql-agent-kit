@@ -31,15 +31,19 @@ modeling, generation, or application work, read and follow
    Do not inspect generated domain-library source for API discovery. If
    progressive Assist lacks the required operation, report `MISSING_ASSIST`
    instead of searching the generated library.
-9. Every query execution declares purpose and comment through the exact
+9. Create each application-owned source file once. After its first compile
+   attempt, repair it with the smallest localized patch; do not rewrite the
+   whole file. If a repair would replace more than 25% of an existing file,
+   stop and report `LARGE_REWRITE_REQUEST` with the diagnostic and reason.
+10. Every query execution declares purpose and comment through the exact
    generated API for its language.
-10. Every write declares an audit reason through the exact generated API for
+11. Every write declares an audit reason through the exact generated API for
    its language. Never guess the spelling from Java or Rust examples.
-11. When evaluation reaches zero errors, send the model path and evaluation
+12. When evaluation reaches zero errors, send the model path and evaluation
     counts, then continue without waiting. Human Review runs in parallel.
-12. Report actual model, assist, policy, compile, test, runtime, and
+13. Report actual model, assist, policy, compile, test, runtime, and
     token/context evidence. Never invent savings or verification results.
-13. Every `<_value>` in a constant object must explicitly provide every data
+14. Every `<_value>` in a constant object must explicitly provide every data
     field declared by that constant object, even when a field is nullable.
     Do not repeat `_...` metadata, version, `createTime()`/`updateTime()` fields,
     or the domain-root relationship injected by runtime Fix/Context.

@@ -103,6 +103,10 @@ Read `rust-app-console/AGENTS.md`, then run current help and object-specific
 code. Use field-specific query Assist only for fields needed by the current
 task. Do not inspect generated library source for API discovery. If Assist is
 incomplete, report `MISSING_ASSIST` and stop that implementation path.
+After the first compile attempt, repair application-owned Rust files with
+localized patches. Do not replace a complete file to fix a compiler or test
+diagnostic; report `LARGE_REWRITE_REQUEST` before a repair exceeding 25% of an
+existing file.
 
 Verify from the editable application:
 

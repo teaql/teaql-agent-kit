@@ -277,6 +277,9 @@ When generation commands complete successfully with `success=true`, output `<pha
   orchestrator explicitly authorizes it, read the bounded request format in
   [references/source-fallback.md](references/source-fallback.md).
 - Keep editable business logic in the generated application workspace.
+- Create an application-owned file once. After its first compile attempt,
+  follow the patch-only repair loop in
+  [references/incremental-editing.md](references/incremental-editing.md).
 
 Enforce the API constraint harness:
 
