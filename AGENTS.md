@@ -28,6 +28,9 @@ modeling, generation, or application work, read and follow
 7. Never edit generated domain-library files.
 8. Read the generated application/workspace `AGENTS.md` and current
    object-specific assist before business code. Never guess generated methods.
+   Do not inspect generated domain-library source for API discovery. If
+   progressive Assist lacks the required operation, report `MISSING_ASSIST`
+   instead of searching the generated library.
 9. Every query execution declares purpose and comment through the exact
    generated API for its language.
 10. Every write declares an audit reason through the exact generated API for

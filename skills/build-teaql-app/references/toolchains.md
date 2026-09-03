@@ -100,8 +100,9 @@ cargo teaql --input /path/to/models/model.xml rust-app-console \
 
 Read `rust-app-console/AGENTS.md`, then run current help and object-specific
 `rust-assist-*` commands with the same `--input` model before writing business
-code. The library may not contain `AGENTS.md`; generated source is an
-assist-incomplete fallback only.
+code. Use field-specific query Assist only for fields needed by the current
+task. Do not inspect generated library source for API discovery. If Assist is
+incomplete, report `MISSING_ASSIST` and stop that implementation path.
 
 Verify from the editable application:
 

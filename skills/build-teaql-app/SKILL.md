@@ -198,10 +198,11 @@ summary of what was fixed and what still fails. Ask the user to provide
 additional guidance or model corrections before continuing. Do not loop
 indefinitely.
 
-On small-context models (≤ 64K tokens), evaluation may be treated as
-best-effort: if the evaluation report itself exceeds the available context
-budget, skip detailed evaluation parsing and proceed to generation with the
-best available model, noting the limitation in the work-complete report.
+On small-context models, keep the zero-error evaluation gate. Read the summary
+and only the reported error locations needed for the current repair round; do
+not stream the complete report into context. If the remaining errors cannot be
+resolved within the repair or context budget, stop with the current report.
+Never proceed to generation with evaluation errors.
 
 ## Signal Model Ready
 
@@ -267,8 +268,14 @@ When generation commands complete successfully with `success=true`, output `<pha
   language member name in the Assist location, and do not request nested paths
   such as `order.customer.name`. Query Assist is intentionally progressive so
   the agent does not load every combinatorial field API into context.
-- Inspect generated source only when the local guide permits it or assist is
-  incomplete; record the reason.
+- Do not inspect, search, grep, or recursively read generated domain-library
+  source to discover APIs. If current entity/action and required field Assist
+  do not expose the needed operation, stop that path and report
+  `MISSING_ASSIST` with the language, entity, action, missing operation, and
+  exact compiler diagnostic when available.
+- Generated-source fallback is never self-authorized. Only after the user or
+  orchestrator explicitly authorizes it, read the bounded request format in
+  [references/source-fallback.md](references/source-fallback.md).
 - Keep editable business logic in the generated application workspace.
 
 Enforce the API constraint harness:
@@ -278,7 +285,7 @@ Enforce the API constraint harness:
   purpose is the capability boundary that exposes execution.
 - Every save/update has an audit reason through the generated
   language-specific API.
-- Read assist or generated source before using those APIs. Java and Rust
+- Read progressive model-aware Assist before using those APIs. Java and Rust
   spellings are examples, not names to copy into Go, Swift, Python, .NET, or
   TypeScript.
 - Use the identity/request context required by the generated API.
