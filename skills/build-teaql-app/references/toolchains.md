@@ -6,14 +6,14 @@ sections only after evaluation reaches zero errors.
 
 ## Required Clients
 
-- Rust: `cargo-teaql` exactly `2.0.13` from crates.io.
+- Rust: `cargo-teaql` exactly `2.0.14` from crates.io.
 - Java: `io.teaql:teaql-maven-plugin:1.1.1` or newer from
   `https://nexus.teaql.io/repository/maven-releases/`.
 
 Verify or refresh before every new generation run:
 
 ```bash
-cargo install cargo-teaql --version 2.0.13 --force
+cargo install cargo-teaql --version 2.0.14 --force
 cargo-teaql --version
 cargo-teaql install-links
 ```
