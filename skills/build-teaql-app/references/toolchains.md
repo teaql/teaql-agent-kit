@@ -1,8 +1,9 @@
 # TeaQL Toolchains
 
-Load this reference only after the first complete model has been written and
-saved. Use the client requirements before evaluation; use the generation
-sections only after evaluation reaches zero errors.
+Load this reference only after the first valid model stage has been written
+and saved. Use the client requirements before evaluation; use the generation
+sections only after the complete model's final global evaluation reaches zero
+errors.
 
 ## Required Clients
 

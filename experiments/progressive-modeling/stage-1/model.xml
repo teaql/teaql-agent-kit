@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root name="progressive-modeling-smoke-service"
+      cfg_mask_china_mobile="false"
+      data_service="sqlite"
+      org="example"
+      _module_key="root">
+  <business_organization _name="Business Organization"
+                         _module="Organization"
+                         _module_key="organization"
+                         organization_name="Example Operations Ltd"
+                         organization_code="ORG-001"
+                         create_time="createTime()"
+                         update_time="updateTime()" />
+  <service_work_order _name="Service Work Order"
+                      _module="Operations"
+                      _module_key="operations"
+                      organization="business_organization()"
+                      order_number="WO-2026-0001"
+                      order_summary="Inspect production equipment"
+                      create_time="createTime()"
+                      update_time="updateTime()" />
+</root>

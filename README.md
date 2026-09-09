@@ -11,6 +11,13 @@ evaluation service checks it and provides repair guidance. Generation turns
 the validated model into a typed API boundary, while model-aware assist teaches
 the agent the exact API available for the current domain.
 
+For large private domains or smaller local models, the Agent Kit also supports
+an experimental progressive modeling protocol: build a domain map, close one
+valid module at a time, resolve cross-module relations, then run a final global
+evaluation before generation. This keeps peak context bounded without lowering
+the final zero-error gate. See the
+[progressive modeling protocol](skills/build-teaql-app/references/progressive-modeling.md).
+
 The goal is not deterministic AI. It is deterministic structure around
 non-deterministic AI.
 
@@ -197,8 +204,9 @@ npx skills add teaql/teaql-agent-kit --skill build-teaql-app
 Then ask your coding agent:
 
 ```text
-Use $build-teaql-app to first draft and save a complete KSML model, then
-evaluate and repair it before generating a runnable TeaQL application: ...
+Use $build-teaql-app to save a valid KSML model stage, evaluate and repair each
+progressive checkpoint for a large domain, then generate a runnable TeaQL
+application only after the complete model passes global evaluation: ...
 ```
 
 This repository can publish multiple focused Skills. `build-teaql-app` is the

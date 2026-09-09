@@ -1,13 +1,14 @@
 ---
 name: build-teaql-app
-description: "Build or change a TeaQL application in Java, Rust, Go, Swift, Python, C#/.NET, or TypeScript, including Kotlin/JVM applications that consume Java-generated libraries. Mandatory order: first draft and save a complete KSML model, then verify the client and evaluate that saved model, repair it through repeated evaluation rounds, and generate only after evaluation reaches zero errors. Use for KSML modeling, seven-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
+description: "Build or change a TeaQL application in Java, Rust, Go, Swift, Python, C#/.NET, or TypeScript, including Kotlin/JVM applications that consume Java-generated libraries. Model small domains in one pass and large private domains through bounded progressive checkpoints; evaluate only valid saved stage targets and generate only after the final global model reaches zero errors. Use for KSML modeling, seven-language TeaQL generation, generated assist APIs, auditable business logic, application verification, or parallel human review."
 ---
 
 # Build TeaQL App
 
 Turn a business requirement into a KSML contract and a verified TeaQL
-application. Never run model evaluation before the first complete KSML model
-has been written and saved.
+application. Never evaluate an absent, empty, syntactically incomplete, or
+placeholder KSML target. A progressive stage may contain only part of the
+planned domain, but everything present in that stage must be a valid model.
 
 ## Core Operating Contract (`compact-v1`)
 
@@ -22,12 +23,15 @@ compilation, tests, runtime execution, and retained evidence.
 Do not reorder these stages:
 
 1. Understand the requirement and choose the model target.
-2. Draft and save the first complete KSML model.
-3. Only after the model exists, verify the TeaQL client.
-4. Evaluate the saved model.
-5. Repair from the report and re-evaluate repeatedly.
-6. At zero Errors, signal Model Ready and continue without waiting.
-7. Generate, implement, compile, test, run, and report.
+2. Choose one-pass modeling for a small domain or progressive modeling for a
+   large domain.
+3. Save either the complete small model or the first valid progressive stage.
+4. Only after that model exists, verify the TeaQL client.
+5. Evaluate and repair the saved target; for progressive modeling, expand it
+   through the ordered checkpoints below.
+6. Run a final global evaluation over the complete model.
+7. At zero Errors, signal Model Ready and continue without waiting.
+8. Generate, implement, compile, test, run, and report.
 
 ## Prepare the Model Target
 
@@ -53,8 +57,44 @@ organizational structure into a different business domain.
 <!-- BLOCK_ID: phase_modeling -->
 ## Model First
 
-Create and save a complete KSML model before running any TeaQL command. Do
-not evaluate an absent, empty, or placeholder model target.
+Create and save a valid KSML model before running any TeaQL command. Do not
+evaluate an absent, empty, syntactically incomplete, or placeholder target.
+
+For a small domain, create the complete model in one pass. For a large domain
+or a constrained private model, follow
+[`progressive-modeling.md`](references/progressive-modeling.md) and start from
+[`progressive-modeling-plan.md`](references/progressive-modeling-plan.md).
+Progressive modeling is an ordered construction protocol, not permission to
+generate from a partial model.
+
+Use these checkpoints:
+
+1. **Domain map** — record bounded outcomes, module names, primary actors,
+   candidate roots, and cross-module dependencies in the modeling ledger.
+2. **Valid foundation** — create the service root, domain root, and the minimum
+   connected objects needed to make a real, evaluable vertical slice.
+3. **Module closure** — complete one module at a time, including its constants,
+   fields, local relationships, and privacy metadata; evaluate and repair it.
+4. **Relation closure** — add cross-module relationships using the ledger's
+   dependency map; evaluate after each bounded relation batch.
+5. **Global governance** — check states, constants, naming, privacy, cycles,
+   disconnected objects, and root connectivity across the complete model.
+6. **Freeze** — run one final evaluation over the complete input directory,
+   record the model hash and counts, and only then generate.
+
+At each checkpoint:
+
+- Load only the current module, its one-hop dependencies, and unresolved
+  findings; do not reload the full business narrative or every completed file.
+- Finish every object introduced in the checkpoint. Do not leave placeholder
+  attributes, unresolved references, empty values, or TODO objects in KSML.
+- Preserve accepted files and make localized edits. Do not rewrite completed
+  modules merely to regain context.
+- Update the compact modeling ledger with completed modules, external
+  references, decisions, unresolved questions, evaluation counts, and the next
+  bounded task.
+- A stage with zero Errors means only that the stage is internally valid. It
+  does not mean the planned domain is complete or ready for generation.
 
 If the model is large (e.g., more than 15 objects), you MAY split it into
 multiple module files using `<_include file="module.xml" />`, but this is
@@ -175,7 +215,9 @@ repair rounds:
    Constant `color` values use the portable `#RRGGBB` form; named CSS colors
    such as `blue` or `green` do not satisfy `KSML-UI-012`.
 
-When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
+Only after the planned domain is complete and the final global evaluation
+passes with zero errors, output
+`<phase-complete>model_generation</phase-complete>`.
 
 ## Evaluate and Repair the Saved Model
 
@@ -184,8 +226,9 @@ Now—and only now—load
 client against the exact version required by the target repository or that
 reference. Stop and report a mismatch.
 
-Submit the complete model target to the repository's Generation Service
-evaluation command. For Rust, every model-derived operation must include:
+Submit the current valid stage target to the repository's Generation Service
+evaluation command. The last evaluation before generation must cover the
+complete model input. For Rust, every model-derived operation must include:
 
 ```bash
 cargo teaql --input <model-file-or-directory> evaluate
@@ -207,11 +250,11 @@ Do not generate from a model with errors.
 
 ### Repair Budget
 
-Run at most **5 evaluation–repair rounds** by default. If errors remain after
-5 rounds, stop and present the current evaluation report to the user with a
-summary of what was fixed and what still fails. Ask the user to provide
-additional guidance or model corrections before continuing. Do not loop
-indefinitely.
+Run at most **5 evaluation–repair rounds per checkpoint** by default. If errors
+remain after 5 rounds, stop and present the current evaluation report to the
+user with a summary of what was fixed and what still fails. Ask the user to
+provide additional guidance or model corrections before continuing. Do not
+loop indefinitely or evade the budget by silently creating a new checkpoint.
 
 On small-context models, keep the zero-error evaluation gate. Read the summary
 and only the reported error locations needed for the current repair round; do

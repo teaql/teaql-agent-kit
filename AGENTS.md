@@ -14,9 +14,11 @@ retained evidence.
 
 ## Hard Requirements
 
-1. Work model-first: save complete KSML, evaluate it with the Generation
-   Service, and fix all Errors before generation. Never run evaluation before
-   the first complete model target exists.
+1. Work model-first. Small domains may be modeled in one pass. Large domains
+   use progressive modeling: save a valid stage target, evaluate it, and grow
+   the model through bounded module checkpoints. Never evaluate an empty or
+   placeholder target, and never generate until the final global model reaches
+   zero Errors.
 2. TeaQL application generation supports exactly these seven language families:
    Java, Rust, Go, Swift, Python, C#/.NET, and TypeScript. Kotlin/JVM
    applications are
@@ -59,6 +61,10 @@ retained evidence.
     field declared by that constant object, even when a field is nullable.
     Do not repeat `_...` metadata, version, `createTime()`/`updateTime()` fields,
     or the domain-root relationship injected by runtime Fix/Context.
+15. For progressive modeling, keep a compact modeling ledger outside KSML.
+    Load only the current module, its one-hop dependencies, and unresolved
+    findings. Preserve accepted model sections and re-run a global evaluation
+    before generation.
 
 The complete pre-simplification repository is recoverable from Git Tag
 `archive/pre-simplification-20260730`.
