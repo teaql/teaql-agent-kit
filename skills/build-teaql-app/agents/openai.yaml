@@ -1,6 +1,6 @@
 interface:
   display_name: "Build TeaQL App"
   short_description: "Build a verified TeaQL app in any supported language"
-  default_prompt: "Use $build-teaql-app to select Java, Rust, Go, Swift, Python, C#/.NET, or TypeScript—or Java output for a Kotlin/JVM app; first draft and save a complete KSML model, then evaluate and repair it before generating and testing a runnable TeaQL application. Use generated AGENTS.md and progressive model-aware assist for API discovery; do not inspect generated domain-library source. After the first compile, repair application code with localized patches instead of whole-file rewrites."
+  default_prompt: "Build the requested business outcome through Vibe Coding. Understand the project from the workspace and generated AGENTS.md. Use model-aware Assist only for the next application edit. Treat generated domain-library source as opaque. Verify through evaluation, compilation, tests, runtime execution, and retained evidence."
 policy:
   allow_implicit_invocation: true

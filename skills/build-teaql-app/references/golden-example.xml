@@ -30,8 +30,8 @@
                       name="string()"
                       code="string()"
                       color="string()"
-                      display_order="number()"
-                      progress="number()"
+                      display_order="integer()"
+                      progress="integer()"
                       _constant="true"
                       _identifier="code">
     <_value id="1001" name="Pending" code="PENDING"

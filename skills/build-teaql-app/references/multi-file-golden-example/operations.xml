@@ -6,7 +6,7 @@
                      id="id()"
                      name="string()"
                      code="string()"
-                     display_order="number()"
+                     display_order="integer()"
                      _constant="true"
                      _identifier="code">
     <_value id="1001" name="Open" code="OPEN" display_order="1" />

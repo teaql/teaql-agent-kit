@@ -4,6 +4,14 @@ This repository publishes the `build-teaql-app` Agent Skill. For TeaQL
 modeling, generation, or application work, read and follow
 `skills/build-teaql-app/SKILL.md`.
 
+## Core Operating Contract (`compact-v1`)
+
+Build the requested business outcome through Vibe Coding. Understand the
+project from the workspace and generated `AGENTS.md`. Use model-aware Assist
+only for the next application edit. Treat generated domain-library source as
+opaque. Verify through evaluation, compilation, tests, runtime execution, and
+retained evidence.
+
 ## Hard Requirements
 
 1. Work model-first: save complete KSML, evaluate it with the Generation
@@ -25,12 +33,16 @@ modeling, generation, or application work, read and follow
 5. Every Rust model-derived command, including assist, uses
    `cargo teaql --input <model> <command> ...`.
 6. Rust generation uses only `rust-lib-core` and `rust-app-console`.
-7. Never edit generated domain-library files.
+7. Treat generated domain-library source as an opaque build artifact. Never
+   read, grep, search, review, summarize, or edit it for API discovery,
+   verification, debugging, or confidence gathering. Verify behavior through
+   evaluation, compiler diagnostics, tests, runtime output, and artifact hashes.
 8. Read the generated application/workspace `AGENTS.md` and current
    object-specific assist before business code. Never guess generated methods.
-   Do not inspect generated domain-library source for API discovery. If
-   progressive Assist lacks the required operation, report `MISSING_ASSIST`
-   instead of searching the generated library.
+   Request Assist only immediately before application work that uses that
+   action or field; never prefetch unused Assist. If progressive Assist lacks
+   the required operation, report `MISSING_ASSIST` instead of searching the
+   generated library.
 9. Create each application-owned source file once. After its first compile
    attempt, repair it with the smallest localized patch; do not rewrite the
    whole file. If a repair would replace more than 25% of an existing file,

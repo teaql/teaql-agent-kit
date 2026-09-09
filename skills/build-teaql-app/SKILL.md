@@ -9,6 +9,14 @@ Turn a business requirement into a KSML contract and a verified TeaQL
 application. Never run model evaluation before the first complete KSML model
 has been written and saved.
 
+## Core Operating Contract (`compact-v1`)
+
+Build the requested business outcome through Vibe Coding. Understand the
+project from application-owned workspace documentation and generated
+`AGENTS.md`. Use model-aware Assist only for the next application edit. Treat
+generated domain-library source as opaque. Verify through evaluation,
+compilation, tests, runtime execution, and retained evidence.
+
 ## Mandatory Workflow Order
 
 Do not reorder these stages:
@@ -93,6 +101,10 @@ Apply this minimal contract:
 - Put objects directly below `<root>` or within the included module files.
 - Give every object `_name`, `_module`, and `_module_key`.
 - Use representative literals for ordinary fields so TeaQL can infer types.
+- Choose types by domain meaning: use `integer()` or `long()` for ordinal,
+  count, and whole-percentage fields such as `display_order` and `progress`
+  (`0`-`100`); reserve `number()` for values that need decimal semantics, such
+  as precise ratios or amounts.
 - Express a relationship as `target_object()`.
 - Do not declare `id` on business objects.
 - Represent reusable finite states as constant objects; only constant objects
@@ -151,14 +163,17 @@ repair rounds:
 
    ```xml
    <school_type platform="platform()" id="id()" name="string()"
-                code="string()" display_order="number()" color="string()?"
+                code="string()" display_order="integer()" color="string()?"
                 _constant="true" _identifier="code">
      <_value id="1001" name="Primary" code="PRIMARY"
-             display_order="1" color="blue"/>
+             display_order="1" color="#2563EB"/>
      <_value id="1002" name="Secondary" code="SECONDARY"
-             display_order="2" color="green"/>
+             display_order="2" color="#16A34A"/>
    </school_type>
    ```
+
+   Constant `color` values use the portable `#RRGGBB` form; named CSS colors
+   such as `blue` or `green` do not satisfy `KSML-UI-012`.
 
 When you finish the model generation phase and evaluation passes with zero errors, output `<phase-complete>model_generation</phase-complete>`.
 
@@ -254,11 +269,9 @@ the two styles within one generation run.
 When generation commands complete successfully with `success=true`, output `<phase-complete>codegen</phase-complete>`.
 <!-- /BLOCK_ID: phase_codegen -->
 
-- Never edit generated domain-library files.
-- Find and read the generated local `AGENTS.md` before business code. If an
-  expected generated application guide is missing, stop and report it.
-- Read current model-aware help and object-specific assist for each
-  entity/action. Never guess generated methods.
+- Follow the `compact-v1` contract above. If the generated application
+  `AGENTS.md` is missing, stop and report it. Never prefetch Assist or guess a
+  generated method.
 - For queries, first request `<language>-assist-query/<entity>` using the exact
   KSML entity name. This returns the executable base query and a compact field
   index. Before using a field-specific select, filter, order, group, facet, or
@@ -268,15 +281,16 @@ When generation commands complete successfully with `success=true`, output `<pha
   language member name in the Assist location, and do not request nested paths
   such as `order.customer.name`. Query Assist is intentionally progressive so
   the agent does not load every combinatorial field API into context.
-- Do not inspect, search, grep, or recursively read generated domain-library
-  source to discover APIs. If current entity/action and required field Assist
-  do not expose the needed operation, stop that path and report
+- If current entity/action and required field Assist do not expose the needed
+  operation, stop that path and report
   `MISSING_ASSIST` with the language, entity, action, missing operation, and
   exact compiler diagnostic when available.
 - Generated-source fallback is never self-authorized. Only after the user or
   orchestrator explicitly authorizes it, read the bounded request format in
   [references/source-fallback.md](references/source-fallback.md).
-- Keep editable business logic in the generated application workspace.
+- Keep editable business logic in the generated application workspace. Read
+  `TOOL_API_GUIDE.md` or `RUNTIME_CUSTOM_GUIDE.md` only when the next edit
+  directly needs that integration; guides are not verification evidence.
 - Create an application-owned file once. After its first compile attempt,
   follow the patch-only repair loop in
   [references/incremental-editing.md](references/incremental-editing.md).
@@ -295,6 +309,11 @@ Enforce the API constraint harness:
 
 Compile, test, and smoke-test the requested result. Repair model-derived
 problems at the model level and regenerate.
+
+For a verification-only task in which no business code will be written, use
+only evaluation summaries, build/test output, runtime output, and artifact
+hashes. Generated source, unused Assist, and implementation guides are outside
+the verification scope.
 
 ### Runtime source selection
 

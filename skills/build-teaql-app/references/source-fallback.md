@@ -1,8 +1,10 @@
 # Controlled Generated-Source Fallback
 
 Use this exception only after normal progressive Assist reported
-`MISSING_ASSIST` and the user or orchestrator explicitly authorized generated
-source inspection. An agent cannot authorize its own fallback.
+`MISSING_ASSIST`, a compiler diagnostic identifies a generated-code problem,
+and the user or orchestrator explicitly authorized generated source inspection.
+Verification or confidence gathering is never sufficient reason. An agent
+cannot authorize its own fallback.
 
 Request authorization with:
 

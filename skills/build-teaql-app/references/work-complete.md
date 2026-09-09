@@ -13,6 +13,8 @@ TeaQL Agent Kit — Work Complete
 
 Outcome: <what now works>
 Model: <model file or directory>
+Prompt profile: compact-v1
+Model/runtime identity: <model name, quantization when applicable, context limit>
 Outputs: <generated or runnable output paths>
 Verification: <evaluation, compile, test, and runtime results>
 
