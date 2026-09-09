@@ -7,6 +7,10 @@ checkpoints without permitting generation from an incomplete planned domain.
 It intentionally uses a tiny fixture; the next experiment should compare the
 same large private domain with one-pass and progressive modeling.
 
+Hosted-model evidence:
+
+- [AMD Qwen3.8 Flash Next P0 probe](amd-qwen3.8-flash-next.md)
+
 ## Reproduce
 
 Use `cargo-teaql 2.0.14` and the current TeaQL evaluation service:
