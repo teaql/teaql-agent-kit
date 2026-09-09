@@ -1,0 +1,78 @@
+{
+  "id": "54b5f9bda87f4a1ba3833a577d0134b5",
+  "object": "chat.completion",
+  "created": 1788980887,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[ambiguities]\nC001,\"The term 'moving_company' conflates the business entity (organization/customer) with the operational domain/system itself, which are distinct persisted objects with different lifecycles.\"\nC017,\"The term 'product' conflates physical goods (e.g., boxes, consumables) with intangible service offerings, which have distinct identities and pricing models.\"\nC018,\"The term 'service' conflates the catalog definition of a service (product type) with the specific instance of service delivery or fulfillment event.\"\nC020,\"The term 'pricing' conflates the static price list/catalog entry with the dynamic transactional cost or invoice line item.\"\nC028,\"The term 'vat' conflates the tax rate configuration/rule with the specific tax amount applied to a transaction or invoice.\"\nC033,\"The term 'maintenance' conflates the maintenance schedule/plan (configuration) with the specific maintenance event/log (history).\"\nC036,\"The term 'document' conflates the document template/type definition with the specific generated or uploaded document instance.\"\nC043,\"The term 'activity_audit' conflates the general system activity log with the specific compliance/audit trail required for regulatory purposes, which may have different retention policies and owners.\"",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 946,
+    "total_tokens": 1221,
+    "completion_tokens": 275,
+    "prompt_tokens_details": {
+      "cached_tokens": 256,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.00024042999999999997,
+    "cost_details": {
+      "upstream_inference_cost": 0.00024042999999999997,
+      "upstream_inference_prompt_cost": 0.00011117999999999999,
+      "upstream_inference_completions_cost": 0.00012925,
+      "total_cost": 0.00024042999999999997,
+      "input_cost": 0.0001035,
+      "output_cost": 0.00012925,
+      "cached_input_cost": 7.68e-06,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 1.2210000000000002e-05
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "nToLnlLAjGazkgCsZJGeUpZxlZoE7fFpyvU7xBJZ",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "Y4778PusAcWefTiADeQD"
+      }
+    ],
+    "log_id": "Y4778PusAcWefTiADeQD",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}

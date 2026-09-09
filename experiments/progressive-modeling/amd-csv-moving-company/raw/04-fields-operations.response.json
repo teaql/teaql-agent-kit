@@ -1,0 +1,78 @@
+{
+  "id": "063ac83bb5dc4d4398c5ed3533842745",
+  "object": "chat.completion",
+  "created": 1788981026,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[fields]\nconcept_id,field_name,semantic_type,required,target_concept_id\nC001,company_name,string,true,\nC001,operating_region,string,true,\nC001,contact_phone,string,true,\nC001,insurance_provider,string,false,\nC002,move_date,date,true,\nC002,origin_address_id,reference,true,C006\nC002,destination_address_id,reference,true,C006\nC002,customer_id,reference,true,C013\nC002,status,string,true,\nC002,estimated_duration_hours,decimal,false,\nC003,route_name,string,true,\nC003,distance_km,decimal,true,\nC003,estimated_time_minutes,integer,true,\nC003,toll_cost,decimal,false,\nC004,start_time,timestamp,true,\nC004,end_time,timestamp,true,\nC004,availability_status,string,true,\nC004,capacity_limit,integer,true,\nC005,event_type,string,true,\nC005,occurred_at,timestamp,true,\nC005,move_id,reference,true,C002\nC005,staff_id,reference,false,C007\nC005,notes,text,false,\nC006,street_address,string,true,\nC006,city,string,true,\nC006,postal_code,string,true,\nC006,country_code,string,true,\nC006,access_notes,text,false,\nC020,fulfillment_status,string,true,\nC020,move_id,reference,true,C002\nC020,service_catalog_item_id,reference,true,C019\nC020,completed_at,timestamp,false,\nC020,quality_rating,integer,false,\n[missing_concepts]\nowner_concept_id,term,reason",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 832,
+    "total_tokens": 1271,
+    "completion_tokens": 439,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.00032345,
+    "cost_details": {
+      "upstream_inference_cost": 0.00032345,
+      "upstream_inference_prompt_cost": 0.00011711999999999999,
+      "upstream_inference_completions_cost": 0.00020632999999999998,
+      "total_cost": 0.00032345,
+      "input_cost": 0.0001152,
+      "output_cost": 0.00020632999999999998,
+      "cached_input_cost": 1.92e-06,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 1.271e-05
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "tuun4Aeo6ptBaFi7y0oFDcKJaz6kLx901v6P17cJ",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "BWOOHOmTwy7OqyamGuX5"
+      }
+    ],
+    "log_id": "BWOOHOmTwy7OqyamGuX5",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}

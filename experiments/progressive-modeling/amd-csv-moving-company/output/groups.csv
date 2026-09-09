@@ -1,0 +1,15 @@
+group_key,name
+operations,Operations and Logistics
+employees,Employees and Payroll
+customers,Customer Management
+products,Products and Services
+marketing,Marketing and Sales
+finance,Finance and Accounting
+assets,Asset Management
+administration,Administration and Compliance
+user_role,User and Role Management
+authentication,Authentication and Permissions
+audit,Activity Logging and Audit
+versioning,Versioning and Soft Deletes
+notifications,Notifications and Automation
+integrations,API and Integrations

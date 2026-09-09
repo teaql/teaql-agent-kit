@@ -1,0 +1,78 @@
+{
+  "id": "1d1bf3fdc9cc444a9c1e9b2323794ae7",
+  "object": "chat.completion",
+  "created": 1788980859,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[concepts]\nterm,group_key,kind,ambiguous,source_term\ncompliance_record,audit,entity,false,audit logs\nsystem_event,audit,entity,false,activity audit",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 445,
+    "total_tokens": 485,
+    "completion_tokens": 40,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 7.787e-05,
+    "cost_details": {
+      "upstream_inference_cost": 7.787e-05,
+      "upstream_inference_prompt_cost": 5.907e-05,
+      "upstream_inference_completions_cost": 1.88e-05,
+      "total_cost": 7.787e-05,
+      "input_cost": 5.715e-05,
+      "output_cost": 1.88e-05,
+      "cached_input_cost": 1.92e-06,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 4.85e-06
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "Ex33SUJu8Uezng6uI0EHa5UbUp9iMIAu53j1Jj6b",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "M8ddhl8Q7W1iMpk35KGL"
+      }
+    ],
+    "log_id": "M8ddhl8Q7W1iMpk35KGL",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}

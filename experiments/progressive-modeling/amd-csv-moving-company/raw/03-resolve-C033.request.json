@@ -1,0 +1,19 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 650,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a bounded worker in a deterministic modeling harness.\nReturn only the requested sectioned RFC 4180 CSV. Do not return Markdown,\nJSON, prose, code fences, KSML, database design, APIs, or implementation.\nUse lowercase snake_case identifiers. Quote a CSV cell when required."
+    },
+    {
+      "role": "user",
+      "content": "Resolve exactly one ambiguity.\n\nActive concept: C033=maintenance@assets\nReason: The term 'maintenance' conflates the maintenance schedule/plan (configuration) with the specific maintenance event/log (history).\nGlobal concept index: C001=moving_company@operations; C002=move@operations; C003=route@operations; C004=time_slot@operations; C005=fulfillment_event@operations; C006=address@operations; C007=staff_registry@employees; C008=job_assignment@employees; C009=worked_hours@employees; C010=payroll_calculation@employees; C011=bonus@employees; C012=leave@employees; C013=customer@customers; C014=contact@customers; C015=billing_information@customers; C016=billing_history@customers; C017=product@products; C018=service@products; C019=configuration@products; C020=pricing@products; C021=campaign@marketing; C022=discount_code@marketing; C023=lead@marketing; C024=conversion_metric@marketing; C025=payment@finance; C026=invoice@finance; C027=expense@finance; C028=vat@finance; C029=summary@finance; C030=vehicle@assets; C031=equipment@assets; C032=consumable@assets; C033=maintenance@assets; C034=contract@administration; C035=insurance@administration; C036=document@administration; C037=audit_log@administration; C038=user@user_role; C039=role@user_role; C040=permission@user_role; C041=authentication@authentication; C042=rbac@authentication; C043=activity_audit@audit; C044=version@versioning; C045=soft_delete@versioning; C046=notification@notifications; C047=automation_hook@notifications; C048=api_integration@integrations; C049=access_control@authentication; C050=compliance_record@audit; C051=system_event@audit; C052=retention_policy@versioning; C053=notification_template@notifications; C054=webhook_endpoint@integrations; C055=api_key@integrations\nAllowed groups: operations; employees; customers; products; marketing; finance; assets; administration; user_role; authentication; audit; versioning; notifications; integrations\n\nChoose keep, rename, or split. A split has exactly two rows. Split only when\nthe source requirement explicitly supports distinct persisted identities,\nlifecycles, or owners. Keep when the distinction is only a view, role, state,\nimplementation detail, speculative refinement, or is already represented by\nanother concept in the global index. A keep row must retain the exact current\nterm and group. A rename or split must not use any existing global term.\n\nReturn exactly:\n[resolutions]\nsource_concept_id,operation,term,group_key"
+    }
+  ]
+}

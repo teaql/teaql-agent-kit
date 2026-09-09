@@ -1,0 +1,19 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 2600,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a bounded worker in a deterministic modeling harness.\nReturn only the requested sectioned RFC 4180 CSV. Do not return Markdown,\nJSON, prose, code fences, KSML, database design, APIs, or implementation.\nUse lowercase snake_case identifiers. Quote a CSV cell when required."
+    },
+    {
+      "role": "user",
+      "content": "Complete only this bounded concept packet.\n\nGroup: finance\nLocal concepts: C023=invoice_line_item; C028=payment; C029=invoice; C030=expense; C031=vat_rate_configuration; C032=vat_amount; C033=summary\nAllowed reference targets (ID=term): C001=moving_company; C002=move; C003=route; C004=time_slot; C005=fulfillment_event; C006=address; C007=staff_registry; C008=job_assignment; C009=worked_hours; C010=payroll_calculation; C011=bonus; C012=leave; C013=customer; C014=contact; C015=billing_information; C016=billing_history; C017=physical_product; C018=service_product; C019=service_catalog_item; C020=service_fulfillment; C021=configuration; C022=price_list; C023=invoice_line_item; C024=campaign; C025=discount_code; C026=lead; C027=conversion_metric; C028=payment; C029=invoice; C030=expense; C031=vat_rate_configuration; C032=vat_amount; C033=summary; C034=vehicle; C035=equipment; C036=consumable; C037=maintenance_schedule; C038=maintenance_log; C039=contract; C040=insurance; C041=document_template; C042=document_instance; C043=audit_log; C044=user; C045=role; C046=permission; C047=authentication; C048=rbac; C049=activity_audit; C050=version; C051=soft_delete; C052=notification; C053=automation_hook; C054=api_integration; C055=access_control; C056=compliance_record; C057=system_event; C058=retention_policy; C059=notification_template; C060=webhook_endpoint; C061=api_key\n\nFor every local concept return 4 to 8 business fields. A domain_root may have\n3 to 6 fields. Do not emit id, version, create_time, update_time, or the\nmoving_company ownership field; the deterministic assembler supplies them.\nUse only these semantic types: string, text, integer, decimal, boolean, date,\ntimestamp, reference. A reference must have one allowed target ID. A scalar\nmust have an empty target_concept_id. Do not invent concepts. If a necessary\ntarget is unavailable, report it under missing_concepts.\nAn identifier for a polymorphic or unspecified entity is a string, not a\nreference. Return the exact headers even when a section has no data rows. Every\nnon-root concept must have at least 4 field rows.\n\nReturn exactly:\n[fields]\nconcept_id,field_name,semantic_type,required,target_concept_id\n[missing_concepts]\nowner_concept_id,term,reason"
+    }
+  ]
+}

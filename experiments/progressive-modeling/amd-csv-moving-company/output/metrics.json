@@ -1,0 +1,392 @@
+[
+  {
+    "name": "01-concept-discovery",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 447,
+      "completion_tokens": 493,
+      "total_tokens": 940,
+      "cost": 0.00025267999999999997
+    },
+    "content_characters": 2200,
+    "reused": true
+  },
+  {
+    "name": "01-repair-audit",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 445,
+      "completion_tokens": 40,
+      "total_tokens": 485,
+      "cost": 7.787e-05
+    },
+    "content_characters": 147,
+    "reused": true
+  },
+  {
+    "name": "01-repair-authentication",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 443,
+      "completion_tokens": 15,
+      "total_tokens": 458,
+      "cost": 5.814e-05
+    },
+    "content_characters": 68,
+    "reused": true
+  },
+  {
+    "name": "01-repair-integrations",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 458,
+      "completion_tokens": 26,
+      "total_tokens": 484,
+      "cost": 7.324e-05
+    },
+    "content_characters": 89,
+    "reused": true
+  },
+  {
+    "name": "01-repair-notifications",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 455,
+      "completion_tokens": 15,
+      "total_tokens": 470,
+      "cost": 6.761999999999999e-05
+    },
+    "content_characters": 71,
+    "reused": true
+  },
+  {
+    "name": "01-repair-versioning",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 455,
+      "completion_tokens": 16,
+      "total_tokens": 471,
+      "cost": 6.809e-05
+    },
+    "content_characters": 53,
+    "reused": true
+  },
+  {
+    "name": "02-ambiguity-scan",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 946,
+      "completion_tokens": 275,
+      "total_tokens": 1221,
+      "cost": 0.00024042999999999997
+    },
+    "content_characters": 1264,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C001",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 820,
+      "completion_tokens": 28,
+      "total_tokens": 848,
+      "cost": 0.00012848
+    },
+    "content_characters": 90,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C017",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 818,
+      "completion_tokens": 28,
+      "total_tokens": 846,
+      "cost": 0.00012818
+    },
+    "content_characters": 86,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C018",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 31,
+      "total_tokens": 845,
+      "cost": 0.00012899
+    },
+    "content_characters": 96,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C020",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 810,
+      "completion_tokens": 29,
+      "total_tokens": 839,
+      "cost": 0.00012745
+    },
+    "content_characters": 81,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C028",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 811,
+      "completion_tokens": 29,
+      "total_tokens": 840,
+      "cost": 0.0001276
+    },
+    "content_characters": 85,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C033",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 810,
+      "completion_tokens": 28,
+      "total_tokens": 838,
+      "cost": 0.00012698
+    },
+    "content_characters": 86,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C036",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 806,
+      "completion_tokens": 28,
+      "total_tokens": 834,
+      "cost": 0.00012638
+    },
+    "content_characters": 101,
+    "reused": true
+  },
+  {
+    "name": "03-resolve-C043",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 821,
+      "completion_tokens": 29,
+      "total_tokens": 850,
+      "cost": 0.0001291
+    },
+    "content_characters": 78,
+    "reused": true
+  },
+  {
+    "name": "04-fields-administration",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 812,
+      "completion_tokens": 365,
+      "total_tokens": 1177,
+      "cost": 0.00028566999999999997
+    },
+    "content_characters": 1041,
+    "reused": true
+  },
+  {
+    "name": "04-fields-assets",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 347,
+      "total_tokens": 1161,
+      "cost": 0.00027750999999999996
+    },
+    "content_characters": 950,
+    "reused": true
+  },
+  {
+    "name": "04-fields-audit",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 800,
+      "completion_tokens": 265,
+      "total_tokens": 1065,
+      "cost": 0.00023686999999999997
+    },
+    "content_characters": 764,
+    "reused": true
+  },
+  {
+    "name": "04-fields-authentication",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 799,
+      "completion_tokens": 229,
+      "total_tokens": 1028,
+      "cost": 0.00021979999999999998
+    },
+    "content_characters": 643,
+    "reused": true
+  },
+  {
+    "name": "04-fields-customers",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 806,
+      "completion_tokens": 297,
+      "total_tokens": 1103,
+      "cost": 0.00025280999999999996
+    },
+    "content_characters": 851,
+    "reused": true
+  },
+  {
+    "name": "04-fields-employees",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 824,
+      "completion_tokens": 425,
+      "total_tokens": 1249,
+      "cost": 0.00031567
+    },
+    "content_characters": 1147,
+    "reused": true
+  },
+  {
+    "name": "04-fields-finance",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 830,
+      "completion_tokens": 523,
+      "total_tokens": 1353,
+      "cost": 0.00036262999999999996
+    },
+    "content_characters": 1448,
+    "reused": true
+  },
+  {
+    "name": "04-fields-integrations",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 802,
+      "completion_tokens": 239,
+      "total_tokens": 1041,
+      "cost": 0.00022495
+    },
+    "content_characters": 670,
+    "reused": true
+  },
+  {
+    "name": "04-fields-marketing",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 806,
+      "completion_tokens": 310,
+      "total_tokens": 1116,
+      "cost": 0.00025892
+    },
+    "content_characters": 852,
+    "reused": true
+  },
+  {
+    "name": "04-fields-notifications",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 799,
+      "completion_tokens": 277,
+      "total_tokens": 1076,
+      "cost": 0.00024235999999999998
+    },
+    "content_characters": 779,
+    "reused": true
+  },
+  {
+    "name": "04-fields-operations",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 832,
+      "completion_tokens": 439,
+      "total_tokens": 1271,
+      "cost": 0.00032345
+    },
+    "content_characters": 1234,
+    "reused": true
+  },
+  {
+    "name": "04-fields-products",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 294,
+      "total_tokens": 1110,
+      "cost": 0.00025289999999999997
+    },
+    "content_characters": 825,
+    "reused": true
+  },
+  {
+    "name": "04-fields-user_role",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 797,
+      "completion_tokens": 196,
+      "total_tokens": 993,
+      "cost": 0.00020399
+    },
+    "content_characters": 582,
+    "reused": true
+  },
+  {
+    "name": "04-fields-versioning",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 801,
+      "completion_tokens": 243,
+      "total_tokens": 1044,
+      "cost": 0.00022668
+    },
+    "content_characters": 697,
+    "reused": true
+  },
+  {
+    "name": "05-fields-repair-assets",
+    "elapsed_seconds": null,
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 343,
+      "total_tokens": 1157,
+      "cost": 0.00019114999999999998
+    },
+    "content_characters": 936,
+    "reused": true
+  }
+]

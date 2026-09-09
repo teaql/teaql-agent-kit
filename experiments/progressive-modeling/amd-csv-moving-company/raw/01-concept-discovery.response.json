@@ -1,0 +1,78 @@
+{
+  "id": "c4da3e61676c4c3faa1fd81eb0c2733f",
+  "object": "chat.completion",
+  "created": 1788980855,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[concepts]\nterm,group_key,kind,ambiguous,source_term\nmoving_company,operations,domain_root,false,moving company\nmove,operations,entity,false,move\nroute,operations,entity,false,route\ntime_slot,operations,entity,false,time slot\nfulfillment_event,operations,entity,false,fulfillment event\naddress,operations,entity,false,address\nstaff_registry,employees,entity,false,staff registry\njob_assignment,employees,entity,false,job assignment\nworked_hours,employees,entity,false,worked hours\npayroll_calculation,employees,entity,false,payroll calculation\nbonus,employees,entity,false,bonus\nleave,employees,entity,false,leave\ncustomer,customers,entity,false,customer\ncontact,customers,entity,false,contact\nbilling_information,customers,entity,false,billing information\nbilling_history,customers,entity,false,billing history\nproduct,products,entity,false,product\nservice,products,entity,false,service\nconfiguration,products,entity,false,configuration\npricing,products,entity,false,pricing\ncampaign,marketing,entity,false,campaign\ndiscount_code,marketing,entity,false,discount code\nlead,marketing,entity,false,lead\nconversion_metric,marketing,entity,false,conversion metric\npayment,finance,entity,false,payment\ninvoice,finance,entity,false,invoice\nexpense,finance,entity,false,expense\nvat,finance,entity,false,VAT\nsummary,finance,entity,false,summary\nvehicle,assets,entity,false,vehicle\nequipment,assets,entity,false,equipment\nconsumable,assets,entity,false,consumable\nmaintenance,assets,entity,false,maintenance\ncontract,administration,entity,false,contract\ninsurance,administration,entity,false,insurance\ndocument,administration,entity,false,document\naudit_log,administration,entity,false,audit log\nuser,user_role,entity,false,user\nrole,user_role,entity,false,role\npermission,user_role,entity,false,permission\nauthentication,authentication,entity,false,authentication\nrbac,authentication,entity,false,RBAC\nactivity_audit,audit,entity,false,activity audit\nversion,versioning,entity,false,version\nsoft_delete,versioning,entity,false,soft delete\nnotification,notifications,entity,false,notification\nautomation_hook,notifications,entity,false,automation hook\napi_integration,integrations,entity,false,API integration",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 447,
+    "total_tokens": 940,
+    "completion_tokens": 493,
+    "prompt_tokens_details": {
+      "cached_tokens": 384,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.00025267999999999997,
+    "cost_details": {
+      "upstream_inference_cost": 0.00025267999999999997,
+      "upstream_inference_prompt_cost": 2.0969999999999997e-05,
+      "upstream_inference_completions_cost": 0.00023171,
+      "total_cost": 0.00025267999999999997,
+      "input_cost": 9.45e-06,
+      "output_cost": 0.00023171,
+      "cached_input_cost": 1.152e-05,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 9.4e-06
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "xgcGB51gxWcxqGdYmQ4B8hwcqsPcLajqun8lWgQZ",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "t5pZnm02Jyq8wG9gMZQJ"
+      }
+    ],
+    "log_id": "t5pZnm02Jyq8wG9gMZQJ",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}

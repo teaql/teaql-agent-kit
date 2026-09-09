@@ -1,0 +1,78 @@
+{
+  "id": "1896e7e7805642c686a63971dbaad63c",
+  "object": "chat.completion",
+  "created": 1788981039,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[fields]\nconcept_id,field_name,semantic_type,required,target_concept_id\nC023,line_number,integer,true,\nC023,description,text,true,\nC023,quantity,decimal,true,\nC023,unit_price,decimal,true,\nC023,line_total,decimal,true,\nC023,taxable_amount,decimal,true,\nC023,product_reference,string,false,\nC028,payment_date,date,true,\nC028,amount,decimal,true,\nC028,payment_method,string,true,\nC028,transaction_reference,string,false,\nC028,status,string,true,\nC028,invoice_id,reference,true,C029\nC029,invoice_number,string,true,\nC029,issue_date,date,true,\nC029,due_date,date,true,\nC029,total_amount,decimal,true,\nC029,status,string,true,\nC029,customer_id,reference,true,C013\nC029,billing_information_id,reference,false,C015\nC030,expense_date,date,true,\nC030,category,string,true,\nC030,amount,decimal,true,\nC030,vendor_name,string,false,\nC030,receipt_reference,string,false,\nC030,is_reimbursable,boolean,true,\nC031,rate_name,string,true,\nC031,rate_value,decimal,true,\nC031,effective_start_date,date,true,\nC031,effective_end_date,date,false,\nC031,is_active,boolean,true,\nC031,jurisdiction,string,true,\nC032,base_amount,decimal,true,\nC032,vat_rate_id,reference,true,C031\nC032,vat_value,decimal,true,\nC032,calculation_method,string,true,\nC033,period_start,date,true,\nC033,period_end,date,true,\nC033,total_revenue,decimal,true,\nC033,total_expenses,decimal,true,\nC033,net_profit,decimal,true,\nC033,report_type,string,true,\n[missing_concepts]\nowner_concept_id,term,reason",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 830,
+    "total_tokens": 1353,
+    "completion_tokens": 523,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.00036262999999999996,
+    "cost_details": {
+      "upstream_inference_cost": 0.00036262999999999996,
+      "upstream_inference_prompt_cost": 0.00011682,
+      "upstream_inference_completions_cost": 0.00024580999999999995,
+      "total_cost": 0.00036262999999999996,
+      "input_cost": 0.0001149,
+      "output_cost": 0.00024580999999999995,
+      "cached_input_cost": 1.92e-06,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 1.3530000000000001e-05
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "InfedYQI3JZhEhMTvRVZb4bHBNXpU4gtsUHRonjD",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "g7MoA4Y15tNy2KpM9Ds6"
+      }
+    ],
+    "log_id": "g7MoA4Y15tNy2KpM9Ds6",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}

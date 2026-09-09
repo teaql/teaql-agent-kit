@@ -1,0 +1,78 @@
+{
+  "id": "e33244bf2ac14f1aae5feff7592db82e",
+  "object": "chat.completion",
+  "created": 1788981053,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[fields]\nconcept_id,field_name,semantic_type,required,target_concept_id\nC049,actor_id,string,true,\nC049,action_type,string,true,\nC049,target_entity_type,string,true,\nC049,target_entity_id,string,true,\nC049,change_summary,text,false,\nC049,ip_address,string,false,\nC049,user_agent,string,false,\nC049,session_id,string,false,\nC056,record_type,string,true,\nC056,regulation_code,string,true,\nC056,status,string,true,\nC056,valid_from,date,true,\nC056,valid_until,date,false,\nC056,document_instance_id,reference,false,C042\nC056,notes,text,false,\nC057,event_type,string,true,\nC057,severity,string,true,\nC057,source_system,string,true,\nC057,payload,text,false,\nC057,correlation_id,string,false,\nC057,is_processed,boolean,true,\n[missing_concepts]\nowner_concept_id,term,reason",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 800,
+    "total_tokens": 1065,
+    "completion_tokens": 265,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.00023686999999999997,
+    "cost_details": {
+      "upstream_inference_cost": 0.00023686999999999997,
+      "upstream_inference_prompt_cost": 0.00011232,
+      "upstream_inference_completions_cost": 0.00012455,
+      "total_cost": 0.00023686999999999997,
+      "input_cost": 0.0001104,
+      "output_cost": 0.00012455,
+      "cached_input_cost": 1.92e-06,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 1.065e-05
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "3FGkYB3VdopBsShyycJUKUYfb7InPoq7cAJ7dP7Z",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "E3U3LuMeYT8E87kd9pOk"
+      }
+    ],
+    "log_id": "E3U3LuMeYT8E87kd9pOk",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}

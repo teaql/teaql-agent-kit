@@ -1,0 +1,17 @@
+{
+  "concept_count": 61,
+  "field_count": 344,
+  "ambiguous_concepts": [],
+  "missing_concepts": [],
+  "field_validation_errors": [],
+  "csv_contract_findings": [
+    "concepts: required CSV header was omitted",
+    "ambiguities: required CSV header was omitted",
+    "resolutions: required CSV header was omitted"
+  ],
+  "resolution_findings": [
+    "C001: rejected split of domain root; retained moving_company",
+    "C043: rejected global term collisions ['system_event', 'compliance_record']; retained activity_audit"
+  ],
+  "assembly_ready": true
+}

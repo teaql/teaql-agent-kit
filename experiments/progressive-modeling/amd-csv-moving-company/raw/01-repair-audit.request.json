@@ -1,0 +1,19 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 700,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a bounded worker in a deterministic modeling harness.\nReturn only the requested sectioned RFC 4180 CSV. Do not return Markdown,\nJSON, prose, code fences, KSML, database design, APIs, or implementation.\nUse lowercase snake_case identifiers. Quote a CSV cell when required."
+    },
+    {
+      "role": "user",
+      "content": "Repair one incomplete concept group from the same requirement.\n\nGroup: audit (Activity Logging and Audit)\nExisting terms: activity_audit\nForbidden global terms: access_control, activity_audit, address, api_integration, audit_log, authentication, automation_hook, billing_history, billing_information, bonus, campaign, configuration, consumable, contact, contract, conversion_metric, customer, discount_code, document, equipment, expense, fulfillment_event, insurance, invoice, job_assignment, lead, leave, maintenance, move, moving_company, notification, payment, payroll_calculation, permission, pricing, product, rbac, role, route, service, soft_delete, staff_registry, summary, time_slot, user, vat, vehicle, version, worked_hours\nRequirement: A moving-company system covering operations and logistics\n(moves, routes, time slots, fulfillment events, addresses); employees and\npayroll (staff registry, job assignments, worked hours, payroll calculations,\nbonuses, leave); private and corporate customers, contacts, billing information\nand history; products and services (moving, cleaning, box rentals,\nconfigurations and pricing); marketing and sales (campaigns, discount codes,\nleads and conversion metrics); finance and accounting (payments, invoices,\nexpenses, VAT and summaries); assets (vehicles, equipment, consumables and\nmaintenance); administration and compliance (contracts, insurance, documents\nand audit logs); user and role management; authentication, RBAC, activity\naudit, versioning, soft deletes, notifications, automation hooks and API\nintegration.\n\nReturn exactly 2 additional durable business concepts for this group.\nDo not repeat existing terms and do not add fields, definitions, or relations.\n\nReturn exactly:\n[concepts]\nterm,group_key,kind,ambiguous,source_term"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+concept_id,term,group_key,kind,ambiguous,source_term,status
+C001,moving_company,operations,domain_root,true,moving company,proposed
+C002,move,operations,entity,false,move,proposed
+C003,route,operations,entity,false,route,proposed
+C004,time_slot,operations,entity,false,time slot,proposed
+C005,fulfillment_event,operations,entity,false,fulfillment event,proposed
+C006,address,operations,entity,false,address,proposed
+C007,staff_registry,employees,entity,false,staff registry,proposed
+C008,job_assignment,employees,entity,false,job assignment,proposed
+C009,worked_hours,employees,entity,false,worked hours,proposed
+C010,payroll_calculation,employees,entity,false,payroll calculation,proposed
+C011,bonus,employees,entity,false,bonus,proposed
+C012,leave,employees,entity,false,leave,proposed
+C013,customer,customers,entity,false,customer,proposed
+C014,contact,customers,entity,false,contact,proposed
+C015,billing_information,customers,entity,false,billing information,proposed
+C016,billing_history,customers,entity,false,billing history,proposed
+C017,product,products,entity,true,product,proposed
+C018,service,products,entity,true,service,proposed
+C019,configuration,products,entity,false,configuration,proposed
+C020,pricing,products,entity,true,pricing,proposed
+C021,campaign,marketing,entity,false,campaign,proposed
+C022,discount_code,marketing,entity,false,discount code,proposed
+C023,lead,marketing,entity,false,lead,proposed
+C024,conversion_metric,marketing,entity,false,conversion metric,proposed
+C025,payment,finance,entity,false,payment,proposed
+C026,invoice,finance,entity,false,invoice,proposed
+C027,expense,finance,entity,false,expense,proposed
+C028,vat,finance,entity,true,VAT,proposed
+C029,summary,finance,entity,false,summary,proposed
+C030,vehicle,assets,entity,false,vehicle,proposed
+C031,equipment,assets,entity,false,equipment,proposed
+C032,consumable,assets,entity,false,consumable,proposed
+C033,maintenance,assets,entity,true,maintenance,proposed
+C034,contract,administration,entity,false,contract,proposed
+C035,insurance,administration,entity,false,insurance,proposed
+C036,document,administration,entity,true,document,proposed
+C037,audit_log,administration,entity,false,audit log,proposed
+C038,user,user_role,entity,false,user,proposed
+C039,role,user_role,entity,false,role,proposed
+C040,permission,user_role,entity,false,permission,proposed
+C041,authentication,authentication,entity,false,authentication,proposed
+C042,rbac,authentication,entity,false,RBAC,proposed
+C043,activity_audit,audit,entity,true,activity audit,proposed
+C044,version,versioning,entity,false,version,proposed
+C045,soft_delete,versioning,entity,false,soft delete,proposed
+C046,notification,notifications,entity,false,notification,proposed
+C047,automation_hook,notifications,entity,false,automation hook,proposed
+C048,api_integration,integrations,entity,false,API integration,proposed
+C049,access_control,authentication,entity,false,authentication,proposed
+C050,compliance_record,audit,entity,false,audit logs,proposed
+C051,system_event,audit,entity,false,activity audit,proposed
+C052,retention_policy,versioning,entity,false,,proposed
+C053,notification_template,notifications,entity,false,notification,proposed
+C054,webhook_endpoint,integrations,entity,false,,proposed
+C055,api_key,integrations,entity,false,,proposed

@@ -1,0 +1,19 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 3200,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a bounded worker in a deterministic modeling harness.\nReturn only the requested sectioned RFC 4180 CSV. Do not return Markdown,\nJSON, prose, code fences, KSML, database design, APIs, or implementation.\nUse lowercase snake_case identifiers. Quote a CSV cell when required."
+    },
+    {
+      "role": "user",
+      "content": "Requirement:\nA moving-company system covering operations and logistics\n(moves, routes, time slots, fulfillment events, addresses); employees and\npayroll (staff registry, job assignments, worked hours, payroll calculations,\nbonuses, leave); private and corporate customers, contacts, billing information\nand history; products and services (moving, cleaning, box rentals,\nconfigurations and pricing); marketing and sales (campaigns, discount codes,\nleads and conversion metrics); finance and accounting (payments, invoices,\nexpenses, VAT and summaries); assets (vehicles, equipment, consumables and\nmaintenance); administration and compliance (contracts, insurance, documents\nand audit logs); user and role management; authentication, RBAC, activity\naudit, versioning, soft deletes, notifications, automation hooks and API\nintegration.\n\nAllowed groups:\noperations=Operations and Logistics; employees=Employees and Payroll; customers=Customer Management; products=Products and Services; marketing=Marketing and Sales; finance=Finance and Accounting; assets=Asset Management; administration=Administration and Compliance; user_role=User and Role Management; authentication=Authentication and Permissions; audit=Activity Logging and Audit; versioning=Versioning and Soft Deletes; notifications=Notifications and Automation; integrations=API and Integrations\n\nDiscover 3 to 5 durable business concepts per group. Include exactly one\ndomain_root concept named moving_company in operations. Preserve genuinely\nambiguous source terms rather than silently choosing a meaning. Do not add\nfields, types, definitions, status values, or relations.\n\nReturn exactly:\n[concepts]\nterm,group_key,kind,ambiguous,source_term\n\nkind is domain_root or entity. ambiguous is true or false. Every allowed group\nmust have at least 3 concepts. Terms must be unique."
+    }
+  ]
+}

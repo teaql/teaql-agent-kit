@@ -1,0 +1,15 @@
+source_concept_id,operation,term,group_key
+C001,keep,moving_company,operations
+C017,split,physical_product,products
+C017,split,service_product,products
+C018,split,service_catalog_item,products
+C018,split,service_fulfillment,operations
+C033,split,maintenance_schedule,assets
+C033,split,maintenance_log,assets
+C020,split,price_list,products
+C020,split,invoice_line_item,finance
+C028,split,vat_rate_configuration,finance
+C028,split,vat_amount,finance
+C036,split,document_template,administration
+C036,split,document_instance,administration
+C043,keep,activity_audit,audit

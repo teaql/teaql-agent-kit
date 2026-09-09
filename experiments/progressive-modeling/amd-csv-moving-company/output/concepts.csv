@@ -1,0 +1,62 @@
+concept_id,term,group_key,kind,ambiguous,source_term,status
+C001,moving_company,operations,domain_root,false,moving_company,proposed
+C002,move,operations,entity,false,move,proposed
+C003,route,operations,entity,false,route,proposed
+C004,time_slot,operations,entity,false,time slot,proposed
+C005,fulfillment_event,operations,entity,false,fulfillment event,proposed
+C006,address,operations,entity,false,address,proposed
+C007,staff_registry,employees,entity,false,staff registry,proposed
+C008,job_assignment,employees,entity,false,job assignment,proposed
+C009,worked_hours,employees,entity,false,worked hours,proposed
+C010,payroll_calculation,employees,entity,false,payroll calculation,proposed
+C011,bonus,employees,entity,false,bonus,proposed
+C012,leave,employees,entity,false,leave,proposed
+C013,customer,customers,entity,false,customer,proposed
+C014,contact,customers,entity,false,contact,proposed
+C015,billing_information,customers,entity,false,billing information,proposed
+C016,billing_history,customers,entity,false,billing history,proposed
+C017,physical_product,products,entity,false,product,proposed
+C018,service_product,products,entity,false,product,proposed
+C019,service_catalog_item,products,entity,false,service,proposed
+C020,service_fulfillment,operations,entity,false,service,proposed
+C021,configuration,products,entity,false,configuration,proposed
+C022,price_list,products,entity,false,pricing,proposed
+C023,invoice_line_item,finance,entity,false,pricing,proposed
+C024,campaign,marketing,entity,false,campaign,proposed
+C025,discount_code,marketing,entity,false,discount code,proposed
+C026,lead,marketing,entity,false,lead,proposed
+C027,conversion_metric,marketing,entity,false,conversion metric,proposed
+C028,payment,finance,entity,false,payment,proposed
+C029,invoice,finance,entity,false,invoice,proposed
+C030,expense,finance,entity,false,expense,proposed
+C031,vat_rate_configuration,finance,entity,false,vat,proposed
+C032,vat_amount,finance,entity,false,vat,proposed
+C033,summary,finance,entity,false,summary,proposed
+C034,vehicle,assets,entity,false,vehicle,proposed
+C035,equipment,assets,entity,false,equipment,proposed
+C036,consumable,assets,entity,false,consumable,proposed
+C037,maintenance_schedule,assets,entity,false,maintenance,proposed
+C038,maintenance_log,assets,entity,false,maintenance,proposed
+C039,contract,administration,entity,false,contract,proposed
+C040,insurance,administration,entity,false,insurance,proposed
+C041,document_template,administration,entity,false,document,proposed
+C042,document_instance,administration,entity,false,document,proposed
+C043,audit_log,administration,entity,false,audit log,proposed
+C044,user,user_role,entity,false,user,proposed
+C045,role,user_role,entity,false,role,proposed
+C046,permission,user_role,entity,false,permission,proposed
+C047,authentication,authentication,entity,false,authentication,proposed
+C048,rbac,authentication,entity,false,RBAC,proposed
+C049,activity_audit,audit,entity,false,activity_audit,proposed
+C050,version,versioning,entity,false,version,proposed
+C051,soft_delete,versioning,entity,false,soft delete,proposed
+C052,notification,notifications,entity,false,notification,proposed
+C053,automation_hook,notifications,entity,false,automation hook,proposed
+C054,api_integration,integrations,entity,false,API integration,proposed
+C055,access_control,authentication,entity,false,authentication,proposed
+C056,compliance_record,audit,entity,false,audit logs,proposed
+C057,system_event,audit,entity,false,activity audit,proposed
+C058,retention_policy,versioning,entity,false,,proposed
+C059,notification_template,notifications,entity,false,notification,proposed
+C060,webhook_endpoint,integrations,entity,false,,proposed
+C061,api_key,integrations,entity,false,,proposed

@@ -1,0 +1,78 @@
+{
+  "id": "bfb3c0c56b234ebf8cf005063465633e",
+  "object": "chat.completion",
+  "created": 1788981040,
+  "model": "self-dploy/Qwen3.8-Flash-Next",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[fields]\nconcept_id,field_name,semantic_type,required,target_concept_id\nC034,license_plate,string,true,\nC034,vin,string,true,\nC034,model,string,true,\nC034,capacity_kg,decimal,true,\nC034,status,string,true,\nC034,insurance_id,reference,false,C040\nC035,serial_number,string,true,\nC035,item_type,string,true,\nC035,condition,string,true,\nC035,assigned_vehicle_id,reference,false,C034\nC035,acquisition_date,date,true,\nC036,item_name,string,true,\nC036,unit_of_measure,string,true,\nC036,current_stock,decimal,true,\nC036,reorder_threshold,decimal,true,\nC036,unit_cost,decimal,true,\nC037,asset_id,reference,true,\nC037,asset_type,string,true,\nC037,interval_days,integer,true,\nC037,next_due_date,date,true,\nC037,is_active,boolean,true,\nC038,schedule_id,reference,true,C037\nC038,performed_date,date,true,\nC038,technician_id,reference,true,C007\nC038,cost,decimal,true,\nC038,notes,text,false,\nC038,status,string,true,\n[missing_concepts]\nowner_concept_id,term,reason",
+        "reasoning_content": null,
+        "tool_calls": null
+      },
+      "logprobs": null,
+      "finish_reason": "stop",
+      "matched_stop": 248046
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 814,
+    "total_tokens": 1161,
+    "completion_tokens": 347,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0,
+      "image_tokens": 0
+    },
+    "reasoning_tokens": 0,
+    "cost": 0.00027750999999999996,
+    "cost_details": {
+      "upstream_inference_cost": 0.00027750999999999996,
+      "upstream_inference_prompt_cost": 0.00011441999999999999,
+      "upstream_inference_completions_cost": 0.00016308999999999999,
+      "total_cost": 0.00027750999999999996,
+      "input_cost": 0.0001125,
+      "output_cost": 0.00016308999999999999,
+      "cached_input_cost": 1.92e-06,
+      "cache_write_input_cost": 0,
+      "request_cost": 0,
+      "web_search_cost": 0,
+      "image_input_cost": null,
+      "image_output_cost": null,
+      "audio_input_cost": null,
+      "data_storage_cost": 1.1609999999999999e-05
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "metadata": {
+    "request_id": "fg6IXqMKImH51VDEb57XUvpxwnk6s9H7gpi2qlOy",
+    "requested_model": "Qwen3.8-Flash-Next",
+    "requested_provider": null,
+    "used_model": "Qwen3.8-Flash-Next",
+    "used_provider": "self-dploy",
+    "underlying_used_model": "Qwen3.8-Flash-Next",
+    "routing": [
+      {
+        "provider": "self-dploy",
+        "model": "Qwen3.8-Flash-Next",
+        "status_code": 200,
+        "error_type": "none",
+        "succeeded": true,
+        "apiKeyHash": "ce10dea265c1cb6e0219ebfdc40832cca3d0949c855b2b05409513e79fdc4d91",
+        "logId": "x5TjKiM5migbb1U5xy8T"
+      }
+    ],
+    "log_id": "x5TjKiM5migbb1U5xy8T",
+    "organization_id": "oneclick-org-6195",
+    "project_id": "oneclick-project-6195",
+    "discount": null
+  }
+}
