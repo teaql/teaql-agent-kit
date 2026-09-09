@@ -12,10 +12,10 @@ the validated model into a typed API boundary, while model-aware assist teaches
 the agent the exact API available for the current domain.
 
 For large private domains or smaller local models, the Agent Kit also supports
-an experimental progressive modeling protocol: build a domain map, close one
-valid module at a time, resolve cross-module relations, then run a final global
-evaluation before generation. This keeps peak context bounded without lowering
-the final zero-error gate. See the
+an experimental progressive modeling protocol: discover and resolve a compact
+concept graph, complete one object at a time, close one valid module at a time,
+then run a final global evaluation before generation. This keeps peak context
+bounded without lowering the final zero-error gate. See the
 [progressive modeling protocol](skills/build-teaql-app/references/progressive-modeling.md).
 
 The goal is not deterministic AI. It is deterministic structure around

@@ -1,0 +1,98 @@
+{
+  "concept_id": "C001",
+  "fields": [
+    {
+      "name": "customer",
+      "meaning": "The party purchasing the moving engagement.",
+      "semantic_type": "reference",
+      "required": true,
+      "target_concept_id": "C012"
+    },
+    {
+      "name": "origin_location",
+      "meaning": "The physical location where the move begins.",
+      "semantic_type": "reference",
+      "required": true,
+      "target_concept_id": "C005-A"
+    },
+    {
+      "name": "destination_location",
+      "meaning": "The physical location where the move ends.",
+      "semantic_type": "reference",
+      "required": true,
+      "target_concept_id": "C005-A"
+    },
+    {
+      "name": "scheduled_slot",
+      "meaning": "The specific time period reserved for the service execution.",
+      "semantic_type": "reference",
+      "required": true,
+      "target_concept_id": "C003"
+    },
+    {
+      "name": "planned_route",
+      "meaning": "The planned travel path between origin and destination.",
+      "semantic_type": "reference",
+      "required": false,
+      "target_concept_id": "C002"
+    },
+    {
+      "name": "primary_vehicle",
+      "meaning": "The main vehicle assigned to transport goods.",
+      "semantic_type": "reference",
+      "required": false,
+      "target_concept_id": "C029"
+    },
+    {
+      "name": "resource_allocations",
+      "meaning": "Allocations of crew or additional vehicles required for the move.",
+      "semantic_type": "reference_list",
+      "required": false,
+      "target_concept_id": "C007-B"
+    },
+    {
+      "name": "core_services",
+      "meaning": "The primary moving services included in the engagement.",
+      "semantic_type": "reference_list",
+      "required": true,
+      "target_concept_id": "C017-A"
+    },
+    {
+      "name": "ancillary_services",
+      "meaning": "Additional services such as cleaning or box rental.",
+      "semantic_type": "reference_list",
+      "required": false,
+      "target_concept_id": "C017-B"
+    },
+    {
+      "name": "fulfillment_events",
+      "meaning": "Observable events recorded during the execution of the move.",
+      "semantic_type": "reference_list",
+      "required": false,
+      "target_concept_id": "C004"
+    },
+    {
+      "name": "invoice",
+      "meaning": "The financial document issued for the completed engagement.",
+      "semantic_type": "reference",
+      "required": false,
+      "target_concept_id": "C025"
+    },
+    {
+      "name": "estimated_duration_hours",
+      "meaning": "The projected time in hours required to complete the move.",
+      "semantic_type": "decimal",
+      "required": false,
+      "target_concept_id": null
+    }
+  ],
+  "missing_concepts": [
+    {
+      "proposed_term": "move_status",
+      "reason": "A lifecycle state concept is required to track the progression from booking to fulfillment, but no allowed state concept exists in the reference list."
+    }
+  ],
+  "questions": [
+    "Should the move support multiple origin or destination locations (multi-stop moves), or is it strictly one-to-one?"
+  ]
+}

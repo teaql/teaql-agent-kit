@@ -1,0 +1,47 @@
+{
+  "status": "needs_repair",
+  "findings": [
+    {
+      "code": "EMPTY_GROUP",
+      "stage": "C0",
+      "target": "G009 system_management",
+      "severity": "error",
+      "message": "The source requires identity, RBAC, versioning, notifications, automation, and API integration, but the group has no concept candidates."
+    },
+    {
+      "code": "OVERBROAD_CONCEPT",
+      "stage": "C1",
+      "target": "C017-B ancillary_service",
+      "severity": "review",
+      "message": "Cleaning and box rental may require separate concepts instead of one ancillary-service concept."
+    },
+    {
+      "code": "CANONICAL_NAME_REQUIRED",
+      "stage": "C2",
+      "target": "C001 move",
+      "severity": "error",
+      "message": "Resolve the verb-like and cross-language-sensitive term before KSML assembly."
+    },
+    {
+      "code": "RELATION_DIRECTION_REVIEW",
+      "stage": "C2",
+      "target": "C001.invoice",
+      "severity": "review",
+      "message": "The invoice may own the reference to the move rather than the move owning the invoice reference."
+    },
+    {
+      "code": "REQUIREDNESS_REVIEW",
+      "stage": "C2",
+      "target": "C001.scheduled_slot",
+      "severity": "review",
+      "message": "A time slot may not be known at initial booking."
+    },
+    {
+      "code": "OVERLAPPING_RELATIONSHIPS",
+      "stage": "C2",
+      "target": "C001.primary_vehicle,C001.resource_allocations",
+      "severity": "review",
+      "message": "Confirm whether the direct vehicle reference duplicates resource allocation."
+    }
+  ]
+}

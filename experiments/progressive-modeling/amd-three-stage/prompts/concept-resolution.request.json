@@ -1,0 +1,17 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 1800,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {"enable_thinking": false},
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are the Concept Resolution worker in a deterministic modeling harness. Return compact strict JSON only. Resolve only the supplied ambiguous vocabulary. Do not add fields, types, KSML, APIs, or implementation. Do not redesign unrelated concepts. Use lowercase snake_case terms and preserve the supplied IDs as lineage."
+    },
+    {
+      "role": "user",
+      "content": "Groups: G001 operations_logistics; G002 employees_payroll; G003 customers; G004 products_services; G008 admin_compliance; G009 system_management. Global canonical name index for collision detection: C001 move; C002 route; C003 time_slot; C004 fulfillment_event; C005 address; C006 staff_registry; C007 job_assignment; C008 worked_hours; C009 payroll_calculation; C010 bonus; C011 leave; C012 customer; C013 contact; C014 billing_information; C015 history; C016 product; C017 service; C018 configuration; C019 pricing; C020 campaign; C021 discount_code; C022 lead; C023 conversion_metric; C024 payment; C025 invoice; C026 expense; C027 vat; C028 summary; C029 vehicle; C030 equipment; C031 consumable; C032 maintenance; C033 contract; C034 insurance; C035 document; C036 audit_log. If a desired concept already exists in this index, reuse its ID instead of creating a duplicate. Resolve only these source terms:\n- role, no concept id: used for employee job responsibility and user RBAC access\n- address, C005/G001: a move may have origin and destination; customers also have contact and billing locations\n- service, C017/G004: moving, cleaning, and box rental were listed together\n- document, C035/G008: contracts, insurance evidence, operational proof, and stored files\n- history, C015/G003: customer interaction history versus technical version/audit history\n- assignment, C007/G002: job assignment versus assigning crew or vehicles to a move\n\nReturn exactly: {\"resolutions\":[{\"source_term\":string,\"operation\":\"split\"|\"rename\"|\"keep\",\"replaces_ids\":[string],\"concepts\":[{\"id\":string,\"term\":string,\"group_id\":string,\"definition\":string}],\"reused_concept_ids\":[string],\"reason\":string}],\"still_unresolved\":[{\"term\":string,\"question\":string}]}. For splits derived from an existing ID, use suffixes such as C005-A. For role, allocate C037-A and C037-B. Every group_id must be one of the supplied groups. Produce the smallest useful split and do not invent surrounding concepts."
+    }
+  ]
+}

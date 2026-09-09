@@ -65,6 +65,11 @@ retained evidence.
     Load only the current module, its one-hop dependencies, and unresolved
     findings. Preserve accepted model sections and re-run a global evaluation
     before generation.
+16. Progressive modeling begins with language-neutral concept artifacts, not
+    KSML: discover grouped vocabulary and coarse relations, resolve ambiguous
+    terms against a global ID/name index, then complete one object using an
+    explicit allowed-reference set. Only deterministic assembly may turn
+    accepted artifacts into KSML.
 
 The complete pre-simplification repository is recoverable from Git Tag
 `archive/pre-simplification-20260730`.

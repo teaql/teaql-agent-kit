@@ -1,0 +1,416 @@
+{
+  "groups": [
+    {
+      "id": "G001",
+      "name": "operations_logistics"
+    },
+    {
+      "id": "G002",
+      "name": "employees_payroll"
+    },
+    {
+      "id": "G003",
+      "name": "customers"
+    },
+    {
+      "id": "G004",
+      "name": "products_services"
+    },
+    {
+      "id": "G005",
+      "name": "marketing_sales"
+    },
+    {
+      "id": "G006",
+      "name": "finance_accounting"
+    },
+    {
+      "id": "G007",
+      "name": "assets"
+    },
+    {
+      "id": "G008",
+      "name": "admin_compliance"
+    },
+    {
+      "id": "G009",
+      "name": "system_management"
+    }
+  ],
+  "concepts": [
+    {
+      "id": "C001",
+      "term": "move",
+      "group_id": "G001",
+      "ambiguous": false
+    },
+    {
+      "id": "C002",
+      "term": "route",
+      "group_id": "G001",
+      "ambiguous": false
+    },
+    {
+      "id": "C003",
+      "term": "time_slot",
+      "group_id": "G001",
+      "ambiguous": false
+    },
+    {
+      "id": "C004",
+      "term": "fulfillment_event",
+      "group_id": "G001",
+      "ambiguous": false
+    },
+    {
+      "id": "C005",
+      "term": "address",
+      "group_id": "G001",
+      "ambiguous": true
+    },
+    {
+      "id": "C006",
+      "term": "staff_registry",
+      "group_id": "G002",
+      "ambiguous": false
+    },
+    {
+      "id": "C007",
+      "term": "job_assignment",
+      "group_id": "G002",
+      "ambiguous": true
+    },
+    {
+      "id": "C008",
+      "term": "worked_hours",
+      "group_id": "G002",
+      "ambiguous": false
+    },
+    {
+      "id": "C009",
+      "term": "payroll_calculation",
+      "group_id": "G002",
+      "ambiguous": false
+    },
+    {
+      "id": "C010",
+      "term": "bonus",
+      "group_id": "G002",
+      "ambiguous": false
+    },
+    {
+      "id": "C011",
+      "term": "leave",
+      "group_id": "G002",
+      "ambiguous": false
+    },
+    {
+      "id": "C012",
+      "term": "customer",
+      "group_id": "G003",
+      "ambiguous": false
+    },
+    {
+      "id": "C013",
+      "term": "contact",
+      "group_id": "G003",
+      "ambiguous": false
+    },
+    {
+      "id": "C014",
+      "term": "billing_information",
+      "group_id": "G003",
+      "ambiguous": false
+    },
+    {
+      "id": "C015",
+      "term": "history",
+      "group_id": "G003",
+      "ambiguous": true
+    },
+    {
+      "id": "C016",
+      "term": "product",
+      "group_id": "G004",
+      "ambiguous": false
+    },
+    {
+      "id": "C017",
+      "term": "service",
+      "group_id": "G004",
+      "ambiguous": true
+    },
+    {
+      "id": "C018",
+      "term": "configuration",
+      "group_id": "G004",
+      "ambiguous": false
+    },
+    {
+      "id": "C019",
+      "term": "pricing",
+      "group_id": "G004",
+      "ambiguous": false
+    },
+    {
+      "id": "C020",
+      "term": "campaign",
+      "group_id": "G005",
+      "ambiguous": false
+    },
+    {
+      "id": "C021",
+      "term": "discount_code",
+      "group_id": "G005",
+      "ambiguous": false
+    },
+    {
+      "id": "C022",
+      "term": "lead",
+      "group_id": "G005",
+      "ambiguous": false
+    },
+    {
+      "id": "C023",
+      "term": "conversion_metric",
+      "group_id": "G005",
+      "ambiguous": false
+    },
+    {
+      "id": "C024",
+      "term": "payment",
+      "group_id": "G006",
+      "ambiguous": false
+    },
+    {
+      "id": "C025",
+      "term": "invoice",
+      "group_id": "G006",
+      "ambiguous": false
+    },
+    {
+      "id": "C026",
+      "term": "expense",
+      "group_id": "G006",
+      "ambiguous": false
+    },
+    {
+      "id": "C027",
+      "term": "vat",
+      "group_id": "G006",
+      "ambiguous": false
+    },
+    {
+      "id": "C028",
+      "term": "summary",
+      "group_id": "G006",
+      "ambiguous": false
+    },
+    {
+      "id": "C029",
+      "term": "vehicle",
+      "group_id": "G007",
+      "ambiguous": false
+    },
+    {
+      "id": "C030",
+      "term": "equipment",
+      "group_id": "G007",
+      "ambiguous": false
+    },
+    {
+      "id": "C031",
+      "term": "consumable",
+      "group_id": "G007",
+      "ambiguous": false
+    },
+    {
+      "id": "C032",
+      "term": "maintenance",
+      "group_id": "G007",
+      "ambiguous": false
+    },
+    {
+      "id": "C033",
+      "term": "contract",
+      "group_id": "G008",
+      "ambiguous": false
+    },
+    {
+      "id": "C034",
+      "term": "insurance",
+      "group_id": "G008",
+      "ambiguous": false
+    },
+    {
+      "id": "C035",
+      "term": "document",
+      "group_id": "G008",
+      "ambiguous": true
+    },
+    {
+      "id": "C036",
+      "term": "audit_log",
+      "group_id": "G008",
+      "ambiguous": false
+    }
+  ],
+  "relations": [
+    [
+      "C001",
+      "uses",
+      "C002"
+    ],
+    [
+      "C001",
+      "scheduled_in",
+      "C003"
+    ],
+    [
+      "C001",
+      "generates",
+      "C004"
+    ],
+    [
+      "C001",
+      "has",
+      "C005"
+    ],
+    [
+      "C006",
+      "receives",
+      "C007"
+    ],
+    [
+      "C006",
+      "logs",
+      "C008"
+    ],
+    [
+      "C008",
+      "feeds",
+      "C009"
+    ],
+    [
+      "C009",
+      "includes",
+      "C010"
+    ],
+    [
+      "C006",
+      "takes",
+      "C011"
+    ],
+    [
+      "C012",
+      "has",
+      "C013"
+    ],
+    [
+      "C012",
+      "has",
+      "C014"
+    ],
+    [
+      "C012",
+      "has",
+      "C015"
+    ],
+    [
+      "C016",
+      "has",
+      "C017"
+    ],
+    [
+      "C016",
+      "has",
+      "C018"
+    ],
+    [
+      "C016",
+      "has",
+      "C019"
+    ],
+    [
+      "C020",
+      "generates",
+      "C022"
+    ],
+    [
+      "C022",
+      "uses",
+      "C021"
+    ],
+    [
+      "C022",
+      "measured_by",
+      "C023"
+    ],
+    [
+      "C024",
+      "pays",
+      "C025"
+    ],
+    [
+      "C025",
+      "includes",
+      "C027"
+    ],
+    [
+      "C026",
+      "recorded_in",
+      "C028"
+    ],
+    [
+      "C029",
+      "undergoes",
+      "C032"
+    ],
+    [
+      "C030",
+      "undergoes",
+      "C032"
+    ],
+    [
+      "C033",
+      "covers",
+      "C034"
+    ]
+  ],
+  "unresolved_terms": [
+    {
+      "term": "role",
+      "candidate_concept_ids": []
+    },
+    {
+      "term": "address",
+      "candidate_concept_ids": [
+        "C005"
+      ]
+    },
+    {
+      "term": "service",
+      "candidate_concept_ids": [
+        "C017"
+      ]
+    },
+    {
+      "term": "document",
+      "candidate_concept_ids": [
+        "C035"
+      ]
+    },
+    {
+      "term": "history",
+      "candidate_concept_ids": [
+        "C015"
+      ]
+    },
+    {
+      "term": "assignment",
+      "candidate_concept_ids": [
+        "C007"
+      ]
+    }
+  ]
+}

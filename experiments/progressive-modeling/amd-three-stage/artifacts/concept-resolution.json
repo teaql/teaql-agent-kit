@@ -1,0 +1,141 @@
+{
+  "resolutions": [
+    {
+      "source_term": "role",
+      "operation": "split",
+      "replaces_ids": [],
+      "concepts": [
+        {
+          "id": "C037-A",
+          "term": "job_role",
+          "group_id": "G002",
+          "definition": "Employee job responsibility and functional title"
+        },
+        {
+          "id": "C037-B",
+          "term": "access_role",
+          "group_id": "G009",
+          "definition": "User RBAC access permissions and security profile"
+        }
+      ],
+      "reused_concept_ids": [],
+      "reason": "The term conflates HR job responsibilities with system access control permissions."
+    },
+    {
+      "source_term": "address",
+      "operation": "split",
+      "replaces_ids": [
+        "C005"
+      ],
+      "concepts": [
+        {
+          "id": "C005-A",
+          "term": "move_location",
+          "group_id": "G001",
+          "definition": "Origin or destination physical location for a move"
+        },
+        {
+          "id": "C005-B",
+          "term": "customer_address",
+          "group_id": "G003",
+          "definition": "Contact or billing location associated with a customer"
+        }
+      ],
+      "reused_concept_ids": [],
+      "reason": "Addresses serve distinct purposes: logistical endpoints for moves versus customer contact/billing data."
+    },
+    {
+      "source_term": "service",
+      "operation": "split",
+      "replaces_ids": [
+        "C017"
+      ],
+      "concepts": [
+        {
+          "id": "C017-A",
+          "term": "moving_service",
+          "group_id": "G004",
+          "definition": "Core moving and relocation service offering"
+        },
+        {
+          "id": "C017-B",
+          "term": "ancillary_service",
+          "group_id": "G004",
+          "definition": "Additional services such as cleaning or box rental"
+        }
+      ],
+      "reused_concept_ids": [],
+      "reason": "Moving is the core service, while cleaning and rentals are ancillary offerings with different operational handling."
+    },
+    {
+      "source_term": "document",
+      "operation": "split",
+      "replaces_ids": [
+        "C035"
+      ],
+      "concepts": [
+        {
+          "id": "C035-A",
+          "term": "legal_document",
+          "group_id": "G008",
+          "definition": "Contracts, insurance policies, and compliance evidence"
+        },
+        {
+          "id": "C035-B",
+          "term": "operational_document",
+          "group_id": "G001",
+          "definition": "Proof of delivery, manifests, and operational records"
+        }
+      ],
+      "reused_concept_ids": [],
+      "reason": "Legal/compliance documents require different retention and access controls than operational proof."
+    },
+    {
+      "source_term": "history",
+      "operation": "split",
+      "replaces_ids": [
+        "C015"
+      ],
+      "concepts": [
+        {
+          "id": "C015-A",
+          "term": "customer_interaction_history",
+          "group_id": "G003",
+          "definition": "Record of customer communications, support tickets, and sales interactions"
+        },
+        {
+          "id": "C015-B",
+          "term": "system_audit_history",
+          "group_id": "G009",
+          "definition": "Technical version history and system audit logs"
+        }
+      ],
+      "reused_concept_ids": [],
+      "reason": "Customer interaction history is business data, while system history is technical audit/versioning data."
+    },
+    {
+      "source_term": "assignment",
+      "operation": "split",
+      "replaces_ids": [
+        "C007"
+      ],
+      "concepts": [
+        {
+          "id": "C007-A",
+          "term": "job_assignment",
+          "group_id": "G002",
+          "definition": "Assignment of specific tasks or shifts to employees for payroll tracking"
+        },
+        {
+          "id": "C007-B",
+          "term": "resource_allocation",
+          "group_id": "G001",
+          "definition": "Allocation of crews, vehicles, or equipment to a specific move"
+        }
+      ],
+      "reused_concept_ids": [],
+      "reason": "Job assignments relate to employee labor and payroll, while resource allocation relates to logistical fulfillment."
+    }
+  ],
+  "still_unresolved": []
+}

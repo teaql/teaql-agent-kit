@@ -1,0 +1,17 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 2400,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {"enable_thinking": false},
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are the Concept Discovery worker in a deterministic modeling harness. Return compact strict JSON only, without indentation. Discover vocabulary, groups, and coarse relationships. Do not resolve ambiguous terms. Do not propose definitions, fields, types, KSML, database design, APIs, or implementation. Preserve ambiguity for the next worker. Use lowercase snake_case identifiers."
+    },
+    {
+      "role": "user",
+      "content": "Requirement: A moving-company system covering operations and logistics (moves, routes, time slots, fulfillment events, addresses); employees and payroll (staff registry, job assignments, worked hours, payroll calculations, bonuses, leave); private and corporate customers, contacts, billing information and history; products and services (moving, cleaning, box rentals, configurations and pricing); marketing and sales (campaigns, discount codes, leads and conversion metrics); finance and accounting (payments, invoices, expenses, VAT and summaries); assets (vehicles, equipment, consumables and maintenance); administration and compliance (contracts, insurance, documents and audit logs); user and role management; authentication, RBAC, activity audit, versioning, soft deletes, notifications, automation hooks and API integration.\n\nReturn exactly: {\"groups\":[{\"id\":string,\"name\":string}],\"concepts\":[{\"id\":string,\"term\":string,\"group_id\":string,\"ambiguous\":boolean}],\"relations\":[[from_concept_id,verb,to_concept_id]],\"unresolved_terms\":[{\"term\":string,\"candidate_concept_ids\":[string]}]}. Use IDs G001... and C001.... Return 28 to 36 concepts and no more than 24 relations. Every group_id and relation endpoint must exist in the response. Preserve source-level ambiguous words such as role, address, service, document, history, and assignment instead of resolving them."
+    }
+  ]
+}

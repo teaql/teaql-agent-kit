@@ -69,18 +69,28 @@ generate from a partial model.
 
 Use these checkpoints:
 
-1. **Domain map** — record bounded outcomes, module names, primary actors,
-   candidate roots, and cross-module dependencies in the modeling ledger.
-2. **Valid foundation** — create the service root, domain root, and the minimum
-   connected objects needed to make a real, evaluable vertical slice.
-3. **Module closure** — complete one module at a time, including its constants,
+1. **Concept discovery** — extract compact vocabulary, groups, and coarse
+   relation triples. Do not use KSML rules or propose fields yet.
+2. **Concept resolution** — split, merge, or rename ambiguous terms. Supply a
+   global `concept ID + canonical name` index for collision detection, but load
+   detailed definitions only for the active ambiguity cluster.
+3. **Object completion** — complete one accepted concept at a time. Supply an
+   explicit allowed-reference set; missing concepts must be reported rather
+   than invented. Still do not produce KSML.
+4. **Valid foundation** — deterministically assemble the service root, domain
+   root, and minimum connected objects into a real, evaluable KSML slice.
+5. **Module closure** — complete one module at a time, including its constants,
    fields, local relationships, and privacy metadata; evaluate and repair it.
-4. **Relation closure** — add cross-module relationships using the ledger's
+6. **Relation closure** — add cross-module relationships using the ledger's
    dependency map; evaluate after each bounded relation batch.
-5. **Global governance** — check states, constants, naming, privacy, cycles,
+7. **Global governance** — check states, constants, naming, privacy, cycles,
    disconnected objects, and root connectivity across the complete model.
-6. **Freeze** — run one final evaluation over the complete input directory,
+8. **Freeze** — run one final evaluation over the complete input directory,
    record the model hash and counts, and only then generate.
+
+For the first three checkpoints, follow
+[`concept-modeling.md`](references/concept-modeling.md). The concept catalog is
+the source for assembly; model-generated prose is never an assembly contract.
 
 At each checkpoint:
 

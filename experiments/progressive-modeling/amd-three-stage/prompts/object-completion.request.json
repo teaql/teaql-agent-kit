@@ -1,0 +1,17 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "temperature": 0,
+  "max_tokens": 1600,
+  "reasoning_effort": "none",
+  "chat_template_kwargs": {"enable_thinking": false},
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are the Object Completion worker in a deterministic modeling harness. Return compact strict JSON only. Complete exactly one supplied business concept. Use language-neutral business semantics, not KSML, database columns, APIs, or implementation. References may target only the supplied allowed concept IDs. Never invent a reference target; report it under missing_concepts instead. Do not add runtime-managed id, version, create_time, update_time, audit, or tenant-root fields."
+    },
+    {
+      "role": "user",
+      "content": "Complete concept C001 move: one requested moving engagement from booking through fulfillment. Allowed references: C012 customer (party purchasing the move); C002 route (planned travel path); C003 time_slot (scheduled service period); C004 fulfillment_event (observable execution event); C005-A move_location (origin or destination location); C017-A moving_service; C017-B ancillary_service (cleaning or box rental); C007-B resource_allocation (crew or vehicle allocation); C029 vehicle; C025 invoice. Global canonical names for collision checking only: move, route, time_slot, fulfillment_event, customer, contact, billing_information, product, invoice, payment, vehicle, job_role, access_role, contract, insurance.\n\nReturn exactly: {\"concept_id\":\"C001\",\"fields\":[{\"name\":string,\"meaning\":string,\"semantic_type\":\"string\"|\"boolean\"|\"integer\"|\"decimal\"|\"date\"|\"timestamp\"|\"reference\"|\"reference_list\",\"required\":boolean,\"target_concept_id\":string|null}],\"missing_concepts\":[{\"proposed_term\":string,\"reason\":string}],\"questions\":[string]}. Return 8 to 14 fields. Reference fields must use one of the allowed IDs. Scalar fields must set target_concept_id to null. If a lifecycle state is needed but no allowed state concept exists, report it as missing rather than encoding it as a free-form string."
+    }
+  ]
+}

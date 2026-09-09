@@ -10,6 +10,7 @@ same large private domain with one-pass and progressive modeling.
 Hosted-model evidence:
 
 - [AMD Qwen3.8 Flash Next P0 probe](amd-qwen3.8-flash-next.md)
+- [AMD three-stage concept modeling probe](amd-three-stage/README.md)
 
 ## Reproduce
 

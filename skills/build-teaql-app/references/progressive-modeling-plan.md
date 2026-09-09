@@ -8,7 +8,7 @@ examples and remove unused rows. Keep entries factual and compact.
 - Business outcome: `<one bounded outcome>`
 - In scope: `<capabilities>`
 - Out of scope: `<explicit exclusions>`
-- Current checkpoint: `P0`
+- Current checkpoint: `C0`
 - Next bounded task: `<one module or relation batch>`
 
 ## Domain map
@@ -18,6 +18,15 @@ examples and remove unused rows. Keep entries factual and compact.
 | `<module>` | `<one line>` | `<ksml names>` | `<module: reason>` | planned |
 
 Status is one of `planned`, `active`, `evaluated`, or `frozen`.
+
+## Concept artifacts
+
+- Concepts: `.teaql/concepts.csv`
+- Relations: `.teaql/relations.csv`
+- Active ambiguity cluster: `<concept IDs or none>`
+- Completed objects: `<concept IDs>`
+- Missing concepts: `<concept IDs/terms or none>`
+- Global name-index hash: `<sha256>`
 
 ## Cross-module relations
 

@@ -11,7 +11,9 @@ recoverable steps:
 
 ```text
 business outcome
-  -> domain map
+  -> concept discovery
+  -> concept resolution
+  -> object completion
   -> valid foundation
   -> module closures
   -> relation closure
@@ -32,6 +34,9 @@ models/
   <module>.xml
   .teaql/
     progressive-modeling.md
+    concepts.csv
+    relations.csv
+    object-completions/
 ```
 
 `progressive-modeling.md` is application-owned planning state, not KSML and
@@ -40,25 +45,54 @@ record facts required to resume work without replaying the full conversation.
 
 ## Checkpoints
 
-### P0 — Domain map
+### C0 — Concept discovery
 
-Record:
+Extract compact language-neutral artifacts:
 
-- bounded business outcome and explicit exclusions;
-- module inventory and module ownership;
-- primary actors and candidate root object;
-- object names, one-line responsibilities, and estimated size;
-- anticipated cross-module references;
-- unresolved business questions.
+- vocabulary with stable temporary IDs;
+- broad groups with stable IDs;
+- coarse relation triples between concept IDs;
+- ambiguous or overloaded source terms.
 
-Do not write detailed fields for every module in this checkpoint. The output
-is a map used to choose a coherent first vertical slice.
+Do not use KSML rules, propose fields, or resolve ambiguous words here. Keep
+the artifact compact: IDs, canonical candidates, groups, relation verbs, and
+ambiguity flags. If it cannot fit the output budget, process one source module
+batch at a time and merge through deterministic ID checks.
 
-### P1 — Valid foundation
+### C1 — Concept resolution
 
-Create the entry root, domain root, and the smallest useful connected slice.
-Every object written must be complete enough to evaluate. Evaluate and repair
-to zero Errors before expanding the model.
+Process one ambiguity cluster at a time. Supply:
+
+- the active terms and their local meanings;
+- affected group IDs;
+- neighboring concept IDs;
+- the global `concept ID + canonical term` index, without full definitions.
+
+Return split, rename, merge, reuse, or unresolved operations with lineage. A
+proposed canonical term that already exists must reuse its existing concept
+ID. Do not add fields or redesign unrelated concepts.
+
+### C2 — Object completion
+
+Complete exactly one canonical business object per request. Provide its ID,
+definition, group, accepted neighboring concepts, and an explicit allowed
+reference set. Field candidates remain language-neutral. They may contain a
+semantic type, required/optional state, and allowed target concept ID.
+
+References outside the allowed set are forbidden. The worker must return a
+`missing_concepts` item rather than invent a target. Runtime-managed identity,
+version, audit, timestamps, and tenant-root fields are not proposed here.
+
+See [`concept-modeling.md`](concept-modeling.md) for the artifact contracts and
+context packets.
+
+### P1 — Valid foundation and deterministic assembly
+
+Select a connected vertical slice from accepted concept and object-completion
+artifacts. A deterministic assembler—not free-form model output—creates the
+entry root, domain root, and smallest useful KSML slice. Every object written
+must be complete enough to evaluate. Evaluate and repair to zero Errors before
+expanding the model.
 
 The foundation must include at least one real business object in addition to
 the domain root and constants. A root-only skeleton is rejected by
@@ -128,7 +162,7 @@ Give a constrained model only this packet:
 
 ```text
 Outcome: <one sentence>
-Checkpoint: <P0-P5>
+Checkpoint: <C0-C2 or P1-P5>
 Current module: <name>
 Current objects: <names and responsibilities>
 One-hop dependencies: <names and relationship direction>
