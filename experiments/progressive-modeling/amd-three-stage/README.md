@@ -8,6 +8,10 @@ The API credential and provider-specific request metadata are not retained.
 Request payloads, accepted response content, and CSV projections are retained
 for reproduction and deterministic validation.
 
+See [Direct CSV versus compact JSON](csv-vs-json.md) for the serialization A/B
+test. Direct CSV reduced completion tokens by 31.4%, but exceeded the requested
+relation-count limit and therefore still requires deterministic validation.
+
 ## Results
 
 | Step | Input tokens | Output tokens | Time | Cost | Contract result |

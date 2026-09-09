@@ -30,9 +30,15 @@ Required checks:
 - ambiguous source terms stay unresolved;
 - this stage contains no fields, types, or KSML fragments.
 
-Prefer compact JSON as the model response and convert accepted content to CSV
-with deterministic code. CSV is the persistent catalog; free-form prose is
-not retained as model state.
+For flat C0 discovery, direct CSV can materially reduce output tokens. Require
+separate named sections or separate calls, parse every row deterministically,
+and enforce count, ID, and reference limits before acceptance. Compact JSON is
+the safer fallback when the provider frequently emits malformed CSV. CSV is
+the persistent catalog; free-form prose is not retained as model state.
+
+Do not generalize this optimization to nested artifacts automatically. C1
+resolution lineage and C2 missing-concept/question structures remain clearer
+and safer as strict JSON.
 
 ## C1 — Concept resolution
 
