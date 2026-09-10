@@ -1,0 +1,17 @@
+{
+  "elapsed_seconds": 21.733,
+  "prompt_tokens": 819,
+  "completion_tokens": 671,
+  "total_tokens": 1490,
+  "cost": 0.00041517999999999997,
+  "group_count": 14,
+  "concept_count": 50,
+  "relation_count": 50,
+  "unresolved_count": 0,
+  "findings": [
+    "invalid/reserved relation verb: references",
+    "unknown relation endpoint: {'from_term': 'finance', 'verb': 'tracks', 'to_term': 'expense_record'}",
+    "unknown relation endpoint: {'from_term': 'finance', 'verb': 'calculates', 'to_term': 'vat_summary'}"
+  ],
+  "accepted": false
+}

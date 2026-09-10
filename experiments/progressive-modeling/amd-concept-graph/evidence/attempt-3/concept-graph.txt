@@ -1,0 +1,106 @@
+group operations
+concept moving_company root
+concept move_order entity
+concept route_plan entity
+concept time_slot entity
+concept fulfillment_event entity
+concept address_record entity
+group staff
+concept staff_registry entity
+concept job_assignment entity
+concept worked_hours entity
+concept payroll_calculation entity
+concept bonus_record entity
+concept leave_request entity
+group customers
+concept private_customer entity
+concept corporate_customer entity
+concept customer_contact entity
+concept billing_history entity
+group services
+concept moving_service entity
+concept cleaning_service entity
+concept box_rental entity
+concept service_configuration entity
+concept pricing_rule entity
+group marketing
+concept marketing_campaign entity
+concept discount_code entity
+concept sales_lead entity
+concept conversion_metric entity
+group finance
+concept payment_record entity
+concept invoice_document entity
+concept expense_record entity
+concept vat_summary entity
+group assets
+concept vehicle_asset entity
+concept equipment_asset entity
+concept consumable_item entity
+concept maintenance_log entity
+group compliance
+concept contract_document entity
+concept insurance_policy entity
+concept audit_log_entry entity
+group access
+concept user_account entity
+concept role_definition entity
+concept authentication_token entity
+concept notification_message entity
+concept automation_hook entity
+concept api_integration entity
+concept version_history entity
+concept soft_delete_flag entity
+relation moving_company manages move_order
+relation move_order requires route_plan
+relation move_order scheduled_in time_slot
+relation move_order generates fulfillment_event
+relation move_order targets address_record
+relation staff_registry assigns job_assignment
+relation job_assignment records worked_hours
+relation worked_hours feeds payroll_calculation
+relation payroll_calculation includes bonus_record
+relation staff_registry tracks leave_request
+relation private_customer places move_order
+relation corporate_customer places move_order
+relation private_customer has customer_contact
+relation corporate_customer has customer_contact
+relation private_customer has billing_history
+relation corporate_customer has billing_history
+relation moving_company offers moving_service
+relation moving_company offers cleaning_service
+relation moving_company offers box_rental
+relation moving_service uses service_configuration
+relation service_configuration uses pricing_rule
+relation marketing_campaign generates sales_lead
+relation marketing_campaign uses discount_code
+relation sales_lead tracked_by conversion_metric
+relation move_order generates invoice_document
+relation invoice_document settled_by payment_record
+relation moving_company incurs expense_record
+relation finance_summary includes vat_summary
+relation moving_company owns vehicle_asset
+relation moving_company owns equipment_asset
+relation moving_company stocks consumable_item
+relation vehicle_asset has maintenance_log
+relation equipment_asset has maintenance_log
+relation moving_company holds contract_document
+relation moving_company holds insurance_policy
+relation moving_company logs audit_log_entry
+relation user_account has role_definition
+relation user_account authenticates_via authentication_token
+relation user_account receives notification_message
+relation automation_hook triggers on move_order
+relation api_integration connects moving_company
+relation move_order has version_history
+relation move_order has soft_delete_flag
+relation staff_registry has version_history
+relation staff_registry has soft_delete_flag
+relation invoice_document has version_history
+relation invoice_document has soft_delete_flag
+relation vehicle_asset has version_history
+relation vehicle_asset has soft_delete_flag
+relation contract_document has version_history
+relation contract_document has soft_delete_flag
+relation user_account has version_history
+relation user_account has soft_delete_flag

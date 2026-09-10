@@ -1,0 +1,128 @@
+group root
+concept moving_company root
+
+group operations
+concept move_order entity
+concept route_plan entity
+concept time_slot entity
+concept fulfillment_event entity
+concept address_record entity
+
+group employees
+concept staff_registry entity
+concept job_assignment entity
+concept worked_hours entity
+concept payroll_calculation entity
+concept bonus_record entity
+concept leave_request entity
+
+group customers
+concept private_customer entity
+concept corporate_customer entity
+concept customer_contact entity
+concept billing_profile entity
+concept billing_history entity
+
+group products
+concept moving_service entity
+concept cleaning_service entity
+concept box_rental entity
+concept service_configuration entity
+concept pricing_rule entity
+
+group marketing
+concept marketing_campaign entity
+concept discount_code entity
+concept sales_lead entity
+concept conversion_metric entity
+
+group finance
+concept payment_record entity
+concept invoice_document entity
+concept expense_record entity
+concept vat_summary entity
+
+group assets
+concept vehicle_asset entity
+concept equipment_asset entity
+concept consumable_item entity
+concept maintenance_log entity
+
+group administration
+concept contract_document entity
+concept insurance_policy entity
+concept compliance_document entity
+concept audit_log_entry entity
+
+group access_control
+concept user_account entity
+concept role_definition entity
+concept permission_set entity
+
+group security
+concept authentication_token entity
+concept rbac_policy entity
+concept activity_audit entity
+
+group data_lifecycle
+concept version_history entity
+concept soft_delete_marker entity
+
+group notifications
+concept notification_message entity
+concept notification_channel entity
+
+group automation
+concept automation_hook entity
+concept api_integration entity
+
+relation moving_company manages move_order
+relation moving_company manages staff_registry
+relation moving_company manages private_customer
+relation moving_company manages corporate_customer
+relation moving_company manages moving_service
+relation moving_company manages marketing_campaign
+relation moving_company manages payment_record
+relation moving_company manages vehicle_asset
+relation moving_company manages contract_document
+relation moving_company manages user_account
+relation move_order requires route_plan
+relation move_order scheduled_in time_slot
+relation move_order generates fulfillment_event
+relation move_order ships_to address_record
+relation staff_registry assigned_to job_assignment
+relation job_assignment logs worked_hours
+relation worked_hours feeds payroll_calculation
+relation payroll_calculation includes bonus_record
+relation staff_registry submits leave_request
+relation private_customer has customer_contact
+relation corporate_customer has customer_contact
+relation private_customer has billing_profile
+relation corporate_customer has billing_profile
+relation billing_profile generates billing_history
+relation moving_service uses service_configuration
+relation service_configuration uses pricing_rule
+relation marketing_campaign issues discount_code
+relation marketing_campaign generates sales_lead
+relation sales_lead tracked_by conversion_metric
+relation payment_record settles invoice_document
+relation invoice_document references billing_history
+relation finance tracks expense_record
+relation finance calculates vat_summary
+relation vehicle_asset undergoes maintenance_log
+relation equipment_asset undergoes maintenance_log
+relation consumable_item consumed_by move_order
+relation contract_document covers move_order
+relation insurance_policy covers vehicle_asset
+relation compliance_document stored_in audit_log_entry
+relation user_account assigned_to role_definition
+relation role_definition grants permission_set
+relation user_account authenticates_via authentication_token
+relation permission_set enforced_by rbac_policy
+relation rbac_policy logs activity_audit
+relation move_order tracked_by version_history
+relation move_order marked_by soft_delete_marker
+relation move_order triggers notification_message
+relation notification_message sent_via notification_channel
+relation move_order triggers automation_hook
+relation automation_hook calls api_integration

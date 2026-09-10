@@ -1,0 +1,15 @@
+{
+  "elapsed_seconds": 25.162,
+  "prompt_tokens": 723,
+  "completion_tokens": 844,
+  "total_tokens": 1567,
+  "cost": 0.00050513,
+  "group_count": 14,
+  "concept_count": 45,
+  "relation_count": 56,
+  "unresolved_count": 1,
+  "findings": [
+    "line 104: relation user_account authenticates via authentication_token"
+  ],
+  "accepted": false
+}

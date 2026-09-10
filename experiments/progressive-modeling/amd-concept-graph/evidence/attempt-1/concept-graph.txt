@@ -1,0 +1,119 @@
+group operations_logistics
+group employees_payroll
+group customers_billing
+group products_services
+group marketing_sales
+group finance_accounting
+group assets_maintenance
+group administration_compliance
+group identity_access
+group security_audit
+group notifications_automation
+group integration_api
+group versioning_lifecycle
+group root_domain
+
+concept moving_company root_domain root
+concept move_order operations_logistics entity
+concept route_plan operations_logistics entity
+concept time_slot operations_logistics entity
+concept fulfillment_event operations_logistics entity
+concept address_record operations_logistics entity
+concept staff_registry employees_payroll entity
+concept job_assignment employees_payroll entity
+concept worked_hours employees_payroll entity
+concept payroll_calculation employees_payroll entity
+concept bonus_record employees_payroll entity
+concept leave_request employees_payroll entity
+concept customer_profile customers_billing entity
+concept contact_person customers_billing entity
+concept billing_history customers_billing entity
+concept service_product products_services entity
+concept box_rental products_services entity
+concept pricing_config products_services entity
+concept marketing_campaign marketing_sales entity
+concept discount_code marketing_sales entity
+concept sales_lead marketing_sales entity
+concept conversion_metric marketing_sales entity
+concept payment_record finance_accounting entity
+concept invoice_document finance_accounting entity
+concept expense_record finance_accounting entity
+concept vat_summary finance_accounting entity
+concept vehicle_asset assets_maintenance entity
+concept equipment_asset assets_maintenance entity
+concept consumable_stock assets_maintenance entity
+concept maintenance_log assets_maintenance entity
+concept contract_document administration_compliance entity
+concept insurance_policy administration_compliance entity
+concept audit_log administration_compliance entity
+concept user_account identity_access entity
+concept role_definition identity_access entity
+concept authentication_token security_audit entity
+concept rbac_permission security_audit entity
+concept activity_trace security_audit entity
+concept version_snapshot versioning_lifecycle entity
+concept soft_delete_flag versioning_lifecycle entity
+concept notification_message notifications_automation entity
+concept automation_hook notifications_automation entity
+concept api_endpoint integration_api entity
+concept external_connector integration_api entity
+concept fulfillment_status operations_logistics ambiguous
+unresolved fulfillment_status
+
+relation moving_company contains move_order
+relation moving_company contains staff_registry
+relation moving_company contains customer_profile
+relation moving_company contains service_product
+relation moving_company contains marketing_campaign
+relation moving_company contains payment_record
+relation moving_company contains vehicle_asset
+relation moving_company contains contract_document
+relation moving_company contains user_account
+relation moving_company contains api_endpoint
+relation move_order requires route_plan
+relation move_order scheduled_in time_slot
+relation move_order generates fulfillment_event
+relation move_order linked_to address_record
+relation move_order assigned_to staff_registry
+relation move_order billed_to customer_profile
+relation move_order uses service_product
+relation move_order tracked_by fulfillment_status
+relation staff_registry performs job_assignment
+relation staff_registry logs worked_hours
+relation staff_registry receives payroll_calculation
+relation staff_registry eligible_for bonus_record
+relation staff_registry submits leave_request
+relation customer_profile has contact_person
+relation customer_profile maintains billing_history
+relation customer_profile receives invoice_document
+relation service_product defined_by pricing_config
+relation service_product includes box_rental
+relation marketing_campaign generates sales_lead
+relation marketing_campaign uses discount_code
+relation sales_lead measured_by conversion_metric
+relation payment_record settles invoice_document
+relation payment_record recorded_in vat_summary
+relation expense_record impacts vat_summary
+relation vehicle_asset undergoes maintenance_log
+relation equipment_asset undergoes maintenance_log
+relation consumable_stock depleted_by move_order
+relation contract_document covers customer_profile
+relation insurance_policy covers vehicle_asset
+relation audit_log records activity_trace
+relation user_account holds role_definition
+relation user_account authenticates via authentication_token
+relation role_definition grants rbac_permission
+relation rbac_permission controls move_order
+relation rbac_permission controls payroll_calculation
+relation rbac_permission controls invoice_document
+relation version_snapshot captures move_order
+relation version_snapshot captures staff_registry
+relation soft_delete_flag marks move_order
+relation soft_delete_flag marks customer_profile
+relation notification_message sent_to user_account
+relation automation_hook triggers notification_message
+relation automation_hook updates fulfillment_status
+relation api_endpoint exposes move_order
+relation api_endpoint exposes payment_record
+relation external_connector syncs api_endpoint
+relation external_connector syncs billing_history

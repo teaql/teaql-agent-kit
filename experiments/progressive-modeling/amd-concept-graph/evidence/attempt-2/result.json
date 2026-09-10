@@ -1,0 +1,24 @@
+{
+  "elapsed_seconds": 76.868,
+  "prompt_tokens": 763,
+  "completion_tokens": 2600,
+  "total_tokens": 3363,
+  "cost": 0.0013364499999999999,
+  "group_count": 14,
+  "concept_count": 120,
+  "relation_count": 212,
+  "unresolved_count": 0,
+  "findings": [
+    "line 270: relation sales_lead converts from marketing_campaign",
+    "line 335: relation sales_lead stems from marketing_campaign",
+    "line 344: relation contact_person speaks for private_customer",
+    "line 345: relation contact_person speaks for corporate_customer",
+    "invalid/reserved relation verb: references",
+    "unknown relation endpoint: {'from_term': 'staff_registry', 'verb': 'employs', 'to_term': 'personnel'}",
+    "unknown relation endpoint: {'from_term': 'staff_registry', 'verb': 'registers', 'to_term': 'personnel'}",
+    "concept count outside 40..60: 120",
+    "relation count above 70: 212",
+    "unresolved mismatch: flags=['account_status', 'activity_type', 'address_type', 'api_method', 'archive_format', 'asset_category', 'assignment_type', 'audit_action', 'audit_entry', 'auth_scope', 'billing_currency', 'billing_status', 'bonus_type', 'campaign_channel', 'campaign_status', 'code_validity', 'config_option', 'consumable_status', 'consumable_unit', 'contact_role', 'contract_status', 'contract_term', 'credential_scope', 'credential_secret', 'customer_type', 'delete_reason', 'deletion_date', 'document_status', 'document_type', 'endpoint_path', 'equipment_class', 'equipment_status', 'event_type', 'expense_category', 'expense_status', 'fulfillment_status', 'history_period', 'hook_payload', 'hook_trigger', 'insurance_status', 'invoice_period', 'invoice_status', 'job_role', 'lead_source', 'lead_stage', 'leave_status', 'leave_type', 'log_retention', 'maintenance_interval', 'maintenance_status', 'message_body', 'metric_period', 'notification_channel', 'pay_period', 'payment_method', 'permission_level', 'policy_coverage', 'policy_rule', 'price_tier', 'role_permission', 'route_status', 'service_duration', 'service_type', 'slot_capacity', 'snapshot_data', 'token_expiry', 'transaction_type', 'vat_rate', 'vehicle_model', 'vehicle_status', 'version_action'] lines=[]"
+  ],
+  "accepted": false
+}

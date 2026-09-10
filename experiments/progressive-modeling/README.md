@@ -12,6 +12,7 @@ Hosted-model evidence:
 - [AMD Qwen3.8 Flash Next P0 probe](amd-qwen3.8-flash-next.md)
 - [AMD three-stage concept modeling probe](amd-three-stage/README.md)
 - [AMD CSV-first moving-company model](amd-csv-moving-company/README.md)
+- [AMD concept graph line protocol](amd-concept-graph/README.md)
 
 ## Reproduce
 
