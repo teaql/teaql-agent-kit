@@ -4,6 +4,10 @@ This repository publishes the `build-teaql-app` Agent Skill. For TeaQL
 modeling, generation, or application work, read and follow
 `skills/build-teaql-app/SKILL.md`.
 
+For the fixed modeling-only benchmark, use
+`skills/benchmark-ksml-modeling/SKILL.md` instead. Its run ends at a globally
+evaluated model; it must not generate or implement an application.
+
 ## Core Operating Contract (`compact-v1`)
 
 Build the requested business outcome through Vibe Coding. Understand the

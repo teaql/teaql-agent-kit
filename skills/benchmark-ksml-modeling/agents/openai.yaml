@@ -1,0 +1,6 @@
+interface:
+  display_name: "Benchmark KSML Modeling"
+  short_description: "Evaluate a fixed TeaQL modeling task with evidence"
+  default_prompt: "Use $benchmark-ksml-modeling to run benchmark 001, retain each KSML evaluation and repair round, and report the final model and coverage without generating code."
+policy:
+  allow_implicit_invocation: true

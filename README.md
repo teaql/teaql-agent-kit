@@ -131,6 +131,13 @@ The repository publishes the harness as a focused Agent Skill:
 - [`work-complete.md`](skills/build-teaql-app/references/work-complete.md)
   defines the evidence required before the agent reports completion.
 
+For comparable **modeling-only** runs, the separate
+[`benchmark-ksml-modeling` Skill](skills/benchmark-ksml-modeling/SKILL.md)
+uses a fixed moving-company requirement and stops after evaluation and
+repair. The [conformance protocol](https://github.com/teaql/teaql-conformance/blob/main/benchmarks/modeling/001-moving-company/protocol.md)
+defines the retained evidence and coverage checklist; no generation or
+runtime claim is part of this benchmark.
+
 Together, these artifacts coordinate the agent, the model evaluator, generated
 contracts, runtime policies, verification tools, and parallel human review.
 
