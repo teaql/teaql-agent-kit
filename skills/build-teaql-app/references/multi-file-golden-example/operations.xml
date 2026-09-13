@@ -3,10 +3,11 @@
   <work_order_status _name="Work Order Status"
                      _module="Operations"
                      _module_key="operations"
+                     business_organization="business_organization()"
                      id="id()"
                      name="string()"
                      code="string()"
-                     display_order="integer()"
+                     display_order="number()"
                      _constant="true"
                      _identifier="code">
     <_value id="1001" name="Open" code="OPEN" display_order="1" />
