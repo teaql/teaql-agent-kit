@@ -35,11 +35,14 @@ tests as part of this benchmark.
    [multi-file example](../build-teaql-app/references/multi-file-golden-example/README.md)
    only as grammar references, never as a business answer. Save a nonempty,
    well-formed model before the first evaluation.
-3. Evaluate the saved model with the current TeaQL client. For multi-file
-   models evaluate the **directory**, not just `main.xml`, so all includes
-   participate. Record the exact command, raw report, model-file hashes, and
-   counts. Fix reported defects in the model and repeat; do not hide failed
-   rounds. For example: `cargo teaql --input models/ evaluate`.
+3. Before **each** evaluation, freeze the complete submitted model under
+   `runs/<run-id>/rounds/round-XX/model/`; evaluate that directory, not a
+   mutable working copy or just `main.xml`, so all includes participate.
+   Capture the raw result in the same round's `report.md` and save per-file
+   hashes in `hashes.txt` and the report hash in `report.sha256`. Keep failed
+   rounds and unchanged final re-runs too.
+   Fix defects only in a new round. The conformance protocol specifies the
+   exact layout and its `scripts/verify-modeling-rounds.sh` completeness gate.
 4. Run a final global evaluation and map each of the requirement's 14 items
    to model objects/relations. Zero Errors alone does not prove coverage.
    Stop at zero Errors plus complete coverage, or at the declared resource
@@ -51,3 +54,5 @@ evidence, not points to maximize. Preserve source file and line number for
 findings when the evaluator supplies them. Do not fabricate wall-clock,
 token, context, or cost measurements. A timeout, unavailable service, or
 partial model is a recorded non-pass result, never a green run.
+Do not claim an older run has per-round replayability if only its final model
+snapshot was retained.
