@@ -83,6 +83,26 @@ Use the actual checkout path on the machine where your agent runs. A local
 checkout changes where instructions are read; it does not by itself make
 evaluation and generation offline.
 
+## What you get
+
+See the benefits in a real application: the **Robot Task Board** showcase.
+
+| What you can inspect | How it helps your work |
+| --- | --- |
+| **Q API — business-oriented queries** | Read and compose typed queries, including filtering and status facets, without scattering SQL throughout application code. |
+| **E API — typed field access** | Express access to business data through generated field APIs instead of hand-written string keys. |
+| **Execution and audit trail** | Follow a task transition through SQL, recorded changes, events, and the refreshed board to debug behavior and investigate operations. |
+
+Developers supply intent and audit context; the runtime records execution and
+changes through its configured logging and audit facilities. That makes the
+trail useful for everyday debugging and observability, not just compliance.
+
+**[Explore the source on GitHub](https://github.com/teaql/robot-task-board)**
+ · **[Read the illustrated walkthrough](https://teaql.io/blog/robot-task-board-showcase/)**
+
+The walkthrough documents the demo's API version. For a newly generated
+application, use its current model-aware Assist for exact API calls.
+
 ## How it works
 
 *A model-mediated harness for reliable agentic software development.*
