@@ -87,11 +87,36 @@ evaluation and generation offline.
 
 See the benefits in a real application: the **Robot Task Board** showcase.
 
-| What you can inspect | How it helps your work |
-| --- | --- |
-| **Q API — business-oriented queries** | Read and compose typed queries, including filtering and status facets, without scattering SQL throughout application code. |
-| **E API — typed field access** | Express access to business data through generated field APIs instead of hand-written string keys. |
-| **Execution and audit trail** | Follow a task transition through SQL, recorded changes, events, and the refreshed board to debug behavior and investigate operations. |
+### Q API
+
+```rust
+let task = Q::tasks()
+    .with_id_is(id)
+    .comment("Load task for status transition")
+    .purpose("Move a task on the board")
+    .execute_for_one(&ctx)
+    .await?;
+```
+
+Adapted from the demo's [task service](https://github.com/teaql/robot-task-board/blob/main/rust-app-console/src/service.rs).
+
+### E API
+
+```rust
+// Read the name from an already-loaded status object.
+let name = E::task_status(status)
+    .get_name()
+    .eval()
+    .unwrap_or(raw_str);
+```
+
+From the [showcase's E API example](https://teaql.io/blog/robot-task-board-showcase/),
+where `raw_str` supplies the display fallback.
+
+### Execution and audit trail
+
+Follow a task transition through SQL, recorded changes, events, and the
+refreshed board to debug behavior and investigate operations.
 
 Developers supply intent and audit context; the runtime records execution and
 changes through its configured logging and audit facilities. That makes the
