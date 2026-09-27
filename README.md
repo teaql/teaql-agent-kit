@@ -163,6 +163,42 @@ trail useful for everyday debugging and observability, not just compliance.
 The walkthrough documents the demo's API version. For a newly generated
 application, use its current model-aware Assist for exact API calls.
 
+## Less Context to Read, More Business Meaning
+
+Context efficiency is a core harness-engineering goal: give the agent enough
+information to understand and change the application without asking it to
+read the framework's implementation.
+
+| Mechanism | What the agent needs in context |
+| --- | --- |
+| **Short, information-dense workspace files** | Generated workspace guidance, the domain vocabulary, and focused application code explain the project's purpose and where work belongs. The generated domain library can be large; it is not the reading material for API discovery. |
+| **Readable, semantically meaningful APIs** | Q queries, E paths, and mutation methods express business intent in application code. The agent works in the workspace rather than searching the underlying library to reconstruct that intent. |
+| **Progressive model-aware Assist** | Load the relevant entity/action guidance first, then the specific field's operations when needed—not every method for every field. Missing guidance is reported, not replaced by speculative API calls or a library-wide source search. |
+| **Explicit context lifetimes** | Keep stable principles, load task-specific guidance when needed, and stop carrying temporary material after its useful lifetime. Retain results and evidence references for later review. |
+
+Our companion project, **[agent-context-kit](https://github.com/teaql/agent-context-kit)**,
+implements explicit context-lifecycle controls with a Pi adapter: ephemeral
+content is visible for one model response, while named instruction blocks stay
+active until a trusted workflow discards them. It changes the context sent to
+the model without deleting the original transcript. These controls require a
+supporting adapter; a README instruction alone cannot evict context from an
+arbitrary coding agent.
+
+### Tested with local models on NVIDIA DGX Spark
+
+The [DGX Spark benchmark project](https://github.com/teaql/nvidia-dgx-spark-model-benchmark)
+records modeling and repair experiments on that platform. One
+[30-object moving-company run](https://github.com/teaql/nvidia-dgx-spark-model-benchmark/blob/main/reports/moving-company-30-pipeline.md)
+used a fresh, bounded repair request after deterministic validation found
+problems. Its final model had zero official evaluation errors, with warnings
+and suggestions retained in the report. This is modeling evidence, not proof
+of complete application correctness or a measured token-saving percentage for
+the full harness or context-lifecycle adapter.
+
+The practical aim is **less irrelevant context, less stale guidance, and a
+smaller body of business code to review**. Measure context/token usage and
+completion quality together; smaller prompts alone do not establish success.
+
 ## How it works
 
 *A model-mediated harness for reliable agentic software development.*
