@@ -1,6 +1,64 @@
 # TeaQL Agent Kit
 
-> A model-mediated harness for reliable agentic software development.
+> Already have a coding agent? Give it one prompt to start building with TeaQL.
+
+<table>
+  <tr>
+    <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/claude-code.svg" width="56" height="56" alt="Claude Code"><br>Claude Code</a></td>
+    <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/codex.svg" width="56" height="56" alt="Codex"><br>Codex</a></td>
+    <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/cursor.svg" width="56" height="56" alt="Cursor"><br>Cursor</a></td>
+    <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/github-copilot.svg" width="56" height="56" alt="GitHub Copilot"><br>GitHub Copilot</a></td>
+    <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/gemini-cli.svg" width="56" height="56" alt="Gemini CLI"><br>Gemini CLI</a></td>
+  </tr>
+</table>
+
+**Your coding agent + one prompt → start building with TeaQL.**
+Use an agent mode that can read project files and run terminal commands.
+
+Use the coding agent you already work with. TeaQL Agent Kit gives it a
+model-first workflow to model your business, evaluate and repair the model,
+generate an application, and verify the result. You do not need to learn the
+runtime, generator, or toolchain architecture before trying it.
+
+## Start with a prompt
+
+Open a project folder in your coding agent and paste this into its chat—not
+your terminal:
+
+```text
+Follow the instructions from https://github.com/teaql/teaql-agent-kit
+
+Build a small order-management application with customers, products, and
+orders, using Rust and SQLite. Evaluate and repair the business model,
+generate a runnable console application, and verify it with tests and a
+runtime smoke test. Report the actual results and any remaining problems.
+```
+
+Replace the example requirement with your own. The agent needs access to the
+repository instructions, permission to work in your project folder, and the
+ability to run development commands.
+
+**What to expect:** the agent may need to install or update TeaQL clients and
+language build tools, download dependencies, and call TeaQL services for model
+evaluation, generation, and API guidance. Network access is required for this
+default workflow, and model content is sent to the configured service. Review
+your agent's permission requests and your organization's data-sharing policy
+before using private business requirements. One prompt starts the workflow;
+it does not mean zero setup, no follow-up questions, or guaranteed success.
+
+If you already have a local checkout, replace the first line with its path:
+
+```text
+Follow the instructions from ~/teaql-agent-kit
+```
+
+Use the actual checkout path on the machine where your agent runs. A local
+checkout changes where instructions are read; it does not by itself make
+evaluation and generation offline.
+
+## How it works
+
+*A model-mediated harness for reliable agentic software development.*
 
 TeaQL Agent Kit demonstrates a new harness pattern for coding agents. Instead
 of letting an agent move directly from requirements to implementation, it
