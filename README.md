@@ -30,9 +30,28 @@ Follow the instructions from https://github.com/teaql/teaql-agent-kit
 
 Build a small order-management application with customers, products, and
 orders, using Rust and SQLite. Evaluate and repair the business model,
-generate a runnable console application, and verify it with tests and a
-runtime smoke test. Report the actual results and any remaining problems.
+generate a runnable console application, and exercise Q queries and E
+expressions in tests and a runtime smoke test. Report the actual results and
+any remaining problems.
+
+Finish with a short, evidence-backed development report in work-complete.md:
+- Show Q query and E expression examples from the application you actually
+  ran, explaining how their typed APIs helped express the business logic.
+- Inspect the evaluation, generation, build/test, and runtime logs. Cite
+  relevant excerpts, including query purpose/comment and write audit context
+  where present; report missing evidence and unresolved failures.
+- Explain what work the model, generated library, runtime, and progressive
+  Assist handled, and what application code and human decisions remained.
+- Report actual token/context usage if available. Claim token savings only
+  with a comparable measured baseline; otherwise mark savings not measured
+  and explain the potential benefit of loading only relevant API guidance.
+- Explain how model validation, consistent typed APIs, and regeneration may
+  help larger projects. Separate observations from this run from expectations
+  that this small example has not tested. Include costs and limitations.
 ```
+
+The final report should help you judge what TeaQL contributed to your own
+development task, with runnable code and log evidence you can inspect.
 
 Replace the example requirement with your own. The agent needs access to the
 repository instructions, permission to work in your project folder, and the
