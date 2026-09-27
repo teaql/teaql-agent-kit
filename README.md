@@ -35,6 +35,14 @@ expressions in tests and a runtime smoke test. Report the actual results and
 any remaining problems.
 
 Finish with a short, evidence-backed development report in work-complete.md:
+- Evaluate from a 2026-and-beyond, AI-assisted development perspective using
+  the tools and model actually tested, not an assumption that humans must
+  manually learn every modeling rule and generated API. Assess what the agent
+  can learn from instructions and Assist, and what human effort remains.
+  Judge runnable results, correctness, change effort, and operational costs;
+  do not treat novelty or unfamiliar syntax alone as reasons to avoid trying
+  the framework. Record demonstrated friction and risks, not generic warnings
+  or assumptions that AI eliminates every learning cost.
 - Show Q query and E expression examples from the application you actually
   ran, explaining how their typed APIs helped express the business logic.
 - Inspect the evaluation, generation, build/test, and runtime logs. Cite
