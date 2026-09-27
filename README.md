@@ -138,6 +138,21 @@ where `raw_str` supplies the display fallback.
 Follow a task transition through SQL, recorded changes, events, and the
 refreshed board to debug behavior and investigate operations.
 
+An excerpt from the demo's [recorded log](https://github.com/teaql/robot-task-board/blob/2560f9b73961eb1b26542d0ec91d5826b48421e5/actual-log.txt)
+shows a task creation:
+
+```text
+[TIME]-[philip]-[DURATION]-[DEBUG]-SqlLogEntry - [Create task 'Review Mission Timeline'] - [1 rows affected]
+          INSERT INTO task_data (id, name, version, status, platform) VALUES (1, 'Review Mission Timeline', 1, 1001, 1)
+[TIME]-[philip]-[AUDIT]-Entity [Task] CREATED. [Create task 'Review Mission Timeline'] {id: U64(1),  name: Text("Review Mission Timeline"),  platform_id: U64(1),  status: U64(1001),  version: I64(1)}
+```
+
+The recorded file already normalizes timestamps and durations to `[TIME]`
+and `[DURATION]`; these are not measured timings from a new run. The excerpt
+ties the user identifier and declared intent to the SQL, affected-row count,
+and created entity values—evidence you can inspect without tracing every
+internal function call.
+
 Developers supply intent and audit context; the runtime records execution and
 changes through its configured logging and audit facilities. That makes the
 trail useful for everyday debugging and observability, not just compliance.
