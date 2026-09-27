@@ -184,6 +184,42 @@ the model without deleting the original transcript. These controls require a
 supporting adapter; a README instruction alone cannot evict context from an
 arbitrary coding agent.
 
+### Prompt lifetimes: consume once or keep until discarded
+
+**Consume once (“burn after reading”)** — mark temporary guidance or a large
+tool result for one response:
+
+```markdown
+<!--ephemeral-->
+Task-specific API guidance needed for the next implementation step.
+```
+
+The marker applies to the entire containing message or tool result. After the
+assistant responds, the adapter replaces that content with a small tombstone
+in subsequent model requests. The original remains in the transcript for
+inspection; “burn” does not mean secure erasure.
+
+**Named block** — keep a phase's instructions active across requests:
+
+```markdown
+<!--BLOCK_ID:phase_modeling-->
+Evaluate and repair the business model before generating application code.
+<!--/BLOCK_ID:phase_modeling-->
+```
+
+Once that phase is complete, a trusted workflow explicitly discards it:
+
+```markdown
+<!--DISCARD_BLOCK:phase_modeling-->
+```
+
+The block is then absent from the next model request. Blocks come from trusted
+context sources; ordinary tool output cannot revoke instructions. This lets
+the harness retain the rules needed now without carrying every earlier phase's
+instructions forever. See the [lifecycle protocol](https://github.com/teaql/agent-context-kit/blob/main/docs/protocol-v1.md)
+and [Pi adapter](https://github.com/teaql/agent-context-kit/blob/main/docs/pi-adapter.md)
+for enforcement and integration details.
+
 ### Tested with local models on NVIDIA DGX Spark
 
 The [DGX Spark benchmark project](https://github.com/teaql/nvidia-dgx-spark-model-benchmark)
