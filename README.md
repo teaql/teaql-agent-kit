@@ -87,7 +87,20 @@ evaluation and generation offline.
 
 See the benefits in a real application: the **Robot Task Board** showcase.
 
-### Q API
+**Review less code to judge whether the business logic is correct.** Typed
+queries and expressions keep business intent in a small, readable surface,
+while the generated library and runtime handle shared mechanics. You still
+review business rules and verify results; you do not have to reconstruct the
+same query-building and data-access plumbing in every application method.
+
+### Q API — compose queries you can review
+
+Q describes what to load: filters, selected fields, related objects, ordering,
+limits, and facets. Requests are composable: extract a child query or facet
+into a named helper, then reuse it inside another query. Review each piece
+and its composition instead of tracing scattered SQL construction and manual
+result assembly. Typed field methods also let the compiler catch invalid API
+calls before execution.
 
 ```rust
 let task = Q::tasks()
@@ -100,7 +113,14 @@ let task = Q::tasks()
 
 Adapted from the demo's [task service](https://github.com/teaql/robot-task-board/blob/main/rust-app-console/src/service.rs).
 
-### E API
+### E API — access business data with explicit safety
+
+E provides typed paths through fields and related objects. It distinguishes
+an absent value from data that was never loaded: optional values can have an
+explicit fallback, while access to unloaded data produces a diagnostic rather
+than silently treating it as missing. That reduces hand-written casts,
+string-key lookups, and nested null checks. A reviewer can focus on the access
+path, whether the query loaded it, and how absence is handled.
 
 ```rust
 // Read the name from an already-loaded status object.
