@@ -236,44 +236,28 @@ with concrete evidence.
 TeaQL Agent Kit is therefore not merely a code-generation Skill. It is a
 reference implementation of a model-mediated harness for coding agents.
 
-## The Harness Pattern
+## How TeaQL Supports Reliable Agent Delivery
 
-```mermaid
-flowchart TD
-    R["Business requirement"] --> A["Coding agent"]
-    A --> M["Inspectable KSML model"]
-    M --> E["Deterministic evaluation"]
-    E -->|"Errors and repair guidance"| A
-    E -->|"Validated model"| G["Generated typed contract"]
-    G --> I["Constrained implementation"]
-    G --> H["Model-aware assist"]
-    H --> A
-    I --> V["Compile, test, runtime, and policy checks"]
-    V -->|"Implementation defect"| A
-    V -->|"Model defect"| M
-    V --> O["Evidence-backed result"]
+Start with a business requirement in natural language. The agent turns it
+into a model, evaluates it, and repairs it using concrete feedback. Once the
+model has no evaluation errors, generate the library and runnable workspace,
+then move into deep customization of the application.
 
-    U["Human reviewer"] -. "Asynchronous feedback" .-> M
-    U -. "Asynchronous feedback" .-> I
-```
+| Stage | What the agent does | What TeaQL provides | What you can review |
+| --- | --- | --- | --- |
+| **Modeling** | Translate requirements into business objects, fields, and relationships; evaluate, repair, and re-evaluate. | Modeling instructions and examples; deterministic evaluation with errors, warnings, suggestions, and repair guidance; library and workspace generation from the evaluated model. | The saved business model and evaluation findings, before substantial application code is written. |
+| **Deep customization** | Implement business rules, workflows, integrations, and UI in application-owned code; compile, test, and correct the implementation. | Generated typed Q/E and mutation APIs; progressive **model-aware Assist** for entity/action and field-specific API guidance; runtime validation, query tracing, and audited saves. | Focused business code, test results, and execution/audit logs that show what the application actually did. |
 
-The harness has five cooperating parts:
+Assist remains available throughout customization: the agent asks for the
+operation it needs instead of guessing methods or loading the entire
+generated library into its context. If implementation reveals a model defect,
+return to evaluation, repair the model, and regenerate its library.
 
-1. **Inspectable intermediate representation** — KSML turns business intent
-   into a saved artifact that agents, tools, and people can inspect and revise.
-2. **Deterministic feedback oracle** — model evaluation returns errors,
-   warnings, suggestions, and current repair guidance instead of relying on the
-   agent to memorize a large rule catalog.
-3. **Generated action boundary** — typed domain APIs and model-aware assist
-   narrow the implementation surface and reduce API invention.
-4. **Policy-bearing APIs** — identity context, query purpose, query comments,
-   and write audits travel with execution rather than remaining prompt advice.
-5. **Evidence-based completion** — evaluation, generated guidance, policy
-   checks, compilation, tests, and runtime results form a traceable evidence
-   chain from requirement to application.
-
-These constraints do not make an agent infallible. They make its actions
-smaller, more observable, and easier to review.
+Delivery is demonstrated through build results, tests, a runtime smoke test,
+and an evidence-backed completion report—not just the agent saying "done."
+You still decide whether the modeled rules meet the business need. TeaQL's
+goal is to make that judgment possible by reviewing a small amount of
+business-focused code and concrete evidence.
 
 ## Where the Harness Lives
 
