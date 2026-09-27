@@ -240,13 +240,20 @@ reference implementation of a model-mediated harness for coding agents.
 
 Start with a business requirement in natural language. The agent turns it
 into a model, evaluates it, and repairs it using concrete feedback. Once the
-model has no evaluation errors, generate the library and runnable workspace,
-then move into deep customization of the application.
+model has no evaluation errors, generate a domain library backed by the
+chosen language's TeaQL runtime and scaffold a runnable workspace. Deep
+customization then happens in that workspace, using the library and runtime
+as its foundation.
 
 | Stage | What the agent does | What TeaQL provides | What you can review |
 | --- | --- | --- | --- |
-| **Modeling** | Translate requirements into business objects, fields, and relationships; evaluate, repair, and re-evaluate. | Modeling instructions and examples; deterministic evaluation with errors, warnings, suggestions, and repair guidance; library and workspace generation from the evaluated model. | The saved business model and evaluation findings, before substantial application code is written. |
-| **Deep customization** | Implement business rules, workflows, integrations, and UI in application-owned code; compile, test, and correct the implementation. | Generated typed Q/E and mutation APIs; progressive **model-aware Assist** for entity/action and field-specific API guidance; runtime validation, query tracing, and audited saves. | Focused business code, test results, and execution/audit logs that show what the application actually did. |
+| **Modeling and evaluation** | Translate requirements into business objects, fields, and relationships; evaluate, repair, and re-evaluate. | Modeling instructions and examples; deterministic evaluation with errors, warnings, suggestions, and repair guidance. | The saved business model and evaluation findings, before substantial application code is written. |
+| **Generation — library + runtime** | Generate the domain library for the selected language, connect it to the corresponding TeaQL runtime, and scaffold the workspace. | Model-specific typed Q/E and mutation APIs backed by a reusable, domain-independent runtime for execution, validation, query tracing, and audited saves. | Generation results, the selected runtime version, and the scaffold's build and startup results. |
+| **Deep customization — workspace** | Implement business rules, workflows, integrations, and UI in workspace-owned code using the library and runtime; compile, test, and refine the application. | Workspace instructions and progressive **model-aware Assist** for entity/action and field-specific API guidance, with runtime feedback during execution. | Focused business code, test results, and execution/audit logs that show what the application actually did. |
+
+The runtime is an existing library for the chosen language, not newly
+generated application code. The domain library is generated from your model;
+the workspace is where application-specific customization belongs.
 
 Assist remains available throughout customization: the agent asks for the
 operation it needs instead of guessing methods or loading the entire
