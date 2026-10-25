@@ -86,3 +86,8 @@ The [actual t003 repair record](t003-business-repair-verification.md) distinguis
 a failed initial attempt from the successful real-model run and its zero-test
 limitation. These capabilities require trusted host configuration; installing
 the lifecycle plugin alone does not activate them.
+
+Protected Pi also includes [old-session reply-loop recovery](pi-old-session-recovery-verification.md).
+It preserves all user instructions and the on-disk transcript while rebuilding
+the outgoing view after repeated no-tool promises. This guard is independent of
+registered build/test capabilities and is not ported to OpenCode.

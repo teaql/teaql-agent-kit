@@ -109,3 +109,28 @@ cancellation and provider errors do not trigger automatic verification.
 Read-only work and failed mutations do not create verification obligations.
 State is stored in host custom session entries and restored from the active
 branch. These checks use only registered capabilities; no shell is enabled.
+
+## Recover an old conversation that repeats without tools
+
+The protected native Pi entry point detects three similar action-promise replies
+without an intervening tool call/result in a bounded recent window. Factual
+repeated answers and explicit blocker codes do not qualify. This is a heuristic
+for the observed reply loop, not semantic detection of every ignored task.
+
+When resuming such a session, it appends a visible `CONTEXT_RECOVERED` host message
+before the next provider request. A loop detected at turn end can also continue
+automatically. The outgoing view preserves all system/tool instructions, current
+active lifecycle/policy messages, all user instructions preceding the marker,
+and the marker plus all subsequent messages and tool results. Project files are
+still freshly policy-checked. Old assistant promises and stale tool diagnostics
+before the marker are omitted from this view; the on-disk transcript is unchanged
+apart from appended entries. The anchor is restored from the selected session
+branch, so restarting does not require `/new` or reintroduce the omitted loop.
+
+There is at most one automatic recovery per submitted user request. A renewed
+promise-only stop with no tool attempt after recovery emits
+`STALLED_NO_TOOL_PROGRESS` rather than silently retrying. User cancellation,
+provider errors and a completion guard's existing continuation do not trigger
+another recovery. No tool, write root or read permission is added by recovery.
+Already running Pi processes must load the updated extension before using this
+behavior; updating files does not hot-replace imported code.

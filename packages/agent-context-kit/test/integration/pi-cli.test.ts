@@ -81,3 +81,32 @@ assert.equal(requests,5); assert.equal(readFileSync('src/main.rs','utf8'),'value
  const run=spawnSync(process.execPath,["--experimental-strip-types",runner],{cwd:root,encoding:"utf8",timeout:30000,maxBuffer:256*1024,env:{...process.env,PI_CODING_AGENT_DIR:join(base,"agent"),PI_OFFLINE:"1",PI_SKIP_VERSION_CHECK:"1",NO_COLOR:"1"}});
  assert.equal(run.status,0,`${run.stderr}\n${run.stdout}`); assert.match(run.stdout,/Verified after repair/);
 });
+
+test("native Pi resumes an old stuck session, rebuilds request context and keeps transcript and policy intact", (t) => {
+ const base=mkdtempSync(join(tmpdir(),"pi-stale-session-")),root=join(base,"project");mkdirSync(root);mkdirSync(join(root,"generated"));
+ t.after(()=>rmSync(base,{recursive:true,force:true}));writeFileSync(join(root,"AGENTS.md"),"FRESH_POLICY_GUIDE");writeFileSync(join(root,"model.xml"),"CURRENT_MODEL_FACTS");writeFileSync(join(root,"generated/.agent-no-read.md"),"Use Assist.");writeFileSync(join(root,"generated/private.rs"),"RECOVERY_PRIVATE_SENTINEL");
+ const sdk=import.meta.resolve("@earendil-works/pi-coding-agent"),main=new URL("main.js",sdk).href,ai=import.meta.resolve("@earendil-works/pi-ai/providers/faux"),entry=new URL("../../src/adapters/pi-cli.ts",import.meta.url).href;
+ const runner=join(base,"runner.mjs");writeFileSync(runner,`
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {SessionManager} from ${JSON.stringify(sdk)};
+import {main} from ${JSON.stringify(main)};
+import {fauxProvider,fauxAssistantMessage,fauxToolCall} from ${JSON.stringify(ai)};
+import {createPiContextCliExtension,preparePiContextCliArgs} from ${JSON.stringify(entry)};
+const promise='Let me read the obsolete compiler errors and inspect the student source before repairing the unavailable query methods.';
+const manager=SessionManager.create(process.cwd(),${JSON.stringify(join(base,"sessions"))});
+for(let i=0;i<3;i++){manager.appendMessage({role:'user',content:'Old continuation '+i,timestamp:Date.now()+i*2});manager.appendMessage({...fauxAssistantMessage(promise,{stopReason:'stop'}),timestamp:Date.now()+i*2+1});}
+const path=manager.getSessionFile();const original=readFileSync(path,'utf8');
+const faux=fauxProvider({provider:'stale-session-test',models:[{id:'fixture',name:'Fixture'}],tokensPerSecond:1000000,tokenSize:{min:1000,max:1000}});let requests=0;
+const check=context=>{requests++;const text=JSON.stringify(context);assert.match(text,/CURRENT_SCENARIO_TASK/);assert.match(text,/FRESH_POLICY_GUIDE/);assert.match(text,/CONTEXT_RECOVERED/);assert.doesNotMatch(text,/Let me read the obsolete compiler errors|RECOVERY_PRIVATE_SENTINEL/);};
+faux.setResponses([
+ context=>{check(context);return fauxAssistantMessage(fauxToolCall('read',{path:'generated/private.rs'},{id:'denial'}),{stopReason:'toolUse'});},
+ context=>{check(context);const last=context.messages.findLast(m=>m.role==='toolResult');assert.equal(last.isError,true);return fauxAssistantMessage(fauxToolCall('read',{path:'model.xml'},{id:'facts'}),{stopReason:'toolUse'});},
+ context=>{check(context);assert.match(JSON.stringify(context),/CURRENT_MODEL_FACTS/);return fauxAssistantMessage('Recovered the current model analysis.',{stopReason:'stop'});}
+]);
+await main(preparePiContextCliArgs(['--offline','--provider','stale-session-test','--model','fixture','--session',path,'--print','CURRENT_SCENARIO_TASK: read the model and identify use cases'],{fileArgs:[]}),{extensionFactories:[pi=>pi.registerProvider(faux.provider),createPiContextCliExtension()]});
+assert.equal(requests,3);const saved=readFileSync(path,'utf8');assert.ok(saved.startsWith(original));assert.match(saved,/Let me read the obsolete compiler errors/);assert.match(saved,/agent-context-kit-progress-recovery-v1/);
+`);
+ const run=spawnSync(process.execPath,["--experimental-strip-types",runner],{cwd:root,encoding:"utf8",timeout:30000,maxBuffer:256*1024,env:{...process.env,PI_CODING_AGENT_DIR:join(base,"agent"),PI_OFFLINE:"1",PI_SKIP_VERSION_CHECK:"1",NO_COLOR:"1"}});
+ assert.equal(run.status,0,`${run.stderr}\n${run.stdout}`);assert.match(run.stdout,/Recovered the current model analysis/);
+});

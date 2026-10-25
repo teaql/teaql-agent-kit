@@ -224,6 +224,7 @@ language runtimes separately govern the resulting application's data operations.
 | **Read and write policy** | `.agent-no-read.md`, pruned traversal, explicit write roots and read-only paths | Protected Pi and OpenCode entry points |
 | **Actionable failures** | Non-retryable error codes, scoped denial reminders, bounded structured diagnostics | Pi policy tools and the optional Rust integration |
 | **Completion verification** | Successful edits invalidate checks; premature stops trigger missing build/test checks | Protected Pi with both host-approved verification tools registered |
+| **Stalled-conversation recovery** | Detect repeated action promises without tools; rebuild the request view while preserving user instructions and the transcript | Protected Pi, including resumed old sessions; one automatic recovery per request |
 | **Runtime governance** | Identity, query purpose/comment, audited writes and explicitly granted capabilities | The selected TeaQL language runtime |
 
 ### Keep generated implementation out of context
@@ -331,6 +332,16 @@ recognizes `PurposedQuery<T>` stage errors: filters, projection, ordering and
 paging belong before `purpose(...)`. Raw compiler output and excluded source
 are suppressed.
 
+### Recover a conversation that repeats without tools
+
+Protected Pi detects repeated action promises without intervening tool calls.
+It automatically rebuilds the request view, keeping system/tool instructions,
+active policy and all user instructions while retiring old assistant/tool
+narratives before the recovery marker. The transcript and session ID remain
+intact. Recovery is bounded to one attempt per user request, with an explicit
+blocker if promise-only replies continue. See the
+[actual old-session recovery](docs/pi-old-session-recovery-verification.md).
+
 ### Verify edits before accepting completion
 
 When both `app_build` and `app_test` are registered, protected Pi tracks
@@ -400,9 +411,10 @@ modules; it does not restore an unrestricted terminal.
 
 | Evidence | Observed result | What it establishes |
 | --- | --- | --- |
-| Repository checks | **148 passed**: 113 package unit, 20 integration, 8 root contract and 7 Python tests | Parser, policy, filesystem, lifecycle, packaging, diagnostics and completion contracts; deterministic providers are used in local Pi integration tests |
+| Repository checks | **154 passed**: 118 package unit, 21 integration, 8 root contract and 7 Python tests | Parser, policy, filesystem, lifecycle, packaging, diagnostics and completion contracts; deterministic providers are used in local Pi integration tests |
 | Ordinary Pi, real-model failure recovery | Four failure paths each read once, followed by build/test diagnostics | Explicit denial, binary, oversized-file and missing-file recovery in the recorded run |
 | Ordinary Pi, real-model premature completion | A standalone Rust edit followed by model `stop`; host build/test passed with **1 test** | The completion hook can resume after an early stop without a follow-up user prompt |
+| [Pi old-session recovery](docs/pi-old-session-recovery-verification.md) | Resumed the actual stuck session, restored file reads and analysis, retained its ID/history, then answered a follow-up | Read-only conversation recovery; no `/new`, no manual continuation prompt, no new business correctness claim |
 | [Actual t003 business repair](docs/t003-business-repair-verification.md) | Real-model localized repair, build passed, test command exited 0 with **0 cases**, no continuation prompt | Existing application compilation and verification flow; no business-test coverage or database runtime proof |
 | [OpenCode strict mode on t003](docs/opencode-t003-verification.md) | Real-model denied read/write probes, one permitted comment edit, build/test exit 0 with **0 cases**, no continuation prompt | Installed CLI 2.1.4 profile and SDK/bridge validation; Pi automatic completion guard and TeaQL capability module remain separate |
 

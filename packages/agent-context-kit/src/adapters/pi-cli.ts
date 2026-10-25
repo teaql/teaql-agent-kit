@@ -13,6 +13,7 @@ import { createContextPolicyTools } from "./pi-context.ts";
 import { PiLifecycleAdapter } from "./pi.ts";
 import { contextPolicyFeedback, contextPolicyInstruction } from "../policy-feedback.ts";
 import { registerPiPolicyFeedback } from "./pi-policy-feedback.ts";
+import { registerPiProgressRecovery } from "./pi-progress.ts";
 import { createPiCompletionGuard } from "./pi-completion.ts";
 import { loadPiHostTools } from "./pi-host-tools.ts";
 
@@ -85,6 +86,7 @@ export function createPiContextCliExtension(hostTools: readonly ToolDefinition<a
 		const root = process.cwd();
 		registerPiPolicyFeedback(pi, root);
 		const trackCompletion = createPiCompletionGuard(pi, hostTools);
+		registerPiProgressRecovery(pi);
 		for (const tool of [...createContextPolicyTools(root), ...createPiContextMutationTools(root), ...hostTools]) pi.registerTool(trackCompletion(tool));
 		const activeTools = [...TOOL_NAMES, ...hostTools.map((tool) => tool.name)];
 		const enabled = new Set(activeTools);
