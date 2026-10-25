@@ -25,3 +25,8 @@ cargo teaql --input models/ evaluate
 The three XML files in this directory form one complete, connected example.
 Copy the file structure and grammar, but replace the sample business concepts
 with the user's actual domain.
+
+The entry root also owns `model_uuid`, Agent/LLM and `skill_version` metadata.
+Replace the example UUID when starting an independent project, then preserve
+it through every evaluation and repair. Use actual identities or `unknown`;
+module roots never repeat provenance or secrets.

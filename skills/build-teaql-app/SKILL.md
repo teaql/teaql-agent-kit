@@ -48,6 +48,30 @@ organizational structure into a different business domain.
 Create and save a complete KSML model before running any TeaQL command. Do
 not evaluate an absent, empty, or placeholder model target.
 
+### Preserve model identity and declared actor provenance
+
+On the entry `<root>`, write `model_uuid`, `agent`, `agent_version`,
+`llm_provider`, `llm_model`, and `skill_version` before the first evaluation.
+Generate one UUID for a newly created independent model (UUIDv7 preferred;
+a valid random UUID is acceptable). Preserve it through repair, rename, split,
+repository clone and machine migration. A new project copied from a template
+gets a new UUID; optionally retain `parent_model_uuid`. Do not add
+`modeling_run_uuid`.
+
+Use the actual Agent/framework name, detectable version and actual current LLM
+identity. If the model ID or version is unavailable, write `unknown`; never
+infer it from handoff text, examples, a filename or the Agent product name.
+`skill_version` is this Skill's version/commit. On actor changes, update the
+entry metadata while preserving the model UUID. Included roots omit these
+attributes. These fields are caller-declared provenance, not provider-verified
+identity. Never put credentials or telemetry endpoint/token in KSML.
+
+Request current Assist while implementing and using the generated application.
+A generator Assist request obtains guidance; it does not prove execution of a
+query or write. Do not fabricate `assist.execution` events or execution counts.
+Telemetry delivery is optional, memory-only and may lose events. Its failure
+must not change business evaluation/generation/Assist results.
+
 ### Edit KSML as XML
 
 Text replacement is fragile for KSML: repeated attribute names, whitespace,
