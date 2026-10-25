@@ -12,6 +12,7 @@ interface ToolDefinition {
 	name: string;
 	description: string;
 	input: Schema;
+	options: { codemode: false };
 	execute(input: unknown, context: { signal: AbortSignal }): Promise<{ content: string }>;
 }
 interface RequestEvent {
@@ -60,7 +61,7 @@ export function createOpenCodeContextPolicyTools(options: OpenCodeContextPolicyO
 	const files = new WorkspaceFiles(options);
 	const definitions: ToolDefinition[] = [];
 	const add = (name: string, inputSchema: Schema, run: (args: Record<string, unknown>, signal: AbortSignal) => unknown | Promise<unknown>) => {
-		definitions.push({ name, input: inputSchema, description: `Policy-controlled ${name}. Paths are relative to the project root. No shell, raw process output or generated diffs.`,
+		definitions.push({ name, input: inputSchema, options: { codemode: false }, description: `Policy-controlled ${name}. Paths are relative to the project root. No shell, raw process output or generated diffs.`,
 			async execute(input, context) {
 				try {
 					context.signal.throwIfAborted();

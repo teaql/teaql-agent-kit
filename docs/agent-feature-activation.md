@@ -11,7 +11,7 @@ checked automatic context. The two are not interchangeable.
 | **Pi native CLI bootstrap** | Inline lifecycle handler; explicit trusted phase-source integration remains separate | Marker policy, fresh checked project context, non-retryable denial feedback | Checked native `write` / `edit` | Host wires the bootstrap behind ordinary `pi`; native CLI tests, real-model failure recovery, completion verification and t003 business repair; see the evidence below |
 | **Pi dedicated SDK harness** | No lifecycle adapter composed by default | Marker policy, fresh checked project context, non-retryable denial feedback | Disabled | `createContextPolicyPiSession`; real Pi 1.4.0 with local deterministic provider tests |
 | **Pi ordinary lifecycle plugin** | Named blocks, trusted discard, consume-once messages | Optional configured ReadGuard | No write-policy integration | `pi install <child-package-path>`; installing alone does not activate marker enforcement |
-| **OpenCode V2 strict plugin** | Optional trusted `lifecycleFile`; request-local text-message lifetimes | Marker policy, checked project context and controlled tool catalog | Explicit write roots; create/overwrite/edit/delete/move | Opt-in `createOpenCodeContextPolicyPlugin`; pinned SDK 2.1.4 type and real Promise/Effect bridge tests; no application-server deployment claimed |
+| **OpenCode V2 strict plugin** | Optional trusted `lifecycleFile`; request-local text-message lifetimes | Marker policy, checked project context and controlled tool catalog | Explicit write roots; create/overwrite/edit/delete/move | Opt-in `createOpenCodeContextPolicyPlugin`; pinned SDK/bridge tests and OpenCode CLI 2.1.4 real-model t003 read/write and fixed build/test verification |
 | **OpenCode ordinary V2 / V1 adapter** | Named blocks, trusted discard, consume-once adapter | Optional configured ReadGuard | No write-policy integration | Local plugin entry; V1 package-object entry requires 1.18.29+; separate from strict V2 |
 | **Cline SDK / CLI / Kanban** | Named blocks, trusted discard, consume-once adapter | Optional configured ReadGuard | No write-policy integration | Cline plugin registration; adapter tests, no IDE-extension claim |
 | **Kilo Code** | Named blocks, trusted discard, consume-once adapter | Optional configured ReadGuard | No write-policy integration | Server plugin; experimental host transforms, adapter tests |
@@ -43,7 +43,7 @@ or a complete seven-language workflow integration.
 
 ## Activate OpenCode V2 strict mode
 
-Create a host-owned `.opencode/plugins/agent-context-policy.ts` in an isolated
+Create a host-owned `.opencode/plugins/agent-context-policy/index.ts` in an isolated
 OpenCode V2 profile, replacing the checkout and project paths:
 
 ```ts
@@ -63,8 +63,10 @@ Use a fresh session and create markers in the generated directories. Do not load
 the ordinary lifecycle plugin alongside this strict plugin. Strict mode requires
 V2 and rejects V1. See the [OpenCode policy guide](../packages/agent-context-kit/docs/opencode-context-policy.md)
 for attachment handling, trusted-host assumptions and automatic-context limits.
-OpenCode's strict plugin has SDK-level verification; an installed OpenCode server
-and real-model end-to-end run remain to be verified.
+OpenCode CLI 2.1.4 now has [real-model t003 verification](opencode-t003-verification.md)
+for read/write boundaries and fixed Rust build/test tasks. The run executed zero
+test cases; Pi completion recovery and TeaQL-specific capability tools are not
+composed into this OpenCode profile.
 
 See the full [compatibility guide](../packages/agent-context-kit/docs/compatibility.md)
 and [host installation guide](../packages/agent-context-kit/docs/installation.md).

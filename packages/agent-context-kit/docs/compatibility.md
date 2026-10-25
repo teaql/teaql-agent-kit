@@ -33,8 +33,12 @@ OpenCode also has an opt-in [V2 context-policy plugin](opencode-context-policy.m
 with marker-aware controlled reads/search/list, independent host-approved writes,
 prompt admission controls and fixed diagnostic tasks. This is separate from the
 ordinary adapter above; V1 strict mode is unsupported. Verification includes SDK
-2.1.4 type compatibility and its real Promise/Effect bridge, not an installed
-OpenCode application server/model run. The guide details its trust and loading limits.
+2.1.4 type compatibility and its real Promise/Effect bridge. A separate
+[installed CLI 2.1.4 run](https://github.com/teaql/teaql-agent-kit/blob/main/docs/opencode-t003-verification.md) verifies
+the t003 profile with a real local model: read/write boundaries and fixed Rust
+build/test tasks, with zero test cases executed. TeaQL capabilities and Pi
+automatic completion recovery are not composed here. The guide details its trust
+and loading limits.
 
 - OpenCode V2 documents a per-session `context` hook that mutates messages and
   system instructions only for the outgoing model request. Its tool hook can

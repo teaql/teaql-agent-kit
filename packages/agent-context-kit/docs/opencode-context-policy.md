@@ -13,7 +13,7 @@ Existing history can already contain excluded content. Other plugins/host APIs a
 trusted: later transforms/hooks can change tools or context. Do not combine this
 plugin with the ordinary lifecycle plugin.
 
-Create a host-owned `.opencode/plugins/agent-context-policy.ts`:
+Create a host-owned `.opencode/plugins/agent-context-policy/index.ts`:
 
 ```ts
 import { createOpenCodeContextPolicyPlugin } from "/absolute/path/to/teaql-agent-kit/packages/agent-context-kit/src/adapters/opencode-context.ts";
@@ -40,8 +40,16 @@ and required guides outside exclusions. Trusted external generation may update
 read-only generated directories; no generic generator/Shell is exposed here.
 Full TeaQL evaluate/generate/Assist integration remains separate work.
 
+When using the `plugins` configuration array instead of auto-discovery, point it
+at the plugin directory, not at the TypeScript file. OpenCode V2 2.1.4 skips
+configured file paths with a warning. Check that the strict plugin is active
+before sending a task. Host-managed deployments should reject startup on plugin
+load errors and deny native tool permissions as a fallback.
+
 ## Controlled surface
 
+- Controlled tools explicitly set `options.codemode = false` so they remain
+  directly visible after the native Code Mode executor is removed.
 - A tool transform removes all native/MCP/delegation/codemode tools and registers
   only `context_read`, `context_grep`, `context_find`, `context_list`, `context_create`,
   `context_overwrite`, `context_edit`, `context_delete`, `context_move`, plus configured
@@ -80,8 +88,11 @@ Root `npm ci` and `npm run check` cover policy/filesystem contracts, adapter tes
 and type compatibility against pinned `@opencode/plugin@2.1.4` (development only).
 An integration test runs registration, controlled IO and denial through that SDK's
 real Promise/Effect bridge and checks native provider-message shape. The remaining
-host registry is a fixture, not the OpenCode application server. No installed CLI
-with a real model, full TeaQL execution or token savings are claimed.
+host registry in that test is a fixture, not the OpenCode application server.
+Separate [OpenCode CLI 2.1.4 real-model t003 evidence](https://github.com/teaql/teaql-agent-kit/blob/main/docs/opencode-t003-verification.md)
+now covers denied reads/writes, an allowed comment edit and fixed Rust build/test
+commands. The suite executed zero cases. Full TeaQL capability composition, Pi
+automatic completion recovery and token savings are not claimed.
 
 References: [V2 API](https://dev.opencode.ai/v2/docs/build/plugins/),
 [published SDK](https://www.npmjs.com/package/@opencode/plugin/v/2.1.4).

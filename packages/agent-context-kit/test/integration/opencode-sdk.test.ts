@@ -36,6 +36,7 @@ test("published OpenCode SDK executes strict plugin registration, controlled IO 
 	const plugin = fromPromise(createOpenCodeContextPolicyPlugin({ projectRoot: root, writeRoots: ["src"], readOnlyPaths: ["generated"] }));
 	await Effect.runPromise(Effect.scoped(Effect.gen(function* () {
 		yield* plugin.effect(host as never);
+		for (const tool of tools.values()) assert.deepEqual((tool as any).options, { codemode: false }, "Strict tools must be visible without the disabled native Code Mode executor");
 		const context = { progress: () => Effect.void };
 		const created = yield* tools.get("context_create")!.execute({ path: "src/app.ts", content: "working" }, context);
 		assert.equal(JSON.parse(created.content).status, "ok");

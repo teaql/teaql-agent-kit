@@ -353,7 +353,7 @@ marker-aware filesystem policy, TeaQL tools or completion verification.
 | Agent / entry point | Context lifetimes | Read / write control | TeaQL tools and completion | Verification level |
 | --- | --- | --- | --- | --- |
 | **Pi protected native CLI** | Inline lifecycle; trusted phase-source wiring remains separate | Marker-aware reads/search/list and checked `write`/`edit` | Optional Rust `teaql`, `app_build`, `app_test`; automatic completion checks when both verification tools are registered | Native CLI tests plus real-model Linux recovery, completion and t003 repair runs |
-| **OpenCode V2 strict plugin** | Optional trusted lifecycle file | Marker-aware reads/search/list; explicit write roots and controlled mutations | Configurable fixed diagnostics; no TeaQL tool module or Pi completion integration | Pinned SDK 2.1.4 and real Promise/Effect bridge; installed server/model run remains unverified |
+| **OpenCode V2 strict plugin** | Optional trusted lifecycle file | Marker-aware reads/search/list; explicit write roots and controlled mutations | Configurable fixed diagnostics; no TeaQL tool module or Pi completion integration | Pinned SDK/bridge plus OpenCode CLI 2.1.4 real-model t003 read/write and fixed build/test validation |
 | **Pi / OpenCode ordinary lifecycle plugins** | Named blocks, trusted discard, consume-once | Optional configured ReadGuard; no shared write-policy integration | Separate from protected modes | Adapter tests |
 | **Pi dedicated SDK harness** | No lifecycle adapter composed by default | Marker-aware, read-only | Optional fixed checks; no native-CLI completion integration | Real Pi SDK with deterministic provider |
 | **Cline / Kilo / MiMo / DeepSeek / Gemini** | Full or host-limited lifecycle views | Varies; some expose configured ReadGuard, without the strict marker-aware filesystem | No completion integration claimed | Host-specific adapter tests and documented API limits |
@@ -404,7 +404,7 @@ modules; it does not restore an unrestricted terminal.
 | Ordinary Pi, real-model failure recovery | Four failure paths each read once, followed by build/test diagnostics | Explicit denial, binary, oversized-file and missing-file recovery in the recorded run |
 | Ordinary Pi, real-model premature completion | A standalone Rust edit followed by model `stop`; host build/test passed with **1 test** | The completion hook can resume after an early stop without a follow-up user prompt |
 | [Actual t003 business repair](docs/t003-business-repair-verification.md) | Real-model localized repair, build passed, test command exited 0 with **0 cases**, no continuation prompt | Existing application compilation and verification flow; no business-test coverage or database runtime proof |
-| OpenCode strict mode | Published SDK registration, controlled IO and denial through the real Promise/Effect bridge | SDK/adapter compatibility; no installed OpenCode server/model deployment claim |
+| [OpenCode strict mode on t003](docs/opencode-t003-verification.md) | Real-model denied read/write probes, one permitted comment edit, build/test exit 0 with **0 cases**, no continuation prompt | Installed CLI 2.1.4 profile and SDK/bridge validation; Pi automatic completion guard and TeaQL capability module remain separate |
 
 The t003 record includes the failed first attempt: completion checks ran, but
 generic diagnostics did not lead to the right repair. The subsequent typed

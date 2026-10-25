@@ -105,8 +105,9 @@ mutations, the protected native Pi CLI bootstrap, and an opt-in OpenCode V2 plug
 See the [Pi CLI guide](../packages/agent-context-kit/docs/pi-cli-policy.md),
 [file policy](../packages/agent-context-kit/docs/file-policy.md) and
 [OpenCode guide](../packages/agent-context-kit/docs/opencode-context-policy.md).
-Tests include the real published SDK bridge, not an installed OpenCode CLI/model
-end-to-end run. The full TeaQL workflow limitations below still apply.
+Tests include the real published SDK bridge. A separate
+[OpenCode CLI 2.1.4 real-model deployment](opencode-t003-verification.md) verifies
+this host profile; the full TeaQL workflow limitations below still apply.
 
 The Skill phase comments now match the strict V1 grammar, enforced by a root
 contract test. This does not automatically load the Skill into a protected harness,
@@ -131,4 +132,6 @@ See the [feature activation matrix](agent-feature-activation.md) and
 boundaries and recorded evidence. The real-model t003 run compiled and ran the
 test command autonomously, but executed zero test cases and did not exercise a
 database runtime. Token/context savings remain unmeasured. OpenCode has pinned
-SDK/bridge evidence; an installed-server/model run is still unverified.
+SDK/bridge evidence and a recorded installed CLI/model run for controlled
+read/write and fixed Rust verification. Its current profile does not include
+TeaQL capabilities or Pi completion recovery.
