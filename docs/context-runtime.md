@@ -113,18 +113,22 @@ contract test. This does not automatically load the Skill into a protected harne
 recognize phase-complete text as a trusted event, or activate lifecycle discard.
 
 The dedicated Pi SDK policy session remains read-only with optional fixed build/test
-commands. Native Pi adds checked write/edit; OpenCode strict mode adds explicit write
-roots and controlled mutations. These entry points disable automatic external Skill
-loading and arbitrary Shell. Full TeaQL composition still needs:
+commands. Native Pi adds checked write/edit and completion verification when both
+host-approved `app_build` and `app_test` tools are registered. OpenCode strict mode
+adds explicit write roots and controlled mutations, without the Pi completion hook.
+These entry points disable automatic external Skill loading and arbitrary shell.
 
-- trusted evaluate, generate and progressive Assist tools;
-- lifecycle/policy composition and trusted stage transitions;
-- explicit handling of the authorized 80-line source-fallback policy;
-- language-native diagnostic adapters beyond the current TypeScript/Node examples.
+The optional [Pi TeaQL Rust integration](../integrations/pi-teaql/README.md) now
+provides version-checked evaluation, progressive Assist, zero-error-gated library
+regeneration, marker restoration and policy-filtered Rust diagnostics. It handles
+saved single-file models and existing application workspaces. The generic package
+does not automatically install these host-owned capabilities or implement a full
+seven-language TeaQL workflow. Trusted Skill phase transitions, multi-file model
+fingerprints and additional language diagnostic integrations remain separate work.
 
-Generated-library markers must not exclude the editable application workspace or
-its required project guide. Full workflow enforcement and context/token savings on
-a real generated TeaQL project remain separate verification work. The native Pi
-launcher and non-retryable denial feedback have Linux SSH smoke evidence using a
-deterministic local provider; no paid-model retry reduction is measured. OpenCode
-has pinned SDK/bridge evidence and no installed-server deployment claim.
+See the [feature activation matrix](agent-feature-activation.md) and
+[actual t003 business repair](t003-business-repair-verification.md) for current
+boundaries and recorded evidence. The real-model t003 run compiled and ran the
+test command autonomously, but executed zero test cases and did not exercise a
+database runtime. Token/context savings remain unmeasured. OpenCode has pinned
+SDK/bridge evidence; an installed-server/model run is still unverified.
