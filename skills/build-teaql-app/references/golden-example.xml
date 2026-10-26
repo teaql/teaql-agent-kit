@@ -3,7 +3,11 @@
       cfg_mask_china_mobile="false"
       data_service="sqlite"
       org="example"
-      _module_key="root">
+      _module_key="root"
+      model_uuid="c2ba9f47-b51b-499f-aad8-560e6f5ebaa8"
+      agent="unknown" agent_version="unknown"
+      llm_provider="unknown" llm_model="unknown"
+      skill_version="unknown">
   <clinic _name="Clinic"
           _module="Organization"
           _module_key="organization"

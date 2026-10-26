@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root name="multi-file-example-service"
+<root model_uuid="0d5d5cd9-19c5-4bbe-81da-f7e50d313f6e" agent="unknown" agent_version="unknown" llm_provider="unknown" llm_model="unknown" skill_version="unknown" name="multi-file-example-service"
       cfg_mask_china_mobile="false"
       data_service="sqlite"
       org="example"
