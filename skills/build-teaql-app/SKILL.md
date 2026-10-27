@@ -66,6 +66,32 @@ entry metadata while preserving the model UUID. Included roots omit these
 attributes. These fields are caller-declared provenance, not provider-verified
 identity. Never put credentials or telemetry endpoint/token in KSML.
 
+**Required runtime discovery:** after saving the complete model and immediately
+before every evaluate, generation and Assist operation, run the bundled helper
+on the Agent host:
+
+```sh
+python3 "$SKILL_DIR/scripts/model_provenance.py" stamp --input /absolute/model.xml
+```
+
+Resolve SKILL_DIR from this installed Skill's actual directory. For a split
+model, pass its directory and an explicit --entry if ambiguous. The helper
+reads the exact current Codex session (including the latest model selection),
+writes all four actual actor fields, preserves an existing model_uuid and
+records this Skill's version. Other hosts can export the documented complete
+current-run identity bundle. Never use a default configuration, another
+session's most recent log, a model-name guess or stale root values to fill gaps.
+Use unknown only for fields that runtime discovery cannot establish.
+
+When TeaQL executes through SSH, capture identity on the Agent host first and
+pass the fresh allowlisted JSON to stamp --context on the execution host.
+Do not discover a client's identity from the generator server. Read
+[runtime-provenance.md](references/runtime-provenance.md) for exact commands,
+supported adapters, freshness and fallback rules. A copied Skill installation
+must include scripts/, references/ and VERSION. If stamping fails due an invalid
+model or stale snapshot, correct that input and retry; do not silently continue
+with the preceding Agent's metadata. Re-evaluate when stamped identity changes.
+
 Request current Assist while implementing and using the generated application.
 A generator Assist request obtains guidance; it does not prove execution of a
 query or write. Do not fabricate `assist.execution` events or execution counts.
