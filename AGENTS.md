@@ -70,5 +70,10 @@ dedicated context-policy harness already executes the complete TeaQL workflow.
     replacements. Reparse saved XML and inspect the diff before semantic
     evaluation. Follow the Skill's "Edit KSML as XML" guidance.
 
+16. Before every model-derived TeaQL operation, run the bundled runtime
+    provenance helper from the Agent host (or transfer its fresh context for
+    SSH execution). Stamp actual current Agent/version/provider/model on the
+    entry root; preserve model_uuid and never use default config as run identity.
+
 The complete pre-simplification repository is recoverable from Git Tag
 `archive/pre-simplification-20260730`.

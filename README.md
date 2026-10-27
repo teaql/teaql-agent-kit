@@ -377,6 +377,10 @@ controls traversal and checked automatic context. They are different boundaries.
 See the [full per-agent activation matrix and setup](docs/agent-feature-activation.md)
 and [adapter compatibility details](packages/agent-context-kit/docs/compatibility.md).
 
+### Runtime identity in models
+
+The modeling Skill now runs its bundled [runtime provenance helper](skills/build-teaql-app/references/runtime-provenance.md) before model-derived operations. It reads the current Codex session or an explicit host runtime bundle, preserves the lifecycle UUID, and writes actual Agent/version/provider/model on the entry root. Remote execution captures on the Agent host first. Missing facts remain unknown; default configuration is not treated as the active model.
+
 ### Use protected Pi
 
 The host must wire the native bootstrap behind ordinary `pi` and explicitly
