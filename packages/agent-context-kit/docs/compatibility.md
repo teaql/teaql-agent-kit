@@ -13,6 +13,7 @@ are deliberately separate claims.
 | DeepSeek Harness | Cordis function plugin | Yes, durable message projections plus prompt sections | V1 adapter; trusted source must remain available when resuming |
 | Gemini CLI | Extension with `hooks/hooks.json` | Text-only `BeforeModel` request view | Supported for text messages; non-text tool payloads are outside the stable hook API |
 | Hermes Agent | Native `plugin.yaml` plus Python `register(ctx)` plugin | Request-local `pre_llm_call` context injection; no arbitrary history replacement | Persistent workspace blocks, trusted session discard, and protected-read blocking; consume-once transcript rewriting not claimed |
+| Octop | Python hook plugin under `integrations/octop` | Ordinary main-agent requests via `wrap_model_call` | Checkpointed blocks and discard, consume-once projection and marker-aware local `read_file`. [Profile and limits](octop-adapter.md). |
 | Kimi Code | Native `kimi.plugin.json` | Current-request context only | Active blocks, subagent context, and protected-read blocking; no consume-once history rewrite |
 | Qwen Code | Native `qwen-extension.json` and command hooks | Current-request context only | Active blocks, subagent context, and protected-read blocking; no consume-once history rewrite |
 | Kiro CLI | Standalone `.kiro/hooks/*.json` | Current-request and `SubagentStart` context only | Active blocks, delegated-agent context, and protected-read blocking; no arbitrary history rewrite |

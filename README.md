@@ -369,6 +369,7 @@ marker-aware filesystem policy, TeaQL tools or completion verification.
 | **Pi dedicated SDK harness** | No lifecycle adapter composed by default | Marker-aware, read-only | Optional fixed checks; no native-CLI completion integration | Real Pi SDK with deterministic provider |
 | **Cline / Kilo / MiMo / DeepSeek / Gemini** | Full or host-limited lifecycle views | Varies; some expose configured ReadGuard, without the strict marker-aware filesystem | No completion integration claimed | Host-specific adapter tests and documented API limits |
 | **Hermes / Kimi / Qwen / Kiro** | Active blocks/current-request context; no consume-once history rewriting | Configured ReadGuard; no shared write policy | No completion integration claimed | Python or command-hook tests |
+| **Octop** | Named blocks, trusted discard and consume-once on main-agent requests | Opt-in marker-aware local `read_file` | No completion integration claimed | [Harness graph test](packages/agent-context-kit/docs/octop-adapter.md#verify) |
 | **Copilot CLI / Crush** | No lifecycle rewriting | Configured ReadGuard; Crush covers top-level calls only | No completion integration claimed | Command-hook tests |
 | **Codex / Claude Code / Cursor and other Skill-capable hosts** | Protocol guidance where packaged | No Context Kit runtime enforcement claimed | Follow the Skill with the host's available tools | Guidance or packaging is separate from enforcement |
 

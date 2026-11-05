@@ -1,0 +1,6 @@
+id: teaql-agent-context-kit
+version: 0.1.0
+name: TeaQL Agent Context Kit
+description: Context lifetimes and marker-aware local file reads for Octop agents
+kind: hook
+entry: main.py

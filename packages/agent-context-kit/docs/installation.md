@@ -42,6 +42,7 @@ Run host commands from the target application directory, not this repository.
 | Kilo | Local file URL to the child `src/adapters/kilo.ts`; [guide](kilo-adapter.md). |
 | MiMo | Install the tarball under `.mimocode`, then copy its file-plugin entry; [guide](mimocode-adapter.md). |
 | Hermes | Copy the child directory into `~/.hermes/plugins/agent-context-kit`, enable it, then start a new session; [guide](hermes-adapter.md). |
+| Octop | Install the child `integrations/octop` directory using `octop plugin install`, then configure the POSIX local agent profile and reload Octop. [Guide](octop-adapter.md). |
 | Kimi / Qwen | Install the absolute child directory with the host's local-directory installer; [guide](command-hook-adapters.md). |
 | Copilot / Kiro / Crush | Install the tarball in the target project and copy/merge the bundled hook JSON; [guide](command-hook-adapters.md). |
 | Codex / Claude Code | Add `teaql/teaql-agent-kit` as the marketplace. Root catalogs select `./packages/agent-context-kit`. Local catalog roots can also be used. |

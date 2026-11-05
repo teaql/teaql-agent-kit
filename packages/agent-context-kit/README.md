@@ -71,6 +71,7 @@ Support is split by what each host can enforce at the model-request boundary:
 | Support tier | Agents | What is supported |
 | --- | --- | --- |
 | Full V1 runtime | **Pi**, **OpenCode**, **Cline**, **Kilo Code** | Persistent blocks, trusted discard, consume-once ephemeral messages, and protected-read feedback; Kilo's full-history hook is experimental |
+| Main-agent runtime | **Octop** | Persistent blocks, trusted discard, consume-once messages and marker-aware local `read_file` in an opt-in profile |
 | Runtime with host limits | **Gemini CLI**, **DeepSeek Harness**, **MiMo Code**, **Hermes Agent**, **Kimi Code**, **Qwen Code**, **Kiro CLI** | Request-local context and read guards are adapted to each documented host boundary; hosts without arbitrary history replacement do not claim consume-once behavior |
 | Protected-read integration | **GitHub Copilot CLI**, **Crush** | Deterministic protected-read blocking and TeaQL redirect feedback; no full context lifecycle claim |
 | Installable protocol plugin | **Codex**, **Claude Code**, **Cursor** | Protocol authoring and integration guidance; full runtime enforcement is not claimed |
@@ -318,6 +319,12 @@ though an older public plugin page still names the upstream OpenCode path. The
 adapter is therefore source-verified and marked experimental until MiMo's
 public plugin documentation catches up. See the
 [MiMo Code adapter guide](docs/mimocode-adapter.md).
+
+### Octop
+
+Install the `integrations/octop` directory with `octop plugin install`. Configure
+the agent's local filesystem backend and the installed plugin's policy before
+reloading Octop. See the [Octop adapter guide](docs/octop-adapter.md).
 
 ### Hermes Agent
 
