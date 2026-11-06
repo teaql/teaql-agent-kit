@@ -17,6 +17,7 @@
     <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/zcode.png" width="56" height="56" alt="ZCode"><br>ZCode</a></td>
     <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/trae.svg" width="56" height="56" alt="TRAE"><br>TRAE</a></td>
     <td align="center"><a href="#start-with-a-prompt"><img src="assets/coding-agents/opencode.svg" width="56" height="56" alt="OpenCode"><br>OpenCode</a></td>
+    <td align="center"><a href="packages/agent-context-kit/docs/octop-adapter.md"><img src="packages/agent-context-kit/assets/coding-agents/octop.svg" width="56" height="56" alt="Octop"><br>Octop</a></td>
   </tr>
 </table>
 

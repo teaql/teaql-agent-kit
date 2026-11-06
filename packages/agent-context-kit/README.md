@@ -44,6 +44,7 @@ transcript and Markdown sources unchanged.
     <td align="center"><a href="#github-copilot-cli"><img src="assets/coding-agents/github-copilot.svg" width="56" height="56" alt="GitHub Copilot CLI"><br>Copilot CLI</a></td>
     <td align="center"><a href="#kiro-cli"><img src="assets/coding-agents/kiro-cli.svg" width="56" height="56" alt="Kiro CLI"><br>Kiro CLI</a></td>
     <td align="center"><a href="#crush"><img src="assets/coding-agents/crush.svg" width="56" height="56" alt="Crush"><br>Crush</a></td>
+    <td align="center"><a href="#octop"><img src="assets/coding-agents/octop.svg" width="56" height="56" alt="Octop"><br>Octop</a></td>
   </tr>
 </table>
 

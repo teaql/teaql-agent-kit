@@ -20,3 +20,6 @@ Cline, Kimi, Qwen, GitHub Copilot, and Kiro come from
 See `KILO-LICENSE`.
 Crush does not publish a vector application icon; its tile uses the project's
 documented heart identity and Charple primary color as a simple original mark.
+
+The Octop tile centers the [official Octop favicon](https://github.com/TencentCloud/Octop/blob/4811eb45996169e86006db1b6451264ff4758223/dashboard/public/favico.svg)
+on the same white background. See [OCTOP-LICENSE](OCTOP-LICENSE).
