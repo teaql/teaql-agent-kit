@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root name="pet-clinic-service"
-      cfg_mask_china_mobile="false"
       data_service="sqlite"
       org="example"
       _module_key="root"

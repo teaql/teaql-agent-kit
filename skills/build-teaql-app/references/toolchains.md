@@ -4,6 +4,10 @@ Load this reference only after the first complete model has been written and
 saved. Use the client requirements before evaluation; use the generation
 sections only after evaluation reaches zero errors.
 
+In the examples below, `/path/to/project` is the project root. The example
+model lives in `models/`, and generated library and application directories
+sit directly under the project root.
+
 ## Required Clients
 
 - Rust: `cargo-teaql` exactly `2.0.14` from crates.io.
@@ -63,9 +67,9 @@ Swift is a current generation target. Its verified scope is:
 Generate the package with the exact advertised target:
 
 ```bash
-cargo teaql --input /path/to/models/model.xml swift-lib-core \
+cargo teaql --input /path/to/project/models/model.xml swift-lib-core \
   --output swift-lib-core \
-  --cwd /path/to/app-playground
+  --cwd /path/to/project
 ```
 
 Read the generated package guide and current `swift-assist-*` output before
@@ -85,17 +89,17 @@ Every model-derived command, including dynamic assist, must use
 Generate the read-only library first:
 
 ```bash
-cargo teaql --input /path/to/models/model.xml rust-lib-core \
+cargo teaql --input /path/to/project/models/model.xml rust-lib-core \
   --output rust-lib-core \
-  --cwd /path/to/app-playground
+  --cwd /path/to/project
 ```
 
 For a runnable result, generate the editable console application second:
 
 ```bash
-cargo teaql --input /path/to/models/model.xml rust-app-console \
+cargo teaql --input /path/to/project/models/model.xml rust-app-console \
   --output rust-app-console \
-  --cwd /path/to/app-playground
+  --cwd /path/to/project
 ```
 
 Read `rust-app-console/AGENTS.md`, then run current help and object-specific
@@ -125,15 +129,15 @@ Evaluate:
 
 ```bash
 mvn io.teaql:teaql-maven-plugin:1.1.1:eval \
-  -Dteaql.input=/path/to/models/model.xml
+  -Dteaql.input=/path/to/project/models/model.xml
 ```
 
 Generate the domain library:
 
 ```bash
 mvn io.teaql:teaql-maven-plugin:1.1.1:generate -Dservice=java-lib-core \
-  -Dteaql.input=/path/to/models/model.xml \
-  -Dteaql.output=/path/to/app-playground/java-lib-core
+  -Dteaql.input=/path/to/project/models/model.xml \
+  -Dteaql.output=/path/to/project/java-lib-core
 ```
 
 For a runnable Spring Boot result, generate the editable workspace second:
@@ -141,8 +145,8 @@ For a runnable Spring Boot result, generate the editable workspace second:
 ```bash
 mvn io.teaql:teaql-maven-plugin:1.1.1:generate \
   -Dservice=java-web-spring-boot \
-  -Dteaql.input=/path/to/models/model.xml \
-  -Dteaql.workspaceDir=/path/to/app-playground/java-web-spring-boot
+  -Dteaql.input=/path/to/project/models/model.xml \
+  -Dteaql.workspaceDir=/path/to/project/java-web-spring-boot
 ```
 
 Read the generated workspace `AGENTS.md` before business code. Generated

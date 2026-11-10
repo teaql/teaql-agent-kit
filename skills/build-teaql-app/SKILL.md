@@ -319,13 +319,16 @@ WARNING: When chaining commands, do NOT use `cd dir && cmd && cd dir && cmd`. Th
 
 ### CLI path semantics
 
+Place generated library and application directories directly under the project
+root, for example `rust-lib-core/` and `rust-app-console/`.
+
 `--cwd` is the base directory for every relative `--output` path. When both
-flags are present, pass the workspace directory once: use an absolute
-`--cwd /path/to/app-playground` together with a child-only output such as
+flags are present, pass the project root once: use an absolute
+`--cwd /path/to/project` together with a child-only output such as
 `--output rust-lib-core`. Never repeat the cwd suffix in output (for example,
-do not combine `--cwd app-playground` with
-`--output app-playground/rust-lib-core`), because that creates
-`app-playground/app-playground/rust-lib-core`.
+do not combine `--cwd project` with
+`--output project/rust-lib-core`), because that creates
+`project/project/rust-lib-core`.
 
 Before generation, resolve the intended output path conceptually as
 `<cwd>/<relative-output>` and confirm it equals the requested destination. An
